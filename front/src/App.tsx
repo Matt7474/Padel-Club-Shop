@@ -18,7 +18,7 @@ import TermsOfSale from "./pages/TermsOfSale";
 function App() {
 	return (
 		<BrowserRouter>
-			<div className="flex flex-col xl:items-center justify-center min-h-screen">
+			<div className="flex flex-col xl:items-center justify-center min-h-screen bg-gray-50">
 				<div className="w-full 2xl:w-3/5 3xl:!w-1/2 flex-1">
 					<ScrollToTop />
 					<Header />

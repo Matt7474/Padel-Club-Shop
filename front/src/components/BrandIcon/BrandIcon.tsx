@@ -22,7 +22,7 @@ export default function BrandIcon() {
 						<img
 							src={`/brands/${brand}.svg`}
 							alt={brand}
-							className="hover:cursor-pointer h-12 border border-gray-300 rounded-md shadow-md hover:bg-gray-300 hover:-translate-y-2 transition-transform"
+							className="hover:cursor-pointer h-12 border border-gray-300 rounded-md shadow-md hover:bg-gray-300 xl:hover:-translate-y-2 transition-transform"
 						/>
 					</Link>
 				))}
