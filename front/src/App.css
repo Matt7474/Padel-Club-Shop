@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+	--breakpoint-3xl: 2500px;
+	--breakpoint-4xl: 3000px;
+}
+
+.fixed-card-height {
+	height: 160px !important;
+}

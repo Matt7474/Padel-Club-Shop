@@ -1,0 +1,56 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import ArticlesWrapper from "./components/ArticlesWrapper/ArticlesWrapper";
+import BrandIcon from "./components/BrandIcon/BrandIcon";
+import Footer from "./components/Footer/Footer";
+import Header from "./components/Header/Header";
+import Navbar from "./components/Navbar/Navbar";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
+import AboutUs from "./pages/AboutUs";
+import Article from "./pages/Article";
+import Cart from "./pages/Cart";
+import Homepage from "./pages/Homepage";
+import LegalNotice from "./pages/LegalNotice";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Profile from "./pages/Profile";
+import TermsOfSale from "./pages/TermsOfSale";
+
+function App() {
+	return (
+		<BrowserRouter>
+			<div className="flex flex-col xl:items-center justify-center min-h-screen">
+				<div className="w-full 2xl:w-3/5 3xl:!w-1/2 flex-1">
+					<ScrollToTop />
+					<Header />
+					<Navbar />
+					<BrandIcon />
+					<div className="px-3">
+						<Routes>
+							<Route path="/articles/:type" element={<ArticlesWrapper />} />
+							<Route path="/articles/:type/:nom" element={<Article />} />
+							<Route path="/profile" element={<Profile />} />
+							<Route path="/cart" element={<Cart />} />
+							<Route path="/homepage" element={<Homepage />} />
+							<Route
+								path="/politique-de-confidentialite"
+								element={<PrivacyPolicy />}
+							/>
+							<Route path="/mentions-legales" element={<LegalNotice />} />
+							<Route
+								path="/conditions-generales-de-vente"
+								element={<TermsOfSale />}
+							/>
+							<Route path="/a-propos-de-nous" element={<AboutUs />} />
+						</Routes>
+					</div>
+				</div>
+
+				<div className="w-full">
+					<Footer />
+				</div>
+			</div>
+		</BrowserRouter>
+	);
+}
+
+export default App;
