@@ -219,7 +219,6 @@
 			"statut": "disponible",
 			"frais_livraison": 3.84,
 			"carac_tech": {
-				"code_carac_tech": 1,
 				"poids": "106g",
 				"type": "raquette",
 				"couleur": "Violet moyen",
@@ -230,7 +229,6 @@
 				"genre": "unisexe"
 			},
 			"note_tech": {
-				"code_note_tech": 1,
 				"maniabilite": 9,
 				"puissance": 7,
 				"confort": 5,
@@ -253,7 +251,6 @@
 			"statut": "précommande",
 			"frais_livraison": 8.98,
 			"carac_tech": {
-				"code_carac_tech": 2,
 				"poids": "378g",
 				"type": "sac",
 				"couleur": "Vert",
@@ -264,7 +261,6 @@
 				"genre": "homme"
 			},
 			"note_tech": {
-				"code_note_tech": 2,
 				"maniabilite": 8,
 				"puissance": 3,
 				"confort": 6,
@@ -298,7 +294,6 @@
 			"statut": "précommande",
 			"frais_livraison": 10.4,
 			"carac_tech": {
-				"code_carac_tech": 3,
 				"poids": "190g",
 				"type": "balle",
 				"couleur": "Blanc",
@@ -309,7 +304,6 @@
 				"genre": "homme"
 			},
 			"note_tech": {
-				"code_note_tech": 3,
 				"maniabilite": 10,
 				"puissance": 6,
 				"confort": 8,
@@ -339,7 +333,6 @@
 			"statut": "précommande",
 			"frais_livraison": 12.85,
 			"carac_tech": {
-				"code_carac_tech": 4,
 				"poids": "348g",
 				"type": "raquette",
 				"couleur": "Beige pêche",
@@ -350,7 +343,6 @@
 				"genre": "unisexe"
 			},
 			"note_tech": {
-				"code_note_tech": 4,
 				"maniabilite": 10,
 				"puissance": 9,
 				"confort": 6,
@@ -386,7 +378,6 @@
 			"statut": "précommande",
 			"frais_livraison": 14.96,
 			"carac_tech": {
-				"code_carac_tech": 5,
 				"poids": "338g",
 				"type": "balle",
 				"couleur": "Rouge brique",
@@ -397,7 +388,6 @@
 				"genre": "femme"
 			},
 			"note_tech": {
-				"code_note_tech": 5,
 				"maniabilite": 1,
 				"puissance": 4,
 				"confort": 5,
@@ -445,7 +435,6 @@
 			"statut": "disponible",
 			"frais_livraison": 5.89,
 			"carac_tech": {
-				"code_carac_tech": 6,
 				"poids": "245g",
 				"type": "balle",
 				"couleur": "Brun",
@@ -456,7 +445,6 @@
 				"genre": "homme"
 			},
 			"note_tech": {
-				"code_note_tech": 6,
 				"maniabilite": 7,
 				"puissance": 5,
 				"confort": 10,
@@ -479,7 +467,6 @@
 			"statut": "disponible",
 			"frais_livraison": 7.28,
 			"carac_tech": {
-				"code_carac_tech": 7,
 				"poids": "216g",
 				"type": "accessoire",
 				"couleur": "Jaune blanc navaro",
@@ -490,7 +477,6 @@
 				"genre": "unisexe"
 			},
 			"note_tech": {
-				"code_note_tech": 7,
 				"maniabilite": 2,
 				"puissance": 9,
 				"confort": 7,
@@ -538,7 +524,6 @@
 			"statut": "rupture",
 			"frais_livraison": 4.44,
 			"carac_tech": {
-				"code_carac_tech": 8,
 				"poids": "89g",
 				"type": "sac",
 				"couleur": "Gris gainsboro (Etain)",
@@ -549,7 +534,6 @@
 				"genre": "homme"
 			},
 			"note_tech": {
-				"code_note_tech": 8,
 				"maniabilite": 1,
 				"puissance": 9,
 				"confort": 9,
@@ -608,7 +592,6 @@
 			"statut": "précommande",
 			"frais_livraison": 4.47,
 			"carac_tech": {
-				"code_carac_tech": 9,
 				"poids": "344g",
 				"type": "balle",
 				"couleur": "Orangé",
@@ -619,7 +602,6 @@
 				"genre": "homme"
 			},
 			"note_tech": {
-				"code_note_tech": 9,
 				"maniabilite": 7,
 				"puissance": 2,
 				"confort": 5,
@@ -678,7 +660,6 @@
 			"statut": "disponible",
 			"frais_livraison": 13.53,
 			"carac_tech": {
-				"code_carac_tech": 10,
 				"poids": "214g",
 				"type": "balle",
 				"couleur": "Bleu foncé",
@@ -689,7 +670,6 @@
 				"genre": "femme"
 			},
 			"note_tech": {
-				"code_note_tech": 10,
 				"maniabilite": 4,
 				"puissance": 9,
 				"confort": 6,
@@ -712,7 +692,6 @@
 			"statut": "précommande",
 			"frais_livraison": 12.85,
 			"carac_tech": {
-				"code_carac_tech": 11,
 				"poids": "392g",
 				"type": "sac",
 				"couleur": "Azurin",
@@ -723,7 +702,6 @@
 				"genre": "unisexe"
 			},
 			"note_tech": {
-				"code_note_tech": 11,
 				"maniabilite": 3,
 				"puissance": 3,
 				"confort": 7,
@@ -746,7 +724,6 @@
 			"statut": "disponible",
 			"frais_livraison": 3.69,
 			"carac_tech": {
-				"code_carac_tech": 12,
 				"poids": "338g",
 				"type": "balle",
 				"couleur": "Bordeaux",
@@ -757,7 +734,6 @@
 				"genre": "femme"
 			},
 			"note_tech": {
-				"code_note_tech": 12,
 				"maniabilite": 5,
 				"puissance": 7,
 				"confort": 3,
@@ -793,7 +769,6 @@
 			"statut": "disponible",
 			"frais_livraison": 8.99,
 			"carac_tech": {
-				"code_carac_tech": 13,
 				"poids": "384g",
 				"type": "balle",
 				"couleur": "Vert pâle",
@@ -804,7 +779,6 @@
 				"genre": "unisexe"
 			},
 			"note_tech": {
-				"code_note_tech": 13,
 				"maniabilite": 6,
 				"puissance": 8,
 				"confort": 5,
@@ -838,7 +812,6 @@
 			"statut": "rupture",
 			"frais_livraison": 4.87,
 			"carac_tech": {
-				"code_carac_tech": 14,
 				"poids": "195g",
 				"type": "balle",
 				"couleur": "Bleu acier",
@@ -849,7 +822,6 @@
 				"genre": "femme"
 			},
 			"note_tech": {
-				"code_note_tech": 14,
 				"maniabilite": 4,
 				"puissance": 1,
 				"confort": 6,
@@ -879,7 +851,6 @@
 			"statut": "précommande",
 			"frais_livraison": 2.85,
 			"carac_tech": {
-				"code_carac_tech": 15,
 				"poids": "119g",
 				"type": "sac",
 				"couleur": "Orange foncé",
@@ -890,7 +861,6 @@
 				"genre": "homme"
 			},
 			"note_tech": {
-				"code_note_tech": 15,
 				"maniabilite": 3,
 				"puissance": 5,
 				"confort": 1,
@@ -920,7 +890,6 @@
 			"statut": "disponible",
 			"frais_livraison": 13.34,
 			"carac_tech": {
-				"code_carac_tech": 16,
 				"poids": "183g",
 				"type": "raquette",
 				"couleur": "Rose Passion",
@@ -931,7 +900,6 @@
 				"genre": "unisexe"
 			},
 			"note_tech": {
-				"code_note_tech": 16,
 				"maniabilite": 6,
 				"puissance": 2,
 				"confort": 6,
@@ -961,7 +929,6 @@
 			"statut": "disponible",
 			"frais_livraison": 11.54,
 			"carac_tech": {
-				"code_carac_tech": 17,
 				"poids": "236g",
 				"type": "raquette",
 				"couleur": "Rose",
@@ -972,7 +939,6 @@
 				"genre": "femme"
 			},
 			"note_tech": {
-				"code_note_tech": 17,
 				"maniabilite": 6,
 				"puissance": 6,
 				"confort": 5,
@@ -1008,7 +974,6 @@
 			"statut": "précommande",
 			"frais_livraison": 14.01,
 			"carac_tech": {
-				"code_carac_tech": 18,
 				"poids": "364g",
 				"type": "raquette",
 				"couleur": "Rose brumeux",
@@ -1019,7 +984,6 @@
 				"genre": "femme"
 			},
 			"note_tech": {
-				"code_note_tech": 18,
 				"maniabilite": 8,
 				"puissance": 6,
 				"confort": 2,
@@ -1067,7 +1031,6 @@
 			"statut": "disponible",
 			"frais_livraison": 4.3,
 			"carac_tech": {
-				"code_carac_tech": 19,
 				"poids": "94g",
 				"type": "sac",
 				"couleur": "Blanc Lin",
@@ -1078,7 +1041,6 @@
 				"genre": "unisexe"
 			},
 			"note_tech": {
-				"code_note_tech": 19,
 				"maniabilite": 6,
 				"puissance": 9,
 				"confort": 7,
@@ -1112,7 +1074,6 @@
 			"statut": "disponible",
 			"frais_livraison": 6.09,
 			"carac_tech": {
-				"code_carac_tech": 20,
 				"poids": "379g",
 				"type": "accessoire",
 				"couleur": "Vert printemps",
@@ -1123,7 +1084,6 @@
 				"genre": "unisexe"
 			},
 			"note_tech": {
-				"code_note_tech": 20,
 				"maniabilite": 3,
 				"puissance": 1,
 				"confort": 7,
@@ -1165,7 +1125,6 @@
 			"statut": "rupture",
 			"frais_livraison": 14.47,
 			"carac_tech": {
-				"code_carac_tech": 21,
 				"poids": "253g",
 				"type": "balle",
 				"couleur": "Orangé",
@@ -1176,7 +1135,6 @@
 				"genre": "unisexe"
 			},
 			"note_tech": {
-				"code_note_tech": 21,
 				"maniabilite": 1,
 				"puissance": 5,
 				"confort": 10,
@@ -1206,7 +1164,6 @@
 			"statut": "rupture",
 			"frais_livraison": 2.07,
 			"carac_tech": {
-				"code_carac_tech": 22,
 				"poids": "278g",
 				"type": "sac",
 				"couleur": "Violet chardon",
@@ -1217,7 +1174,6 @@
 				"genre": "homme"
 			},
 			"note_tech": {
-				"code_note_tech": 22,
 				"maniabilite": 6,
 				"puissance": 8,
 				"confort": 8,
@@ -1270,7 +1226,6 @@
 			"statut": "disponible",
 			"frais_livraison": 7.62,
 			"carac_tech": {
-				"code_carac_tech": 23,
 				"poids": "81g",
 				"type": "raquette",
 				"couleur": "Jaune clair",
@@ -1281,7 +1236,6 @@
 				"genre": "homme"
 			},
 			"note_tech": {
-				"code_note_tech": 23,
 				"maniabilite": 1,
 				"puissance": 9,
 				"confort": 4,
@@ -1328,7 +1282,6 @@
 			"statut": "précommande",
 			"frais_livraison": 9.42,
 			"carac_tech": {
-				"code_carac_tech": 24,
 				"poids": "293g",
 				"type": "sac",
 				"couleur": "Vert printemps",
@@ -1339,7 +1292,6 @@
 				"genre": "unisexe"
 			},
 			"note_tech": {
-				"code_note_tech": 24,
 				"maniabilite": 10,
 				"puissance": 8,
 				"confort": 8,
@@ -1387,7 +1339,6 @@
 			"statut": "précommande",
 			"frais_livraison": 5.39,
 			"carac_tech": {
-				"code_carac_tech": 25,
 				"poids": "78g",
 				"type": "accessoire",
 				"couleur": "Violet orchidée foncé",
@@ -1398,7 +1349,6 @@
 				"genre": "homme"
 			},
 			"note_tech": {
-				"code_note_tech": 25,
 				"maniabilite": 6,
 				"puissance": 9,
 				"confort": 1,
@@ -1446,7 +1396,6 @@
 			"statut": "précommande",
 			"frais_livraison": 10.59,
 			"carac_tech": {
-				"code_carac_tech": 26,
 				"poids": "135g",
 				"type": "sac",
 				"couleur": "Rose brumeux",
@@ -1457,7 +1406,6 @@
 				"genre": "unisexe"
 			},
 			"note_tech": {
-				"code_note_tech": 26,
 				"maniabilite": 4,
 				"puissance": 6,
 				"confort": 8,
@@ -1505,7 +1453,6 @@
 			"statut": "disponible",
 			"frais_livraison": 2.69,
 			"carac_tech": {
-				"code_carac_tech": 27,
 				"poids": "372g",
 				"type": "raquette",
 				"couleur": "Brun pérou",
@@ -1516,7 +1463,6 @@
 				"genre": "homme"
 			},
 			"note_tech": {
-				"code_note_tech": 27,
 				"maniabilite": 8,
 				"puissance": 1,
 				"confort": 5,
@@ -1564,7 +1510,6 @@
 			"statut": "disponible",
 			"frais_livraison": 6.89,
 			"carac_tech": {
-				"code_carac_tech": 28,
 				"poids": "87g",
 				"type": "raquette",
 				"couleur": "Gris ardoise foncé",
@@ -1575,7 +1520,6 @@
 				"genre": "femme"
 			},
 			"note_tech": {
-				"code_note_tech": 28,
 				"maniabilite": 6,
 				"puissance": 4,
 				"confort": 1,
@@ -1598,7 +1542,6 @@
 			"statut": "précommande",
 			"frais_livraison": 10.98,
 			"carac_tech": {
-				"code_carac_tech": 29,
 				"poids": "297g",
 				"type": "balle",
 				"couleur": "Blanc lavande",
@@ -1609,7 +1552,6 @@
 				"genre": "unisexe"
 			},
 			"note_tech": {
-				"code_note_tech": 29,
 				"maniabilite": 10,
 				"puissance": 6,
 				"confort": 4,
@@ -1632,7 +1574,6 @@
 			"statut": "disponible",
 			"frais_livraison": 8.98,
 			"carac_tech": {
-				"code_carac_tech": 30,
 				"poids": "395g",
 				"type": "sac",
 				"couleur": "Blanc floral",
@@ -1643,7 +1584,6 @@
 				"genre": "femme"
 			},
 			"note_tech": {
-				"code_note_tech": 30,
 				"maniabilite": 4,
 				"puissance": 4,
 				"confort": 10,

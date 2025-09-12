@@ -36,7 +36,7 @@ export default function Footer() {
 				{/* Liens INFOS LEGALES */}
 				<div className="flex flex-col items-center mt-6 xl:w-1/2">
 					<p className="text-lg font-semibold mb-2">INFOS LEGALES</p>
-					<div className="w-full xl:w-1/4 border-b border-white mb-4"></div>
+					<div className="w-full xl:w-1/3 border-b border-white mb-4"></div>
 
 					<div className="flex flex-col items-center  gap-2 leading-tight">
 						<Link to="/mentions-legales">
@@ -60,7 +60,7 @@ export default function Footer() {
 				{/* Lien NOTRE ENTREPRISE */}
 				<div className="flex flex-col items-center mt-5 xl:mt-24 xl:w-1/2">
 					<p className="text-lg font-semibold mb-2">NOTRE ENTREPRISE</p>
-					<div className="w-full xl:w-1/4 border-b border-white -mt- mb-4"></div>
+					<div className="w-full xl:w-1/3 border-b border-white -mt- mb-4"></div>
 
 					<div className="flex flex-col items-center  gap-2 leading-tight">
 						<Link to="/a-propos-de-nous">
@@ -72,11 +72,11 @@ export default function Footer() {
 				</div>
 
 				{/* Liens BOUTIQUE */}
-				<div className="flex flex-col items-center mt-5 xl:w-1/2">
+				<div className="flex flex-col items-center mt-5 xl:w-1/2 ">
 					<p className="text-lg font-semibold mb-2">BOUTIQUE</p>
-					<div className="w-full xl:w-1/4 border-b border-white mb-4"></div>
+					<div className="w-full xl:w-1/3 border-b border-white mb-4"></div>
 
-					<div className="grid grid-cols-2 gap-x-6 gap-y-2 leading-tight text-">
+					<div className="grid grid-cols-2 gap-x-16 gap-y-2 leading-tight text-">
 						<Link to="/articles/raquette">
 							<p className="text-md hover:underline cursor-pointer ">
 								Raquettes
