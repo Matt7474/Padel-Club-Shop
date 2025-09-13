@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useCartStore } from "../../../store/cartStore";
 import type Article from "../../../types/Article";
 
 export default function PriceArticle({ article }: { article: Article }) {
+	const addToCart = useCartStore((state) => state.addToCart);
 	const [quantity, setQuantity] = useState(1);
 	const increment = () => setQuantity((prev) => prev + 1);
 	const decrement = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
@@ -18,7 +20,14 @@ export default function PriceArticle({ article }: { article: Article }) {
 	displayPrice = Math.max(displayPrice, 0);
 
 	const addOnCart = () => {
-		console.log("ajouter au panier");
+		addToCart({
+			id: article.code_article.toString(),
+			name: article.nom,
+			brand: article.marque || "Inconnue",
+			price: displayPrice,
+			image: article.image[0] || "/icons/default.svg",
+			quantity: quantity,
+		});
 	};
 	return (
 		<>
