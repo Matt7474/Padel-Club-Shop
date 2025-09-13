@@ -1,4 +1,5 @@
 interface inputProps {
+	width?: string;
 	htmlFor: string;
 	label: string;
 	type: string;
@@ -8,6 +9,7 @@ interface inputProps {
 }
 
 export default function Input({
+	width,
 	htmlFor,
 	label,
 	type,
@@ -17,7 +19,7 @@ export default function Input({
 }: inputProps) {
 	return (
 		<>
-			<div className="relative flex flex-col mt-4 ">
+			<div className={`relative flex flex-col mt-4 w-${width}`}>
 				<label
 					htmlFor={htmlFor}
 					className="absolute text-xs text-gray-500 pl-1"

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Input from "../components/form/Input";
 
 export default function Connection() {
@@ -12,10 +13,16 @@ export default function Connection() {
 	const [isNotSameRegisterPassword, setIsNotSameRegisterPassword] =
 		useState(false);
 
+	const [isChecked, setIsChecked] = useState(false);
+
 	// Règles de validation
 	const hasMinLength = registerPassword.length >= 8;
 	const hasUppercase = /[A-Z]/.test(registerPassword);
 	const hasNumber = /\d/.test(registerPassword);
+
+	const handleCheckConditions = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setIsChecked(e.target.checked);
+	};
 
 	const registerSubmit = () => {
 		if (registerPassword !== passwordConfirm) {
@@ -148,6 +155,28 @@ export default function Connection() {
 									</span>
 								)}
 							</div>
+						</div>
+						<div className="flex items-start gap-2 mt-2">
+							<input
+								type="checkbox"
+								id="accept"
+								name="accept"
+								required
+								className="mt-1"
+								checked={isChecked}
+								onChange={handleCheckConditions}
+							/>
+							<label htmlFor="accept" className="text-sm text-gray-700">
+								J'ai lu et j'accepte les{" "}
+								<Link to="/conditions-generales-de-vente" className="underline">
+									conditions d'utilisation
+								</Link>{" "}
+								et la{" "}
+								<Link to="/politique-de-confidentialite" className="underline">
+									politique de confidentialité
+								</Link>
+								.
+							</label>
 						</div>
 
 						<button
