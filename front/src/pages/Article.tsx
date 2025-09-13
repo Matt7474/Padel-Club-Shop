@@ -39,12 +39,12 @@ export default function Article() {
 
 	return (
 		<>
-			<div className="xl:mb-6">
+			<div>
 				<Breadcrumb items={breadcrumbItems} />
 			</div>
 
 			{/* LAYOUT MOBILE */}
-			<div className="xl:hidden">
+			<div className="xl:hidden mt-6">
 				<ImagesArticle article={article} />
 				<PriceArticle article={article} />
 				<p className="font-semibold text-lg mt-6">{article.nom}</p>
@@ -90,7 +90,7 @@ export default function Article() {
 			</div>
 
 			{/* LAYOUT DESKTOP */}
-			<div className="hidden xl:flex xl:flex-col xl:gap-8 xl:justify-between ">
+			<div className="hidden xl:flex xl:flex-col xl:gap-8 xl:justify-between mt-6">
 				<div className="hidden xl:flex  xl:gap-8 xl:justify-between ">
 					<ImagesArticle article={article} />
 					<div className="xl:w-1/2 xl:flex xl:flex-col">

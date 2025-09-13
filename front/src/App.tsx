@@ -9,8 +9,10 @@ import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import AboutUs from "./pages/AboutUs";
 import Article from "./pages/Article";
 import Cart from "./pages/Cart";
+import Connection from "./pages/Connection";
 import Homepage from "./pages/Homepage";
 import LegalNotice from "./pages/LegalNotice";
+import Login from "./pages/login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
 import TermsOfSale from "./pages/TermsOfSale";
@@ -26,6 +28,9 @@ function App() {
 					<BrandIcon />
 					<div className="px-3">
 						<Routes>
+							<Route path="/login" element={<Login />} />
+							<Route path="/connexion2" element={<Connection />} />
+
 							<Route path="/articles/:type" element={<ArticlesWrapper />} />
 							<Route path="/articles/:type/:nom" element={<Article />} />
 							<Route path="/profile" element={<Profile />} />
