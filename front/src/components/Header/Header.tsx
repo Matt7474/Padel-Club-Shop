@@ -154,7 +154,7 @@ export default function Header() {
 							>
 								<img
 									src="/icons/glass.svg"
-									alt="loupe"
+									alt=""
 									className="w-4 hover:cursor-pointer"
 								/>
 							</button>

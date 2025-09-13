@@ -29,7 +29,7 @@ function App() {
 					<div className="px-3">
 						<Routes>
 							<Route path="/login" element={<Login />} />
-							<Route path="/connexion" element={<Connection />} />
+							<Route path="/connexion2" element={<Connection />} />
 
 							<Route path="/articles/:type" element={<ArticlesWrapper />} />
 							<Route path="/articles/:type/:nom" element={<Article />} />

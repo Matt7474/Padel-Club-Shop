@@ -27,8 +27,6 @@ export default function Profile() {
 	const [country, setCountry] = useState("");
 	const [additionalInfo, setAdditionalInfo] = useState("");
 
-	const additionalInfoCount = additionalInfo.length / 200;
-
 	const handleChange = () => {
 		console.log("modification activé");
 	};
@@ -222,7 +220,7 @@ export default function Profile() {
 								</div>
 							</div>
 						</div>
-						<div className="flex justify-between mt-4 gap-4 xl:w-1/2 xl:mt-10 xl:mx-auto">
+						<div className="flex justify-between mt-4 gap-4 xl:w-1/2 xl:mt-10 xl:mx-auto pl-1">
 							<button
 								type="button"
 								className="w-4/10 p-2 bg-red-400 font-semibold rounded-md cursor-pointer hover:brightness-80"
