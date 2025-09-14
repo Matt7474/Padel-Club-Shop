@@ -8,27 +8,30 @@ export default function PriceArticle({ article }: { article: Article }) {
 	const increment = () => setQuantity((prev) => prev + 1);
 	const decrement = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
-	let displayPrice: number = article.prix_ttc;
-	if (article.promos && article.promos.length > 0) {
-		const promo = article.promos[0];
-		if (promo.type_remise === "pourcentage") {
-			displayPrice = (article.prix_ttc * (100 - promo.valeur_remise)) / 100;
-		} else if (promo.type_remise === "montant") {
-			displayPrice = article.prix_ttc - promo.valeur_remise;
+	let displayPrice: number = article.price_ttc;
+
+	// Vérification sécurisée des promotions
+	if (article.promotions && article.promotions.length > 0) {
+		const promo = article.promotions[0];
+		if (promo.discount_type === "percentage") {
+			displayPrice = (article.price_ttc * (100 - promo.discount_value)) / 100;
+		} else if (promo.discount_type === "amount") {
+			displayPrice = article.price_ttc - promo.discount_value;
 		}
 	}
 	displayPrice = Math.max(displayPrice, 0);
 
 	const addOnCart = () => {
 		addToCart({
-			id: article.code_article.toString(),
-			name: article.nom,
-			brand: article.marque || "Inconnue",
+			id: article.article_id.toString(),
+			name: article.name,
+			brand: article.brand || "Inconnue",
 			price: displayPrice,
-			image: article.image[0] || "/icons/default.svg",
+			image: article.images[0] || "/icons/default.svg",
 			quantity: quantity,
 		});
 	};
+
 	return (
 		<>
 			<div>
@@ -36,12 +39,13 @@ export default function PriceArticle({ article }: { article: Article }) {
 					<div className="flex flex-col w-1/2 justify-end">
 						{/* Partie promo */}
 						<div>
-							{article.promos.length > 0 && (
+							{/* Vérification sécurisée des promotions */}
+							{article.promotions && article.promotions.length > 0 && (
 								<div className="flex mb-2">
 									<p className="text-xs bg-gray-300 rounded-md font-semibold px-2 py-1">
-										{article.promos[0].type_remise === "pourcentage"
-											? `-${article.promos[0].valeur_remise}%`
-											: `-${article.promos[0].valeur_remise}€`}
+										{article.promotions[0].discount_type === "percentage"
+											? `-${article.promotions[0].discount_value}%`
+											: `-${article.promotions[0].discount_value}€`}
 									</p>
 									<p className="text-xs bg-red-500 rounded-md text-white font-semibold px-2 py-1 ml-2">
 										PROMO
@@ -52,16 +56,16 @@ export default function PriceArticle({ article }: { article: Article }) {
 
 						{/* Partie prix */}
 						<div>
-							{article.promos && article.promos.length > 0 ? (
+							{article.promotions && article.promotions.length > 0 ? (
 								<p className="font-bold text-red-600 text-lg">
 									{displayPrice.toFixed(2)} €{" "}
 									<span className="line-through text-black text-xs">
-										{article.prix_ttc.toFixed(2)} €
+										{article.price_ttc.toFixed(2)} €
 									</span>
 								</p>
 							) : (
 								<p className="font-bold text-lg">
-									{article.prix_ttc.toFixed(2)} €
+									{article.price_ttc.toFixed(2)} €
 								</p>
 							)}
 						</div>

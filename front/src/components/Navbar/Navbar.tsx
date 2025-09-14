@@ -6,49 +6,49 @@ export default function Navbar() {
 			<div className="hidden 2xl:block  ">
 				<div className="flex gap-y-3 mt-4 ml-3 justify-center gap-7">
 					<LinkMenu
-						to="raquette"
+						to="racket"
 						name="RAQUETTES"
 						color="text-black"
 						border={0}
 						marginLeft={4}
 					/>
 					<LinkMenu
-						to="sac"
+						to="bag"
 						name="SACS"
 						color="text-black"
 						border={0}
 						marginLeft={4}
 					/>
 					<LinkMenu
-						to="balle"
+						to="ball"
 						name="BALLES"
 						color="text-black"
 						border={0}
 						marginLeft={4}
 					/>
 					<LinkMenu
-						to="vêtement"
+						to="clothing"
 						name="VÊTEMENTS"
 						color="text-black"
 						border={0}
 						marginLeft={4}
 					/>
 					<LinkMenu
-						to="chaussure"
+						to="shoe"
 						name="CHAUSSURES"
 						color="text-black"
 						border={0}
 						marginLeft={4}
 					/>
 					<LinkMenu
-						to="accessoire"
+						to="accessory"
 						name="ACCESSOIRES"
 						color="text-black"
 						border={0}
 						marginLeft={4}
 					/>
 					<LinkMenu
-						to="/promotion"
+						to="promotion"
 						name="PROMOTIONS"
 						color="text-orange-500"
 						border={0}

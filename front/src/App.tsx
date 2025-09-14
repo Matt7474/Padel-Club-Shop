@@ -1,11 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import ArticlesWrapper from "./components/ArticlesWrapper/ArticlesWrapper";
 import BrandIcon from "./components/BrandIcon/BrandIcon";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
+import ArticlesWrapper from "./components/Wrapper/ArticlesWrapper";
+import BrandsWrapper from "./components/Wrapper/BrandsWrapper";
 import AboutUs from "./pages/AboutUs";
 import Article from "./pages/Article";
 import Cart from "./pages/Cart";
@@ -29,13 +30,16 @@ function App() {
 					<div className="px-3">
 						<Routes>
 							<Route path="/login" element={<Login />} />
-							<Route path="/connexion2" element={<Connection />} />
+							<Route path="/connexion" element={<Connection />} />
 
 							<Route path="/articles/:type" element={<ArticlesWrapper />} />
-							<Route path="/articles/:type/:nom" element={<Article />} />
+							<Route path="/articles/:type/:name" element={<Article />} />
+
+							<Route path="/marques/:brand" element={<BrandsWrapper />} />
+
 							<Route path="/profile" element={<Profile />} />
 							<Route path="/cart" element={<Cart />} />
-							<Route path="/homepage" element={<Homepage />} />
+							<Route path="/" element={<Homepage />} />
 							<Route
 								path="/politique-de-confidentialite"
 								element={<PrivacyPolicy />}

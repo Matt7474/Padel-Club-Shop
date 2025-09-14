@@ -6,15 +6,18 @@ import ImagesArticle from "../components/Article/ImagesArticle/ImagesArticle";
 import PriceArticle from "../components/Article/PriceArticle/PriceArticle";
 import RatingArticle from "../components/Article/RatingArticle/RatingArticle";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
+import type ArticleType from "../types/Article";
+
+const typedArticlesData: { articles: ArticleType[] } = articlesData;
 
 export default function Article() {
-	const { type, nom } = useParams();
+	const { type, name } = useParams();
 
-	const article = articlesData.articles.find(
-		(art) => art.carac_tech.type === type && art.nom === nom,
+	const article = typedArticlesData.articles.find(
+		(art) => art.tech_characteristics.type === type && art.name === name,
 	);
 
-	if (!type || !nom) {
+	if (!type || !name) {
 		return <div>Chargement...</div>;
 	}
 
@@ -32,8 +35,8 @@ export default function Article() {
 			href: `/articles/${type}`,
 		},
 		{
-			label: nom,
-			href: `/articles/${type}/${nom}`,
+			label: name,
+			href: `/articles/${type}/${name}`,
 		},
 	];
 
@@ -47,7 +50,7 @@ export default function Article() {
 			<div className="xl:hidden mt-6">
 				<ImagesArticle article={article} />
 				<PriceArticle article={article} />
-				<p className="font-semibold text-lg mt-6">{article.nom}</p>
+				<p className="font-semibold text-lg mt-6">{article.name}</p>
 				<p className="text-sm">{article.reference}</p>
 				<RatingArticle article={article} />
 				<div className="mt-10">
@@ -96,7 +99,7 @@ export default function Article() {
 					<div className="xl:w-1/2 xl:flex xl:flex-col">
 						<div className="xl:flex xl:flex-col xl:h-full xl:justify-between">
 							<div>
-								<h1 className="font-bold text-2xl mb-2">{article.nom}</h1>
+								<h1 className="font-bold text-2xl mb-2">{article.name}</h1>
 								<p className="text-gray-600 text-sm mb-4">
 									{article.reference}
 								</p>

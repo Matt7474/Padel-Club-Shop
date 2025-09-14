@@ -74,7 +74,7 @@ export default function MenuModal({ closeMenu }: { closeMenu: () => void }) {
 						onLinkClick={closeMenu}
 					/>
 					<LinkMenu
-						to="raquette"
+						to="racket"
 						name="Raquettes"
 						color="text-black"
 						border={1}
@@ -83,7 +83,7 @@ export default function MenuModal({ closeMenu }: { closeMenu: () => void }) {
 						onLinkClick={closeMenu}
 					/>
 					<LinkMenu
-						to="sac"
+						to="bag"
 						name="Sacs"
 						color="text-black"
 						border={1}
@@ -92,7 +92,7 @@ export default function MenuModal({ closeMenu }: { closeMenu: () => void }) {
 						onLinkClick={closeMenu}
 					/>
 					<LinkMenu
-						to="balle"
+						to="ball"
 						name="Balles"
 						color="text-black"
 						border={1}
@@ -101,7 +101,7 @@ export default function MenuModal({ closeMenu }: { closeMenu: () => void }) {
 						onLinkClick={closeMenu}
 					/>
 					<LinkMenu
-						to="vetement"
+						to="clothing"
 						name="Vêtements"
 						color="text-black"
 						border={1}
@@ -110,7 +110,7 @@ export default function MenuModal({ closeMenu }: { closeMenu: () => void }) {
 						onLinkClick={closeMenu}
 					/>
 					<LinkMenu
-						to="chaussure"
+						to="shoe"
 						name="Chaussures"
 						color="text-black"
 						border={1}
@@ -119,17 +119,8 @@ export default function MenuModal({ closeMenu }: { closeMenu: () => void }) {
 						onLinkClick={closeMenu}
 					/>
 					<LinkMenu
-						to="accessoire"
+						to="accessory"
 						name="Accessoires"
-						color="text-black"
-						border={1}
-						marginLeft={0}
-						animate="hover:animate-bounce"
-						onLinkClick={closeMenu}
-					/>
-					<LinkMenu
-						to="marque"
-						name="Marques"
 						color="text-black"
 						border={1}
 						marginLeft={0}

@@ -153,7 +153,7 @@ export default function Profile() {
 										type={"text"}
 										value={streetNumber}
 										onChange={setStreetNumber}
-										width="1/5"
+										width="w-1/5"
 									/>
 
 									{/* Partie nom de rue */}
@@ -163,7 +163,7 @@ export default function Profile() {
 										type={"text"}
 										value={streetName}
 										onChange={setStreetName}
-										width="full"
+										width="w-full"
 									/>
 								</div>
 
@@ -174,6 +174,7 @@ export default function Profile() {
 									type={"text"}
 									value={zipcode}
 									onChange={setZipcode}
+									width="w-full"
 								/>
 
 								{/* Partie ville */}
@@ -183,6 +184,7 @@ export default function Profile() {
 									type={"text"}
 									value={city}
 									onChange={setCity}
+									width="w-full"
 								/>
 
 								{/* Partie pays */}
@@ -192,6 +194,7 @@ export default function Profile() {
 									type={"text"}
 									value={country}
 									onChange={setCountry}
+									width="w-full"
 								/>
 
 								{/* Partie informations complémentaires */}

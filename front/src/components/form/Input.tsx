@@ -19,7 +19,7 @@ export default function Input({
 }: inputProps) {
 	return (
 		<>
-			<div className={`relative flex flex-col mt-4 w-${width}`}>
+			<div className={`relative flex flex-col mt-4 ${width}`}>
 				<label
 					htmlFor={htmlFor}
 					className="absolute text-xs text-gray-500 pl-1"

@@ -1,11 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useCartStore } from "../../store/cartStore";
 import CartModal from "../Modal/CartModal";
 import MenuModal from "../Modal/MenuModal";
 
 export default function Header() {
+	const [isQuantity, setIsQuantity] = useState(0);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isCartOpen, setIsCartOpen] = useState(false);
+
+	const cart = useCartStore((state) => state.cart);
+	// Somme des quantités dans le panier
+	useEffect(() => {
+		const totalQuantity = cart.reduce<number>(
+			(acc, item) => acc + item.quantity,
+			0,
+		);
+		setIsQuantity(totalQuantity);
+	}, [cart]);
 
 	const toggleMenu = () => {
 		setIsMenuOpen((prev) => !prev);
@@ -53,7 +65,7 @@ export default function Header() {
 							/>
 						)}
 					</button>
-					<Link to={"/homepage"} className="flex ml-2 mt-1">
+					<Link to={"/"} className="flex ml-2 mt-1">
 						<img
 							src="/icons/logo_name.svg"
 							alt="titre-site"
@@ -93,10 +105,19 @@ export default function Header() {
 
 					<button
 						type="button"
-						className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8"
+						className="relative w-6 hover:cursor-pointer xl:mt-2 2xl:w-8"
 						onClick={toggleCart}
 					>
-						<img src="/icons/cart.svg" alt="icon-panier" className="block" />
+						{isQuantity > 0 && (
+							<span className="absolute top-0 right-2 bg-red-500 h-5 w-5 rounded-full text-xs text-white font-semibold flex items-center justify-center -translate-y-1/2 translate-x-1/2 z-0">
+								{isQuantity}
+							</span>
+						)}
+						<img
+							src="/icons/cart.svg"
+							alt="icon-panier"
+							className="block relative z-10"
+						/>
 					</button>
 				</div>
 			</div>

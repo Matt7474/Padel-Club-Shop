@@ -1,24 +1,14 @@
 import { Link } from "react-router-dom";
+import data from "../../../data/dataTest.json";
 
 export default function BrandIcon() {
-	const brands = [
-		"adidas",
-		"babolat",
-		"wilson",
-		"black-crown",
-		"cork",
-		"head",
-		"nox",
-		"oxdog",
-		"starvie",
-		"tecnifibre",
-	];
+	const brands = [...new Set(data.articles.map((article) => article.brand))];
 
 	return (
 		<div className="mt-3">
 			<div className="flex gap-4 2xl:justify-center 2xl:flex-wrap overflow-x-auto 2xl:overflow-visible pb-2 px-4 2xl:px-0 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
 				{brands.map((brand) => (
-					<Link to={`/marque/${brand}`} key={brand} className="flex-shrink-0">
+					<Link to={`/marques/${brand}`} key={brand} className="flex-shrink-0">
 						<img
 							src={`/brands/${brand}.svg`}
 							alt={brand}

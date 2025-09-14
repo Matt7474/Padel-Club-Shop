@@ -7,7 +7,7 @@ interface LinkMenuProps {
 	border: number;
 	marginLeft?: number;
 	animate?: string;
-	onLinkClick: () => void;
+	onLinkClick?: () => void;
 }
 
 export default function LinkMenu({

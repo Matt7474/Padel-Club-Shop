@@ -9,7 +9,7 @@ export default function Homepage() {
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-3 mt-5 2xl:mx-30">
 					{/* RAQUETTES */}
 					<Link
-						to={"/articles/raquette"}
+						to={"/articles/racket"}
 						className="relative group bg-[#FFAEC9] aspect-square rounded-2xl flex items-center justify-center  2xl:aspect-auto 2xl:row-start-1 2xl:row-end-3 2xl:col-start-2 2xl:col-end-3  border hover:cursor-pointer overflow-hidden"
 					>
 						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
@@ -26,7 +26,7 @@ export default function Homepage() {
 
 					{/* VETEMENTS */}
 					<Link
-						to={"/articles/vêtement"}
+						to={"/articles/clothing"}
 						className="relative group bg-[#B5E51D] aspect-square rounded-2xl flex items-center justify-center 2xl:row-start-1 2xl:row-end-2 2xl:col-start-1 2xl:col-end-2  border hover:cursor-pointer overflow-hidden"
 					>
 						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
@@ -43,7 +43,7 @@ export default function Homepage() {
 
 					{/* ACCESSOIRES */}
 					<Link
-						to={"/articles/accessoire"}
+						to={"/articles/accessory"}
 						className="relative group bg-[#FFD779] aspect-square rounded-2xl flex items-center justify-center 2xl:aspect-auto 2xl:row-start-2 2xl:row-end-4 2xl:col-start-1 2xl:col-end-2  border hover:cursor-pointer overflow-hidden"
 					>
 						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
@@ -60,7 +60,7 @@ export default function Homepage() {
 
 					{/* SACS */}
 					<Link
-						to={"/articles/sac"}
+						to={"/articles/bag"}
 						className="relative group bg-[#93F7A8] aspect-square 2xl:aspect-[2/1] rounded-2xl flex items-center justify-center 2xl:row-start-1 2xl:row-end-2 2xl:col-start-3 2xl:col-end-5  border hover:cursor-pointer overflow-hidden"
 					>
 						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
@@ -77,7 +77,7 @@ export default function Homepage() {
 
 					{/* BALLES */}
 					<Link
-						to={"/articles/balle"}
+						to={"/articles/ball"}
 						className="relative group bg-[#9AD9EB] aspect-square rounded-2xl flex items-center justify-center 2xl:aspect-auto 2xl:row-start-2 2xl:row-end-3 2xl:col-start-3 2xl:col-end-4  border hover:cursor-pointer overflow-hidden"
 					>
 						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
@@ -94,7 +94,7 @@ export default function Homepage() {
 
 					{/* CHAUSSURES */}
 					<Link
-						to={"/articles/chaussure"}
+						to={"/articles/shoe"}
 						className="relative group bg-[#A3EFD8] aspect-square rounded-2xl flex items-center justify-center 2xl:aspect-auto 2xl:row-start-2 2xl:row-end-4 2xl:col-start-4 2xl:col-end-5  border hover:cursor-pointer overflow-hidden"
 					>
 						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
