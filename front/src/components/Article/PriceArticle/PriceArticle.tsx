@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { useCartStore } from "../../../store/cartStore";
 import type Article from "../../../types/Article";
+import Toast from "../../Modal/InfoModal";
 
 export default function PriceArticle({ article }: { article: Article }) {
 	const addToCart = useCartStore((state) => state.addToCart);
 	const [quantity, setQuantity] = useState(1);
 	const increment = () => setQuantity((prev) => prev + 1);
 	const decrement = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+	const [infoModal, setInfoModal] = useState<{ id: number; text: string }[]>(
+		[],
+	);
 
 	let displayPrice: number = article.price_ttc;
 
@@ -29,6 +33,15 @@ export default function PriceArticle({ article }: { article: Article }) {
 			image: article.images[0] || "/icons/default.svg",
 			quantity: quantity,
 		});
+		const id = Date.now();
+		setInfoModal((prev) => [
+			...prev,
+			{ id, text: "Produit ajouté au panier !" },
+		]);
+	};
+
+	const removeToast = (id: number) => {
+		setInfoModal((prev) => prev.filter((t) => t.id !== id));
 	};
 
 	return (
@@ -102,6 +115,19 @@ export default function PriceArticle({ article }: { article: Article }) {
 				>
 					Ajouter au panier
 				</button>
+			</div>
+
+			{/* infoModal */}
+			<div className="fixed bottom-4 left-4 flex flex-col gap-2 z-50">
+				{infoModal.map((infoModal) => (
+					<Toast
+						key={infoModal.id}
+						id={infoModal.id}
+						bg="bg-green-500"
+						text={infoModal.text}
+						onClose={removeToast}
+					/>
+				))}
 			</div>
 		</>
 	);

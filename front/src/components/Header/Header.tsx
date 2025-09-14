@@ -21,16 +21,13 @@ export default function Header() {
 
 	const toggleMenu = () => {
 		setIsMenuOpen((prev) => !prev);
-		console.log(isMenuOpen ? "Fermeture du menu" : "Ouverture du menu");
 	};
 
 	const toggleCart = () => {
 		setIsCartOpen((prev) => !prev);
-		console.log(isCartOpen ? "Fermeture du panier" : "Ouverture du panier");
 	};
 
 	const handleSearch = () => {
-		console.log("Recherche en cours");
 		setIsMenuOpen(false);
 	};
 

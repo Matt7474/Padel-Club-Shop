@@ -1,6 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import type Article from "../../types/Article";
+import { useState } from "react";
+import InfoModal from "../Modal/InfoModal";
+import Toast from "../Modal/InfoModal";
 
 interface ArticleCardProps {
 	article: Article;
@@ -9,6 +12,9 @@ interface ArticleCardProps {
 export default function ArticleCard({ article }: ArticleCardProps) {
 	const navigate = useNavigate();
 	const now = new Date();
+	const [infoModal, setInfoModal] = useState<{ id: number; text: string }[]>(
+		[],
+	);
 	const addToCartStore = useCartStore((state) => state.addToCart);
 
 	const handleBrandClick = (e: React.MouseEvent, brand: string) => {
@@ -44,19 +50,26 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 	displayPrice = Math.max(displayPrice, 0);
 
 	const addToCart = (e: React.MouseEvent) => {
-		e.preventDefault(); // empêche le Link
-		e.stopPropagation(); // évite la navigation
+		e.preventDefault();
+		e.stopPropagation();
 
 		addToCartStore({
 			id: article.article_id.toString(),
 			name: article.name,
 			brand: article.brand,
-			price: displayPrice, // prix avec promo si applicable
-			image: article.images?.[0], // première image
+			price: displayPrice,
+			image: article.images?.[0],
 			quantity: 1,
 		});
+		const id = Date.now();
+		setInfoModal((prev) => [
+			...prev,
+			{ id, text: "Produit ajouté au panier !" },
+		]);
+	};
 
-		console.log(`${article.name} ajouté au panier`);
+	const removeToast = (id: number) => {
+		setInfoModal((prev) => prev.filter((t) => t.id !== id));
 	};
 
 	return (
@@ -143,6 +156,19 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 							<img src="/icons/cart.svg" alt="panier" className="w-5 h-5" />
 						</button>
 					</div>
+				</div>
+
+				{/* infoModal */}
+				<div className="fixed bottom-4 left-4 flex flex-col gap-2 z-50">
+					{infoModal.map((infoModal) => (
+						<Toast
+							key={infoModal.id}
+							id={infoModal.id}
+							bg="bg-green-500"
+							text={infoModal.text}
+							onClose={removeToast}
+						/>
+					))}
 				</div>
 			</div>
 		</Link>
