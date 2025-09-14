@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useCartStore } from "../../store/cartStore";
 import type Article from "../../types/Article";
 
 interface ArticleCardProps {
@@ -7,6 +8,8 @@ interface ArticleCardProps {
 
 export default function ArticleCard({ article }: ArticleCardProps) {
 	const navigate = useNavigate();
+	const now = new Date();
+	const addToCartStore = useCartStore((state) => state.addToCart);
 
 	const handleBrandClick = (e: React.MouseEvent, brand: string) => {
 		e.stopPropagation();
@@ -18,25 +21,51 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 		? `${article.description.split(" ").slice(0, 7).join(" ")} ... voir plus`
 		: "";
 
+	// On récupère la première promo active, si elle existe
+	const activePromo = article.promotions?.find((promo) => {
+		const start = new Date(promo.start_date);
+		const end = new Date(promo.end_date);
+		return promo.status === "active" && start <= now && now <= end;
+	});
+
+	// booléen pour savoir si on affiche le badge + prix promo
+	const hasPromo = !!activePromo;
+
 	// Calcul prix avec promo si elle existe
-	let displayPrice: number = article.price_ttc;
-	if (article.promotions && article.promotions.length > 0) {
-		const promo = article.promotions[0];
-		if (promo.discount_type === "percentage") {
-			displayPrice = (article.price_ttc * (100 - promo.discount_value)) / 100;
-		} else if (promo.discount_type === "amount") {
-			displayPrice = article.price_ttc - promo.discount_value;
+	let displayPrice = article.price_ttc;
+	if (activePromo) {
+		if (activePromo.discount_type === "percentage") {
+			displayPrice =
+				(article.price_ttc * (100 - activePromo.discount_value)) / 100;
+		} else if (activePromo.discount_type === "amount") {
+			displayPrice = article.price_ttc - activePromo.discount_value;
 		}
 	}
 	displayPrice = Math.max(displayPrice, 0);
+
+	const addToCart = (e: React.MouseEvent) => {
+		e.preventDefault(); // empêche le Link
+		e.stopPropagation(); // évite la navigation
+
+		addToCartStore({
+			id: article.article_id.toString(),
+			name: article.name,
+			brand: article.brand,
+			price: displayPrice, // prix avec promo si applicable
+			image: article.images?.[0], // première image
+			quantity: 1,
+		});
+
+		console.log(`${article.name} ajouté au panier`);
+	};
 
 	return (
 		<Link
 			to={`/articles/${type}/${article.name}`}
 			key={article.article_id}
-			className="border rounded-lg shadow-lg bg-white cursor-pointer flex flex-col h-40 hover:-translate-y-2"
+			className="border rounded-lg shadow-lg bg-white cursor-pointer flex flex-col hover:-translate-y-2 transition-transform"
 		>
-			<div className="flex h-full">
+			<div className="flex h-42">
 				{/* Colonne image */}
 				<div className="w-1/3 border-r flex items-center justify-center p-2">
 					<img
@@ -50,46 +79,69 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 				</div>
 
 				{/* Colonne texte */}
-				<div className="w-2/3 pl-2 flex flex-col justify-between bg-gray-50 rounded-lg">
+				<div className="w-2/3 pl-2 flex flex-col bg-gray-50 rounded-lg justify-between">
 					<div>
-						<div className="bg-gray-300 inline-block mt-1 -ml-1 rounded-lg">
-							<button
-								type="button"
-								onClick={(e) => handleBrandClick(e, article.brand)}
-								className="px-2 hover:underline"
-							>
-								{article.brand}
-							</button>
+						<div className="flex justify-between">
+							<div className="bg-gray-300 inline-block mt-1 -ml-1 rounded-lg">
+								<button
+									type="button"
+									onClick={(e) => handleBrandClick(e, article.brand)}
+									className="px-2 hover:underline"
+								>
+									{article.brand}
+								</button>
+							</div>
+							<div>
+								{hasPromo && (
+									<p className="text-xs bg-red-500 rounded-md text-white font-semibold inline-block mt-1 px-2 py-1 mr-1 animate-bounce">
+										PROMO
+									</p>
+								)}
+							</div>
 						</div>
 						<h2 className="font-semibold leading-none mt-1">{article.name}</h2>
-						<p className="text-sm text-gray-600 mt-1">{shortDesc}</p>
+						<p className="text-sm text-gray-600 mt-1 leading-tight">
+							{shortDesc}
+						</p>
 					</div>
 
-					<div>
-						{article.promotions && article.promotions.length > 0 && (
-							<div className="bg-gray-300 inline-block rounded-sm px-1 mt-2 text-sm">
-								- {article.promotions[0].discount_value}{" "}
-								{article.promotions[0].discount_type === "percentage"
-									? "%"
-									: "€"}
-							</div>
-						)}
-
+					{/* Bloc prix + panier fixé en bas */}
+					<div className="flex items-end justify-between p-1 -ml-2 ">
 						{/* Prix */}
 						<div>
-							{article.promotions && article.promotions.length > 0 ? (
-								<p className="font-bold text-red-600 text-sm">
-									{displayPrice.toFixed(2)} €{" "}
-									<span className="line-through text-black text-sm">
-										{article.price_ttc.toFixed(2)} €
-									</span>
-								</p>
-							) : (
-								<p className="font-bold text-sm">
-									{article.price_ttc.toFixed(2)} €
+							{hasPromo && activePromo && (
+								<p className="inline-block bg-gray-300 rounded-md font-semibold px-2 py-1 text-xs">
+									{activePromo.discount_type === "percentage"
+										? `-${activePromo.discount_value}%`
+										: `-${activePromo.discount_value}€`}
 								</p>
 							)}
+
+							<div>
+								{hasPromo && activePromo ? (
+									<p className="font-bold text-red-600 text-md">
+										{displayPrice.toFixed(2)} €{" "}
+										<span className="line-through text-gray-500 text-sm">
+											{article.price_ttc.toFixed(2)} €
+										</span>
+									</p>
+								) : (
+									<p className="font-bold text-md">
+										{article.price_ttc.toFixed(2)} €
+									</p>
+								)}
+							</div>
 						</div>
+
+						{/* Bouton panier */}
+						<button
+							type="button"
+							className="flex items-center justify-center bg-amber-300 text-black rounded-md px-2 py-1 transition-colors"
+							onClick={addToCart}
+						>
+							<span className="text-md font-bold mr-1">+</span>
+							<img src="/icons/cart.svg" alt="panier" className="w-5 h-5" />
+						</button>
 					</div>
 				</div>
 			</div>

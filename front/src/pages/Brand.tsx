@@ -22,7 +22,9 @@ export default function Brand({ brand }: ArticlesProps) {
 	return (
 		<>
 			<Breadcrumb items={breadcrumbItems} />
-			<h1 className="text-xl font-bold mb-4">{brand}</h1>
+			<h1 className="text-xl font-bold mb-4 mt-2">
+				Nos article de la marque {brand}
+			</h1>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{filteredArticles.map((article) => (

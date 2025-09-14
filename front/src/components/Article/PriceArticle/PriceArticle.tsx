@@ -10,7 +10,6 @@ export default function PriceArticle({ article }: { article: Article }) {
 
 	let displayPrice: number = article.price_ttc;
 
-	// Vérification sécurisée des promotions
 	if (article.promotions && article.promotions.length > 0) {
 		const promo = article.promotions[0];
 		if (promo.discount_type === "percentage") {
@@ -39,7 +38,6 @@ export default function PriceArticle({ article }: { article: Article }) {
 					<div className="flex flex-col w-1/2 justify-end">
 						{/* Partie promo */}
 						<div>
-							{/* Vérification sécurisée des promotions */}
 							{article.promotions && article.promotions.length > 0 && (
 								<div className="flex mb-2">
 									<p className="text-xs bg-gray-300 rounded-md font-semibold px-2 py-1">
@@ -47,7 +45,7 @@ export default function PriceArticle({ article }: { article: Article }) {
 											? `-${article.promotions[0].discount_value}%`
 											: `-${article.promotions[0].discount_value}€`}
 									</p>
-									<p className="text-xs bg-red-500 rounded-md text-white font-semibold px-2 py-1 ml-2">
+									<p className="text-xs bg-red-500 rounded-md text-white font-semibold px-2 py-1 ml-2 animate-bounce">
 										PROMO
 									</p>
 								</div>
@@ -59,7 +57,7 @@ export default function PriceArticle({ article }: { article: Article }) {
 							{article.promotions && article.promotions.length > 0 ? (
 								<p className="font-bold text-red-600 text-lg">
 									{displayPrice.toFixed(2)} €{" "}
-									<span className="line-through text-black text-xs">
+									<span className="line-through text-black text-sm">
 										{article.price_ttc.toFixed(2)} €
 									</span>
 								</p>

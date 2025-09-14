@@ -14,7 +14,7 @@ export default function CaracteristicsArticle({
 				</h3>
 
 				{/* Responsive : 1 colonne en mobile, 2 en desktop */}
-				<div className="grid grid-cols-1 xl:grid-cols-2 gap-4 mt-6">
+				<div className="grid grid-cols-1 xl:grid-cols-2 gap-x-4 gap-y-2 xl:gap-y-6 mt-6 xl:mt-10">
 					{Object.entries(characteristics)
 						.filter(([_, value]) => value && value !== null)
 						.map(([key, value]) => (
