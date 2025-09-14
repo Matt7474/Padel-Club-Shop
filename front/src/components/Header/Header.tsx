@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import CartModal from "../Modal/CartModal";
 import MenuModal from "../Modal/MenuModal";
+import SearchBar from "../SearchBar/SearchBar";
 
 export default function Header() {
+	const navigate = useNavigate();
 	const [isQuantity, setIsQuantity] = useState(0);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isCartOpen, setIsCartOpen] = useState(false);
@@ -27,7 +29,10 @@ export default function Header() {
 		setIsCartOpen((prev) => !prev);
 	};
 
-	const handleSearch = () => {
+	const handleSearch = (searchValue: string) => {
+		if (searchValue.trim()) {
+			navigate(`/articles?search=${encodeURIComponent(searchValue)}`);
+		}
 		setIsMenuOpen(false);
 	};
 
@@ -71,26 +76,7 @@ export default function Header() {
 					</Link>
 				</div>
 
-				<div className="hidden 2xl:block relative">
-					<input
-						type="text"
-						className="bg-white mt-4 h-10 w-150 border-1 border-gray-500 rounded-sm relative pl-2 text-gray-700 pb-1"
-						placeholder="Rechercher"
-					/>
-
-					<button
-						type="button"
-						onClick={handleSearch}
-						className="absolute right-3 -mt-1 top-1/2 -translate-y-1/2 opacity-60"
-						aria-label="Rechercher"
-					>
-						<img
-							src="/icons/glass.svg"
-							alt=""
-							className="w-5 hover:cursor-pointer"
-						/>
-					</button>
-				</div>
+				<SearchBar onSearch={handleSearch} className="hidden 2xl:block" />
 
 				<div className="flex gap-3 xl:-mt-4 mr-1 items-center">
 					<Link

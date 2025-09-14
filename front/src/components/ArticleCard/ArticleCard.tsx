@@ -1,9 +1,8 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import type Article from "../../types/Article";
-import { useState } from "react";
 import InfoModal from "../Modal/InfoModal";
-import Toast from "../Modal/InfoModal";
 
 interface ArticleCardProps {
 	article: Article;
@@ -68,7 +67,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 		]);
 	};
 
-	const removeToast = (id: number) => {
+	const removeInfoModal = (id: number) => {
 		setInfoModal((prev) => prev.filter((t) => t.id !== id));
 	};
 
@@ -161,12 +160,12 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 				{/* infoModal */}
 				<div className="fixed bottom-4 left-4 flex flex-col gap-2 z-50">
 					{infoModal.map((infoModal) => (
-						<Toast
+						<InfoModal
 							key={infoModal.id}
 							id={infoModal.id}
 							bg="bg-green-500"
 							text={infoModal.text}
-							onClose={removeToast}
+							onClose={removeInfoModal}
 						/>
 					))}
 				</div>

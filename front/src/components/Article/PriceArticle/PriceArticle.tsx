@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useCartStore } from "../../../store/cartStore";
 import type Article from "../../../types/Article";
-import Toast from "../../Modal/InfoModal";
+import InfoModal from "../../Modal/InfoModal";
 
 export default function PriceArticle({ article }: { article: Article }) {
 	const addToCart = useCartStore((state) => state.addToCart);
@@ -40,7 +40,7 @@ export default function PriceArticle({ article }: { article: Article }) {
 		]);
 	};
 
-	const removeToast = (id: number) => {
+	const removeInfoModal = (id: number) => {
 		setInfoModal((prev) => prev.filter((t) => t.id !== id));
 	};
 
@@ -120,12 +120,12 @@ export default function PriceArticle({ article }: { article: Article }) {
 			{/* infoModal */}
 			<div className="fixed bottom-4 left-4 flex flex-col gap-2 z-50">
 				{infoModal.map((infoModal) => (
-					<Toast
+					<InfoModal
 						key={infoModal.id}
 						id={infoModal.id}
 						bg="bg-green-500"
 						text={infoModal.text}
-						onClose={removeToast}
+						onClose={removeInfoModal}
 					/>
 				))}
 			</div>

@@ -77,30 +77,30 @@ export default function Footer() {
 					<div className="w-full xl:w-1/3 border-b border-white mb-4"></div>
 
 					<div className="grid grid-cols-2 gap-x-16 gap-y-2 leading-tight text-">
-						<Link to="/articles/raquette">
+						<Link to="/articles/racket">
 							<p className="text-md hover:underline cursor-pointer ">
 								Raquettes
 							</p>
 						</Link>
-						<Link to="/articles/sac">
+						<Link to="/articles/bag">
 							<p className="text-md hover:underline cursor-pointer text-end">
 								Sacs
 							</p>
 						</Link>
-						<Link to="/articles/balle">
+						<Link to="/articles/ball">
 							<p className="text-md hover:underline cursor-pointer">Balles</p>
 						</Link>
-						<Link to="/articles/vetement">
+						<Link to="/articles/clothing">
 							<p className="text-md hover:underline cursor-pointer text-end">
 								Vêtements
 							</p>
 						</Link>
-						<Link to="/articles/chaussure">
+						<Link to="/articles/shoe">
 							<p className="text-md hover:underline cursor-pointer">
 								Chaussures
 							</p>
 						</Link>
-						<Link to="/articles/raquaccessoire">
+						<Link to="/articles/accessory">
 							<p className="text-md hover:underline cursor-pointer text-end">
 								Accessoires
 							</p>

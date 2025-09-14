@@ -1,12 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import LinkMenu from "../LinkMenu/LinkMenu";
+import SearchBar from "../SearchBar/SearchBar";
 
 export default function MenuModal({ closeMenu }: { closeMenu: () => void }) {
+	const navigate = useNavigate();
 	const [, setIsMenuOpen] = useState(false);
 
-	const handleSearch = () => {
-		console.log("Recherche en cours");
-		closeMenu();
+	const handleSearch = (searchValue: string) => {
+		if (searchValue.trim()) {
+			navigate(`/articles?search=${encodeURIComponent(searchValue)}`);
+		}
+		setIsMenuOpen(false);
 	};
 
 	return (
@@ -42,26 +47,7 @@ export default function MenuModal({ closeMenu }: { closeMenu: () => void }) {
 					Fermer
 				</button>
 
-				<div className="relative mb-3 flex items-center">
-					<input
-						type="text"
-						className="bg-white mt-5 h-10 w-full border-1 border-gray-500 rounded-md relative pl-2 text-gray-700 pb-1"
-						placeholder="Rechercher"
-					/>
-
-					<button
-						type="button"
-						onClick={handleSearch}
-						className="absolute right-2 mt-5.5 opacity-60"
-						aria-label="Rechercher"
-					>
-						<img
-							src="/icons/glass.svg"
-							alt=""
-							className="w-4 hover:cursor-pointer"
-						/>
-					</button>
-				</div>
+				<SearchBar onSearch={handleSearch} className="block 2xl:hidden" />
 
 				<div className="flex flex-col gap-y-3 mt-4">
 					<LinkMenu
