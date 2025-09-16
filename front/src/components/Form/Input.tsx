@@ -3,7 +3,7 @@ interface inputProps {
 	htmlFor: string;
 	label: string;
 	type: string;
-	value: string;
+	value: string | number;
 	onChange: (value: string) => void;
 	pattern?: string;
 	min?: string;

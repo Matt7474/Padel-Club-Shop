@@ -38,19 +38,19 @@ export default function Toogle({ checked, onChange }: ToogleProps) {
 				<div className="-mt-5">
 					{!checked ? (
 						<>
-							<span className="absolute text-sm left-74.5 text-red-500 [text-shadow:0_0_8px_rgba(239,68,68,1),0_0_20px_rgba(239,68,68,0.9)]">
+							<span className="absolute text-sm left-75 text-red-500 [text-shadow:0_0_8px_rgba(239,68,68,1),0_0_20px_rgba(239,68,68,0.9)]">
 								NO
 							</span>
-							<span className="absolute text-sm left-74.5 text-red-500 [text-shadow:0_0_8px_rgba(239,68,68,1),0_0_20px_rgba(239,68,68,0.9)]">
+							<span className="absolute text-sm left-75 text-red-500 [text-shadow:0_0_8px_rgba(239,68,68,1),0_0_20px_rgba(239,68,68,0.9)]">
 								NO
 							</span>
 						</>
 					) : (
 						<>
-							<span className="absolute text-sm left-69.5 text-green-400 [text-shadow:0_0_8px_rgba(34,197,94,1),0_0_20px_rgba(34,197,94,0.9)]">
+							<span className="absolute text-sm left-70 text-green-400 [text-shadow:0_0_8px_rgba(34,197,94,1),0_0_20px_rgba(34,197,94,0.9)]">
 								YES
 							</span>
-							<span className="absolute text-sm left-69.5 text-green-400 [text-shadow:0_0_8px_rgba(34,197,94,1),0_0_20px_rgba(34,197,94,0.9)]">
+							<span className="absolute text-sm left-70 text-green-400 [text-shadow:0_0_8px_rgba(34,197,94,1),0_0_20px_rgba(34,197,94,0.9)]">
 								YES
 							</span>
 						</>

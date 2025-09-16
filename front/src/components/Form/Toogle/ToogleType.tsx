@@ -1,6 +1,6 @@
 interface ToogleTypeProps {
-	value: "%" | "€";
-	onChange: (val: "%" | "€") => void;
+	value: string;
+	onChange: (val: string) => void;
 }
 
 export default function ToogleType({ value, onChange }: ToogleTypeProps) {

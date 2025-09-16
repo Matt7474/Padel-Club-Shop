@@ -1,18 +1,14 @@
-interface SelectProps {
+interface TechRatingsProps {
 	label: string;
 	value: string;
 	onChange: (value: string) => void;
-	options: string[];
-	labels: string[];
 }
 
-export default function Select({
+export default function TechRatings({
 	label,
 	value,
 	onChange,
-	options,
-	labels,
-}: SelectProps) {
+}: TechRatingsProps) {
 	return (
 		<div className="relative">
 			<select
@@ -21,11 +17,14 @@ export default function Select({
 				className="border mt-4 h-10 pt-3 pl-2 w-full bg-white"
 			>
 				<option value="" className="text-gray-500"></option>
-				{options.map((option, idx) => (
-					<option key={option} value={option}>
-						{labels[idx] || option}
-					</option>
-				))}
+				{Array.from({ length: 10 }, (_, i) => {
+					const val = (i + 1).toString();
+					return (
+						<option key={val} value={val}>
+							{val}
+						</option>
+					);
+				})}
 			</select>
 			<p className="absolute text-gray-500 text-xs top-4 left-1">{label}</p>
 		</div>
