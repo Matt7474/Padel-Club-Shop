@@ -14,7 +14,7 @@ export default function Article() {
 	const { type, name } = useParams();
 
 	const article = typedArticlesData.articles.find(
-		(art) => art.tech_characteristics.type === type && art.name === name,
+		(art) => art.type && art.name === name,
 	);
 
 	if (!type || !name) {
@@ -25,14 +25,16 @@ export default function Article() {
 		return <div>Cet article n'à pas été trouvé</div>;
 	}
 
+	const ratings = article.tech_ratings;
 	const [isDescriptionOn, setIsDescriptionOn] = useState(true);
 	const [isCaracteristiquesOn, setIsCaracteristiquesOn] = useState(false);
 
 	const breadcrumbItems = [
-		{ label: "Accueil", href: "/homepage" },
+		{ label: "Accueil", href: "/" },
 		{
-			label: `${type.charAt(0).toUpperCase() + type.slice(1)}s`,
-			href: `/articles/${type}`,
+			// label: `${type.charAt(0).toUpperCase() + type.slice(1)}s`,
+			label: `${article.type.charAt(0).toUpperCase() + article.type.slice(1)}`,
+			href: `/articles/${article.type}`,
 		},
 		{
 			label: name,
@@ -52,7 +54,9 @@ export default function Article() {
 				<PriceArticle article={article} />
 				<p className="font-semibold text-lg mt-6">{article.name}</p>
 				<p className="text-sm">{article.reference}</p>
-				<RatingArticle article={article} />
+				{ratings && Object.keys(ratings).length > 0 && (
+					<RatingArticle article={article} />
+				)}
 				<div className="mt-10">
 					<div className="flex justify-around font-semibold text-lg">
 						<button

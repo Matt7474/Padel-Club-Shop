@@ -204,8 +204,9 @@
 	"articles": [
 		{
 			"article_id": 1,
+			"type": "racket",
 			"name": "Babolat Pure Aero Rafa",
-			"description": "Professional tennis racket designed in collaboration with Rafael Nadal. Exceptional spin and power for aggressive baseline players.",
+			"description": "Professional tennis racket designed in collaboration with Rafael Nadal. Exceptional effet and puissance for aggressive baseline players.",
 			"reference": "PA-RAFA-2024",
 			"brand": "Babolat",
 			"images": [
@@ -215,32 +216,34 @@
 				"/images/babolat-pure-aero-rafa-4.jpg"
 			],
 			"price_ttc": 277.57,
-			"stock_quantity": 157,
+			"stock_quantity": {
+				"unique": 157
+			},
 			"status": "available",
 			"shipping_cost": 3.84,
 			"tech_characteristics": {
-				"weight": "106g",
-				"type": "racket",
-				"color": "Medium Purple",
-				"shape": "diamond",
-				"foam": "EVA hard",
+				"poids": "106g",
+
+				"couleur": "Medium Purple",
+				"forme": "diamond",
+				"mousse": "EVA hard",
 				"surface": "carbon",
-				"skill_level": "advanced",
-				"gender": "unisex"
+				"niveau": "advanced",
+				"genre": "unisex"
 			},
 			"tech_ratings": {
-				"maneuverability": 6,
-				"power": 2,
-				"comfort": 6,
-				"spin": 9,
+				"maniabilité": 6,
+				"puissance": 2,
+				"confort": 6,
+				"effet": 9,
 				"tolerance": 5,
-				"control": 9
+				"contrôle": 9
 			},
 			"promotions": [],
 			"reviews": [
 				{
 					"review_id": 1,
-					"comment": "Excellent control and precision for advanced players.",
+					"comment": "Excellent contrôle and precision for advanced players.",
 					"rating": 2,
 					"user": 1
 				}
@@ -248,38 +251,40 @@
 		},
 		{
 			"article_id": 17,
+			"type": "racket",
 			"name": "Wilson Blade 98 16x19",
-			"description": "Classic control racket with modern technology. Perfect balance of power and precision for all-court players.",
+			"description": "Classic contrôle racket with modern technology. Perfect balance of puissance and precision for all-court players.",
 			"reference": "WIL-BLADE-98",
 			"brand": "Wilson",
 			"images": ["/images/wilson-blade-98-1.jpg"],
 			"price_ttc": 210.56,
-			"stock_quantity": 59,
+			"stock_quantity": {
+				"unique": 59
+			},
 			"status": "available",
 			"shipping_cost": 11.54,
 			"tech_characteristics": {
-				"weight": "236g",
-				"type": "racket",
-				"color": "Pink",
-				"shape": "teardrop",
-				"foam": "EVA hard",
+				"poids": "236g",
+				"couleur": "Pink",
+				"forme": "teardrop",
+				"mousse": "EVA hard",
 				"surface": "felt",
-				"skill_level": "intermediate",
-				"gender": "women"
+				"niveau": "intermediate",
+				"genre": "women"
 			},
 			"tech_ratings": {
-				"maneuverability": 6,
-				"power": 6,
-				"comfort": 5,
-				"spin": 3,
+				"maniabilité": 6,
+				"puissance": 6,
+				"confort": 5,
+				"effet": 3,
 				"tolerance": 9,
-				"control": 4
+				"contrôle": 4
 			},
 			"promotions": [],
 			"reviews": [
 				{
 					"review_id": 1,
-					"comment": "Great feel and control for competitive play.",
+					"comment": "Great feel and contrôle for competitive play.",
 					"rating": 3,
 					"user": 8
 				},
@@ -293,38 +298,40 @@
 		},
 		{
 			"article_id": 18,
+			"type": "racket",
 			"name": "black-crown Textreme Tour 100P",
-			"description": "High-performance racket with Textreme technology for enhanced stability and power. Ideal for aggressive baseliners.",
+			"description": "High-performance racket with Textreme technology for enhanced stability and puissance. Ideal for aggressive baseliners.",
 			"reference": "PRI-TOUR-100P",
 			"brand": "black-crown",
 			"images": ["/images/black-crown-tour-100p-1.jpg"],
 			"price_ttc": 282.62,
-			"stock_quantity": 120,
+			"stock_quantity": {
+				"unique": 120
+			},
 			"status": "preorder",
 			"shipping_cost": 14.01,
 			"tech_characteristics": {
-				"weight": "364g",
-				"type": "racket",
-				"color": "Misty Rose",
-				"shape": "spherical",
-				"foam": "EVA medium",
+				"poids": "364g",
+				"couleur": "Misty Rose",
+				"forme": "spherical",
+				"mousse": "EVA medium",
 				"surface": "felt",
-				"skill_level": "intermediate",
-				"gender": "women"
+				"niveau": "intermediate",
+				"genre": "women"
 			},
 			"tech_ratings": {
-				"maneuverability": 8,
-				"power": 6,
-				"comfort": 2,
-				"spin": 5,
+				"maniabilité": 8,
+				"puissance": 6,
+				"confort": 2,
+				"effet": 5,
 				"tolerance": 7,
-				"control": 3
+				"contrôle": 3
 			},
 			"promotions": [],
 			"reviews": [
 				{
 					"review_id": 1,
-					"comment": "Excellent power and stability for aggressive play.",
+					"comment": "Excellent puissance and stability for aggressive play.",
 					"rating": 5,
 					"user": 5
 				},
@@ -336,7 +343,7 @@
 				},
 				{
 					"review_id": 3,
-					"comment": "Perfect for baseline power shots.",
+					"comment": "Perfect for baseline puissance shots.",
 					"rating": 5,
 					"user": 7
 				},
@@ -350,33 +357,28 @@
 		},
 		{
 			"article_id": 19,
+			"type": "bag",
 			"name": "cork CX Team Tennis Bag",
-			"description": "Lightweight tennis bag perfect for recreational players. Simple design with essential compartments for rackets and accessories.",
+			"description": "Lightpoids tennis bag perfect for recreational players. Simple design with essential compartments for rackets and accessories.",
 			"reference": "DUN-CX-TEAM",
 			"brand": "cork",
 			"images": ["/images/cork-cx-bag-1.jpg"],
 			"price_ttc": 75.37,
-			"stock_quantity": 100,
+			"stock_quantity": {
+				"unique": 100
+			},
 			"status": "available",
 			"shipping_cost": 4.3,
 			"tech_characteristics": {
-				"weight": "94g",
-				"type": "bag",
-				"color": "Linen White",
-				"shape": "spherical",
-				"foam": "EVA hard",
+				"poids": "94g",
+				"couleur": "Linen White",
+				"forme": "spherical",
+				"mousse": "EVA hard",
 				"surface": "fiberglass",
-				"skill_level": "beginner",
-				"gender": "unisex"
+				"niveau": "beginner",
+				"genre": "unisex"
 			},
-			"tech_ratings": {
-				"maneuverability": 6,
-				"power": 9,
-				"comfort": 7,
-				"spin": 1,
-				"tolerance": 5,
-				"control": 4
-			},
+			"tech_ratings": {},
 			"promotions": [
 				{
 					"promotion_id": 19,
@@ -393,38 +395,33 @@
 		},
 		{
 			"article_id": 20,
+			"type": "accessory",
 			"name": "Head Grip Overgrip Pack",
-			"description": "Premium overgrip for enhanced racket handle comfort and control. Absorbent material for optimal grip in all conditions.",
+			"description": "Premium overgrip for enhanced racket handle confort and contrôle. Absorbent material for optimal grip in all conditions.",
 			"reference": "TOUR-GRIP-PACK",
 			"brand": "Head",
 			"images": ["/images/Head-grip-1.jpg"],
 			"price_ttc": 64.91,
-			"stock_quantity": 82,
+			"stock_quantity": {
+				"unique": 82
+			},
 			"status": "available",
 			"shipping_cost": 6.09,
 			"tech_characteristics": {
-				"weight": "379g",
-				"type": "accessory",
-				"color": "Spring Green",
-				"shape": "spherical",
-				"foam": "N/A",
+				"poids": "379g",
+				"couleur": "Spring Green",
+				"forme": "spherical",
+				"mousse": "N/A",
 				"surface": "felt",
-				"skill_level": "all levels",
-				"gender": "unisex"
+				"niveau": "all levels",
+				"genre": "unisex"
 			},
-			"tech_ratings": {
-				"maneuverability": 3,
-				"power": 1,
-				"comfort": 7,
-				"spin": 7,
-				"tolerance": 8,
-				"control": 3
-			},
+			"tech_ratings": {},
 			"promotions": [],
 			"reviews": [
 				{
 					"review_id": 1,
-					"comment": "Excellent grip and comfort enhancement.",
+					"comment": "Excellent grip and confort enhancement.",
 					"rating": 4,
 					"user": 9
 				},
@@ -444,33 +441,28 @@
 		},
 		{
 			"article_id": 21,
+			"type": "ball",
 			"name": "Wilson Starter Tennis Balls",
 			"description": "Beginner-friendly tennis balls with reduced bounce for easier learning. Perfect for tennis lessons and recreational play.",
 			"reference": "WIL-START-BALL",
 			"brand": "Wilson",
 			"images": ["/images/wilson-starter-1.jpg"],
 			"price_ttc": 114.06,
-			"stock_quantity": 147,
+			"stock_quantity": {
+				"unique": 147
+			},
 			"status": "out_of_stock",
 			"shipping_cost": 14.47,
 			"tech_characteristics": {
-				"weight": "253g",
-				"type": "ball",
-				"color": "Orange",
-				"shape": "teardrop",
-				"foam": "EVA hard",
-				"surface": "felt",
-				"skill_level": "beginner",
-				"gender": "unisex"
+				"poids": "57g",
+				"diametre": "6.6 cm",
+				"rebond": "140 cm (chute de 2.54m)",
+				"pression": "4.8 kg/cm²",
+				"matiere": "caoutchouc + feutre synthétique",
+				"couleur": "jaune fluo",
+				"type": "balle de padel homologuée FIP"
 			},
-			"tech_ratings": {
-				"maneuverability": 1,
-				"power": 5,
-				"comfort": 10,
-				"spin": 7,
-				"tolerance": 3,
-				"control": 1
-			},
+			"tech_ratings": {},
 			"promotions": [],
 			"reviews": [
 				{
@@ -483,33 +475,28 @@
 		},
 		{
 			"article_id": 22,
+			"type": "bag",
 			"name": "Head Tour Team Tennis Bag",
 			"description": "Professional tennis bag with multiple compartments for rackets, shoe, and accessories. Built for serious tournament players.",
 			"reference": "HEAD-TOUR-BAG",
 			"brand": "Head",
 			"images": ["/images/head-tour-bag-1.jpg"],
 			"price_ttc": 251.58,
-			"stock_quantity": 59,
+			"stock_quantity": {
+				"unique": 59
+			},
 			"status": "out_of_stock",
 			"shipping_cost": 2.07,
 			"tech_characteristics": {
-				"weight": "278g",
-				"type": "bag",
-				"color": "Thistle Purple",
-				"shape": "diamond",
-				"foam": "N/A",
-				"surface": "felt",
-				"skill_level": "all levels",
-				"gender": "men"
+				"poids": "278g",
+				"type": "sac de sport",
+				"volume": "45L",
+				"dimension": "60 x 30 x 30 cm",
+				"matiere": "100% polyester",
+				"couleur": "Thistle Purple",
+				"compartiment": "1 principal + 2 latéraux + poche chaussure"
 			},
-			"tech_ratings": {
-				"maneuverability": 6,
-				"power": 8,
-				"comfort": 8,
-				"spin": 3,
-				"tolerance": 10,
-				"control": 1
-			},
+			"tech_ratings": {},
 			"promotions": [],
 			"reviews": [
 				{
@@ -540,8 +527,9 @@
 		},
 		{
 			"article_id": 23,
+			"type": "racket",
 			"name": "Babolat Pure Drive 2024",
-			"description": "Latest generation Pure Drive with enhanced power and spin capabilities. The world's most popular tennis racket series.",
+			"description": "Latest generation Pure Drive with enhanced puissance and effet capabilities. The world's most popular tennis racket series.",
 			"reference": "BAB-DRIVE-2024",
 			"brand": "Babolat",
 			"images": [
@@ -551,26 +539,27 @@
 				"/images/babolat-drive-2024-4.jpg"
 			],
 			"price_ttc": 239.1,
-			"stock_quantity": 95,
+			"stock_quantity": {
+				"unique": 95
+			},
 			"status": "available",
 			"shipping_cost": 7.62,
 			"tech_characteristics": {
-				"weight": "81g",
-				"type": "racket",
-				"color": "Light Yellow",
-				"shape": "round",
-				"foam": "N/A",
+				"poids": "81g",
+				"couleur": "Light Yellow",
+				"forme": "round",
+				"mousse": "N/A",
 				"surface": "carbon/aluminum",
-				"skill_level": "intermediate",
-				"gender": "men"
+				"niveau": "intermediate",
+				"genre": "men"
 			},
 			"tech_ratings": {
-				"maneuverability": 1,
-				"power": 9,
-				"comfort": 4,
-				"spin": 9,
+				"maniabilité": 1,
+				"puissance": 9,
+				"confort": 4,
+				"effet": 9,
 				"tolerance": 9,
-				"control": 8
+				"contrôle": 8
 			},
 			"promotions": [
 				{
@@ -587,7 +576,7 @@
 			"reviews": [
 				{
 					"review_id": 1,
-					"comment": "Incredible power and spin generation.",
+					"comment": "Incredible puissance and effet generation.",
 					"rating": 2,
 					"user": 3
 				},
@@ -601,33 +590,28 @@
 		},
 		{
 			"article_id": 24,
+			"type": "bag",
 			"name": "nox Pro Tournament Bag",
 			"description": "Premium tournament bag with thermal compartments for racket protection. Professional grade for competitive players.",
 			"reference": "YON-PRO-TOURN",
 			"brand": "nox",
 			"images": ["/images/nox-pro-bag-1.jpg"],
 			"price_ttc": 176.94,
-			"stock_quantity": 106,
+			"stock_quantity": {
+				"unique": 106
+			},
 			"status": "preorder",
 			"shipping_cost": 9.42,
 			"tech_characteristics": {
-				"weight": "293g",
-				"type": "bag",
-				"color": "Spring Green",
-				"shape": "teardrop",
-				"foam": "EVA hard",
-				"surface": "felt",
-				"skill_level": "intermediate",
-				"gender": "unisex"
+				"poids": "410g",
+				"type": "sac à dos",
+				"volume": "28L",
+				"dimension": "48 x 28 x 20 cm",
+				"matiere": "nylon ripstop",
+				"couleur": "Charcoal Black",
+				"compartiment": "1 principal + 1 ordinateur + 2 poches extérieures"
 			},
-			"tech_ratings": {
-				"maneuverability": 10,
-				"power": 8,
-				"comfort": 8,
-				"spin": 1,
-				"tolerance": 6,
-				"control": 2
-			},
+			"tech_ratings": {},
 			"promotions": [],
 			"reviews": [
 				{
@@ -658,33 +642,29 @@
 		},
 		{
 			"article_id": 25,
+			"type": "accessory",
 			"name": "Wilson Pro Overgrip 3-Pack",
-			"description": "Professional grade overgrip for enhanced racket control and comfort. Used by top ATP and WTA players worldwide.",
+			"description": "Professional grade overgrip for enhanced racket contrôle and confort. Used by top ATP and WTA players worldwide.",
 			"reference": "WIL-PRO-OVER3",
 			"brand": "Wilson",
 			"images": ["/images/wilson-pro-overgrip-1.jpg"],
 			"price_ttc": 66.75,
-			"stock_quantity": 99,
+			"stock_quantity": {
+				"unique": 99
+			},
 			"status": "preorder",
 			"shipping_cost": 5.39,
 			"tech_characteristics": {
-				"weight": "78g",
-				"type": "accessory",
-				"color": "Dark Orchid Purple",
-				"shape": "diamond",
-				"foam": "EVA hard",
+				"poids": "78g",
+
+				"couleur": "Dark Orchid Purple",
+				"forme": "diamond",
+				"mousse": "EVA hard",
 				"surface": "fiberglass",
-				"skill_level": "advanced",
-				"gender": "men"
+				"niveau": "advanced",
+				"genre": "men"
 			},
-			"tech_ratings": {
-				"maneuverability": 6,
-				"power": 9,
-				"comfort": 1,
-				"spin": 10,
-				"tolerance": 1,
-				"control": 5
-			},
+			"tech_ratings": {},
 			"promotions": [],
 			"reviews": [
 				{
@@ -715,33 +695,28 @@
 		},
 		{
 			"article_id": 26,
+			"type": "bag",
 			"name": "Tecnifibre Endurance Tennis Bag",
 			"description": "Durable tennis bag with reinforced construction for long-lasting performance. Perfect for club and recreational players.",
 			"reference": "TECNI-ENDUR-BAG",
 			"brand": "Tecnifibre",
 			"images": ["/images/tecnifibre-endur-1.jpg"],
 			"price_ttc": 10.41,
-			"stock_quantity": 118,
+			"stock_quantity": {
+				"unique": 118
+			},
 			"status": "preorder",
 			"shipping_cost": 10.59,
 			"tech_characteristics": {
-				"weight": "135g",
-				"type": "bag",
-				"color": "Misty Rose",
-				"shape": "teardrop",
-				"foam": "N/A",
-				"surface": "felt",
-				"skill_level": "intermediate",
-				"gender": "unisex"
+				"poids": "540g",
+				"type": "duffel",
+				"volume": "55L",
+				"dimension": "65 x 32 x 32 cm",
+				"matiere": "polyester 600D",
+				"couleur": "Crimson Red",
+				"compartiment": "1 principal + 2 latéraux + 1 poche zippée"
 			},
-			"tech_ratings": {
-				"maneuverability": 4,
-				"power": 6,
-				"comfort": 8,
-				"spin": 7,
-				"tolerance": 2,
-				"control": 10
-			},
+			"tech_ratings": {},
 			"promotions": [],
 			"reviews": [
 				{
@@ -772,38 +747,41 @@
 		},
 		{
 			"article_id": 27,
+			"type": "racket",
 			"name": "black-crown Phantom Pro 100",
-			"description": "Advanced racket with precision engineering for control-oriented players. Perfect balance of power and accuracy for competitive play.",
+			"description": "Advanced racket with precision engineering for contrôle-oriented players. Perfect balance of puissance and accuracy for competitive play.",
 			"reference": "PRI-PHANTOM-100",
 			"brand": "black-crown",
 			"images": ["/images/black-crown.jpg"],
 			"price_ttc": 65.9,
-			"stock_quantity": 174,
+			"stock_quantity": {
+				"unique": 174
+			},
 			"status": "available",
 			"shipping_cost": 2.69,
 			"tech_characteristics": {
-				"weight": "372g",
-				"type": "racket",
-				"color": "Peru Brown",
-				"shape": "diamond",
-				"foam": "EVA soft",
+				"poids": "372g",
+
+				"couleur": "Peru Brown",
+				"forme": "diamond",
+				"mousse": "EVA soft",
 				"surface": "felt",
-				"skill_level": "beginner",
-				"gender": "men"
+				"niveau": "beginner",
+				"genre": "men"
 			},
 			"tech_ratings": {
-				"maneuverability": 8,
-				"power": 1,
-				"comfort": 5,
-				"spin": 6,
+				"maniabilité": 8,
+				"puissance": 1,
+				"confort": 5,
+				"effet": 6,
 				"tolerance": 5,
-				"control": 2
+				"contrôle": 2
 			},
 			"promotions": [],
 			"reviews": [
 				{
 					"review_id": 1,
-					"comment": "Excellent precision and control.",
+					"comment": "Excellent precision and contrôle.",
 					"rating": 3,
 					"user": 3
 				},
@@ -829,97 +807,90 @@
 		},
 		{
 			"article_id": 28,
+			"type": "racket",
 			"name": "HEAD Graphene 360+ Gravity Pro",
-			"description": "Professional grade racket with Graphene 360+ technology for enhanced stability and power. Perfect for aggressive players.",
+			"description": "Professional grade racket with Graphene 360+ technology for enhanced stability and puissance. Perfect for aggressive players.",
 			"reference": "HEAD-GRAV-PRO",
 			"brand": "Head",
 			"images": ["/images/head-gravity-pro-1.jpg"],
 			"price_ttc": 266.19,
-			"stock_quantity": 156,
+			"stock_quantity": {
+				"unique": 156
+			},
 			"status": "available",
 			"shipping_cost": 6.89,
 			"tech_characteristics": {
-				"weight": "87g",
-				"type": "racket",
-				"color": "Dark Slate Gray",
-				"shape": "round",
-				"foam": "EVA hard",
+				"poids": "87g",
+
+				"couleur": "Dark Slate Gray",
+				"forme": "round",
+				"mousse": "EVA hard",
 				"surface": "fiberglass",
-				"skill_level": "all levels",
-				"gender": "women"
+				"niveau": "all levels",
+				"genre": "women"
 			},
 			"tech_ratings": {
-				"maneuverability": 6,
-				"power": 4,
-				"comfort": 1,
-				"spin": 7,
+				"maniabilité": 6,
+				"puissance": 4,
+				"confort": 1,
+				"effet": 7,
 				"tolerance": 8,
-				"control": 3
+				"contrôle": 3
 			},
 			"promotions": [],
 			"reviews": []
 		},
 		{
 			"article_id": 29,
+			"type": "ball",
 			"name": "cork Australian Open Tennis Balls",
 			"description": "Official Australian Open tennis balls with premium felt coating. Used in the season-opening Grand Slam tournament.",
 			"reference": "DUN-AUSOPEN-24",
 			"brand": "cork",
 			"images": ["/images/cork-ausopen-1.jpg"],
 			"price_ttc": 144.8,
-			"stock_quantity": 98,
+			"stock_quantity": {
+				"unique": 98
+			},
 			"status": "preorder",
 			"shipping_cost": 10.98,
 			"tech_characteristics": {
-				"weight": "297g",
-				"type": "ball",
-				"color": "Lavender White",
-				"shape": "teardrop",
-				"foam": "EVA medium",
-				"surface": "felt",
-				"skill_level": "beginner",
-				"gender": "unisex"
+				"poids": "57g",
+				"diametre": "6.6 cm",
+				"rebond": "140 cm (chute de 2.54m)",
+				"pression": "4.8 kg/cm²",
+				"matiere": "caoutchouc + feutre synthétique",
+				"couleur": "jaune fluo",
+				"type": "balle de padel homologuée FIP"
 			},
-			"tech_ratings": {
-				"maneuverability": 10,
-				"power": 6,
-				"comfort": 4,
-				"spin": 5,
-				"tolerance": 2,
-				"control": 10
-			},
+			"tech_ratings": {},
 			"promotions": [],
 			"reviews": []
 		},
 		{
 			"article_id": 30,
+			"type": "bag",
 			"name": "Wilson Roland Garros Tennis Bag",
 			"description": "Premium tennis bag inspired by the French Open. Elegant design with practical compartments for court and travel use.",
 			"reference": "WIL-RG-BAG-24",
 			"brand": "Wilson",
 			"images": ["/images/wilson-rg-bag-1.jpg"],
 			"price_ttc": 99.47,
-			"stock_quantity": 154,
+			"stock_quantity": {
+				"unique": 154
+			},
 			"status": "available",
 			"shipping_cost": 8.98,
 			"tech_characteristics": {
-				"weight": "395g",
-				"type": "bag",
-				"color": "Floral White",
-				"shape": "spherical",
-				"foam": "EVA hard",
-				"surface": "felt",
-				"skill_level": "intermediate",
-				"gender": "women"
+				"poids": "295g",
+				"type": "sac bandoulière",
+				"volume": "20L",
+				"dimension": "40 x 20 x 25 cm",
+				"matiere": "coton canvas",
+				"couleur": "Olive Green",
+				"compartiment": "1 principal + 1 poche frontale"
 			},
-			"tech_ratings": {
-				"maneuverability": 4,
-				"power": 4,
-				"comfort": 10,
-				"spin": 10,
-				"tolerance": 2,
-				"control": 7
-			},
+			"tech_ratings": {},
 			"promotions": [
 				{
 					"promotion_id": 30,
@@ -961,153 +932,170 @@
 		},
 		{
 			"article_id": 31,
+			"type": "shoes",
 			"name": "oxdog Air Zoom Vapor Pro",
 			"description": "Chaussures de tennis haute performance avec technologie Zoom Air pour une réactivité optimale sur tous les courts.",
 			"reference": "oxdog-VAPOR-PRO-2024",
 			"brand": "oxdog",
 			"images": ["/images/oxdog-vapor-pro-white.jpg"],
 			"price_ttc": 129.9,
-			"stock_quantity": 89,
+			"stock_quantity": {
+				"36": 25,
+				"37": 45,
+				"38": 17,
+				"39": 43,
+				"40": 53,
+				"41": 53,
+				"42": 14
+			},
 			"status": "available",
 			"shipping_cost": 6.99,
 			"tech_characteristics": {
-				"weight": "340g",
-				"type": "shoe",
-				"color": "White/Black",
-				"surface": "all court",
-				"technology": "Zoom Air",
-				"upper_material": "synthetic leather",
-				"sole": "rubber with herringbone pattern",
-				"gender": "unisex"
+				"poids": "300g",
+				"couleur": "White/Black",
+				"semelle": "all court",
+				"genre": "Femme"
 			},
-			"sizes_available": ["38", "39", "40", "41", "42", "43", "44", "45"],
-			"tech_ratings": {
-				"stability": 9,
-				"comfort": 8,
-				"durability": 8,
-				"grip": 9,
-				"breathability": 7,
-				"support": 8
-			}
+			"tech_ratings": {}
 		},
 		{
 			"article_id": 32,
+			"type": "shoes",
 			"name": "starvie Barricade Court Women",
 			"description": "Chaussures de tennis femme conçues pour la durabilité et le confort lors des matchs intensifs.",
 			"reference": "ADI-BARRI-W-24",
 			"brand": "starvie",
 			"images": ["/images/starvie-barricade-pink.jpg"],
 			"price_ttc": 119.95,
-			"stock_quantity": 67,
+			"stock_quantity": {
+				"36": 2,
+				"37": 45,
+				"38": 7,
+				"39": 3,
+				"40": 3,
+				"41": 3,
+				"42": 1
+			},
 			"status": "available",
 			"shipping_cost": 6.99,
 			"tech_characteristics": {
-				"weight": "320g",
-				"type": "shoe",
-				"color": "Pink/White",
-				"surface": "hard court",
-				"technology": "Bounce cushioning",
-				"upper_material": "mesh and synthetic",
-				"sole": "Adiwear rubber",
-				"gender": "women"
-			},
-			"sizes_available": ["36", "37", "38", "39", "40", "41", "42"]
+				"poids": "340g",
+				"couleur": "White/Black",
+				"semelle": "all court",
+				"genre": "homme"
+			}
 		},
 		{
 			"article_id": 33,
+			"type": "clothing",
 			"name": "starvie Sport Polo Classic",
 			"description": "Polo de tennis classique en piqué de coton respirant, parfait pour les matchs et l'entraînement.",
 			"reference": "LAC-POLO-CLASSIC-24",
 			"brand": "starvie",
 			"images": ["/images/starvie-polo-white.jpg"],
 			"price_ttc": 89.0,
-			"stock_quantity": 142,
+			"stock_quantity": {
+				"XS": 12,
+				"S": 22,
+				"M": 45,
+				"L": 37,
+				"XL": 13,
+				"2XL": 13,
+				"3XL": 23,
+				"4XL": 1
+			},
 			"status": "available",
 			"shipping_cost": 4.99,
 			"tech_characteristics": {
-				"weight": "180g",
-				"type": "clothing",
-				"clothing_type": "polo",
-				"color": "White",
-				"material": "100% cotton piqué",
-				"fit": "regular",
-				"collar": "ribbed",
-				"sleeves": "short",
-				"gender": "men"
-			},
-			"sizes_available": ["S", "M", "L", "XL", "XXL"]
+				"type": "skirt",
+				"genre": "women",
+				"material": "85% recycled polyester, 15% elastane",
+				"couleur": "White"
+			}
 		},
 		{
 			"article_id": 34,
+			"type": "clothing",
 			"name": "oxdog Dri-FIT Tennis Dress",
 			"description": "Robe de tennis féminine avec technologie Dri-FIT pour évacuer la transpiration et short intégré.",
 			"reference": "oxdog-DRESS-DRIFIT-24",
 			"brand": "oxdog",
 			"images": ["/images/oxdog-tennis-dress-navy.jpg"],
 			"price_ttc": 79.99,
-			"stock_quantity": 58,
+			"stock_quantity": {
+				"XS": 2,
+				"S": 22,
+				"M": 4,
+				"L": 3,
+				"XL": 3,
+				"2XL": 13,
+				"3XL": 3,
+				"4XL": 1
+			},
 			"status": "available",
 			"shipping_cost": 4.99,
 			"tech_characteristics": {
-				"weight": "150g",
-				"type": "clothing",
-				"clothing_type": "dress",
-				"color": "Navy Blue",
-				"material": "88% polyester, 12% elastane",
-				"technology": "Dri-FIT",
-				"fit": "athletic",
-				"length": "above knee",
-				"gender": "women"
-			},
-			"sizes_available": ["XS", "S", "M", "L", "XL"]
+				"type": "skirt",
+				"genre": "women",
+				"material": "85% recycled polyester, 15% elastane",
+				"couleur": "White"
+			}
 		},
 		{
 			"article_id": 35,
+			"type": "clothing",
 			"name": "Wilson Team Shorts Men",
 			"description": "Short de tennis homme en tissu stretch avec ceinture élastique et poches latérales pratiques.",
 			"reference": "WIL-SHORTS-TEAM-24",
 			"brand": "Wilson",
 			"images": ["/images/wilson-shorts-black.jpg"],
 			"price_ttc": 39.9,
-			"stock_quantity": 198,
+			"stock_quantity": {
+				"XS": 12,
+				"S": 2,
+				"M": 5,
+				"L": 3,
+				"XL": 13,
+				"2XL": 13,
+				"3XL": 3,
+				"4XL": 1
+			},
 			"status": "available",
 			"shipping_cost": 4.99,
 			"tech_characteristics": {
-				"weight": "120g",
-				"type": "clothing",
-				"clothing_type": "shorts",
-				"color": "Black",
-				"material": "92% polyester, 8% elastane",
-				"fit": "athletic",
-				"length": "7 inches",
-				"pockets": "2 side pockets",
-				"gender": "men"
-			},
-			"sizes_available": ["S", "M", "L", "XL", "XXL"]
+				"type": "skirt",
+				"genre": "women",
+				"material": "85% recycled polyester, 15% elastane",
+				"couleur": "White"
+			}
 		},
 		{
 			"article_id": 36,
+			"type": "clothing",
 			"name": "starvie Club Skirt Women",
 			"description": "Jupe-short de tennis avec short intégré, parfaite pour le confort et la liberté de mouvement.",
 			"reference": "ADI-SKIRT-CLUB-24",
 			"brand": "starvie",
 			"images": ["/images/starvie-skirt-white.jpg"],
 			"price_ttc": 49.95,
-			"stock_quantity": 73,
+			"stock_quantity": {
+				"XS": 2,
+				"S": 2,
+				"M": 5,
+				"L": 31,
+				"XL": 10,
+				"2XL": 12,
+				"3XL": 23,
+				"4XL": 1
+			},
 			"status": "available",
 			"shipping_cost": 4.99,
 			"tech_characteristics": {
-				"weight": "110g",
-				"type": "clothing",
-				"clothing_type": "skirt",
-				"color": "White",
+				"type": "skirt",
+				"genre": "women",
 				"material": "85% recycled polyester, 15% elastane",
-				"technology": "AEROREADY",
-				"fit": "regular",
-				"length": "15 inches",
-				"gender": "women"
-			},
-			"sizes_available": ["XS", "S", "M", "L", "XL"]
+				"couleur": "White"
+			}
 		}
 	],
 	"orders": [
@@ -1773,7 +1761,7 @@
 		{
 			"article_id": 1,
 			"name": "Babolat Pure Aero Tennis racket",
-			"description": "Professional tennis racket designed for power and spin. Endorsed by Rafael Nadal.",
+			"description": "Professional tennis racket designed for puissance and effet. Endorsed by Rafael Nadal.",
 			"reference": "BPA-2024-001",
 			"brand": "Babolat",
 			"images": [
@@ -1785,22 +1773,22 @@
 			"status": "available",
 			"shipping_cost": 12.5,
 			"tech_characteristics": {
-				"weight": "300g",
+				"poids": "300g",
 				"type": "racket",
-				"color": "Yellow/Black",
-				"shape": "oval",
-				"foam": "EVA soft",
+				"couleur": "Yellow/Black",
+				"forme": "oval",
+				"mousse": "EVA soft",
 				"surface": "carbon",
-				"skill_level": "intermediate to advanced",
-				"gender": "unisex"
+				"niveau": "intermediate to advanced",
+				"genre": "unisex"
 			},
 			"tech_ratings": {
-				"maneuverability": 7,
-				"power": 9,
-				"comfort": 6,
-				"spin": 10,
+				"maniabilité": 7,
+				"puissance": 9,
+				"confort": 6,
+				"effet": 10,
 				"tolerance": 7,
-				"control": 6
+				"contrôle": 6
 			},
 			"promotions": [
 				{
@@ -1836,22 +1824,22 @@
 			"status": "preorder",
 			"shipping_cost": 10.4,
 			"tech_characteristics": {
-				"weight": "190g",
+				"poids": "190g",
 				"type": "ball",
-				"color": "White",
-				"shape": "spherical",
-				"foam": "EVA medium",
+				"couleur": "White",
+				"forme": "spherical",
+				"mousse": "EVA medium",
 				"surface": "felt",
-				"skill_level": "intermediate",
-				"gender": "men"
+				"niveau": "intermediate",
+				"genre": "men"
 			},
 			"tech_ratings": {
-				"maneuverability": 10,
-				"power": 6,
-				"comfort": 8,
-				"spin": 7,
+				"maniabilité": 10,
+				"puissance": 6,
+				"confort": 8,
+				"effet": 7,
 				"tolerance": 7,
-				"control": 2
+				"contrôle": 2
 			},
 			"promotions": [],
 			"reviews": [
@@ -1866,7 +1854,7 @@
 		{
 			"article_id": 4,
 			"name": "HEAD Graphene 360+ Speed MP",
-			"description": "Precision and control racket for competitive players. Graphene 360+ technology for enhanced feel and stability.",
+			"description": "Precision and contrôle racket for competitive players. Graphene 360+ technology for enhanced feel and stability.",
 			"reference": "HEAD-SPEED-MP",
 			"brand": "HEAD",
 			"images": ["/images/head-speed-mp-1.jpg"],
@@ -1875,34 +1863,34 @@
 			"status": "preorder",
 			"shipping_cost": 12.85,
 			"tech_characteristics": {
-				"weight": "348g",
+				"poids": "348g",
 				"type": "racket",
-				"color": "Peach Beige",
-				"shape": "diamond",
-				"foam": "EVA soft",
+				"couleur": "Peach Beige",
+				"forme": "diamond",
+				"mousse": "EVA soft",
 				"surface": "fiberglass",
-				"skill_level": "intermediate",
-				"gender": "unisex"
+				"niveau": "intermediate",
+				"genre": "unisex"
 			},
 			"tech_ratings": {
-				"maneuverability": 10,
-				"power": 9,
-				"comfort": 6,
-				"spin": 5,
+				"maniabilité": 10,
+				"puissance": 9,
+				"confort": 6,
+				"effet": 5,
 				"tolerance": 7,
-				"control": 5
+				"contrôle": 5
 			},
 			"promotions": [],
 			"reviews": [
 				{
 					"review_id": 1,
-					"comment": "Excellent control and precision for competitive play.",
+					"comment": "Excellent contrôle and precision for competitive play.",
 					"rating": 5,
 					"user": 7
 				},
 				{
 					"review_id": 2,
-					"comment": "Perfect balance between power and control.",
+					"comment": "Perfect balance between puissance and contrôle.",
 					"rating": 5,
 					"user": 2
 				}
@@ -1920,22 +1908,22 @@
 			"status": "preorder",
 			"shipping_cost": 14.96,
 			"tech_characteristics": {
-				"weight": "338g",
+				"poids": "338g",
 				"type": "ball",
-				"color": "Brick Red",
-				"shape": "round",
-				"foam": "EVA soft",
+				"couleur": "Brick Red",
+				"forme": "round",
+				"mousse": "EVA soft",
 				"surface": "fiberglass",
-				"skill_level": "advanced",
-				"gender": "women"
+				"niveau": "advanced",
+				"genre": "women"
 			},
 			"tech_ratings": {
-				"maneuverability": 1,
-				"power": 4,
-				"comfort": 5,
-				"spin": 1,
+				"maniabilité": 1,
+				"puissance": 4,
+				"confort": 5,
+				"effet": 1,
 				"tolerance": 2,
-				"control": 5
+				"contrôle": 5
 			},
 			"promotions": [],
 			"reviews": [
@@ -1977,22 +1965,22 @@
 			"status": "available",
 			"shipping_cost": 5.89,
 			"tech_characteristics": {
-				"weight": "245g",
+				"poids": "245g",
 				"type": "ball",
-				"color": "Brown",
-				"shape": "round",
-				"foam": "EVA medium",
+				"couleur": "Brown",
+				"forme": "round",
+				"mousse": "EVA medium",
 				"surface": "fiberglass",
-				"skill_level": "advanced",
-				"gender": "men"
+				"niveau": "advanced",
+				"genre": "men"
 			},
 			"tech_ratings": {
-				"maneuverability": 7,
-				"power": 5,
-				"comfort": 10,
-				"spin": 10,
+				"maniabilité": 7,
+				"puissance": 5,
+				"confort": 10,
+				"effet": 10,
 				"tolerance": 9,
-				"control": 4
+				"contrôle": 4
 			},
 			"promotions": [],
 			"reviews": []
@@ -2000,7 +1988,7 @@
 		{
 			"article_id": 7,
 			"name": "nox Vibration Dampener Pro",
-			"description": "Professional vibration dampener to reduce string vibration and improve comfort during play. Essential accessory for serious players.",
+			"description": "Professional vibration dampener to reduce string vibration and improve confort during play. Essential accessory for serious players.",
 			"reference": "YON-DAMP-PRO",
 			"brand": "nox",
 			"images": ["/images/nox-dampener-1.jpg"],
@@ -2009,28 +1997,28 @@
 			"status": "available",
 			"shipping_cost": 7.28,
 			"tech_characteristics": {
-				"weight": "216g",
+				"poids": "216g",
 				"type": "accessory",
-				"color": "Navajo Yellow White",
-				"shape": "diamond",
-				"foam": "N/A",
+				"couleur": "Navajo Yellow White",
+				"forme": "diamond",
+				"mousse": "N/A",
 				"surface": "fiberglass",
-				"skill_level": "advanced",
-				"gender": "unisex"
+				"niveau": "advanced",
+				"genre": "unisex"
 			},
 			"tech_ratings": {
-				"maneuverability": 2,
-				"power": 9,
-				"comfort": 7,
-				"spin": 1,
+				"maniabilité": 2,
+				"puissance": 9,
+				"confort": 7,
+				"effet": 1,
 				"tolerance": 8,
-				"control": 10
+				"contrôle": 10
 			},
 			"promotions": [],
 			"reviews": [
 				{
 					"review_id": 1,
-					"comment": "Excellent vibration reduction and comfort.",
+					"comment": "Excellent vibration reduction and confort.",
 					"rating": 2,
 					"user": 9
 				},
@@ -2066,22 +2054,22 @@
 			"status": "out_of_stock",
 			"shipping_cost": 4.44,
 			"tech_characteristics": {
-				"weight": "89g",
+				"poids": "600g",
 				"type": "bag",
-				"color": "Gainsboro Gray (Pewter)",
-				"shape": "teardrop",
-				"foam": "EVA soft",
-				"surface": "fiberglass",
-				"skill_level": "all levels",
-				"gender": "men"
+				"type_sac": "duffel à roulettes",
+				"volume": "75L",
+				"dimension": "70 x 35 x 35 cm",
+				"matiere": "polyester renforcé",
+				"couleur": "Steel Grey",
+				"compartiment": "1 principal + 2 latéraux + compartiment chaussures ventilé"
 			},
 			"tech_ratings": {
-				"maneuverability": 1,
-				"power": 9,
-				"comfort": 9,
-				"spin": 6,
+				"maniabilité": 1,
+				"puissance": 9,
+				"confort": 9,
+				"effet": 6,
 				"tolerance": 9,
-				"control": 3
+				"contrôle": 3
 			},
 			"promotions": [
 				{
@@ -2134,22 +2122,22 @@
 			"status": "preorder",
 			"shipping_cost": 4.47,
 			"tech_characteristics": {
-				"weight": "344g",
+				"poids": "344g",
 				"type": "ball",
-				"color": "Orange",
-				"shape": "round",
-				"foam": "EVA soft",
+				"couleur": "Orange",
+				"forme": "round",
+				"mousse": "EVA soft",
 				"surface": "felt",
-				"skill_level": "advanced",
-				"gender": "men"
+				"niveau": "advanced",
+				"genre": "men"
 			},
 			"tech_ratings": {
-				"maneuverability": 7,
-				"power": 2,
-				"comfort": 5,
-				"spin": 5,
+				"maniabilité": 7,
+				"puissance": 2,
+				"confort": 5,
+				"effet": 5,
 				"tolerance": 10,
-				"control": 7
+				"contrôle": 7
 			},
 			"promotions": [
 				{
@@ -2202,22 +2190,22 @@
 			"status": "available",
 			"shipping_cost": 13.53,
 			"tech_characteristics": {
-				"weight": "214g",
+				"poids": "214g",
 				"type": "ball",
-				"color": "Dark Blue",
-				"shape": "spherical",
-				"foam": "EVA soft",
+				"couleur": "Dark Blue",
+				"forme": "spherical",
+				"mousse": "EVA soft",
 				"surface": "carbon/aluminum",
-				"skill_level": "intermediate",
-				"gender": "women"
+				"niveau": "intermediate",
+				"genre": "women"
 			},
 			"tech_ratings": {
-				"maneuverability": 4,
-				"power": 9,
-				"comfort": 6,
-				"spin": 1,
+				"maniabilité": 4,
+				"puissance": 9,
+				"confort": 6,
+				"effet": 1,
 				"tolerance": 9,
-				"control": 7
+				"contrôle": 7
 			},
 			"promotions": [],
 			"reviews": []
@@ -2234,22 +2222,22 @@
 			"status": "preorder",
 			"shipping_cost": 12.85,
 			"tech_characteristics": {
-				"weight": "392g",
+				"poids": "370g",
 				"type": "bag",
-				"color": "Azure",
-				"shape": "spherical",
-				"foam": "EVA medium",
-				"surface": "fiberglass",
-				"skill_level": "beginner",
-				"gender": "unisex"
+				"type_sac": "sac à dos",
+				"volume": "32L",
+				"dimension": "50 x 30 x 22 cm",
+				"matiere": "polyester imperméable",
+				"couleur": "Sky Blue",
+				"compartiment": "1 principal + 1 poche ordinateur + 1 poche frontale"
 			},
 			"tech_ratings": {
-				"maneuverability": 3,
-				"power": 3,
-				"comfort": 7,
-				"spin": 3,
+				"maniabilité": 3,
+				"puissance": 3,
+				"confort": 7,
+				"effet": 3,
 				"tolerance": 1,
-				"control": 6
+				"contrôle": 6
 			},
 			"promotions": [],
 			"reviews": []
@@ -2266,22 +2254,22 @@
 			"status": "available",
 			"shipping_cost": 3.69,
 			"tech_characteristics": {
-				"weight": "338g",
+				"poids": "338g",
 				"type": "ball",
-				"color": "Bordeaux",
-				"shape": "diamond",
-				"foam": "EVA soft",
+				"couleur": "Bordeaux",
+				"forme": "diamond",
+				"mousse": "EVA soft",
 				"surface": "fiberglass",
-				"skill_level": "advanced",
-				"gender": "women"
+				"niveau": "advanced",
+				"genre": "women"
 			},
 			"tech_ratings": {
-				"maneuverability": 5,
-				"power": 7,
-				"comfort": 3,
-				"spin": 10,
+				"maniabilité": 5,
+				"puissance": 7,
+				"confort": 3,
+				"effet": 10,
 				"tolerance": 4,
-				"control": 5
+				"contrôle": 5
 			},
 			"promotions": [],
 			"reviews": [
@@ -2311,27 +2299,27 @@
 			"status": "available",
 			"shipping_cost": 8.99,
 			"tech_characteristics": {
-				"weight": "384g",
+				"poids": "384g",
 				"type": "ball",
-				"color": "Pale Green",
-				"shape": "round",
-				"foam": "EVA medium",
+				"couleur": "Pale Green",
+				"forme": "round",
+				"mousse": "EVA medium",
 				"surface": "fiberglass",
-				"skill_level": "intermediate",
-				"gender": "unisex"
+				"niveau": "intermediate",
+				"genre": "unisex"
 			},
 			"tech_ratings": {
-				"maneuverability": 6,
-				"power": 8,
-				"comfort": 5,
-				"spin": 5,
+				"maniabilité": 6,
+				"puissance": 8,
+				"confort": 5,
+				"effet": 5,
 				"tolerance": 7,
-				"control": 8
+				"contrôle": 8
 			},
 			"promotions": [
 				{
 					"promotion_id": 13,
-					"name": "The power to innovate naturally",
+					"name": "The puissance to innovate naturally",
 					"description": "Special offer on premium tennis balls.",
 					"discount_type": "percentage",
 					"discount_value": 8,
@@ -2354,22 +2342,22 @@
 			"status": "out_of_stock",
 			"shipping_cost": 4.87,
 			"tech_characteristics": {
-				"weight": "195g",
+				"poids": "195g",
 				"type": "ball",
-				"color": "Steel Blue",
-				"shape": "round",
-				"foam": "EVA medium",
+				"couleur": "Steel Blue",
+				"forme": "round",
+				"mousse": "EVA medium",
 				"surface": "fiberglass",
-				"skill_level": "advanced",
-				"gender": "women"
+				"niveau": "advanced",
+				"genre": "women"
 			},
 			"tech_ratings": {
-				"maneuverability": 4,
-				"power": 1,
-				"comfort": 6,
-				"spin": 4,
+				"maniabilité": 4,
+				"puissance": 1,
+				"confort": 6,
+				"effet": 4,
 				"tolerance": 7,
-				"control": 2
+				"contrôle": 2
 			},
 			"promotions": [],
 			"reviews": [
@@ -2384,7 +2372,7 @@
 		{
 			"article_id": 15,
 			"name": "starvie Club Line Tennis Bag",
-			"description": "Compact tennis bag perfect for recreational players. Lightweight design with essential compartments for equipment.",
+			"description": "Compact tennis bag perfect for recreational players. Lightpoids design with essential compartments for equipment.",
 			"reference": "ADI-CLUB-BAG",
 			"brand": "starvie",
 			"images": ["/images/starvie-club-bag-1.jpg"],
@@ -2393,22 +2381,22 @@
 			"status": "preorder",
 			"shipping_cost": 2.85,
 			"tech_characteristics": {
-				"weight": "119g",
+				"poids": "460g",
 				"type": "bag",
-				"color": "Dark Orange",
-				"shape": "diamond",
-				"foam": "EVA medium",
-				"surface": "carbon",
-				"skill_level": "intermediate",
-				"gender": "men"
+				"type_sac": "duffel",
+				"volume": "60L",
+				"dimension": "68 x 33 x 30 cm",
+				"matiere": "polyester et cuir PU",
+				"couleur": "Sand Beige",
+				"compartiment": "1 principal + 2 latéraux + poche intérieure zippée"
 			},
 			"tech_ratings": {
-				"maneuverability": 3,
-				"power": 5,
-				"comfort": 1,
-				"spin": 8,
+				"maniabilité": 3,
+				"puissance": 5,
+				"confort": 1,
+				"effet": 8,
 				"tolerance": 10,
-				"control": 7
+				"contrôle": 7
 			},
 			"promotions": [],
 			"reviews": [

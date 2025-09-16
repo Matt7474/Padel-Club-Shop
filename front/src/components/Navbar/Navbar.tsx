@@ -34,7 +34,7 @@ export default function Navbar() {
 						marginLeft={4}
 					/>
 					<LinkMenu
-						to="shoe"
+						to="shoes"
 						name="CHAUSSURES"
 						color="text-black"
 						border={0}

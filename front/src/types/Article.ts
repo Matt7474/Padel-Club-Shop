@@ -74,6 +74,7 @@ export interface Review {
 
 // ---------- Article complet ----------
 export default interface Article {
+	type: string;
 	article_id: number;
 	name: string;
 	description: string;
@@ -81,14 +82,11 @@ export default interface Article {
 	brand: string;
 	images: string[];
 	price_ttc: number;
-	stock_quantity: number;
+	stock_quantity: number | Record<string, number | undefined>;
 	status: "available" | "out_of_stock" | "preorder" | string;
 	shipping_cost: number;
 	tech_characteristics: TechCharacteristics;
-	tech_ratings?: TechRatings; // Rendu optionnel
-	promotions?: Promotion[]; // Rendu optionnel
-	reviews?: Review[]; // Rendu optionnel
-
-	// Champs spécifiques selon le type de produit
-	sizes_available?: string[]; // pour vêtements et chaussures
+	tech_ratings?: TechRatings;
+	promotions?: Promotion[];
+	reviews?: Review[];
 }

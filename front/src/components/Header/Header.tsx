@@ -30,10 +30,9 @@ export default function Header() {
 	};
 
 	const handleSearch = (searchValue: string) => {
-		if (searchValue.trim()) {
-			navigate(`/articles?search=${encodeURIComponent(searchValue)}`);
-		}
-		setIsMenuOpen(false);
+		if (!searchValue.trim()) return;
+		navigate(`/articles?search=${encodeURIComponent(searchValue)}`);
+		closeMenu();
 	};
 
 	const closeMenu = () => {

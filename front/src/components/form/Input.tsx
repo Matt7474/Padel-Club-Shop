@@ -6,6 +6,9 @@ interface inputProps {
 	value: string;
 	onChange: (value: string) => void;
 	pattern?: string;
+	min?: string;
+	max?: number;
+	suffixe?: string;
 }
 
 export default function Input({
@@ -16,6 +19,9 @@ export default function Input({
 	value,
 	onChange,
 	pattern,
+	min,
+	max,
+	suffixe,
 }: inputProps) {
 	return (
 		<>
@@ -29,13 +35,20 @@ export default function Input({
 				<input
 					id={htmlFor}
 					type={type}
-					className="bg-white border h-10 pl-3 pt-3"
+					className="bg-white border h-10 pl-2 pt-3"
 					value={value}
 					onChange={(e) => onChange(e.target.value)}
 					required
 					pattern={pattern}
 					autoComplete="new-password"
+					min={min}
+					max={max}
 				/>
+				{suffixe && (
+					<span className="absolute text-md top-0 pt-4 right-2 pl-2 border-l">
+						{suffixe}
+					</span>
+				)}
 			</div>
 		</>
 	);

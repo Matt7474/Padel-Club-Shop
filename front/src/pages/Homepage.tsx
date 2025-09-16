@@ -17,7 +17,6 @@ export default function Homepage() {
 							src="/categories/racket.avif"
 							alt="raquettes"
 							className="max-w-full max-h-full object-contain"
-							loading="lazy"
 						/>
 						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
 							RAQUETTES
@@ -34,7 +33,6 @@ export default function Homepage() {
 							src="/categories/clothing.avif"
 							alt="vetements"
 							className="max-w-full max-h-full object-contain"
-							loading="lazy"
 						/>
 						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
 							VÊTEMENTS
@@ -51,7 +49,6 @@ export default function Homepage() {
 							src="/categories/accessories.avif"
 							alt="accessoires"
 							className="max-w-full max-h-full object-contain"
-							loading="lazy"
 						/>
 						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
 							ACCESSOIRES
@@ -68,7 +65,6 @@ export default function Homepage() {
 							src="/categories/bags.avif"
 							alt="sacs"
 							className="max-w-full max-h-full object-contain"
-							loading="lazy"
 						/>
 						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
 							SACS
@@ -85,7 +81,6 @@ export default function Homepage() {
 							src="/categories/balls.avif"
 							alt="balles"
 							className="max-w-full max-h-full object-contain p-8"
-							loading="lazy"
 						/>
 						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
 							BALLES
@@ -94,7 +89,7 @@ export default function Homepage() {
 
 					{/* CHAUSSURES */}
 					<Link
-						to={"/articles/shoe"}
+						to={"/articles/shoes"}
 						className="relative group bg-[#A3EFD8] aspect-square rounded-2xl flex items-center justify-center 2xl:aspect-auto 2xl:row-start-2 2xl:row-end-4 2xl:col-start-4 2xl:col-end-5  border hover:cursor-pointer overflow-hidden"
 					>
 						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
@@ -102,7 +97,6 @@ export default function Homepage() {
 							src="/categories/shoes.avif"
 							alt="chaussures"
 							className="max-w-full max-h-full object-contain"
-							loading="lazy"
 						/>
 						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
 							CHAUSSURES
@@ -119,7 +113,6 @@ export default function Homepage() {
 							src="/categories/promotion.avif"
 							alt="promotions"
 							className="max-w-full max-h-full object-contain"
-							loading="lazy"
 						/>
 						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
 							PROMOTIONS

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Input from "../components/form/Input";
+import TextArea from "../components/form/TextArea";
 
 export default function Profile() {
 	const [lastName, setLastName] = useState("");
@@ -198,29 +199,14 @@ export default function Profile() {
 								/>
 
 								{/* Partie informations complémentaires */}
-								<div className="relative flex flex-col mt-4">
-									<div className="relative w-full">
-										<label
-											htmlFor="additionalInfo"
-											className="absolute text-xs text-gray-500 pl-1"
-										>
-											Informations complémentaires
-										</label>
-
-										<span className="absolute text-xs text-gray-500 right-1">
-											{additionalInfo.length} / 200
-										</span>
-
-										<textarea
-											id="additionalInfo"
-											value={additionalInfo}
-											onChange={(e) => setAdditionalInfo(e.target.value)}
-											className="bg-white border h-24 p-2 pt-6 resize-none w-full"
-											placeholder="Exemple : étage, code d'accès, particularités..."
-											maxLength={200}
-										/>
-									</div>
-								</div>
+								<TextArea
+									label="Informations complémentaires"
+									placeholder="Exemple : étage, code d'accès, particularités..."
+									length={additionalInfo.length}
+									value={additionalInfo}
+									onChange={setAdditionalInfo}
+									maxLength={200}
+								/>
 							</div>
 						</div>
 						<div className="flex justify-between mt-4 gap-4 xl:w-1/2 xl:mt-10 xl:mx-auto pl-1">

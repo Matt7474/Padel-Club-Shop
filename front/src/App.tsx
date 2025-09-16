@@ -17,6 +17,7 @@ import Login from "./pages/login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
 import TermsOfSale from "./pages/TermsOfSale";
+import CreateArticle from "./pages/admin/CreateArticle";
 
 function App() {
 	return (
@@ -31,6 +32,8 @@ function App() {
 						<Routes>
 							<Route path="/login" element={<Login />} />
 							<Route path="/connexion" element={<Connection />} />
+
+							<Route path="/CreateArticle" element={<CreateArticle />} />
 
 							<Route path="/articles" element={<ArticlesWrapper />} />
 

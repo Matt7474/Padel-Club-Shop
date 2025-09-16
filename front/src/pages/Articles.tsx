@@ -36,9 +36,7 @@ export default function Articles({
 			),
 		);
 	} else if (type) {
-		articles = articles.filter(
-			(article) => article.tech_characteristics.type === type,
-		);
+		articles = articles.filter((article) => article.type === type);
 	}
 
 	// Breadcrumb
@@ -73,7 +71,7 @@ export default function Articles({
 						: showPromos
 							? "Promotions"
 							: type
-								? `${type}s disponibles`
+								? `${type}(s) disponibles`
 								: "Articles disponibles"}
 				</h1>
 

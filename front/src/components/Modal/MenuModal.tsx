@@ -3,15 +3,19 @@ import { useNavigate } from "react-router-dom";
 import LinkMenu from "../LinkMenu/LinkMenu";
 import SearchBar from "../SearchBar/SearchBar";
 
-export default function MenuModal({ closeMenu }: { closeMenu: () => void }) {
+interface menuModalsProps {
+	closeMenu: () => void;
+}
+
+export default function MenuModal({ closeMenu }: menuModalsProps) {
 	const navigate = useNavigate();
 	const [, setIsMenuOpen] = useState(false);
 
 	const handleSearch = (searchValue: string) => {
 		if (searchValue.trim()) {
+			closeMenu();
 			navigate(`/articles?search=${encodeURIComponent(searchValue)}`);
 		}
-		setIsMenuOpen(false);
 	};
 
 	return (
@@ -96,7 +100,7 @@ export default function MenuModal({ closeMenu }: { closeMenu: () => void }) {
 						onLinkClick={closeMenu}
 					/>
 					<LinkMenu
-						to="shoe"
+						to="shoes"
 						name="Chaussures"
 						color="text-black"
 						border={1}

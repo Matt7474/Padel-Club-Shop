@@ -5,7 +5,7 @@ export default function CaracteristicsArticle({
 }: {
 	article: Article;
 }) {
-	const characteristics = article.tech_ratings ?? {};
+	const characteristics = article.tech_characteristics ?? {};
 	return (
 		<>
 			<div className="xl:w-full">
