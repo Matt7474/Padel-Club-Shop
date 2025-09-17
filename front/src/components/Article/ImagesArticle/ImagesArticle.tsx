@@ -2,18 +2,24 @@ import { useState } from "react";
 import type Article from "../../../types/Article";
 
 export default function ImagesArticle({ article }: { article: Article }) {
-	const [selectedImage, setSelectedImage] = useState(article?.images[0] || "");
+	const defaultImage = "/images/default.svg";
+	const [selectedImage, setSelectedImage] = useState(
+		article?.images?.[0] || defaultImage,
+	);
+
 	return (
 		<>
 			{/* LAYOUT MOBILE */}
 			<div className="xl:hidden">
 				<div className="xl:flex-row-reverse xl:flex xl:flex-col-2 ">
 					{/* Partie grande image */}
-					<img
-						src={selectedImage}
-						alt={article.name}
-						className="border border-gray-300 rounded-sm xl:w-4/10"
-					/>
+					{selectedImage && (
+						<img
+							src={selectedImage}
+							alt={article.name}
+							className="border border-gray-300 rounded-sm xl:w-4/10"
+						/>
+					)}
 
 					{/* Partie petites images */}
 					<div className="flex gap-2 mt-2 xl:flex-col xl:mt-0 xl:mr-2">

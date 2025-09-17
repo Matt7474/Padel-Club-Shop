@@ -1,4 +1,4 @@
-import Input from "../Input";
+import Input from "../Tools/Input";
 
 interface BallFormProps {
 	type: string;

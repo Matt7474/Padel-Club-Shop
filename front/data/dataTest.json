@@ -209,12 +209,7 @@
 			"description": "Professional tennis racket designed in collaboration with Rafael Nadal. Exceptional effet and puissance for aggressive baseline players.",
 			"reference": "PA-RAFA-2024",
 			"brand": "Babolat",
-			"images": [
-				"/images/babolat-pure-aero-rafa-1.jpg",
-				"/images/babolat-pure-aero-rafa-2.jpg",
-				"/images/babolat-pure-aero-rafa-3.jpg",
-				"/images/babolat-pure-aero-rafa-4.jpg"
-			],
+			"images": [],
 			"price_ttc": 277.57,
 			"stock_quantity": {
 				"unique": 157
@@ -256,7 +251,7 @@
 			"description": "Classic contrôle racket with modern technology. Perfect balance of puissance and precision for all-court players.",
 			"reference": "WIL-BLADE-98",
 			"brand": "Wilson",
-			"images": ["/images/wilson-blade-98-1.jpg"],
+			"images": [],
 			"price_ttc": 210.56,
 			"stock_quantity": {
 				"unique": 59
@@ -303,7 +298,7 @@
 			"description": "High-performance racket with Textreme technology for enhanced stability and puissance. Ideal for aggressive baseliners.",
 			"reference": "PRI-TOUR-100P",
 			"brand": "black-crown",
-			"images": ["/images/black-crown-tour-100p-1.jpg"],
+			"images": [],
 			"price_ttc": 282.62,
 			"stock_quantity": {
 				"unique": 120
@@ -362,7 +357,7 @@
 			"description": "Lightpoids tennis bag perfect for recreational players. Simple design with essential compartments for rackets and accessories.",
 			"reference": "DUN-CX-TEAM",
 			"brand": "cork",
-			"images": ["/images/cork-cx-bag-1.jpg"],
+			"images": [],
 			"price_ttc": 75.37,
 			"stock_quantity": {
 				"unique": 100
@@ -387,7 +382,7 @@
 					"discount_type": "amount",
 					"discount_value": 28,
 					"start_date": "2025-04-05",
-					"end_date": "20256-01-24",
+					"end_date": "2026-01-24",
 					"status": "active"
 				}
 			],
@@ -400,7 +395,7 @@
 			"description": "Premium overgrip for enhanced racket handle confort and contrôle. Absorbent material for optimal grip in all conditions.",
 			"reference": "TOUR-GRIP-PACK",
 			"brand": "Head",
-			"images": ["/images/Head-grip-1.jpg"],
+			"images": [],
 			"price_ttc": 64.91,
 			"stock_quantity": {
 				"unique": 82
@@ -954,7 +949,7 @@
 				"poids": "300g",
 				"couleur": "White/Black",
 				"semelle": "all court",
-				"genre": "Femme"
+				"genre": "Fe"
 			},
 			"tech_ratings": {}
 		},

@@ -1,6 +1,6 @@
-import Input from "../Input";
-import Select from "../Select";
-import TextArea from "../TextArea";
+import Input from "../Tools/Input";
+import Select from "../Tools/Select";
+import TextArea from "../Tools/TextArea";
 
 interface ArticleFormProps {
 	articleType: string;
@@ -64,11 +64,11 @@ export default function ArticleForm({
 							onChange={setArticleType}
 							options={[
 								"racket",
-								"bags",
-								"balls",
+								"bag",
+								"ball",
 								"clothing",
 								"shoes",
-								"accessories",
+								"accessory",
 							]}
 							labels={[
 								"Raquette",
@@ -275,6 +275,7 @@ export default function ArticleForm({
 					</div>
 				</div>
 			</div>
+			<div className="border-b border-gray-400 xl:border-none mt-4 "></div>
 		</>
 	);
 }

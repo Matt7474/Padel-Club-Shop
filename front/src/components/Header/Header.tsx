@@ -79,6 +79,26 @@ export default function Header() {
 
 				<div className="flex gap-3 xl:-mt-4 mr-1 items-center">
 					<Link
+						to="/admin/profile"
+						className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"
+					>
+						<div className="relative">
+							<img
+								src="/icons/profile.svg"
+								alt="icon-compte"
+								className="block"
+							/>
+							<div>
+								<img
+									src="/icons/tie.svg"
+									alt="cravate"
+									className="absolute -mt-3 left-1 w-4 xl:-mt-4 xl:left-2"
+								/>
+							</div>
+						</div>
+					</Link>
+
+					<Link
 						to="/profile"
 						className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"
 					>
@@ -95,6 +115,7 @@ export default function Header() {
 								{isQuantity}
 							</span>
 						)}
+
 						<img
 							src="/icons/cart.svg"
 							alt="icon-panier"

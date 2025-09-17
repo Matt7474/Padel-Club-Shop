@@ -17,7 +17,8 @@ import Login from "./pages/login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
 import TermsOfSale from "./pages/TermsOfSale";
-import CreateArticle from "./pages/admin/CreateArticle";
+import CreateArticle from "./components/Form/Admin/CreateArticle";
+import AdminProfile from "./pages/AdminProfile";
 
 function App() {
 	return (
@@ -41,6 +42,8 @@ function App() {
 							<Route path="/articles/:type/:name" element={<Article />} />
 
 							<Route path="/marques/:brand" element={<BrandsWrapper />} />
+
+							<Route path="/admin/profile" element={<AdminProfile />} />
 							<Route path="/profile" element={<Profile />} />
 							<Route path="/cart" element={<Cart />} />
 							<Route path="/" element={<Homepage />} />

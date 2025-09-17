@@ -1,4 +1,4 @@
-import Input from "../Input";
+import Input from "../Tools/Input";
 
 interface BagFormProps {
 	type: string;

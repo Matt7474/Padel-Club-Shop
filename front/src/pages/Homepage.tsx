@@ -46,7 +46,7 @@ export default function Homepage() {
 					>
 						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
 						<img
-							src="/categories/accessories.avif"
+							src="/categories/accessory.avif"
 							alt="accessoires"
 							className="max-w-full max-h-full object-contain"
 						/>
@@ -62,7 +62,7 @@ export default function Homepage() {
 					>
 						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
 						<img
-							src="/categories/bags.avif"
+							src="/categories/bag.avif"
 							alt="sacs"
 							className="max-w-full max-h-full object-contain"
 						/>
@@ -78,7 +78,7 @@ export default function Homepage() {
 					>
 						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
 						<img
-							src="/categories/balls.avif"
+							src="/categories/ball.avif"
 							alt="balles"
 							className="max-w-full max-h-full object-contain p-8"
 						/>

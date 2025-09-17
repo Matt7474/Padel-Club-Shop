@@ -5,10 +5,12 @@ interface inputProps {
 	type: string;
 	value: string | number;
 	onChange: (value: string) => void;
+	required?: boolean;
 	pattern?: string;
 	min?: string;
 	max?: number;
 	suffixe?: string;
+	onBlur?: () => void;
 }
 
 export default function Input({
@@ -18,10 +20,12 @@ export default function Input({
 	type,
 	value,
 	onChange,
+	required = true,
 	pattern,
 	min,
 	max,
 	suffixe,
+	onBlur,
 }: inputProps) {
 	return (
 		<>
@@ -38,11 +42,12 @@ export default function Input({
 					className="bg-white border h-10 pl-2 pt-3"
 					value={value}
 					onChange={(e) => onChange(e.target.value)}
-					required
+					required={required}
 					pattern={pattern}
 					autoComplete="new-password"
 					min={min}
 					max={max}
+					onBlur={onBlur}
 				/>
 				{suffixe && (
 					<span className="absolute text-md top-0 pt-4 right-2 pl-2 border-l">

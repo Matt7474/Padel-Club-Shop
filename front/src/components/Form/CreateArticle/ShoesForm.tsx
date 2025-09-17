@@ -1,5 +1,5 @@
-import Input from "../Input";
-import Select from "../Select";
+import Input from "../Tools/Input";
+import Select from "../Tools/Select";
 
 interface ShoesProps {
 	type: string;

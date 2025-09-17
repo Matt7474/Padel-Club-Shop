@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Input from "../components/Form/Input";
-import TextArea from "../components/Form/TextArea";
+import Input from "../components/Form/Tools/Input";
+import TextArea from "../components/Form/Tools/TextArea";
 
 export default function Profile() {
 	const [lastName, setLastName] = useState("");

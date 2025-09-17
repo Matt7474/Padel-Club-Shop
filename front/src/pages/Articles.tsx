@@ -48,7 +48,7 @@ export default function Articles({
 				: searchQuery
 					? `Recherche`
 					: type
-						? `${type.charAt(0).toUpperCase() + type.slice(1)}s`
+						? `${type.charAt(0).toUpperCase() + type.slice(1)}(s)`
 						: "",
 			href: showPromos
 				? "/articles/promotions"

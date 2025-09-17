@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Input from "../components/Form/Input";
+import Input from "../components/Form/Tools/Input";
 
 export default function Connection() {
 	const [loginEmail, setLoginEmail] = useState("");

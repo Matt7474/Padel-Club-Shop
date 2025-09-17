@@ -1,5 +1,5 @@
-import Input from "../Input";
-import TextArea from "../TextArea";
+import Input from "../Tools/Input";
+import TextArea from "../Tools/TextArea";
 import ToogleType from "../Toogle/ToogleType";
 
 interface PromoFormProps {
@@ -72,7 +72,7 @@ export default function PromoForm({
 
 				{/* Description de la promo */}
 				<div>
-					<div className="-mt-1">
+					<div>
 						<TextArea
 							label="Description de la promotion"
 							placeholder="Jusqu'à épuisement des stock"
@@ -86,8 +86,8 @@ export default function PromoForm({
 
 				{/* Dates de la promo */}
 
-				<div className="grid grid-cols-3 gap-4 -mt-3 text-sm">
-					<div>
+				<div className="grid grid-cols-3 gap-4 -mt-1 text-sm">
+					<div className="">
 						<Input
 							htmlFor={"startDate"}
 							label={"Début de la promo"}
@@ -99,7 +99,7 @@ export default function PromoForm({
 						/>
 					</div>
 
-					<div>
+					<div className="">
 						<Input
 							htmlFor={"endDate"}
 							label={"Fin de la promo"}

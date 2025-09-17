@@ -1,7 +1,7 @@
 interface TechRatingsProps {
 	label: string;
-	value: string;
-	onChange: (value: string) => void;
+	value: number;
+	onChange: (value: number) => void;
 }
 
 export default function TechRatings({
@@ -13,7 +13,7 @@ export default function TechRatings({
 		<div className="relative">
 			<select
 				value={value}
-				onChange={(e) => onChange(e.target.value)}
+				onChange={(e) => onChange(Number(e.target.value))}
 				className="border mt-4 h-10 pt-3 pl-2 w-full bg-white"
 			>
 				<option value="" className="text-gray-500"></option>

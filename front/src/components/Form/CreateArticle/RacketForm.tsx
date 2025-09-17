@@ -1,6 +1,6 @@
-import Input from "../Input";
-import Select from "../Select";
-import TechRatings from "../TechRatings";
+import Input from "../Tools/Input";
+import Select from "../Tools/Select";
+import TechRatings from "../Tools/TechRatings";
 
 interface RacketFormProps {
 	type: string;
@@ -18,18 +18,18 @@ interface RacketFormProps {
 	setRCharacteristicsLevel: (val: string) => void;
 	rCharacteristicsGender: string;
 	setRCharacteristicsGender: (val: string) => void;
-	rcharacteristicsManiability: string;
-	setRCharacteristicsManiability: (val: string) => void;
-	rCharacteristicsPower: string;
-	setRCharacteristicsPower: (val: string) => void;
-	rCharacteristicsComfort: string;
-	setRCharacteristicsComfort: (val: string) => void;
-	rCharacteristicsSpin: string;
-	setRCharacteristicsSpin: (val: string) => void;
-	rCharacteristicsTolerance: string;
-	setRCharacteristicsTolerance: (val: string) => void;
-	rCharacteristicsControl: string;
-	setRCharacteristicsControl: (val: string) => void;
+	rcharacteristicsManiability: number;
+	setRCharacteristicsManiability: (val: number) => void;
+	rCharacteristicsPower: number;
+	setRCharacteristicsPower: (val: number) => void;
+	rCharacteristicsComfort: number;
+	setRCharacteristicsComfort: (val: number) => void;
+	rCharacteristicsSpin: number;
+	setRCharacteristicsSpin: (val: number) => void;
+	rCharacteristicsTolerance: number;
+	setRCharacteristicsTolerance: (val: number) => void;
+	rCharacteristicsControl: number;
+	setRCharacteristicsControl: (val: number) => void;
 }
 
 export default function RacketForm({
