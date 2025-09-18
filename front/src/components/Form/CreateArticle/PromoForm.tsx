@@ -1,6 +1,6 @@
+import ToogleType from "../Toogle/ToogleType";
 import Input from "../Tools/Input";
 import TextArea from "../Tools/TextArea";
-import ToogleType from "../Toogle/ToogleType";
 
 interface PromoFormProps {
 	articleDiscountValue: number | string;

@@ -7,7 +7,7 @@ export default function ArticlesList() {
 	const articlesData = data.articles;
 	const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
-	const handleUserClick = (article: Article) => {
+	const handleArticleClick = (article: Article) => {
 		setSelectedArticle(article);
 	};
 
@@ -33,8 +33,8 @@ export default function ArticlesList() {
 					<div key={article.article_id}>
 						<button
 							type="button"
-							onClick={() => handleUserClick(article)}
-							className="cursor-pointer w-full text-left"
+							onClick={() => handleArticleClick(article)}
+							className="cursor-pointer w-full text-left hover:bg-gray-300"
 						>
 							<div className="grid grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr]">
 								<img

@@ -1,6 +1,7 @@
 import { useState } from "react";
+import Toogle from "../components/Form/Toogle/Toogle";
 import Input from "../components/Form/Tools/Input";
-import TextArea from "../components/Form/Tools/TextArea";
+import Adress from "../components/Form/User/Adress";
 
 export default function Profile() {
 	const [lastName, setLastName] = useState("");
@@ -21,12 +22,24 @@ export default function Profile() {
 		return digits.replace(/(\d{2})(?=\d)/g, "$1.");
 	};
 
-	const [streetNumber, setStreetNumber] = useState("");
-	const [streetName, setStreetName] = useState("");
-	const [zipcode, setZipcode] = useState("");
-	const [city, setCity] = useState("");
-	const [country, setCountry] = useState("");
-	const [additionalInfo, setAdditionalInfo] = useState("");
+	// Adresse de livraison (shippping)
+	const [sStreetNumber, setSStreetNumber] = useState("");
+	const [sStreetName, setSStreetName] = useState("");
+	const [sZipcode, setSZipcode] = useState("");
+	const [sCity, setSCity] = useState("");
+	const [sCountry, setSCountry] = useState("");
+	const [sAdditionalInfo, setSAdditionalInfo] = useState("");
+
+	// Adresse de facturation (billing)
+	const [bStreetNumber, setBStreetNumber] = useState("");
+	const [bStreetName, setBStreetName] = useState("");
+	const [bZipcode, setBZipcode] = useState("");
+	const [bCity, setBCity] = useState("");
+	const [bCountry, setBCountry] = useState("");
+	const [bAdditionalInfo, setBAdditionalInfo] = useState("");
+
+	// gestion des differentes adresses
+	const [isBillingDifferent, setIsBillingDifferent] = useState(false);
 
 	const handleChange = () => {
 		console.log("modification activé");
@@ -52,8 +65,8 @@ export default function Profile() {
 
 	return (
 		<>
-			<div className="xl:bg-[url('/icons/backgroundH.avif')] xl:h-160 xl:pt-10">
-				<div className="xl:w-2/3 xl:mx-auto xl:bg-white/80 xl:p-5 ">
+			<div className="xl:bg-[url('/icons/backgroundH.avif')] xl:h-180 xl:pt-10 xl:relative">
+				<div className="xl:w-2/3 xl:mx-auto xl:bg-white/80 xl:p-5 xl:h-[40rem] xl:overflow-y-auto xl:relative xl:z-10">
 					<h2 className="p-3 bg-gray-500/80 font-semibold text-lg mt-7 xl:mt-0 flex justify-between">
 						Mon profil
 						<button
@@ -141,74 +154,50 @@ export default function Profile() {
 
 							<div className="border-b xl:border-r border-gray-400 mt-7 "></div>
 
-							<div className="xl:w-1/2">
-								<h3 className="mt-6 font-semibold text-sm">
-									Informations de livraison
-								</h3>
-								{/* Partie Numéro de rue et type de voie*/}
-								<div className="flex -mt-2 gap-x-4">
-									{/* Partie Numéro de rue */}
-									<Input
-										htmlFor={"streetNumber"}
-										label={"N°"}
-										type={"text"}
-										value={streetNumber}
-										onChange={setStreetNumber}
-										width="w-1/5"
-									/>
-
-									{/* Partie nom de rue */}
-									<Input
-										htmlFor={"streetName"}
-										label={"Nom de la voie"}
-										type={"text"}
-										value={streetName}
-										onChange={setStreetName}
-										width="w-full"
-									/>
-								</div>
-
-								{/* Partie code postal */}
-								<Input
-									htmlFor={"zipcode"}
-									label={"Code postal"}
-									type={"text"}
-									value={zipcode}
-									onChange={setZipcode}
-									width="w-full"
-								/>
-
-								{/* Partie ville */}
-								<Input
-									htmlFor={"city"}
-									label={"Ville"}
-									type={"text"}
-									value={city}
-									onChange={setCity}
-									width="w-full"
-								/>
-
-								{/* Partie pays */}
-								<Input
-									htmlFor={"country"}
-									label={"Pays"}
-									type={"text"}
-									value={country}
-									onChange={setCountry}
-									width="w-full"
-								/>
-
-								{/* Partie informations complémentaires */}
-								<TextArea
-									label="Informations complémentaires"
-									placeholder="Exemple : étage, code d'accès, particularités..."
-									length={additionalInfo.length}
-									value={additionalInfo}
-									onChange={setAdditionalInfo}
-									maxLength={200}
+							<Adress
+								title={"Adresse de livraison"}
+								streetNumber={sStreetNumber}
+								setStreetNumber={setSStreetNumber}
+								streetName={sStreetName}
+								setStreetName={setSStreetName}
+								zipcode={sZipcode}
+								setZipcode={setSZipcode}
+								city={sCity}
+								setCity={setSCity}
+								country={sCountry}
+								setCountry={setSCountry}
+								additionalInfo={sAdditionalInfo}
+								setAdditionalInfo={setSAdditionalInfo}
+							/>
+						</div>
+						<div className="border-b xl:border-r border-gray-400 my-4 "></div>
+						<div>
+							<Toogle
+								title="Adresse de facturation differente ?"
+								checked={isBillingDifferent}
+								onChange={setIsBillingDifferent}
+							/>
+						</div>
+						{isBillingDifferent === true && (
+							<div>
+								<Adress
+									title={"Adresse de facturation"}
+									streetNumber={bStreetNumber}
+									setStreetNumber={setBStreetNumber}
+									streetName={bStreetName}
+									setStreetName={setBStreetName}
+									zipcode={bZipcode}
+									setZipcode={setBZipcode}
+									city={bCity}
+									setCity={setBCity}
+									country={bCountry}
+									setCountry={setBCountry}
+									additionalInfo={bAdditionalInfo}
+									setAdditionalInfo={setBAdditionalInfo}
 								/>
 							</div>
-						</div>
+						)}
+
 						<div className="flex justify-between mt-4 gap-4 xl:w-1/2 xl:mt-10 xl:mx-auto pl-1">
 							<button
 								type="button"

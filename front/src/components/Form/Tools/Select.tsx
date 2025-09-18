@@ -18,17 +18,19 @@ export default function Select({
 			<select
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
-				className="border mt-4 h-10 pt-3 pl-2 w-full bg-white"
+				className="border mt-4 h-10 pt-3 pl-2 w-full bg-white cursor-pointer"
 				required
 			>
-				<option value="" className="text-gray-500"></option>
+				<option value="" className="text-gray-500 "></option>
 				{options.map((option, idx) => (
 					<option key={option} value={option}>
 						{labels[idx] || option}
 					</option>
 				))}
 			</select>
-			<p className="absolute text-gray-500 text-xs top-4 left-1">{label}</p>
+			<p className="absolute text-gray-500 text-xs top-4 left-1 cursor-pointer">
+				{label}
+			</p>
 		</div>
 	);
 }

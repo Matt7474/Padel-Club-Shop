@@ -3,6 +3,7 @@ import type Article from "../../../types/Article";
 import type { Promotion } from "../../../types/Article";
 import ArticlesList from "./ArticlesList";
 import CreateArticle from "./CreateArticle";
+import Button from "../Tools/Button";
 
 interface ArticleDetailsProps {
 	article: Article;
@@ -35,7 +36,7 @@ export default function ArticleDetails({ article }: ArticleDetailsProps) {
 			<button
 				type="button"
 				onClick={() => handleClick(article)}
-				className="flex mt-4"
+				className="flex mt-4 cursor-pointer"
 			>
 				<img
 					src="/icons/arrow.svg"
@@ -108,14 +109,12 @@ export default function ArticleDetails({ article }: ArticleDetailsProps) {
 							</div>
 						</div>
 					</div>
-					<div className="flex justify-center mt-6">
-						<button
-							onClick={handleChange}
+					<div>
+						<Button
 							type="button"
-							className="bg-green-500 w-full h-10 rounded-lg cursor-pointer"
-						>
-							Modifier l'article
-						</button>
+							onClick={handleChange}
+							buttonText="MODIFIER L'ARTICLE"
+						/>
 					</div>
 				</div>
 			)}
@@ -123,7 +122,7 @@ export default function ArticleDetails({ article }: ArticleDetailsProps) {
 				<div>
 					<CreateArticle
 						title={"Modifier l'article"}
-						button={"MODIFIER L'ARTICLE"}
+						buttonText={"MODIFIER L'ARTICLE"}
 						article={article}
 					/>
 				</div>

@@ -8,12 +8,11 @@ import Select from "../components/Form/Tools/Select";
 export default function AdminProfile() {
 	const [menuSelected, setMenuSelected] = useState("");
 
-	// tu définis tes options au même endroit
 	const menuOptions = [
 		"Ajouter une marque",
 		"Ajouter un article",
 		"Liste des articles",
-		"Voir les utilisateurs",
+		"Liste des utilisateurs",
 	];
 
 	return (
@@ -24,7 +23,7 @@ export default function AdminProfile() {
 				</h2>
 
 				{/* menu déroulant en version mobile */}
-				<div className="xl:hidden">
+				<div className="xl:hidden cursor-pointer">
 					<Select
 						label="Choisissez un menu"
 						value={menuSelected}
@@ -35,7 +34,7 @@ export default function AdminProfile() {
 				</div>
 
 				{/* menu latéral en version desktop */}
-				<div className="hidden xl:flex flex-col w-70 absolute -left-74 top-17">
+				<div className="hidden xl:flex flex-col w-70 absolute -left-74 top-17 cursor-pointer">
 					{menuOptions.map((option) => (
 						<button
 							type="button"
@@ -57,7 +56,7 @@ export default function AdminProfile() {
 					<div>
 						<CreateArticle
 							title={"Création d'un article"}
-							button="AJOUTER L'ARTICLE"
+							buttonText="AJOUTER L'ARTICLE"
 						/>
 					</div>
 				)}
@@ -70,7 +69,7 @@ export default function AdminProfile() {
 				)}
 
 				{/* Liste des utilisateurs */}
-				{menuSelected === "Voir les utilisateurs" && (
+				{menuSelected === "Liste des utilisateurs" && (
 					<div>
 						<UserList />
 					</div>

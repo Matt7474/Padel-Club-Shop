@@ -12,6 +12,21 @@
 	height: 160px !important;
 }
 
+@media print {
+	body * {
+		visibility: hidden; /* tout masquer */
+	}
+	.printable,
+	.printable * {
+		visibility: visible; /* montrer juste cette partie */
+	}
+	.printable {
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+}
+
 @theme inline {
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);

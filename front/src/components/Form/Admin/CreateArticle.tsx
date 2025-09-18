@@ -9,6 +9,7 @@ import PromoForm from "../CreateArticle/PromoForm";
 import RacketForm from "../CreateArticle/RacketForm";
 import ShoesForm from "../CreateArticle/ShoesForm";
 import Toogle from "../Toogle/Toogle";
+import Button from "../Tools/Button";
 
 type ImageWithId = {
 	id: string;
@@ -17,8 +18,8 @@ type ImageWithId = {
 };
 
 interface CreateArticlePropos {
-	title: string;
-	button: string;
+	title?: string;
+	buttonText?: string;
 	article?: Article;
 }
 
@@ -29,7 +30,7 @@ interface SizeOption {
 
 export default function CreateArticle({
 	title,
-	button,
+	buttonText,
 	article,
 }: CreateArticlePropos) {
 	const today = new Date();
@@ -353,7 +354,11 @@ export default function CreateArticle({
 								{/* Appliquer une promo ? */}
 								<div className="relative flex flex-col gap-2 mt-5">
 									<div>
-										<Toogle checked={articlePromo} onChange={setArticlePromo} />
+										<Toogle
+											title="Appliquer une promo à cet article ?"
+											checked={articlePromo}
+											onChange={setArticlePromo}
+										/>
 									</div>
 
 									{articlePromo && (
@@ -502,14 +507,8 @@ export default function CreateArticle({
 								)}
 							</div>
 						</div>
-						<div className="flex justify-center">
-							<button
-								type="submit"
-								className="w-full xl:w-1/3  bg-green-500 text-white font-semibold p-2 rounded-lg mt-6"
-							>
-								{button}
-							</button>
-						</div>
+
+						<Button type="submit" buttonText={`${buttonText}`} />
 					</form>
 				</div>
 			</div>
