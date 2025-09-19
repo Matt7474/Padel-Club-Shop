@@ -55,7 +55,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 		addToCartStore({
 			id: article.article_id.toString(),
 			name: article.name,
-			brand: article.brand.name,
+			brand: article.brand,
 			price: displayPrice,
 			image: article.images?.[0],
 			quantity: 1,
