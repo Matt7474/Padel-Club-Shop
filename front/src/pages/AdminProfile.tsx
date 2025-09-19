@@ -1,7 +1,9 @@
 import { useState } from "react";
 import ArticlesList from "../components/Form/Admin/ArticlesList";
+import BrandList from "../components/Form/Admin/BrandList";
 import CreateArticle from "../components/Form/Admin/CreateArticle";
 import CreateBrand from "../components/Form/Admin/CreateBrand";
+import OrderList from "../components/Form/Admin/OrderList";
 import UserList from "../components/Form/Admin/UsersList";
 import Select from "../components/Form/Tools/Select";
 
@@ -9,19 +11,20 @@ export default function AdminProfile() {
 	const [menuSelected, setMenuSelected] = useState("");
 
 	const menuOptions = [
-		"Ajouter une marque",
 		"Ajouter un article",
+		"Ajouter une marque",
 		"Liste des articles",
+		"Liste des marques",
 		"Liste des utilisateurs",
+		"Voir les commandes",
 	];
 
 	return (
 		<>
 			<div className="relative">
 				<h2 className="p-3 bg-orange-500/80 font-semibold text-lg mt-7 xl:mt-0 xl:mb-4 flex justify-between">
-					Gestion d'administration
+					MENU ADMINASTRATEUR
 				</h2>
-
 				{/* menu déroulant en version mobile */}
 				<div className="xl:hidden cursor-pointer">
 					<Select
@@ -32,7 +35,6 @@ export default function AdminProfile() {
 						labels={menuOptions}
 					/>
 				</div>
-
 				{/* menu latéral en version desktop */}
 				<div className="hidden xl:flex flex-col w-70 absolute -left-74 top-17 cursor-pointer">
 					{menuOptions.map((option) => (
@@ -50,7 +52,6 @@ export default function AdminProfile() {
 						</button>
 					))}
 				</div>
-
 				{/* Ajouter un article */}
 				{menuSelected === "Ajouter un article" && (
 					<div>
@@ -60,25 +61,34 @@ export default function AdminProfile() {
 						/>
 					</div>
 				)}
-
 				{/* Ajouter un article */}
 				{menuSelected === "Ajouter une marque" && (
 					<div>
 						<CreateBrand />
 					</div>
 				)}
-
 				{/* Liste des utilisateurs */}
 				{menuSelected === "Liste des utilisateurs" && (
 					<div>
 						<UserList />
 					</div>
 				)}
-
 				{/* Liste des articles */}
 				{menuSelected === "Liste des articles" && (
 					<div>
 						<ArticlesList />
+					</div>
+				)}
+				{/* Liste des marques */}
+				{menuSelected === "Liste des marques" && (
+					<div>
+						<BrandList />
+					</div>
+				)}
+				{/*	Voir les commandes */}
+				{menuSelected === "Voir les commandes" && (
+					<div>
+						<OrderList />
 					</div>
 				)}
 			</div>

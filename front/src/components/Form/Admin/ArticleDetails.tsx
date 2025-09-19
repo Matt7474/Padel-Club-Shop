@@ -1,9 +1,9 @@
 import { useState } from "react";
 import type Article from "../../../types/Article";
 import type { Promotion } from "../../../types/Article";
+import Button from "../Tools/Button";
 import ArticlesList from "./ArticlesList";
 import CreateArticle from "./CreateArticle";
-import Button from "../Tools/Button";
 
 interface ArticleDetailsProps {
 	article: Article;
@@ -47,7 +47,7 @@ export default function ArticleDetails({ article }: ArticleDetailsProps) {
 			</button>
 
 			{changeArticle === false && (
-				<div>
+				<div className="xl:flex xl:flex-col xl:items-center">
 					<div className="mt-4 pl-1">
 						<div className="flex justify-between">
 							<h2>Détails de l'article : {article.name}</h2>
@@ -68,7 +68,7 @@ export default function ArticleDetails({ article }: ArticleDetailsProps) {
 							</div>
 
 							<div className="mt-4 border-l pl-2">
-								<p>Marque : {article.brand}</p>
+								<p>Marque : {article.brand.name}</p>
 								<p>Référence : {article.reference}</p>
 								<p>Type : {article.type}</p>
 								<p>Prix TTC : {article.price_ttc} €</p>
@@ -109,7 +109,7 @@ export default function ArticleDetails({ article }: ArticleDetailsProps) {
 							</div>
 						</div>
 					</div>
-					<div>
+					<div className="xl:w-full xl:flex xl:justify-center">
 						<Button
 							type="button"
 							onClick={handleChange}

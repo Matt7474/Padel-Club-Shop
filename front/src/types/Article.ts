@@ -79,7 +79,7 @@ export default interface Article {
 	name: string;
 	description: string;
 	reference: string;
-	brand: string;
+	brand: Brand;
 	images: string[];
 	price_ttc: number;
 	stock_quantity: number | Record<string, number | undefined>;
@@ -89,4 +89,10 @@ export default interface Article {
 	tech_ratings?: TechRatings;
 	promotions?: Promotion[];
 	reviews?: Review[];
+}
+
+// ---------- Marque ----------
+export interface Brand {
+	name: string;
+	logo: string;
 }

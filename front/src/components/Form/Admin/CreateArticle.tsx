@@ -43,7 +43,7 @@ export default function CreateArticle({
 	const [articleReference, setArticleReference] = useState(
 		article?.reference || "",
 	);
-	const [articleBrand, setArticleBrand] = useState(article?.brand || "");
+	const [articleBrand, setArticleBrand] = useState(article?.brand.name || "");
 	const [images, setImages] = useState<ImageWithId[]>(() => {
 		return (
 			article?.images?.map((url: string) => ({
@@ -231,7 +231,7 @@ export default function CreateArticle({
 
 	// gestion des marques
 	const brands = Array.from(
-		new Set(data.articles.map((article) => article.brand)),
+		new Set(data.articles.map((article) => article.brand.name)),
 	);
 
 	// gestion des images
@@ -507,8 +507,9 @@ export default function CreateArticle({
 								)}
 							</div>
 						</div>
-
-						<Button type="submit" buttonText={`${buttonText}`} />
+						<div className="xl:flex xl:justify-center">
+							<Button type="submit" buttonText={`${buttonText}`} />
+						</div>
 					</form>
 				</div>
 			</div>

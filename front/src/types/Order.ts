@@ -21,4 +21,5 @@ export interface Order {
 	created_at: string;
 	total_ttc?: number;
 	tva_rate?: number;
+	status?: string;
 }

@@ -166,7 +166,7 @@ export default function ArticleForm({
 
 						<label
 							htmlFor="file-upload"
-							className="border mt-4 h-10 flex max-w-[100%] pt-3 pl-3 z-200 w-full cursor-pointer"
+							className="border mt-4 h-10 flex max-w-[100%] pt-3 pl-3 z-200 w-full cursor-pointer bg-white"
 						>
 							<p className="absolute text-gray-500 text-xs top-0 left-1">
 								Sélectionnez des images

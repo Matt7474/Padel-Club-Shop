@@ -16,7 +16,7 @@ export default function Brand({ brand }: ArticlesProps) {
 	];
 
 	const filteredArticles = data.articles.filter(
-		(article) => article.brand.toLowerCase() === brand.toLowerCase(),
+		(article) => article.brand.name.toLowerCase() === brand.toLowerCase(),
 	);
 
 	return (

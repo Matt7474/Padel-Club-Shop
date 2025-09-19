@@ -5,7 +5,7 @@ import type { User } from "../../../types/User";
 import Toogle from "../Toogle/Toogle";
 import Button from "../Tools/Button";
 import Select from "../Tools/Select";
-import OrderDetails from "./OrderDetails";
+import OrderDetails from "./ClientOrderDetails";
 import UsersList from "./UsersList";
 
 interface UserProps {

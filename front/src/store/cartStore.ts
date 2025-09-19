@@ -1,12 +1,13 @@
 // src/store/cartStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import type { Brand } from "../types/Article";
 
 // Définition du type pour un article du panier
 export type CartItem = {
 	id: string;
 	name: string;
-	brand: string;
+	brand: Brand;
 	price: number;
 	image?: string;
 	quantity: number;

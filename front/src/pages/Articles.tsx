@@ -23,7 +23,7 @@ export default function Articles({
 		articles = articles.filter(
 			(article) =>
 				article.name.toLowerCase().includes(query) ||
-				article.brand.toLowerCase().includes(query) ||
+				article.brand.name.toLowerCase().includes(query) ||
 				article.description.toLowerCase().includes(query),
 		);
 	} else if (type?.toLowerCase() === "promotion" || showPromos) {

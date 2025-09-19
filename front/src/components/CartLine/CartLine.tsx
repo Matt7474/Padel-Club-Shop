@@ -12,9 +12,12 @@ export default function CartLine({ item }: { item: CartItem }) {
 				className="w-20 h-20 object-contain"
 			/>
 			<div className="flex flex-col flex-1">
-				<p className="text-sm font-semibold">{item.brand}</p>
+				<p className="text-sm font-semibold">{item.brand.name}</p>
 				<p className="text-sm">{item.name}</p>
-				<p className="text-sm text-gray-600">{item.price} €</p>
+				<p className="text-sm text-gray-600">
+					{" "}
+					{Number(item.price).toFixed(2)} €
+				</p>
 			</div>
 
 			{/* Quantité */}

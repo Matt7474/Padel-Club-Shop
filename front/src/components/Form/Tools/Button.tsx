@@ -11,7 +11,7 @@ export default function Button({ type, onClick, buttonText }: buttonProps) {
 				<button
 					type={type}
 					onClick={onClick}
-					className="w-full xl:w-1/3  bg-green-500 text-white font-semibold p-2 rounded-sm mt-6 cursor-pointer"
+					className="w-full   bg-green-500 text-white font-semibold p-2 rounded-sm mt-6 cursor-pointer"
 				>
 					{buttonText}
 				</button>

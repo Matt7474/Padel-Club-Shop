@@ -4,12 +4,15 @@ import type { Order } from "../../../types/Order";
 import type { User } from "../../../types/User";
 import UserDetails from "./UserDetails";
 
-interface OrderDetailsProps {
+interface ClientOrderDetailsProps {
 	order: Order;
 	user: User;
 }
 
-export default function OrderDetails({ order, user }: OrderDetailsProps) {
+export default function ClientOrderDetails({
+	order,
+	user,
+}: ClientOrderDetailsProps) {
 	const articlesData = articlesDatas.articles;
 	const [clickReturn, setClickReturn] = useState<User | null>(null);
 	const handleClick = (user: User) => setClickReturn(user);
@@ -17,7 +20,7 @@ export default function OrderDetails({ order, user }: OrderDetailsProps) {
 	const getArticleById = (id: number) =>
 		articlesData.find((a) => a.article_id === id);
 
-	// Calcul des totaux TTC/HT/TVA de façon sûre
+	// Calcul des totaux TTC/HT/TVA
 	const totalTTC = order.order_lines.reduce((sum, line) => {
 		const article = getArticleById(line.article);
 		if (!article || typeof line.quantity !== "number") return sum;
@@ -96,6 +99,8 @@ export default function OrderDetails({ order, user }: OrderDetailsProps) {
 					<div className="w-full place-self-center border-b my-4 border-gray-200"></div>
 
 					<p className="font-semibold text-xl mb-2">EMETTEUR</p>
+					<p>Padel Club Shop</p>
+					<p>N° SIRET : 123 456 789 00013</p>
 
 					<div className="flex">
 						<img src="/icons/phone.svg" alt="phone" className="w-5" />

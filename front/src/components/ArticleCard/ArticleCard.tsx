@@ -55,7 +55,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 		addToCartStore({
 			id: article.article_id.toString(),
 			name: article.name,
-			brand: article.brand,
+			brand: article.brand.name,
 			price: displayPrice,
 			image: article.images?.[0],
 			quantity: 1,
@@ -97,10 +97,10 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 							<div className="bg-gray-300 inline-block mt-1 -ml-1 rounded-lg">
 								<button
 									type="button"
-									onClick={(e) => handleBrandClick(e, article.brand)}
+									onClick={(e) => handleBrandClick(e, article.brand.name)}
 									className="px-2 hover:underline"
 								>
-									{article.brand}
+									{article.brand.name}
 								</button>
 							</div>
 							<div>

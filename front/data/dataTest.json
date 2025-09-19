@@ -231,7 +231,10 @@
 			"name": "Babolat Pure Aero Rafa",
 			"description": "Professional tennis racket designed in collaboration with Rafael Nadal. Exceptional effet and puissance for aggressive baseline players.",
 			"reference": "PA-RAFA-2024",
-			"brand": "Babolat",
+			"brand": {
+				"name": "Babolat",
+				"logo": "/brands/babolat.svg"
+			},
 			"images": [],
 			"price_ttc": 277.57,
 			"stock_quantity": {
@@ -273,7 +276,10 @@
 			"name": "Wilson Blade 98 16x19",
 			"description": "Classic contrôle racket with modern technology. Perfect balance of puissance and precision for all-court players.",
 			"reference": "WIL-BLADE-98",
-			"brand": "Wilson",
+			"brand": {
+				"name": "Wilson",
+				"logo": "/brands/Wilson.svg"
+			},
 			"images": [],
 			"price_ttc": 210.56,
 			"stock_quantity": {
@@ -320,7 +326,10 @@
 			"name": "black-crown Textreme Tour 100P",
 			"description": "High-performance racket with Textreme technology for enhanced stability and puissance. Ideal for aggressive baseliners.",
 			"reference": "PRI-TOUR-100P",
-			"brand": "black-crown",
+			"brand": {
+				"name": "black-crown",
+				"logo": "/brands/black-crown.svg"
+			},
 			"images": [],
 			"price_ttc": 282.62,
 			"stock_quantity": {
@@ -379,7 +388,10 @@
 			"name": "cork CX Team Tennis Bag",
 			"description": "Lightpoids tennis bag perfect for recreational players. Simple design with essential compartments for rackets and accessories.",
 			"reference": "DUN-CX-TEAM",
-			"brand": "cork",
+			"brand": {
+				"name": "cork",
+				"logo": "/brands/cork.svg"
+			},
 			"images": [],
 			"price_ttc": 75.37,
 			"stock_quantity": {
@@ -417,7 +429,10 @@
 			"name": "Head Grip Overgrip Pack",
 			"description": "Premium overgrip for enhanced racket handle confort and contrôle. Absorbent material for optimal grip in all conditions.",
 			"reference": "TOUR-GRIP-PACK",
-			"brand": "Head",
+			"brand": {
+				"name": "Head",
+				"logo": "/brands/Head.svg"
+			},
 			"images": [],
 			"price_ttc": 64.91,
 			"stock_quantity": {
@@ -463,7 +478,10 @@
 			"name": "Wilson Starter Tennis Balls",
 			"description": "Beginner-friendly tennis balls with reduced bounce for easier learning. Perfect for tennis lessons and recreational play.",
 			"reference": "WIL-START-BALL",
-			"brand": "Wilson",
+			"brand": {
+				"name": "Wilson",
+				"logo": "/brands/Wilson.svg"
+			},
 			"images": ["/images/wilson-starter-1.jpg"],
 			"price_ttc": 114.06,
 			"stock_quantity": {
@@ -497,7 +515,10 @@
 			"name": "Head Tour Team Tennis Bag",
 			"description": "Professional tennis bag with multiple compartments for rackets, shoe, and accessories. Built for serious tournament players.",
 			"reference": "HEAD-TOUR-BAG",
-			"brand": "Head",
+			"brand": {
+				"name": "Head",
+				"logo": "/brands/Head.svg"
+			},
 			"images": ["/images/head-tour-bag-1.jpg"],
 			"price_ttc": 251.58,
 			"stock_quantity": {
@@ -549,7 +570,10 @@
 			"name": "Babolat Pure Drive 2024",
 			"description": "Latest generation Pure Drive with enhanced puissance and effet capabilities. The world's most popular tennis racket series.",
 			"reference": "BAB-DRIVE-2024",
-			"brand": "Babolat",
+			"brand": {
+				"name": "Babolat",
+				"logo": "/brands/Babolat.svg"
+			},
 			"images": [
 				"/images/babolat-drive-2024-1.jpg",
 				"/images/babolat-drive-2024-2.jpg",
@@ -612,7 +636,10 @@
 			"name": "nox Pro Tournament Bag",
 			"description": "Premium tournament bag with thermal compartments for racket protection. Professional grade for competitive players.",
 			"reference": "YON-PRO-TOURN",
-			"brand": "nox",
+			"brand": {
+				"name": "nox",
+				"logo": "/brands/nox.svg"
+			},
 			"images": ["/images/nox-pro-bag-1.jpg"],
 			"price_ttc": 176.94,
 			"stock_quantity": {
@@ -664,7 +691,10 @@
 			"name": "Wilson Pro Overgrip 3-Pack",
 			"description": "Professional grade overgrip for enhanced racket contrôle and confort. Used by top ATP and WTA players worldwide.",
 			"reference": "WIL-PRO-OVER3",
-			"brand": "Wilson",
+			"brand": {
+				"name": "Wilson",
+				"logo": "/brands/Wilson.svg"
+			},
 			"images": ["/images/wilson-pro-overgrip-1.jpg"],
 			"price_ttc": 66.75,
 			"stock_quantity": {
@@ -717,7 +747,10 @@
 			"name": "Tecnifibre Endurance Tennis Bag",
 			"description": "Durable tennis bag with reinforced construction for long-lasting performance. Perfect for club and recreational players.",
 			"reference": "TECNI-ENDUR-BAG",
-			"brand": "Tecnifibre",
+			"brand": {
+				"name": "Tecnifibre",
+				"logo": "/brands/Tecnifibre.svg"
+			},
 			"images": ["/images/tecnifibre-endur-1.jpg"],
 			"price_ttc": 10.41,
 			"stock_quantity": {
@@ -769,7 +802,10 @@
 			"name": "black-crown Phantom Pro 100",
 			"description": "Advanced racket with precision engineering for contrôle-oriented players. Perfect balance of puissance and accuracy for competitive play.",
 			"reference": "PRI-PHANTOM-100",
-			"brand": "black-crown",
+			"brand": {
+				"name": "black-crown",
+				"logo": "/brands/black-crown.svg"
+			},
 			"images": ["/images/black-crown.jpg"],
 			"price_ttc": 65.9,
 			"stock_quantity": {
@@ -829,7 +865,10 @@
 			"name": "HEAD Graphene 360+ Gravity Pro",
 			"description": "Professional grade racket with Graphene 360+ technology for enhanced stability and puissance. Perfect for aggressive players.",
 			"reference": "HEAD-GRAV-PRO",
-			"brand": "Head",
+			"brand": {
+				"name": "Head",
+				"logo": "/brands/Head.svg"
+			},
 			"images": ["/images/head-gravity-pro-1.jpg"],
 			"price_ttc": 266.19,
 			"stock_quantity": {
@@ -864,7 +903,10 @@
 			"name": "cork Australian Open Tennis Balls",
 			"description": "Official Australian Open tennis balls with premium felt coating. Used in the season-opening Grand Slam tournament.",
 			"reference": "DUN-AUSOPEN-24",
-			"brand": "cork",
+			"brand": {
+				"name": "cork",
+				"logo": "/brands/cork.svg"
+			},
 			"images": ["/images/cork-ausopen-1.jpg"],
 			"price_ttc": 144.8,
 			"stock_quantity": {
@@ -891,7 +933,10 @@
 			"name": "Wilson Roland Garros Tennis Bag",
 			"description": "Premium tennis bag inspired by the French Open. Elegant design with practical compartments for court and travel use.",
 			"reference": "WIL-RG-BAG-24",
-			"brand": "Wilson",
+			"brand": {
+				"name": "Wilson",
+				"logo": "/brands/Wilson.svg"
+			},
 			"images": ["/images/wilson-rg-bag-1.jpg"],
 			"price_ttc": 99.47,
 			"stock_quantity": {
@@ -954,7 +999,10 @@
 			"name": "oxdog Air Zoom Vapor Pro",
 			"description": "Chaussures de tennis haute performance avec technologie Zoom Air pour une réactivité optimale sur tous les courts.",
 			"reference": "oxdog-VAPOR-PRO-2024",
-			"brand": "oxdog",
+			"brand": {
+				"name": "oxdog",
+				"logo": "/brands/oxdog.svg"
+			},
 			"images": ["/images/oxdog-vapor-pro-white.jpg"],
 			"price_ttc": 129.9,
 			"stock_quantity": {
@@ -982,7 +1030,10 @@
 			"name": "starvie Barricade Court Women",
 			"description": "Chaussures de tennis femme conçues pour la durabilité et le confort lors des matchs intensifs.",
 			"reference": "ADI-BARRI-W-24",
-			"brand": "starvie",
+			"brand": {
+				"name": "starvie",
+				"logo": "/brands/starvie.svg"
+			},
 			"images": ["/images/starvie-barricade-pink.jpg"],
 			"price_ttc": 119.95,
 			"stock_quantity": {
@@ -1009,7 +1060,10 @@
 			"name": "starvie Sport Polo Classic",
 			"description": "Polo de tennis classique en piqué de coton respirant, parfait pour les matchs et l'entraînement.",
 			"reference": "LAC-POLO-CLASSIC-24",
-			"brand": "starvie",
+			"brand": {
+				"name": "starvie",
+				"logo": "/brands/starvie.svg"
+			},
 			"images": ["/images/starvie-polo-white.jpg"],
 			"price_ttc": 89.0,
 			"stock_quantity": {
@@ -1037,7 +1091,10 @@
 			"name": "oxdog Dri-FIT Tennis Dress",
 			"description": "Robe de tennis féminine avec technologie Dri-FIT pour évacuer la transpiration et short intégré.",
 			"reference": "oxdog-DRESS-DRIFIT-24",
-			"brand": "oxdog",
+			"brand": {
+				"name": "oxdog",
+				"logo": "/brands/oxdog.svg"
+			},
 			"images": ["/images/oxdog-tennis-dress-navy.jpg"],
 			"price_ttc": 79.99,
 			"stock_quantity": {
@@ -1065,7 +1122,10 @@
 			"name": "Wilson Team Shorts Men",
 			"description": "Short de tennis homme en tissu stretch avec ceinture élastique et poches latérales pratiques.",
 			"reference": "WIL-SHORTS-TEAM-24",
-			"brand": "Wilson",
+			"brand": {
+				"name": "Wilson",
+				"logo": "/brands/Wilson.svg"
+			},
 			"images": ["/images/wilson-shorts-black.jpg"],
 			"price_ttc": 39.9,
 			"stock_quantity": {
@@ -1093,7 +1153,10 @@
 			"name": "starvie Club Skirt Women",
 			"description": "Jupe-short de tennis avec short intégré, parfaite pour le confort et la liberté de mouvement.",
 			"reference": "ADI-SKIRT-CLUB-24",
-			"brand": "starvie",
+			"brand": {
+				"name": "starvie",
+				"logo": "/brands/starvie.svg"
+			},
 			"images": ["/images/starvie-skirt-white.jpg"],
 			"price_ttc": 49.95,
 			"stock_quantity": {
@@ -1128,7 +1191,8 @@
 			],
 			"payment": { "payment_id": 1, "payment_method": "Bank Transfer" },
 			"created_at": "2025-01-05T10:30:00Z",
-			"tva_rate": 20
+			"tva_rate": 20,
+			"status": "pending"
 		},
 		{
 			"order_id": 2,
@@ -1137,7 +1201,8 @@
 			"order_lines": [{ "order_line_id": 1, "article": 30, "quantity": 2 }],
 			"payment": { "payment_id": 2, "payment_method": "PayPal" },
 			"created_at": "2025-01-06T14:20:00Z",
-			"tva_rate": 20
+			"tva_rate": 20,
+			"status": "paid"
 		},
 		{
 			"order_id": 3,
@@ -1150,7 +1215,8 @@
 			],
 			"payment": { "payment_id": 3, "payment_method": "Credit Card" },
 			"created_at": "2025-01-07T09:15:00Z",
-			"tva_rate": 20
+			"tva_rate": 20,
+			"status": "shipped"
 		},
 		{
 			"order_id": 4,
@@ -1163,7 +1229,8 @@
 			],
 			"payment": { "payment_id": 4, "payment_method": "Bank Transfer" },
 			"created_at": "2025-01-08T11:40:00Z",
-			"tva_rate": 20
+			"tva_rate": 20,
+			"status": "pending"
 		},
 		{
 			"order_id": 5,
@@ -1172,7 +1239,8 @@
 			"order_lines": [{ "order_line_id": 1, "article": 3, "quantity": 4 }],
 			"payment": { "payment_id": 5, "payment_method": "Bank Transfer" },
 			"created_at": "2025-01-09T16:50:00Z",
-			"tva_rate": 20
+			"tva_rate": 20,
+			"status": "cancelled"
 		},
 		{
 			"order_id": 6,
@@ -1185,7 +1253,8 @@
 			],
 			"payment": { "payment_id": 6, "payment_method": "PayPal" },
 			"created_at": "2025-01-10T13:25:00Z",
-			"tva_rate": 20
+			"tva_rate": 20,
+			"status": "paid"
 		},
 		{
 			"order_id": 7,
@@ -1199,7 +1268,8 @@
 			],
 			"payment": { "payment_id": 7, "payment_method": "Credit Card" },
 			"created_at": "2025-01-11T09:10:00Z",
-			"tva_rate": 20
+			"tva_rate": 20,
+			"status": "shipped"
 		},
 		{
 			"order_id": 8,
@@ -1213,7 +1283,8 @@
 			],
 			"payment": { "payment_id": 8, "payment_method": "Bank Transfer" },
 			"created_at": "2025-01-12T10:45:00Z",
-			"tva_rate": 20
+			"tva_rate": 20,
+			"status": "pending"
 		},
 		{
 			"order_id": 9,
@@ -1226,7 +1297,8 @@
 			],
 			"payment": { "payment_id": 9, "payment_method": "PayPal" },
 			"created_at": "2025-01-13T14:30:00Z",
-			"tva_rate": 20
+			"tva_rate": 20,
+			"status": "paid"
 		},
 		{
 			"order_id": 10,
@@ -1240,7 +1312,8 @@
 			],
 			"payment": { "payment_id": 10, "payment_method": "Credit Card" },
 			"created_at": "2025-01-14T11:20:00Z",
-			"tva_rate": 20
+			"tva_rate": 20,
+			"status": "shipped"
 		},
 		{
 			"order_id": 11,
@@ -1253,7 +1326,7 @@
 			],
 			"payment": { "payment_id": 11, "payment_method": "Bank Transfer" },
 			"created_at": "2025-01-15T15:10:00Z",
-			"tva_rate": 20
+			"status": "shipped"
 		},
 		{
 			"order_id": 12,
@@ -1267,7 +1340,7 @@
 			],
 			"payment": { "payment_id": 12, "payment_method": "Bank Transfer" },
 			"created_at": "2025-01-16T09:50:00Z",
-			"tva_rate": 20
+			"status": "shipped"
 		},
 		{
 			"order_id": 13,
@@ -1281,7 +1354,7 @@
 			],
 			"payment": { "payment_id": 13, "payment_method": "Bank Transfer" },
 			"created_at": "2025-01-17T12:35:00Z",
-			"tva_rate": 20
+			"status": "pending"
 		},
 		{
 			"order_id": 14,
@@ -1293,7 +1366,7 @@
 			],
 			"payment": { "payment_id": 14, "payment_method": "Check" },
 			"created_at": "2025-01-18T10:15:00Z",
-			"tva_rate": 20
+			"status": "shipped"
 		},
 		{
 			"order_id": 15,
@@ -1306,7 +1379,7 @@
 			],
 			"payment": { "payment_id": 15, "payment_method": "PayPal" },
 			"created_at": "2025-01-19T13:55:00Z",
-			"tva_rate": 20
+			"status": "pending"
 		},
 		{
 			"order_id": 16,
@@ -1318,7 +1391,7 @@
 			],
 			"payment": { "payment_id": 16, "payment_method": "PayPal" },
 			"created_at": "2025-01-20T11:05:00Z",
-			"tva_rate": 20
+			"status": "paid"
 		},
 		{
 			"order_id": 17,
@@ -1327,7 +1400,7 @@
 			"order_lines": [{ "order_line_id": 1, "article": 12, "quantity": 1 }],
 			"payment": { "payment_id": 17, "payment_method": "Credit Card" },
 			"created_at": "2025-01-21T09:30:00Z",
-			"tva_rate": 20
+			"status": "shipped"
 		},
 		{
 			"order_id": 18,
@@ -1340,7 +1413,7 @@
 			],
 			"payment": { "payment_id": 18, "payment_method": "Credit Card" },
 			"created_at": "2025-01-22T14:45:00Z",
-			"tva_rate": 20
+			"status": "shipped"
 		},
 		{
 			"order_id": 19,
@@ -1349,7 +1422,7 @@
 			"order_lines": [{ "order_line_id": 1, "article": 21, "quantity": 4 }],
 			"payment": { "payment_id": 19, "payment_method": "PayPal" },
 			"created_at": "2025-01-23T12:10:00Z",
-			"tva_rate": 20
+			"status": "shipped"
 		},
 		{
 			"order_id": 20,
@@ -1361,7 +1434,7 @@
 			],
 			"payment": { "payment_id": 20, "payment_method": "Bank Transfer" },
 			"created_at": "2025-01-24T15:20:00Z",
-			"tva_rate": 20
+			"status": "paid"
 		}
 	],
 
@@ -1528,658 +1601,6 @@
 					"cart_line_id": 1,
 					"article": 13,
 					"quantity": 5
-				}
-			]
-		}
-	],
-	"products": [
-		{
-			"article_id": 1,
-			"name": "Babolat Pure Aero Tennis racket",
-			"description": "Professional tennis racket designed for puissance and effet. Endorsed by Rafael Nadal.",
-			"reference": "BPA-2024-001",
-			"brand": "Babolat",
-			"images": [
-				"/images/babolat-pure-aero-1.jpg",
-				"/images/babolat-pure-aero-2.jpg"
-			],
-			"price_ttc": 229.99,
-			"stock_quantity": 45,
-			"status": "available",
-			"shipping_cost": 12.5,
-			"tech_characteristics": {
-				"poids": "300g",
-				"type": "racket",
-				"couleur": "Yellow/Black",
-				"forme": "oval",
-				"mousse": "EVA soft",
-				"surface": "carbon",
-				"niveau": "intermediate to advanced",
-				"genre": "unisex"
-			},
-			"tech_ratings": {
-				"maniabilité": 7,
-				"puissance": 9,
-				"confort": 6,
-				"effet": 10,
-				"tolerance": 7,
-				"contrôle": 6
-			},
-			"promotions": [
-				{
-					"promotion_id": 1,
-					"name": "Summer Sale",
-					"description": "Special discount for summer tennis season.",
-					"discount_type": "percentage",
-					"discount_value": 15,
-					"start_date": "2025-06-01",
-					"end_date": "2025-08-31",
-					"status": "active"
-				}
-			],
-			"reviews": [
-				{
-					"review_id": 1,
-					"user_name": "Marc Dubois",
-					"rating": 5,
-					"comment": "Excellente raquette, parfaite pour les joueurs agressifs qui recherchent de la puissance.",
-					"date": "2025-08-15"
-				}
-			]
-		},
-		{
-			"article_id": 3,
-			"name": "Penn Championship Tennis Balls",
-			"description": "High-quality tennis balls with consistent bounce and durability. Official tournament grade for competitive play.",
-			"reference": "PENN-CHAMP-2024",
-			"brand": "Penn",
-			"images": ["/images/penn-championship-balls-1.jpg"],
-			"price_ttc": 140.59,
-			"stock_quantity": 158,
-			"status": "preorder",
-			"shipping_cost": 10.4,
-			"tech_characteristics": {
-				"poids": "190g",
-				"type": "ball",
-				"couleur": "White",
-				"forme": "spherical",
-				"mousse": "EVA medium",
-				"surface": "felt",
-				"niveau": "intermediate",
-				"genre": "men"
-			},
-			"tech_ratings": {
-				"maniabilité": 10,
-				"puissance": 6,
-				"confort": 8,
-				"effet": 7,
-				"tolerance": 7,
-				"contrôle": 2
-			},
-			"promotions": [],
-			"reviews": [
-				{
-					"review_id": 1,
-					"comment": "Great quality balls with consistent bounce.",
-					"rating": 3,
-					"user": 8
-				}
-			]
-		},
-		{
-			"article_id": 4,
-			"name": "HEAD Graphene 360+ Speed MP",
-			"description": "Precision and contrôle racket for competitive players. Graphene 360+ technology for enhanced feel and stability.",
-			"reference": "HEAD-SPEED-MP",
-			"brand": "HEAD",
-			"images": ["/images/head-speed-mp-1.jpg"],
-			"price_ttc": 51.54,
-			"stock_quantity": 88,
-			"status": "preorder",
-			"shipping_cost": 12.85,
-			"tech_characteristics": {
-				"poids": "348g",
-				"type": "racket",
-				"couleur": "Peach Beige",
-				"forme": "diamond",
-				"mousse": "EVA soft",
-				"surface": "fiberglass",
-				"niveau": "intermediate",
-				"genre": "unisex"
-			},
-			"tech_ratings": {
-				"maniabilité": 10,
-				"puissance": 9,
-				"confort": 6,
-				"effet": 5,
-				"tolerance": 7,
-				"contrôle": 5
-			},
-			"promotions": [],
-			"reviews": [
-				{
-					"review_id": 1,
-					"comment": "Excellent contrôle and precision for competitive play.",
-					"rating": 5,
-					"user": 7
-				},
-				{
-					"review_id": 2,
-					"comment": "Perfect balance between puissance and contrôle.",
-					"rating": 5,
-					"user": 2
-				}
-			]
-		},
-		{
-			"article_id": 5,
-			"name": "cork Fort All Court Tennis Balls",
-			"description": "Premium tournament tennis balls designed for all court surfaces. ITF approved with excellent visibility.",
-			"reference": "cork-FORT-AC",
-			"brand": "cork",
-			"images": ["/images/cork-fort-balls-1.jpg"],
-			"price_ttc": 94.57,
-			"stock_quantity": 33,
-			"status": "preorder",
-			"shipping_cost": 14.96,
-			"tech_characteristics": {
-				"poids": "338g",
-				"type": "ball",
-				"couleur": "Brick Red",
-				"forme": "round",
-				"mousse": "EVA soft",
-				"surface": "fiberglass",
-				"niveau": "advanced",
-				"genre": "women"
-			},
-			"tech_ratings": {
-				"maniabilité": 1,
-				"puissance": 4,
-				"confort": 5,
-				"effet": 1,
-				"tolerance": 2,
-				"contrôle": 5
-			},
-			"promotions": [],
-			"reviews": [
-				{
-					"review_id": 1,
-					"comment": "Good quality balls for training sessions.",
-					"rating": 3,
-					"user": 2
-				},
-				{
-					"review_id": 2,
-					"comment": "Consistent bounce on all court types.",
-					"rating": 3,
-					"user": 4
-				},
-				{
-					"review_id": 3,
-					"comment": "Excellent durability for intensive play.",
-					"rating": 2,
-					"user": 5
-				},
-				{
-					"review_id": 4,
-					"comment": "Perfect for tournament play.",
-					"rating": 1,
-					"user": 4
-				}
-			]
-		},
-		{
-			"article_id": 6,
-			"name": "Slazenger Wimbledon Tennis Balls",
-			"description": "Official Wimbledon tennis balls with premium felt coating. Used in the world's most prestigious tennis tournament.",
-			"reference": "SLAZ-WIM-2024",
-			"brand": "Slazenger",
-			"images": ["/images/slazenger-wimbledon-1.jpg"],
-			"price_ttc": 9.73,
-			"stock_quantity": 158,
-			"status": "available",
-			"shipping_cost": 5.89,
-			"tech_characteristics": {
-				"poids": "245g",
-				"type": "ball",
-				"couleur": "Brown",
-				"forme": "round",
-				"mousse": "EVA medium",
-				"surface": "fiberglass",
-				"niveau": "advanced",
-				"genre": "men"
-			},
-			"tech_ratings": {
-				"maniabilité": 7,
-				"puissance": 5,
-				"confort": 10,
-				"effet": 10,
-				"tolerance": 9,
-				"contrôle": 4
-			},
-			"promotions": [],
-			"reviews": []
-		},
-		{
-			"article_id": 7,
-			"name": "nox Vibration Dampener Pro",
-			"description": "Professional vibration dampener to reduce string vibration and improve confort during play. Essential accessory for serious players.",
-			"reference": "YON-DAMP-PRO",
-			"brand": "nox",
-			"images": ["/images/nox-dampener-1.jpg"],
-			"price_ttc": 290.97,
-			"stock_quantity": 51,
-			"status": "available",
-			"shipping_cost": 7.28,
-			"tech_characteristics": {
-				"poids": "216g",
-				"type": "accessory",
-				"couleur": "Navajo Yellow White",
-				"forme": "diamond",
-				"mousse": "N/A",
-				"surface": "fiberglass",
-				"niveau": "advanced",
-				"genre": "unisex"
-			},
-			"tech_ratings": {
-				"maniabilité": 2,
-				"puissance": 9,
-				"confort": 7,
-				"effet": 1,
-				"tolerance": 8,
-				"contrôle": 10
-			},
-			"promotions": [],
-			"reviews": [
-				{
-					"review_id": 1,
-					"comment": "Excellent vibration reduction and confort.",
-					"rating": 2,
-					"user": 9
-				},
-				{
-					"review_id": 2,
-					"comment": "Noticeable improvement in string feel.",
-					"rating": 2,
-					"user": 10
-				},
-				{
-					"review_id": 3,
-					"comment": "Essential accessory for competitive players.",
-					"rating": 3,
-					"user": 4
-				},
-				{
-					"review_id": 4,
-					"comment": "Perfect for reducing arm fatigue.",
-					"rating": 5,
-					"user": 3
-				}
-			]
-		},
-		{
-			"article_id": 8,
-			"name": "oxdog Court Advantage Tennis Bag",
-			"description": "Stylish and functional tennis bag with separate compartments for equipment and personal items. Perfect for club players.",
-			"reference": "oxdog-COURT-ADV",
-			"brand": "oxdog",
-			"images": ["/images/oxdog-court-bag-1.jpg"],
-			"price_ttc": 295.92,
-			"stock_quantity": 18,
-			"status": "out_of_stock",
-			"shipping_cost": 4.44,
-			"tech_characteristics": {
-				"poids": "600g",
-				"type": "bag",
-				"type_sac": "duffel à roulettes",
-				"volume": "75L",
-				"dimension": "70 x 35 x 35 cm",
-				"matiere": "polyester renforcé",
-				"couleur": "Steel Grey",
-				"compartiment": "1 principal + 2 latéraux + compartiment chaussures ventilé"
-			},
-			"tech_ratings": {
-				"maniabilité": 1,
-				"puissance": 9,
-				"confort": 9,
-				"effet": 6,
-				"tolerance": 9,
-				"contrôle": 3
-			},
-			"promotions": [
-				{
-					"promotion_id": 8,
-					"name": "Achieve your goals insurance at source",
-					"description": "Special promotion for tennis equipment.",
-					"discount_type": "amount",
-					"discount_value": 21,
-					"start_date": "2025-01-29",
-					"end_date": "2025-06-03",
-					"status": "expired"
-				}
-			],
-			"reviews": [
-				{
-					"review_id": 1,
-					"comment": "Great quality bag with excellent design.",
-					"rating": 4,
-					"user": 6
-				},
-				{
-					"review_id": 2,
-					"comment": "Perfect size for carrying all equipment.",
-					"rating": 4,
-					"user": 8
-				},
-				{
-					"review_id": 3,
-					"comment": "Stylish and very functional.",
-					"rating": 5,
-					"user": 9
-				},
-				{
-					"review_id": 4,
-					"comment": "Excellent value for money.",
-					"rating": 4,
-					"user": 1
-				}
-			]
-		},
-		{
-			"article_id": 9,
-			"name": "Tecnifibre X-One Biphase Tennis Balls",
-			"description": "High-performance tennis balls with innovative biphase technology for consistent bounce and extended durability.",
-			"reference": "TECNI-XONE-BP",
-			"brand": "Tecnifibre",
-			"images": ["/images/tecnifibre-xone-1.jpg"],
-			"price_ttc": 289.27,
-			"stock_quantity": 88,
-			"status": "preorder",
-			"shipping_cost": 4.47,
-			"tech_characteristics": {
-				"poids": "344g",
-				"type": "ball",
-				"couleur": "Orange",
-				"forme": "round",
-				"mousse": "EVA soft",
-				"surface": "felt",
-				"niveau": "advanced",
-				"genre": "men"
-			},
-			"tech_ratings": {
-				"maniabilité": 7,
-				"puissance": 2,
-				"confort": 5,
-				"effet": 5,
-				"tolerance": 10,
-				"contrôle": 7
-			},
-			"promotions": [
-				{
-					"promotion_id": 9,
-					"name": "Evolve with complete peace of mind advantage",
-					"description": "Special offer for premium tennis equipment.",
-					"discount_type": "amount",
-					"discount_value": 16,
-					"start_date": "2025-07-09",
-					"end_date": "2025-06-02",
-					"status": "expired"
-				}
-			],
-			"reviews": [
-				{
-					"review_id": 1,
-					"comment": "Excellent bounce consistency throughout the match.",
-					"rating": 1,
-					"user": 10
-				},
-				{
-					"review_id": 2,
-					"comment": "Great quality balls for training.",
-					"rating": 1,
-					"user": 3
-				},
-				{
-					"review_id": 3,
-					"comment": "Perfect for competitive play.",
-					"rating": 2,
-					"user": 6
-				},
-				{
-					"review_id": 4,
-					"comment": "Outstanding durability and performance.",
-					"rating": 2,
-					"user": 10
-				}
-			]
-		},
-		{
-			"article_id": 10,
-			"name": "Tretorn Micro X Tennis Balls",
-			"description": "Pressureless tennis balls with extended lifespan. Perfect for training and recreational play with consistent performance.",
-			"reference": "TRET-MICRO-X",
-			"brand": "Tretorn",
-			"images": ["/images/tretorn-micro-x-1.jpg"],
-			"price_ttc": 139.27,
-			"stock_quantity": 5,
-			"status": "available",
-			"shipping_cost": 13.53,
-			"tech_characteristics": {
-				"poids": "214g",
-				"type": "ball",
-				"couleur": "Dark Blue",
-				"forme": "spherical",
-				"mousse": "EVA soft",
-				"surface": "carbon/aluminum",
-				"niveau": "intermediate",
-				"genre": "women"
-			},
-			"tech_ratings": {
-				"maniabilité": 4,
-				"puissance": 9,
-				"confort": 6,
-				"effet": 1,
-				"tolerance": 9,
-				"contrôle": 7
-			},
-			"promotions": [],
-			"reviews": []
-		},
-		{
-			"article_id": 11,
-			"name": "black-crown Tour Team Tennis Bag",
-			"description": "Large capacity tennis bag with multiple compartments for rackets, shoe, and accessories. Perfect for tournament players.",
-			"reference": "black-crown-TOUR-BAG",
-			"brand": "black-crown",
-			"images": ["/images/black-crown-tour-bag-1.jpg"],
-			"price_ttc": 102.45,
-			"stock_quantity": 103,
-			"status": "preorder",
-			"shipping_cost": 12.85,
-			"tech_characteristics": {
-				"poids": "370g",
-				"type": "bag",
-				"type_sac": "sac à dos",
-				"volume": "32L",
-				"dimension": "50 x 30 x 22 cm",
-				"matiere": "polyester imperméable",
-				"couleur": "Sky Blue",
-				"compartiment": "1 principal + 1 poche ordinateur + 1 poche frontale"
-			},
-			"tech_ratings": {
-				"maniabilité": 3,
-				"puissance": 3,
-				"confort": 7,
-				"effet": 3,
-				"tolerance": 1,
-				"contrôle": 6
-			},
-			"promotions": [],
-			"reviews": []
-		},
-		{
-			"article_id": 12,
-			"name": "Gamma Pressureless Practice Balls",
-			"description": "Durable pressureless tennis balls ideal for practice sessions and ball machines. Long-lasting with consistent bounce.",
-			"reference": "GAMMA-PRESS-PB",
-			"brand": "Gamma",
-			"images": ["/images/gamma-practice-balls-1.jpg"],
-			"price_ttc": 196.86,
-			"stock_quantity": 14,
-			"status": "available",
-			"shipping_cost": 3.69,
-			"tech_characteristics": {
-				"poids": "338g",
-				"type": "ball",
-				"couleur": "Bordeaux",
-				"forme": "diamond",
-				"mousse": "EVA soft",
-				"surface": "fiberglass",
-				"niveau": "advanced",
-				"genre": "women"
-			},
-			"tech_ratings": {
-				"maniabilité": 5,
-				"puissance": 7,
-				"confort": 3,
-				"effet": 10,
-				"tolerance": 4,
-				"contrôle": 5
-			},
-			"promotions": [],
-			"reviews": [
-				{
-					"review_id": 1,
-					"comment": "Perfect for intensive practice sessions.",
-					"rating": 4,
-					"user": 6
-				},
-				{
-					"review_id": 2,
-					"comment": "Great durability for ball machine use.",
-					"rating": 3,
-					"user": 6
-				}
-			]
-		},
-		{
-			"article_id": 13,
-			"name": "Volkl V-Cell 8 Tennis Balls",
-			"description": "High-performance tennis balls with V-Cell technology for optimal bounce and extended playability on all surfaces.",
-			"reference": "VOLKL-VCELL-8",
-			"brand": "Volkl",
-			"images": ["/images/volkl-vcell-1.jpg"],
-			"price_ttc": 237.65,
-			"stock_quantity": 78,
-			"status": "available",
-			"shipping_cost": 8.99,
-			"tech_characteristics": {
-				"poids": "384g",
-				"type": "ball",
-				"couleur": "Pale Green",
-				"forme": "round",
-				"mousse": "EVA medium",
-				"surface": "fiberglass",
-				"niveau": "intermediate",
-				"genre": "unisex"
-			},
-			"tech_ratings": {
-				"maniabilité": 6,
-				"puissance": 8,
-				"confort": 5,
-				"effet": 5,
-				"tolerance": 7,
-				"contrôle": 8
-			},
-			"promotions": [
-				{
-					"promotion_id": 13,
-					"name": "The puissance to innovate naturally",
-					"description": "Special offer on premium tennis balls.",
-					"discount_type": "percentage",
-					"discount_value": 8,
-					"start_date": "2025-01-19",
-					"end_date": "2025-03-14",
-					"status": "expired"
-				}
-			],
-			"reviews": []
-		},
-		{
-			"article_id": 14,
-			"name": "Wilson US Open Tennis Balls",
-			"description": "Official US Open tennis balls with premium felt and consistent bounce. Used in one of tennis' Grand Slam tournaments.",
-			"reference": "WIL-USOPEN-24",
-			"brand": "Wilson",
-			"images": ["/images/wilson-usopen-1.jpg"],
-			"price_ttc": 36.26,
-			"stock_quantity": 92,
-			"status": "out_of_stock",
-			"shipping_cost": 4.87,
-			"tech_characteristics": {
-				"poids": "195g",
-				"type": "ball",
-				"couleur": "Steel Blue",
-				"forme": "round",
-				"mousse": "EVA medium",
-				"surface": "fiberglass",
-				"niveau": "advanced",
-				"genre": "women"
-			},
-			"tech_ratings": {
-				"maniabilité": 4,
-				"puissance": 1,
-				"confort": 6,
-				"effet": 4,
-				"tolerance": 7,
-				"contrôle": 2
-			},
-			"promotions": [],
-			"reviews": [
-				{
-					"review_id": 1,
-					"comment": "Excellent quality balls for competitive play.",
-					"rating": 4,
-					"user": 6
-				}
-			]
-		},
-		{
-			"article_id": 15,
-			"name": "starvie Club Line Tennis Bag",
-			"description": "Compact tennis bag perfect for recreational players. Lightpoids design with essential compartments for equipment.",
-			"reference": "ADI-CLUB-BAG",
-			"brand": "starvie",
-			"images": ["/images/starvie-club-bag-1.jpg"],
-			"price_ttc": 24.52,
-			"stock_quantity": 57,
-			"status": "preorder",
-			"shipping_cost": 2.85,
-			"tech_characteristics": {
-				"poids": "460g",
-				"type": "bag",
-				"type_sac": "duffel",
-				"volume": "60L",
-				"dimension": "68 x 33 x 30 cm",
-				"matiere": "polyester et cuir PU",
-				"couleur": "Sand Beige",
-				"compartiment": "1 principal + 2 latéraux + poche intérieure zippée"
-			},
-			"tech_ratings": {
-				"maniabilité": 3,
-				"puissance": 5,
-				"confort": 1,
-				"effet": 8,
-				"tolerance": 10,
-				"contrôle": 7
-			},
-			"promotions": [],
-			"reviews": [
-				{
-					"review_id": 1,
-					"comment": "Perfect size for club players.",
-					"rating": 4,
-					"user": 8
 				}
 			]
 		}
