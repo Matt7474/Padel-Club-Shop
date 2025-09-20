@@ -22,7 +22,8 @@ export default function UsersList() {
 			<h2 className="p-3 bg-gray-500/80 font-semibold text-lg mt-7 xl:mt-0 flex justify-between">
 				Liste des Utilisateurs
 			</h2>
-			<div className="grid grid-cols-[3fr_3fr_3fr_5fr] bg-gray-300 mt-4 mb-2 text-sm">
+
+			<div className="grid grid-cols-[3fr_3fr_3fr_5fr] bg-gray-300 mt-4 mb-2 text-sm ">
 				<button
 					type="button"
 					className="border-b pl-1 cursor-pointer"
@@ -32,21 +33,21 @@ export default function UsersList() {
 				</button>
 				<button
 					type="button"
-					className="border-b pl-1 cursor-pointer"
+					className="border-b pl-1 cursor-pointer text-start"
 					onClick={() => requestSort("lastname")}
 				>
 					NOM ↓
 				</button>
 				<button
 					type="button"
-					className="border-b pl-1 cursor-pointer"
+					className="border-b pl-1 cursor-pointer text-start"
 					onClick={() => requestSort("firstname")}
 				>
 					PRENOM ↓
 				</button>
 				<button
 					type="button"
-					className="overflow-hidden border-b pl-1 cursor-pointer"
+					className="overflow-hidden border-b pl-1 cursor-pointer text-start"
 					onClick={() => requestSort("email")}
 				>
 					EMAIL ↓

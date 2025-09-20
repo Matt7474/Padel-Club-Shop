@@ -6,7 +6,7 @@ export default function Homepage() {
 			<div>
 				<p className="xl:ml-30 mt-6 text-2xl font-semibold">NOS CATEGORIES</p>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-3 mt-5 2xl:mx-30">
+				<div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-3 mt-5 2xl:mx-30">
 					{/* RAQUETTES */}
 					<Link
 						to={"/articles/racket"}
@@ -39,22 +39,6 @@ export default function Homepage() {
 						</p>
 					</Link>
 
-					{/* ACCESSOIRES */}
-					<Link
-						to={"/articles/accessory"}
-						className="relative group bg-[#FFD779] aspect-square rounded-2xl flex items-center justify-center 2xl:aspect-auto 2xl:row-start-2 2xl:row-end-4 2xl:col-start-1 2xl:col-end-2  border hover:cursor-pointer overflow-hidden"
-					>
-						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
-						<img
-							src="/categories/accessory.avif"
-							alt="accessoires"
-							className="max-w-full max-h-full object-contain"
-						/>
-						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
-							ACCESSOIRES
-						</p>
-					</Link>
-
 					{/* SACS */}
 					<Link
 						to={"/articles/bag"}
@@ -68,6 +52,22 @@ export default function Homepage() {
 						/>
 						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
 							SACS
+						</p>
+					</Link>
+
+					{/* ACCESSOIRES */}
+					<Link
+						to={"/articles/accessory"}
+						className="relative group bg-[#FFD779] aspect-square rounded-2xl flex items-center justify-center 2xl:aspect-auto 2xl:row-start-2 2xl:row-end-4 2xl:col-start-1 2xl:col-end-2  border hover:cursor-pointer overflow-hidden"
+					>
+						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
+						<img
+							src="/categories/accessory.avif"
+							alt="accessoires"
+							className="max-w-full max-h-full object-contain"
+						/>
+						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
+							ACCESSOIRES
 						</p>
 					</Link>
 
@@ -106,7 +106,7 @@ export default function Homepage() {
 					{/* PROMOTIONS */}
 					<Link
 						to={"/articles/promotion"}
-						className="relative group bg-[#D8DCFF] aspect-square 2xl:aspect-[2/1] rounded-2xl flex items-center justify-center  2xl:row-start-3 2xl:row-end-4 2xl:col-start-2 2xl:col-end-4  border hover:cursor-pointer overflow-hidden"
+						className="relative col-span-2 xl:col-auto aspect-auto  h-42 xl:h-auto group bg-[#D8DCFF] 2xl:aspect-[2/1] rounded-2xl flex items-center justify-center  2xl:row-start-3 2xl:row-end-4 2xl:col-start-2 2xl:col-end-4  border hover:cursor-pointer overflow-hidden"
 					>
 						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
 						<img
@@ -118,6 +118,21 @@ export default function Homepage() {
 							PROMOTIONS
 						</p>
 					</Link>
+
+					{/* <Link
+						to={"/articles/promotion"}
+						className="relative group bg-[#D8DCFF] aspect-square 2xl:aspect-[2/1] rounded-2xl flex items-center justify-center  2xl:row-start-3 2xl:row-end-4 2xl:col-start-2 2xl:col-end-4  border hover:cursor-pointer overflow-hidden"
+					>
+						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
+						<img
+							src="/categories/promotion.avif"
+							alt="promotions"
+							className="max-w-full max-h-full object-contain"
+						/>
+						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
+							PROMOTIONS
+						</p>
+					</Link> */}
 				</div>
 			</div>
 		</>

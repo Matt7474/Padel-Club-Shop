@@ -11,10 +11,6 @@ export default function ArticlesList() {
 		setSelectedArticle(article);
 	};
 
-	if (selectedArticle) {
-		return <ArticleDetails article={selectedArticle} />;
-	}
-
 	const articlesWithBrandName = data.articles.map((a) => ({
 		...a,
 		brandName: a.brand.name,
@@ -35,12 +31,16 @@ export default function ArticlesList() {
 			: undefined;
 	};
 
+	if (selectedArticle) {
+		return <ArticleDetails article={selectedArticle} />;
+	}
+
 	return (
 		<div>
 			<h2 className="p-3 bg-gray-500/80 font-semibold text-lg mt-7 xl:mt-0 flex justify-between">
 				Liste des Articles
 			</h2>
-			<div className="grid grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr] xl:grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr_1fr_1fr_1fr] bg-gray-300 mt-4 mb-2">
+			<div className="grid grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr] xl:grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr] bg-gray-300 mt-4 mb-2">
 				<button
 					type="button"
 					className="text-xs border-b pl-1 cursor-pointer"
@@ -92,13 +92,13 @@ export default function ArticlesList() {
 						onClick={() => handleArticleClick(article)}
 						className="cursor-pointer w-full text-left hover:bg-gray-300"
 					>
-						<div className="grid grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr] xl:grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr_1fr_1fr_1fr]">
+						<div className="grid grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr] xl:grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr] xl:text-center">
 							<img
 								src={article.images?.[0] || "/icons/default.svg"}
 								alt={article.name || "Image par défaut"}
-								className="border-r px-1 py-1 w-12"
+								className=" px-1 py-1 w-12 mx-auto"
 							/>
-							<p className="border-r px-1 py-1 text-xs">{article.name}</p>
+							<p className="border-x px-1 py-1 text-xs">{article.name}</p>
 							<p className="border-r px-1 py-1 text-xs truncate">
 								{article.brandName}
 							</p>

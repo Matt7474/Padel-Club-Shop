@@ -3,7 +3,7 @@ import SocialNetwork from "../SocialNetwork/SocialNetwork";
 
 export default function Footer() {
 	return (
-		<footer className="flex flex-col items-center bg-zinc-800 text-white pb-6 px-6 mt-7 w-full">
+		<footer className="flex flex-col items-center bg-zinc-800 text-white pb-4 px-6 mt-7 w-full">
 			{/* Logo centré */}
 			<div className="">
 				<img

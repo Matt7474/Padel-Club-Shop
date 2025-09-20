@@ -419,7 +419,7 @@ export default function CreateArticle({
 								)}
 
 								{/* Si l'article est un sac  */}
-								{articleType === "bags" && (
+								{articleType === "bag" && (
 									<BagForm
 										type={articleType}
 										bCharacteristicsWeight={bCharacteristicsWeight}
@@ -444,7 +444,7 @@ export default function CreateArticle({
 								)}
 
 								{/* Si l'article est une balle  */}
-								{articleType === "balls" && (
+								{articleType === "ball" && (
 									<BallForm
 										type={articleType}
 										ballCharacteristicsWeight={ballCharacteristicsWeight}

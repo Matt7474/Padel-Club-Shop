@@ -67,16 +67,16 @@ export default function BrandList() {
 						Liste des Marques
 					</h2>
 
-					<div className="grid grid-cols-[2fr_3fr_1fr] bg-gray-300 mt-4 mb-2">
+					<div className="grid grid-cols-[2fr_3fr_1fr] bg-gray-300 mt-4 mb-2 text-sm">
 						<button
 							type="button"
-							className="text-xs border-b pl-1 cursor-pointer"
+							className="border-b pl-1 cursor-pointer"
 							onClick={() => requestSort("name")}
 						>
 							NOM {getClassNamesFor("name")}
 						</button>
-						<p className="text-xs border-b pl-1 text-center">LOGO</p>
-						<p className="text-xs border-b pr-1">ART.ASSOC</p>
+						<p className="border-b text-center cusror-pointer">LOGO</p>
+						<p className="border-b text-center cusror-pointer">NB.ART</p>
 					</div>
 
 					{sortedBrands.map((brand) => (
@@ -87,7 +87,7 @@ export default function BrandList() {
 								className="cursor-pointer w-full text-left hover:bg-gray-300"
 							>
 								<div className="grid grid-cols-[2fr_3fr_1fr] items-center">
-									<p className="pl-1">{brand.name}</p>
+									<p className="pl-1 text-center">{brand.name}</p>
 									<img
 										src={brand.logo || "/icons/default.svg"}
 										alt={brand.name || "Image par défaut"}
@@ -127,18 +127,20 @@ export default function BrandList() {
 					</h2>
 
 					<form onSubmit={() => handleBrandSubmit()}>
-						<div className="mt-4 flex flex-col gap-4">
-							<Input
-								htmlFor="brandName"
-								label="Nom de la marque"
-								type="text"
-								value={selectedBrand.name ?? ""}
-								onChange={(val) =>
-									setSelectedBrand({ ...selectedBrand, name: val })
-								}
-							/>
+						<div className="mt-4 flex flex-col gap-4 xl:flex xl:flex-col xl:items-center ">
+							<div className="xl:w-1/4">
+								<Input
+									htmlFor="brandName"
+									label="Nom de la marque"
+									type="text"
+									value={selectedBrand.name ?? ""}
+									onChange={(val) =>
+										setSelectedBrand({ ...selectedBrand, name: val })
+									}
+								/>
+							</div>
 
-							<div className="relative -mt-4">
+							<div className="relative -mt-4 xl:w-1/4">
 								<input
 									id="file-upload"
 									type="file"
@@ -174,7 +176,7 @@ export default function BrandList() {
 								<img
 									src={selectedBrand.logo || "/icons/default.svg"}
 									alt={selectedBrand.name}
-									className="w-50 border"
+									className="w-50 border "
 								/>
 							</div>
 						</div>
