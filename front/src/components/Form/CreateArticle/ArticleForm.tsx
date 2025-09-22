@@ -1,3 +1,4 @@
+import type { Brand } from "../../../types/Article";
 import Input from "../Tools/Input";
 import Select from "../Tools/Select";
 import TextArea from "../Tools/TextArea";
@@ -11,9 +12,9 @@ interface ArticleFormProps {
 	setArticleDescription: (val: string) => void;
 	articleReference: string;
 	setArticleReference: (val: string) => void;
-	articleBrand: string;
-	setArticleBrand: (val: string) => void;
-	brands: string[];
+	articleBrand: number | null;
+	setArticleBrand: (val: number) => void;
+	brands: Brand[];
 	images: { id: string; previewUrl: string }[];
 	handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	handleDeleteImage: (id: string) => void;
@@ -61,7 +62,7 @@ export default function ArticleForm({
 						<Select
 							label="Choisir un type d'article"
 							value={articleType}
-							onChange={setArticleType}
+							onChange={(val) => setArticleType(val as string)}
 							options={[
 								"racket",
 								"bag",
@@ -132,10 +133,10 @@ export default function ArticleForm({
 					<div className="w-full ">
 						<Select
 							label="Choisir une marque"
-							value={articleBrand}
-							onChange={setArticleBrand}
-							options={brands}
-							labels={brands.map((b) => b.charAt(0).toUpperCase() + b.slice(1))}
+							value={articleBrand ?? ""}
+							onChange={(val) => setArticleBrand(Number(val))}
+							options={brands.map((b) => b.brand_id)}
+							labels={brands.map((b) => b.name)}
 						/>
 					</div>
 
@@ -255,7 +256,7 @@ export default function ArticleForm({
 						<Select
 							label="Choisir un statut"
 							value={articleStatus}
-							onChange={setArticleStatus}
+							onChange={(val) => setArticleStatus(val as string)}
 							options={["available", "preorder", "out_of_stock"]}
 							labels={["Disponible", "En commande", "Pas de stock"]}
 						/>

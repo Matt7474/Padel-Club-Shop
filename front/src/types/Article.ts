@@ -93,6 +93,100 @@ export default interface Article {
 
 // ---------- Marque ----------
 export interface Brand {
+	slice(arg0: number): unknown;
+	charAt(arg0: number): unknown;
+	brand_id: number;
 	name: string;
 	logo: string;
+}
+
+// ---------- New Article ----------
+export interface NewArticle {
+	type: string;
+	name: string;
+	reference: string;
+	description?: string;
+	brand_id: number;
+	price_ttc: number;
+	stock_quantity?: number;
+	status?: "available" | "preorder" | "out_of_stock";
+	shipping_cost?: number;
+	tech_characteristics?: TechCharacteristics;
+	promotions?: NewPromotion[];
+}
+
+// ---------- Form Article ----------
+export interface ArticleFormState {
+	articleType: string;
+	articleName: string;
+	articleDescription: string;
+	articleReference: string;
+	articleBrand: number | null;
+	articlePriceTTC: string;
+	articleQty: string;
+	articleStatus: string;
+	articleShippingCost: string;
+	techCharacteristicsState: TechCharacteristics;
+	articlePromo: boolean;
+	articleDiscountValue: string | number;
+	articlePromoType: string;
+	articleDescriptionPromo: string;
+	articlePromoStart: string;
+	articlePromoEnd: string;
+	images: { id: string; file: File; previewUrl: string }[];
+}
+
+// ---------- Promo Article ----------
+export interface NewPromotion {
+	discount_type: "percentage" | "amount" | string;
+	discount_value: number;
+	description: string;
+	start_date: string;
+	end_date: string;
+}
+
+export interface RacketState {
+	rCharacteristicsWeight?: string;
+	rCharacteristicsColor?: string;
+	rCharacteristicsShape?: string;
+	rCharacteristicsFoam?: string;
+	rCharacteristicsSurface?: string;
+	rCharacteristicsLevel?: string;
+	rCharacteristicsGender?: string;
+}
+
+export interface BagState {
+	bCharacteristicsWeight?: string;
+	bCharacteristicsType?: string;
+	bCharacteristicsVolume?: string;
+	bCharacteristicsDimensions?: string;
+	bCharacteristicsMaterial?: string;
+	bCharacteristicsColor?: string;
+	bCharacteristicsCompartment?: string;
+}
+
+export interface BallState {
+	ballCharacteristicsWeight?: string;
+	ballCharacteristicsDiameter?: string;
+	ballCharacteristicsRebound?: string;
+	ballCharacteristicsPressure?: string;
+	ballCharacteristicsMaterial?: string;
+	ballCharacteristicsColor?: string;
+	ballCharacteristicsType?: string;
+}
+
+export interface ClothingState {
+	cCharacteristicsType?: string;
+	cCharacteristicsGender?: string;
+	cCharacteristicsMaterial?: string;
+	cCharacteristicsColor?: string;
+	cCharacteristicsSize?: { label: string; stock: number }[];
+}
+
+export interface ShoesState {
+	sCharacteristicsWeight?: string;
+	sCharacteristicsColor?: string;
+	sCharacteristicsSole?: string;
+	sCharacteristicsGender?: string;
+	sCharacteristicsSize?: { label: string; stock: number }[];
 }

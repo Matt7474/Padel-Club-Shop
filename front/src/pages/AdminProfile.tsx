@@ -30,7 +30,8 @@ export default function AdminProfile() {
 					<Select
 						label="Choisissez un menu"
 						value={menuSelected}
-						onChange={setMenuSelected}
+						// onChange={setMenuSelected}
+						onChange={(val) => setMenuSelected(val as string)}
 						options={menuOptions}
 						labels={menuOptions}
 					/>

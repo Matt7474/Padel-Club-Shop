@@ -19,6 +19,7 @@ import Profile from "./pages/Profile";
 import TermsOfSale from "./pages/TermsOfSale";
 import CreateArticle from "./components/Form/Admin/CreateArticle";
 import AdminProfile from "./pages/AdminProfile";
+import AllArticles from "./pages/AllArticles";
 
 function App() {
 	return (
@@ -38,6 +39,7 @@ function App() {
 
 							<Route path="/articles" element={<ArticlesWrapper />} />
 
+							<Route path="/allArticle" element={<AllArticles />} />
 							<Route path="/articles/:type" element={<ArticlesWrapper />} />
 							<Route path="/articles/:type/:name" element={<Article />} />
 

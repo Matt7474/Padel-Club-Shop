@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="159.16341mm"
+   height="185.62175mm"
+   viewBox="0 0 159.16341 185.62175"
+   version="1.1"
+   id="svg1"
+   xml:space="preserve"
+   inkscape:export-filename="trash2.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:export-bgcolor="#acacac00" /><defs
+     id="defs1" /><g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-25.368424,-55.689127)"><g
+       style="fill:#44aa00;stroke:#f91515"
+       id="g1"
+       transform="matrix(0.41341146,0,0,0.41341146,-0.88320588,42.666666)"><g
+         id="SVGRepo_iconCarrier"
+         style="fill:#44aa00"><title
+           id="title1">ionicons-v5-e</title><path
+           d="M 432,96 H 336 V 72 A 40,40 0 0 0 296,32 H 216 A 40,40 0 0 0 176,72 V 96 H 80 a 16,16 0 0 0 0,32 h 17 l 19,304.92 c 1.42,26.85 22,47.08 48,47.08 h 184 c 26.13,0 46.3,-19.78 48,-47 l 19,-305 h 17 a 16,16 0 0 0 0,-32 z M 192.57,416 H 192 a 16,16 0 0 1 -16,-15.43 l -8,-224 a 16.01015,16.01015 0 1 1 32,-1.14 l 8,224 A 16,16 0 0 1 192.57,416 Z M 272,400 a 16,16 0 0 1 -32,0 V 176 a 16,16 0 0 1 32,0 z M 304,96 H 208 V 72 a 7.91,7.91 0 0 1 8,-8 h 80 a 7.91,7.91 0 0 1 8,8 z m 32,304.57 A 16,16 0 0 1 320,416 h -0.58 A 16,16 0 0 1 304,399.43 l 8,-224 a 16.01015,16.01015 0 1 1 32,1.14 z"
+           id="path2"
+           style="fill:#aa0000;stroke:#38dc10;stroke-opacity:0" /></g></g></g></svg>

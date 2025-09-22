@@ -21,7 +21,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 		navigate(`/marque/${brand}`);
 	};
 
-	const type = article.tech_characteristics.type;
+	const type = article.type;
 	const shortDesc = article.description
 		? `${article.description.split(" ").slice(0, 7).join(" ")} ... voir plus`
 		: "";
@@ -139,7 +139,8 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 									</p>
 								) : (
 									<p className="font-bold text-md">
-										{article.price_ttc.toFixed(2)} €
+										{/* {article.price_ttc.toFixed(2)} € */}
+										{article.price_ttc} €
 									</p>
 								)}
 							</div>

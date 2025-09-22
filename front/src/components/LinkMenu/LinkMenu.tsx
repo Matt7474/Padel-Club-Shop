@@ -21,7 +21,7 @@ export default function LinkMenu({
 }: LinkMenuProps) {
 	const handleClick = () => {
 		if (onLinkClick) {
-			onLinkClick(); // Ferme le menu
+			onLinkClick();
 		}
 	};
 	return (

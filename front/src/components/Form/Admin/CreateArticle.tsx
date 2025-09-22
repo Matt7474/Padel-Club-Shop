@@ -1,6 +1,11 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import data from "../../../../data/dataTest.json";
 import type Article from "../../../types/Article";
+import {
+	buildNewArticle,
+	getTechCharacteristicsState,
+	submitArticle,
+} from "../../../utils/ArticleHelpers";
 import ArticleForm from "../CreateArticle/ArticleForm";
 import BagForm from "../CreateArticle/BagForm";
 import BallForm from "../CreateArticle/BallForm";
@@ -10,6 +15,9 @@ import RacketForm from "../CreateArticle/RacketForm";
 import ShoesForm from "../CreateArticle/ShoesForm";
 import Toogle from "../Toogle/Toogle";
 import Button from "../Tools/Button";
+import type { Brand } from "../../../types/Article";
+import axios from "axios";
+import { getBrands } from "../../../api/Brand";
 
 type ImageWithId = {
 	id: string;
@@ -43,7 +51,8 @@ export default function CreateArticle({
 	const [articleReference, setArticleReference] = useState(
 		article?.reference || "",
 	);
-	const [articleBrand, setArticleBrand] = useState(article?.brand.name || "");
+	const [articleBrand, setArticleBrand] = useState<number | null>(null);
+
 	const [images, setImages] = useState<ImageWithId[]>(() => {
 		return (
 			article?.images?.map((url: string) => ({
@@ -229,10 +238,16 @@ export default function CreateArticle({
 		{ label: "46", stock: 0 },
 	]);
 
-	// gestion des marques
-	const brands = Array.from(
-		new Set(data.articles.map((article) => article.brand.name)),
-	);
+	const [brands, setBrands] = useState<Brand[]>([]);
+
+	useEffect(() => {
+		getBrands()
+			.then((data) => {
+				console.log("brands API:", data);
+				setBrands(data);
+			})
+			.catch((err) => console.error(err));
+	}, []);
 
 	// gestion des images
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -295,9 +310,72 @@ export default function CreateArticle({
 		setSCharacteristicsSize(newSizes);
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log("soumission du formulaire");
+
+		try {
+			const newArticle = buildNewArticle({
+				articleType,
+				articleName,
+				articleDescription,
+				articleReference,
+				articleBrand,
+				articlePriceTTC,
+				articleQty,
+				articleStatus,
+				articleShippingCost,
+				techCharacteristicsState: getTechCharacteristicsState(articleType, {
+					rCharacteristicsWeight,
+					rCharacteristicsColor,
+					rCharacteristicsShape,
+					rCharacteristicsFoam,
+					rCharacteristicsSurface,
+					rCharacteristicsLevel,
+					rCharacteristicsGender,
+					bCharacteristicsWeight,
+					bCharacteristicsType,
+					bCharacteristicsVolume,
+					bCharacteristicsDimensions,
+					bCharacteristicsMaterial,
+					bCharacteristicsColor,
+					bCharacteristicsCompartment,
+					ballCharacteristicsWeight,
+					ballCharacteristicsDiameter,
+					ballCharacteristicsRebound,
+					ballCharacteristicsPressure,
+					ballCharacteristicsMaterial,
+					ballCharacteristicsColor,
+					ballCharacteristicsType,
+					cCharacteristicsType,
+					cCharacteristicsGender,
+					cCharacteristicsMaterial,
+					cCharacteristicsColor,
+					cCharacteristicsSize,
+					sCharacteristicsWeight,
+					sCharacteristicsColor,
+					sCharacteristicsSole,
+					sCharacteristicsGender,
+					sCharacteristicsSize,
+				}),
+				articlePromo,
+				articleDiscountValue,
+				articlePromoType,
+				articleDescriptionPromo,
+				articlePromoStart,
+				articlePromoEnd,
+				images: [],
+			});
+
+			const res = await submitArticle(newArticle);
+			console.log("Article créé :", res);
+			alert("Article créé avec succès !");
+
+			// Ensuite tu peux uploader les images séparément si besoin
+			// await uploadImages(res.article_id, images);
+		} catch (err) {
+			console.error(err);
+			alert("Erreur lors de la création de l'article");
+		}
 	};
 
 	const handleDelete = () => {
@@ -313,7 +391,7 @@ export default function CreateArticle({
 					</h2>
 					<button type="button" onClick={handleDelete}>
 						<img
-							src="/icons/trash.svg"
+							src="/icons/trash2.svg"
 							alt="poubelle"
 							className="w-7 cursor-pointer"
 						/>

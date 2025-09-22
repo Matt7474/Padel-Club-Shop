@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LinkMenu from "../LinkMenu/LinkMenu";
 import SearchBar from "../SearchBar/SearchBar";
 
@@ -117,6 +117,7 @@ export default function MenuModal({ closeMenu }: menuModalsProps) {
 						animate="hover:animate-bounce"
 						onLinkClick={closeMenu}
 					/>
+					<Link to="/allArticle">Tous les articles</Link>
 				</div>
 			</div>
 		</>
