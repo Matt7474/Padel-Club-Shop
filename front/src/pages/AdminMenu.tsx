@@ -62,7 +62,7 @@ export default function AdminMenu() {
 						/>
 					</div>
 				)}
-				{/* Ajouter un article */}
+				{/* Ajouter une marque */}
 				{menuSelected === "Ajouter une marque" && (
 					<div>
 						<CreateBrand />

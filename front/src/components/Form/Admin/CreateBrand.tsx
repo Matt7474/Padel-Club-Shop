@@ -1,6 +1,7 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import Input from "../Tools/Input";
+import { createBrand } from "../../../api/Brand";
 
 export default function CreateBrand() {
 	const [newBrand, setNewBrand] = useState("");
@@ -99,21 +100,29 @@ export default function CreateBrand() {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		// Exemple d'envoi :
-		if (selectedFile) {
-			// envoi du File
-			const fd = new FormData();
-			fd.append("image", selectedFile);
-			fd.append("brandName", newBrand);
-			// fetch('/api/brands', { method: 'POST', body: fd }) ...
-			console.log("Envoi en FormData (fichier local) :", selectedFile);
-		} else if (imagePreview) {
-			// envoi d'une URL distante
-			const payload = { brandName: newBrand, image_url: imagePreview };
-			// fetch('/api/brands', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) }) ...
-			console.log("Envoi JSON (url distante) :", payload);
-		} else {
-			console.log("Aucune image sélectionnée");
+
+		try {
+			if (selectedFile) {
+				const fd = new FormData();
+				fd.append("image", selectedFile);
+				fd.append("brandName", newBrand);
+				const result = await createBrand(fd);
+				console.log("Marque créée avec fichier local :", result);
+			} else if (imagePreview) {
+				const payload = { brandName: newBrand, image_url: imagePreview };
+				const result = await createBrand(payload);
+				console.log("Marque créée avec URL distante :", result);
+			} else {
+				console.log("Aucune image sélectionnée");
+				return;
+			}
+
+			// Reset formulaire si besoin
+			setNewBrand("");
+			setSelectedFile(null);
+			setImagePreview("");
+		} catch (err) {
+			console.error("Erreur submit :", err);
 		}
 	};
 

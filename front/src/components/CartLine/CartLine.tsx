@@ -45,7 +45,7 @@ export default function CartLine({
 					<button
 						type="button"
 						onClick={() => updateQuantity(item.id, item.quantity - 1)}
-						className="px-3 py-1 text-md font-bold hover:bg-gray-200"
+						className="px-3 py-1 text-md font-bold hover:bg-gray-200 cursor-pointer"
 					>
 						-
 					</button>
@@ -55,7 +55,7 @@ export default function CartLine({
 					<button
 						type="button"
 						onClick={() => updateQuantity(item.id, item.quantity + 1)}
-						className="px-3 py-1 text-md font-bold hover:bg-gray-200"
+						className="px-3 py-1 text-md font-bold hover:bg-gray-200 cursor-pointer"
 					>
 						+
 					</button>

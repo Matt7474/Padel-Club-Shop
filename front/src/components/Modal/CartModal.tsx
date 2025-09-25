@@ -16,7 +16,7 @@ export default function CartModal({ closeCart }: { closeCart: () => void }) {
 				<button
 					type="button"
 					onClick={closeCart}
-					className="text-red-600 hover:brightness-90"
+					className="text-red-600 hover:brightness-90 cursor-pointer"
 					aria-label="Fermer le panier"
 				>
 					<img src="/icons/cross-red.svg" alt="Fermer" className="w-8 h-8" />

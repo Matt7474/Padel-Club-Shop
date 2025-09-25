@@ -55,7 +55,7 @@ export default function PriceArticle({ article }: { article: Article }) {
 			price: displayPrice,
 			image: firstImageUrl,
 			type: article.type,
-			quantity: 1,
+			quantity: quantity,
 		});
 
 		const id = Date.now();

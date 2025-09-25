@@ -175,8 +175,29 @@ export default function ArticleForm({
 						<img
 							src={
 								articleBrand
-									? `/brands/${brands.find((b) => b.brand_id === articleBrand)?.name}.svg`
-									: `/brands/no-image.svg`
+									? (() => {
+											const brand = brands.find(
+												(b) => b.brand_id === articleBrand,
+											);
+											if (!brand) return "/brands/no-image.svg";
+
+											// Si c'est déjà une URL complète
+											if (
+												brand.logo.startsWith("http") ||
+												brand.logo.startsWith("https")
+											) {
+												return brand.logo;
+											}
+
+											// Si c'est un fichier uploadé côté backend
+											if (brand.logo.startsWith("/uploads/")) {
+												return `${import.meta.env.VITE_API_URL}${brand.logo}`;
+											}
+
+											// Sinon, c'est une image frontale classique
+											return brand.logo;
+										})()
+									: "/brands/no-image.svg"
 							}
 							alt={
 								articleBrand

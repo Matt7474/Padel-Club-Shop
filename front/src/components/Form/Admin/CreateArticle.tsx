@@ -596,7 +596,7 @@ export default function CreateArticle({
 	return (
 		<>
 			<div>
-				<div className="flex justify-between bg-gray-500/80 p-3 mt-7  h10">
+				<div className="flex justify-between bg-gray-500/80 p-3 mt-7 xl:mt-4 h10">
 					<h2 className="font-semibold text-lg xl:mt-0 flex justify-between">
 						{title}
 					</h2>

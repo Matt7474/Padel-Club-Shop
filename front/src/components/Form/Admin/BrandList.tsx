@@ -1,24 +1,42 @@
-import { useState } from "react";
-import data from "../../../../data/dataTest.json";
+import { useEffect, useState } from "react";
+import { getArticles } from "../../../api/Article";
+import { getBrands } from "../../../api/Brand";
+import type Article from "../../../types/Article";
 import type { Brand } from "../../../types/Article";
 import Button from "../Tools/Button";
 import Input from "../Tools/Input";
 import { useSortableData } from "../Tools/useSortableData";
 
 export default function BrandList() {
+	const BASE_URL = import.meta.env.VITE_API_URL;
 	const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
+	const [brands, setBrands] = useState<Brand[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+	const [articles, setArticles] = useState<Article[]>([]);
 
-	// Création de la liste unique de marques
-	const brandsMap = new Map<string, Brand>(
-		data.articles.map((a) => [
-			a.brand.name,
-			{
-				name: a.brand.name,
-				logo: a.brand.logo,
-			},
-		]),
-	);
-	const brands = Array.from(brandsMap.values());
+	// Récupération des marques depuis l'API
+	useEffect(() => {
+		const fetchBrands = async () => {
+			try {
+				const data = await getBrands();
+				const articles = await getArticles();
+				const dataWithFullLogo = data.map((b: Brand) => ({
+					...b,
+					logo: b.logo ? BASE_URL + b.logo : "/icons/default.svg",
+				}));
+				setBrands(dataWithFullLogo);
+				setArticles(articles);
+			} catch (err: unknown) {
+				if (err instanceof Error) setError(err.message);
+				else setError("Erreur inconnue");
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchBrands();
+	}, []);
 
 	// Hook pour le tri
 	const {
@@ -61,6 +79,9 @@ export default function BrandList() {
 
 	const handleClick = () => setSelectedBrand(null);
 
+	if (loading) return <p>Chargement des marques...</p>;
+	if (error) return <p className="text-red-500">{error}</p>;
+
 	return (
 		<div>
 			{selectedBrand === null && (
@@ -96,10 +117,7 @@ export default function BrandList() {
 										className="border-x w-full px-1 h-10"
 									/>
 									<p className="text-center">
-										{
-											data.articles.filter((a) => a.brand.name === brand.name)
-												.length
-										}
+										{articles.filter((a) => a.brand.name === brand.name).length}
 									</p>
 								</div>
 								<div className="w-full border-b border-gray-200"></div>
