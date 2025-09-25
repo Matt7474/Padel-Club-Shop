@@ -52,6 +52,34 @@ export default function ArticleForm({
 	articleStatus,
 	setArticleStatus,
 }: ArticleFormProps) {
+	// Quand le stock change
+	const handleQtyChange = (val: string | number) => {
+		const qty = Number(val);
+
+		setArticleQty(qty.toString());
+
+		if (qty === 0 && articleStatus === "available") {
+			setArticleStatus("out_of_stock");
+		}
+
+		if (qty > 0) {
+			setArticleStatus("available");
+		}
+	};
+
+	// Quand le statut change
+	const handleStatusChange = (val: string) => {
+		setArticleStatus(val);
+
+		if (val === "preorder" || val === "out_of_stock") {
+			setArticleQty("0");
+		}
+
+		if (val === "available" && Number(articleQty) === 0) {
+			setArticleQty("1");
+		}
+	};
+
 	return (
 		<>
 			<div>
@@ -135,7 +163,9 @@ export default function ArticleForm({
 							label="Choisir une marque"
 							value={articleBrand ?? ""}
 							onChange={(val) => setArticleBrand(Number(val))}
-							options={brands.map((b) => b.brand_id)}
+							options={brands
+								.map((b) => b.brand_id)
+								.filter((id): id is number => id !== undefined)}
 							labels={brands.map((b) => b.name)}
 						/>
 					</div>
@@ -145,10 +175,14 @@ export default function ArticleForm({
 						<img
 							src={
 								articleBrand
-									? `/brands/${articleBrand}.svg`
+									? `/brands/${brands.find((b) => b.brand_id === articleBrand)?.name}.svg`
 									: `/brands/no-image.svg`
 							}
-							alt={articleBrand ? `logo ${articleBrand}` : "logo par défaut"}
+							alt={
+								articleBrand
+									? `logo ${brands.find((b) => b.brand_id === articleBrand)?.name}`
+									: "logo par défaut"
+							}
 							className="w-25 h-9.5"
 						/>
 					</div>
@@ -231,7 +265,7 @@ export default function ArticleForm({
 							label={"Quantité"}
 							type={"number"}
 							value={articleQty}
-							onChange={setArticleQty}
+							onChange={handleQtyChange}
 							width="w-full"
 						/>
 					</div>
@@ -256,9 +290,9 @@ export default function ArticleForm({
 						<Select
 							label="Choisir un statut"
 							value={articleStatus}
-							onChange={(val) => setArticleStatus(val as string)}
+							onChange={handleStatusChange}
 							options={["available", "preorder", "out_of_stock"]}
-							labels={["Disponible", "En commande", "Pas de stock"]}
+							labels={["Disponible", "En commande", "Rupture de stock"]}
 						/>
 					</div>
 

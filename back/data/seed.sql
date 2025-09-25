@@ -24,7 +24,7 @@ INSERT INTO brands (brand_id, name, logo) VALUES
 
 -- ARTICLES
 INSERT INTO articles (article_id, type, name, description, reference, brand_id, price_ttc, stock_quantity, status, shipping_cost) VALUES
-(1, 'racket', 'Babolat Pure Aero Rafa', 'Professional tennis racket designed with Rafael Nadal', 'PA-RAFA-2024', 1, 277.57, 157, 'available', 3.84),
+(1, 'racket', 'Babolat Pure Aero Rafa', 'Professional tennis racket designed with Rafael Nadal', 'PA-RAFA-2024', 1, 300, 157, 'available', 3.84),
 (2, 'racket', 'Wilson Blade 98', 'Blade 98 racket for advanced players', 'WB-98-2024', 2, 249.99, 200, 'available', 4.50);
 
 -- ARTICLE CHARACTERISTICS
@@ -33,7 +33,7 @@ INSERT INTO article_characteristics (characteristic_id, article_id, weight, colo
 (2, 2, '305g', 'Black/Green', 'rectangle', 'EVA soft', 'carbon', 'intermediate', 'unisex');
 
 -- ARTICLE RATINGS
-INSERT INTO article_ratings (rating_id, article_id, maneuverability, power, comfort, spin, forgiveness, control) VALUES
+INSERT INTO article_ratings (rating_id, article_id, maneuverability, power, comfort, spin, tolerance, control) VALUES
 (1, 1, 6, 2, 6, 9, 5, 9),
 (2, 2, 7, 5, 7, 6, 6, 8);
 
@@ -43,8 +43,8 @@ INSERT INTO reviews (review_id, article_id, user_id, comment, rating) VALUES
 (2, 2, 2, 'Good racket for intermediate players.', 4);
 
 -- PROMOTIONS
-INSERT INTO promotions (promo_id, article_id, label, discount_percent, start_date, end_date, status) VALUES
-(1, 1, 'Summer Sale', 15, '2025-06-01', '2025-06-30', 'active');
+INSERT INTO promotions (promo_id, article_id, name, description, discount_type, discount_value, start_date, end_date, status) VALUES
+(1, 1, 'Summer Sale', 'sous reserve de blablabla', 'amount', 15, '2025-06-01', '2025-12-30', 'active');
 
 -- ORDERS
 INSERT INTO orders (order_id, reference, user_id, created_at, vat_rate, status) VALUES

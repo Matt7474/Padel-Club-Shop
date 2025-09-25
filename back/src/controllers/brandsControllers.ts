@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { Brand } from "../models/Brand";
+import { Brand } from "../models/brand";
 
 export async function getAllBrands(_req: Request, res: Response) {
 	try {

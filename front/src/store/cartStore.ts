@@ -9,8 +9,9 @@ export type CartItem = {
 	name: string;
 	brand: Brand;
 	price: number;
-	image?: string;
+	image: string;
 	quantity: number;
+	type: string;
 };
 
 // Typage du store

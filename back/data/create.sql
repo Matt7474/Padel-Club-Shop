@@ -3,8 +3,8 @@ BEGIN;
 DROP TABLE IF EXISTS 
     cart_lines,
     carts,
-    order_lines,
     payments,
+    order_lines,
     orders,
     reviews,
     promotions,
@@ -19,12 +19,11 @@ DROP TABLE IF EXISTS
 CASCADE;
 
 -- ROLES
-
 CREATE TABLE roles (
     role_id SERIAL PRIMARY KEY,
     label TEXT NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE users (
@@ -36,7 +35,7 @@ CREATE TABLE users (
     password TEXT NOT NULL,
     role_id INT NOT NULL REFERENCES roles(role_id) ON DELETE RESTRICT,
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE addresses (
@@ -51,7 +50,7 @@ CREATE TABLE addresses (
     country TEXT,
     is_default BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE brands (
@@ -59,11 +58,10 @@ CREATE TABLE brands (
     name TEXT NOT NULL UNIQUE,
     logo TEXT,
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 -- ARTICLES
-
 CREATE TABLE articles (
     article_id SERIAL PRIMARY KEY,
     type TEXT,
@@ -75,9 +73,9 @@ CREATE TABLE articles (
     stock_quantity INT DEFAULT 0,
     status TEXT CHECK (status IN ('available','preorder','out_of_stock')),
     shipping_cost NUMERIC(10,2),
-    is_deleted BOOLEAN DEFAULT FALSE;
+    is_deleted BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE article_images (
@@ -85,7 +83,7 @@ CREATE TABLE article_images (
     article_id INT NOT NULL REFERENCES articles(article_id) ON DELETE CASCADE,
     url TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE article_characteristics (
@@ -99,7 +97,7 @@ CREATE TABLE article_characteristics (
     level TEXT,
     gender TEXT,
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE article_ratings (
@@ -109,22 +107,22 @@ CREATE TABLE article_ratings (
     power INT,
     comfort INT,
     spin INT,
-    forgiveness INT,
-    control INT,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    tolerance INT,
+    control INT
 );
 
 CREATE TABLE promotions (
     promo_id SERIAL PRIMARY KEY,
     article_id INT NOT NULL REFERENCES articles(article_id) ON DELETE CASCADE,
-    label TEXT,
-    discount_percent NUMERIC(5,2),
+    name TEXT,
+    description TEXT,
+    discount_type TEXT,
+    discount_value NUMERIC(5,2),
     start_date TIMESTAMP,
     end_date TIMESTAMP,
     status TEXT CHECK (status IN ('active','upcoming','expired')),
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE reviews (
@@ -134,20 +132,18 @@ CREATE TABLE reviews (
     comment TEXT,
     rating INT CHECK (rating BETWEEN 1 AND 5),
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 -- ORDERS
-
 CREATE TABLE orders (
     order_id SERIAL PRIMARY KEY,
     reference TEXT UNIQUE NOT NULL,
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     vat_rate NUMERIC(5,2) DEFAULT 20,
     status TEXT CHECK (status IN ('pending','paid','cancelled','shipped')),
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE order_lines (
@@ -156,7 +152,7 @@ CREATE TABLE order_lines (
     article_id INT NOT NULL REFERENCES articles(article_id) ON DELETE RESTRICT,
     quantity INT NOT NULL CHECK (quantity > 0),
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE payments (
@@ -165,16 +161,15 @@ CREATE TABLE payments (
     payment_method TEXT NOT NULL,
     paid_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 -- CARTS
-
 CREATE TABLE carts (
     cart_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE cart_lines (
@@ -183,7 +178,7 @@ CREATE TABLE cart_lines (
     article_id INT NOT NULL REFERENCES articles(article_id) ON DELETE CASCADE,
     quantity INT NOT NULL CHECK (quantity > 0),
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW();
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 COMMIT;

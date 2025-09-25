@@ -1,16 +1,35 @@
+import { Link } from "react-router-dom";
 import type { CartItem } from "../../store/cartStore";
 import { useCartStore } from "../../store/cartStore";
 
-export default function CartLine({ item }: { item: CartItem }) {
+export default function CartLine({
+	item,
+	closeCart,
+}: {
+	item: CartItem;
+	closeCart: () => void;
+}) {
 	const { updateQuantity, removeFromCart } = useCartStore();
+
+	const handleClick = () => {
+		if (window.innerWidth < 1280) {
+			closeCart();
+		}
+	};
 
 	return (
 		<div className="flex items-center gap-4 border-b pb-2">
-			<img
-				src={item.image || "/icons/default.svg"}
-				alt={item.name}
-				className="w-20 h-20 object-contain"
-			/>
+			<Link
+				to={`/articles/${item.type}/${item.name}`}
+				onClick={() => handleClick()}
+			>
+				<img
+					src={item.image || "/icons/default.svg"}
+					alt={item.name}
+					className="w-20 h-20 object-contain"
+				/>
+			</Link>
+
 			<div className="flex flex-col flex-1">
 				<p className="text-sm font-semibold">{item.brand.name}</p>
 				<p className="text-sm">{item.name}</p>

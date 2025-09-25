@@ -10,11 +10,11 @@ export const sequelize = new Sequelize(databaseUrl, {
 	logging: false,
 });
 
-import "../models/Article";
-import "../models/Brand";
+import "../models/article";
+import "../models/brand";
 import "../models/associations";
 
-export async function initDb() {
+export async function db() {
 	try {
 		await sequelize.authenticate();
 		console.log("Database connected!");

@@ -80,24 +80,27 @@ export default interface Article {
 	description: string;
 	reference: string;
 	brand: Brand;
-	images: string[];
+	images: ArticleImage[];
 	price_ttc: number;
 	stock_quantity: number | Record<string, number | undefined>;
 	status: "available" | "out_of_stock" | "preorder" | string;
 	shipping_cost: number;
-	tech_characteristics: TechCharacteristics;
-	tech_ratings?: TechRatings;
+	tech_characteristics?: TechCharacteristics;
+	ratings?: TechRatings;
 	promotions?: Promotion[];
 	reviews?: Review[];
 }
-
 // ---------- Marque ----------
 export interface Brand {
-	slice(arg0: number): unknown;
-	charAt(arg0: number): unknown;
-	brand_id: number;
+	brand_id?: number;
 	name: string;
 	logo: string;
+}
+
+// ---------- Image ----------
+export interface ArticleImage {
+	image_id: number;
+	url: string;
 }
 
 // ---------- New Article ----------
@@ -127,6 +130,7 @@ export interface ArticleFormState {
 	articleStatus: string;
 	articleShippingCost: string;
 	techCharacteristicsState: TechCharacteristics;
+	techRatings: TechRatings;
 	articlePromo: boolean;
 	articleDiscountValue: string | number;
 	articlePromoType: string;
@@ -138,11 +142,13 @@ export interface ArticleFormState {
 
 // ---------- Promo Article ----------
 export interface NewPromotion {
+	name?: string;
+	description?: string;
 	discount_type: "percentage" | "amount" | string;
 	discount_value: number;
-	description: string;
 	start_date: string;
 	end_date: string;
+	status: "active" | "upcoming" | "expired";
 }
 
 export interface RacketState {

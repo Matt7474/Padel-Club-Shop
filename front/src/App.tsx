@@ -2,14 +2,16 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import BrandIcon from "./components/BrandIcon/BrandIcon";
 import Footer from "./components/Footer/Footer";
+import CreateArticle from "./components/Form/Admin/CreateArticle";
 import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import ArticlesWrapper from "./components/Wrapper/ArticlesWrapper";
 import BrandsWrapper from "./components/Wrapper/BrandsWrapper";
 import AboutUs from "./pages/AboutUs";
+import AdminMenu from "./pages/AdminMenu";
+import AllArticles from "./pages/AllArticles";
 import Article from "./pages/Article";
-import Cart from "./pages/Cart";
 import Connection from "./pages/Connection";
 import Homepage from "./pages/Homepage";
 import LegalNotice from "./pages/LegalNotice";
@@ -17,9 +19,6 @@ import Login from "./pages/login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
 import TermsOfSale from "./pages/TermsOfSale";
-import CreateArticle from "./components/Form/Admin/CreateArticle";
-import AdminProfile from "./pages/AdminProfile";
-import AllArticles from "./pages/AllArticles";
 
 function App() {
 	return (
@@ -45,9 +44,8 @@ function App() {
 
 							<Route path="/marques/:brand" element={<BrandsWrapper />} />
 
-							<Route path="/admin/profile" element={<AdminProfile />} />
+							<Route path="/admin/profile" element={<AdminMenu />} />
 							<Route path="/profile" element={<Profile />} />
-							<Route path="/cart" element={<Cart />} />
 							<Route path="/" element={<Homepage />} />
 							<Route
 								path="/politique-de-confidentialite"

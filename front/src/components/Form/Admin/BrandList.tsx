@@ -1,20 +1,22 @@
 import { useState } from "react";
 import data from "../../../../data/dataTest.json";
+import type { Brand } from "../../../types/Article";
 import Button from "../Tools/Button";
 import Input from "../Tools/Input";
 import { useSortableData } from "../Tools/useSortableData";
-
-interface Brand {
-	name: string;
-	logo: string;
-}
 
 export default function BrandList() {
 	const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
 
 	// Création de la liste unique de marques
 	const brandsMap = new Map<string, Brand>(
-		data.articles.map((a) => [a.brand.name, a.brand]),
+		data.articles.map((a) => [
+			a.brand.name,
+			{
+				name: a.brand.name,
+				logo: a.brand.logo,
+			},
+		]),
 	);
 	const brands = Array.from(brandsMap.values());
 

@@ -61,14 +61,14 @@ export default function ArticleDetails({ article }: ArticleDetailsProps) {
 						<div className="flex">
 							<div className="my-auto">
 								<img
-									src={article.images?.[0] || "/icons/default.svg"}
+									src={article.images?.[0]?.url || "/icons/default.svg"}
 									alt={article.name || "Image par défaut"}
 									className="w-30"
 								/>
 							</div>
 
 							<div className="mt-4 border-l pl-2">
-								<p>Marque : {article.brand.name}</p>
+								<p>Marque : {article.brand?.name}</p>
 								<p>Référence : {article.reference}</p>
 								<p>Type : {article.type}</p>
 								<p>Prix TTC : {article.price_ttc} €</p>

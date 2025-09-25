@@ -1,5 +1,3 @@
-import React from "react";
-
 interface SelectProps<T extends string | number> {
 	label?: string;
 	value: T;

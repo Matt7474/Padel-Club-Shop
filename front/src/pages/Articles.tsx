@@ -18,6 +18,7 @@ export default function Articles({
 }: ArticlesProps) {
 	const [articles, setArticles] = useState<Article[]>([]);
 	const now = new Date();
+	console.log(articles);
 
 	useEffect(() => {
 		const fetchArticles = async () => {

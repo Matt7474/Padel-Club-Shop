@@ -18,7 +18,7 @@ export default function Footer() {
 					link="https://www.linkedin.com/in/matthieu-dimier-a51539290"
 				/>
 				<SocialNetwork name="github" link="https://github.com/Matt7474" />
-				<div className="rounded-md bg-gray-300 w-9 hover:cursor-pointer">
+				<div className="rounded-md bg-white w-9 hover:cursor-pointer">
 					<a
 						href="mailto:dimier.matt.dev@gmail.com?subject=Contact%20depuis%20le%20site%20la%20pince&body=Bonjour Matthieu,"
 						aria-label="Envoyer un mail"
@@ -26,7 +26,7 @@ export default function Footer() {
 						<img
 							src={`/icons/gmail.svg`}
 							alt={`logo gmail`}
-							className="rounded-md bg-gray-300 w-9 hover:cursor-pointer"
+							className="rounded-md w-9 hover:cursor-pointer"
 						/>
 					</a>
 				</div>

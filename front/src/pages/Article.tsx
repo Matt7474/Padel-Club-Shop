@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
-import articlesData from "../../data/dataTest.json";
+import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { getArticleByName } from "../api/Article";
 import CaracteristicsArticle from "../components/Article/CaracteristicsArticle/CaracteristicsArticle";
 import ImagesArticle from "../components/Article/ImagesArticle/ImagesArticle";
 import PriceArticle from "../components/Article/PriceArticle/PriceArticle";
@@ -8,45 +8,47 @@ import RatingArticle from "../components/Article/RatingArticle/RatingArticle";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import type ArticleType from "../types/Article";
 
-const typedArticlesData: { articles: ArticleType[] } = articlesData;
-
 export default function Article() {
-	const { type, name } = useParams();
-
-	const article = typedArticlesData.articles.find(
-		(art) => art.type && art.name === name,
-	);
-
-	if (!type || !name) {
-		return <div>Chargement...</div>;
-	}
-
-	if (!article) {
-		return <div>Cet article n'à pas été trouvé</div>;
-	}
-
-	const ratings = article.tech_ratings;
 	const [isDescriptionOn, setIsDescriptionOn] = useState(true);
 	const [isCaracteristiquesOn, setIsCaracteristiquesOn] = useState(false);
+
+	const { name } = useParams<{ name: string }>();
+	const location = useLocation();
+	const stateArticle = (location.state as { article?: ArticleType })?.article;
+
+	const [article, setArticle] = useState<ArticleType | null>(
+		stateArticle || null,
+	);
+	const [loading, setLoading] = useState(!stateArticle);
+
+	useEffect(() => {
+		if (stateArticle) return;
+		if (!name) return;
+
+		setLoading(true);
+		getArticleByName(name)
+			.then((data) => {
+				setArticle(data);
+			})
+			.catch(console.error)
+			.finally(() => setLoading(false));
+	}, [name, stateArticle]);
+
+	if (!name || loading) return <div>Chargement...</div>;
+	if (!article) return <div>Cet article n'a pas été trouvé</div>;
 
 	const breadcrumbItems = [
 		{ label: "Accueil", href: "/" },
 		{
-			// label: `${type.charAt(0).toUpperCase() + type.slice(1)}s`,
-			label: `${article.type.charAt(0).toUpperCase() + article.type.slice(1)}`,
+			label: article.type.charAt(0).toUpperCase() + article.type.slice(1),
 			href: `/articles/${article.type}`,
 		},
-		{
-			label: name,
-			href: `/articles/${type}/${name}`,
-		},
+		{ label: article.name, href: `/articles/${name}` },
 	];
 
 	return (
 		<>
-			<div>
-				<Breadcrumb items={breadcrumbItems} />
-			</div>
+			<Breadcrumb items={breadcrumbItems} />
 
 			{/* LAYOUT MOBILE */}
 			<div className="xl:hidden mt-6">
@@ -54,9 +56,10 @@ export default function Article() {
 				<PriceArticle article={article} />
 				<p className="font-semibold text-lg mt-6">{article.name}</p>
 				<p className="text-sm">{article.reference}</p>
-				{ratings && Object.keys(ratings).length > 0 && (
+				{article.ratings && Object.keys(article.ratings).length > 0 && (
 					<RatingArticle article={article} />
 				)}
+
 				<div className="mt-10">
 					<div className="flex justify-around font-semibold text-lg">
 						<button
@@ -67,8 +70,7 @@ export default function Article() {
 							}}
 							className={`cursor-pointer ${
 								isDescriptionOn ? "text-black" : "text-gray-400"
-							}
-								`}
+							}`}
 						>
 							Description
 						</button>
@@ -87,18 +89,16 @@ export default function Article() {
 					</div>
 
 					{isDescriptionOn ? (
-						<div>
-							<p className="mt-3">{article.description}</p>
-						</div>
-					) : isCaracteristiquesOn ? (
-						<CaracteristicsArticle article={article} />
-					) : null}
+						<p className="mt-3">{article.description}</p>
+					) : (
+						isCaracteristiquesOn && <CaracteristicsArticle article={article} />
+					)}
 				</div>
 			</div>
 
 			{/* LAYOUT DESKTOP */}
 			<div className="hidden xl:flex xl:flex-col xl:gap-8 xl:justify-between mt-6">
-				<div className="hidden xl:flex  xl:gap-8 xl:justify-between ">
+				<div className="hidden xl:flex xl:gap-8 xl:justify-between">
 					<ImagesArticle article={article} />
 					<div className="xl:w-1/2 xl:flex xl:flex-col">
 						<div className="xl:flex xl:flex-col xl:h-full xl:justify-between">

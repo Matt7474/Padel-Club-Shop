@@ -54,6 +54,7 @@ export const buildNewArticle = (state: ArticleFormState): NewArticle => {
 					description: articleDescriptionPromo,
 					start_date: articlePromoStart,
 					end_date: articlePromoEnd,
+					status: "upcoming" as const, // Type littéral correct
 				},
 			]
 		: [];

@@ -26,7 +26,9 @@ export default function CartModal({ closeCart }: { closeCart: () => void }) {
 			{/* Liste d'articles */}
 			<div className="flex-1 overflow-y-auto p-4 space-y-4 mt-10 border-t">
 				{cart.length > 0 ? (
-					cart.map((item) => <CartLine key={item.id} item={item} />)
+					cart.map((item) => (
+						<CartLine key={item.id} item={item} closeCart={closeCart} />
+					))
 				) : (
 					<p className="text-center text-gray-500">Votre panier est vide.</p>
 				)}

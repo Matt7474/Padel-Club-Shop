@@ -1,26 +1,38 @@
-import { useState } from "react";
-import data from "../../../../data/dataTest.json";
+import { useEffect, useState } from "react";
+import { getArticles } from "../../../api/Article";
 import type Article from "../../../types/Article";
+import type { Brand } from "../../../types/Article";
 import { useSortableData } from "../Tools/useSortableData";
 import ArticleDetails from "./ArticleDetails";
 
+type ArticleWithBrandName = Article & { brandName: Brand };
+
 export default function ArticlesList() {
+	const [articles, setArticles] = useState<ArticleWithBrandName[]>([]);
 	const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+
+	// Récupération des articles depuis l’API
+	useEffect(() => {
+		getArticles()
+			.then((data) => {
+				const articlesWithBrandName = data.map((a) => ({
+					...a,
+					brandName: a.brand || "Sans marque",
+				}));
+				setArticles(articlesWithBrandName);
+			})
+			.catch((err) => console.error("Erreur API Articles:", err));
+	}, []);
 
 	const handleArticleClick = (article: Article) => {
 		setSelectedArticle(article);
 	};
 
-	const articlesWithBrandName = data.articles.map((a) => ({
-		...a,
-		brandName: a.brand.name,
-	}));
-
 	const {
 		items: sortedArticles,
 		requestSort,
 		sortConfig,
-	} = useSortableData(articlesWithBrandName);
+	} = useSortableData(articles);
 
 	const getClassNamesFor = (name: keyof Article) => {
 		if (!sortConfig) return;
@@ -94,13 +106,13 @@ export default function ArticlesList() {
 					>
 						<div className="grid grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr] xl:grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr] xl:text-center">
 							<img
-								src={article.images?.[0] || "/icons/default.svg"}
+								src={article.images?.[0].url || "/icons/default.svg"}
 								alt={article.name || "Image par défaut"}
 								className=" px-1 py-1 w-12 mx-auto"
 							/>
 							<p className="border-x px-1 py-1 text-xs">{article.name}</p>
 							<p className="border-r px-1 py-1 text-xs truncate">
-								{article.brandName}
+								{article.brand?.name}
 							</p>
 							<p className="border-r px-1 py-1 text-xs truncate">
 								{article.reference}
@@ -110,9 +122,9 @@ export default function ArticlesList() {
 							</p>
 							<div
 								className={`w-4 h-4 rounded-full mx-auto my-1
-									${article.status === "available" ? "bg-green-500" : ""}
-									${article.status === "preorder" ? "bg-blue-500" : ""}
-									${article.status === "out_of_stock" ? "bg-red-500" : ""}`}
+                  ${article.status === "available" ? "bg-green-500" : ""}
+                  ${article.status === "preorder" ? "bg-blue-500" : ""}
+                  ${article.status === "out_of_stock" ? "bg-red-500" : ""}`}
 							/>
 						</div>
 						<div className="w-full border-b border-gray-200"></div>

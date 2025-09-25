@@ -1,10 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import data from "../../../../data/dataTest.json";
+import {
+	addArticle,
+	addPromo,
+	addTechRatings,
+	uploadArticleImages,
+} from "../../../api/Article";
+import { getBrands } from "../../../api/Brand";
 import type Article from "../../../types/Article";
+import type { ArticleImage, Brand } from "../../../types/Article";
 import {
 	buildNewArticle,
 	getTechCharacteristicsState,
-	submitArticle,
 } from "../../../utils/ArticleHelpers";
 import ArticleForm from "../CreateArticle/ArticleForm";
 import BagForm from "../CreateArticle/BagForm";
@@ -15,9 +21,6 @@ import RacketForm from "../CreateArticle/RacketForm";
 import ShoesForm from "../CreateArticle/ShoesForm";
 import Toogle from "../Toogle/Toogle";
 import Button from "../Tools/Button";
-import type { Brand } from "../../../types/Article";
-import axios from "axios";
-import { getBrands } from "../../../api/Brand";
 
 type ImageWithId = {
 	id: string;
@@ -51,14 +54,16 @@ export default function CreateArticle({
 	const [articleReference, setArticleReference] = useState(
 		article?.reference || "",
 	);
-	const [articleBrand, setArticleBrand] = useState<number | null>(null);
+	const [articleBrand, setArticleBrand] = useState<number | null>(
+		article?.brand?.brand_id ?? null,
+	);
 
 	const [images, setImages] = useState<ImageWithId[]>(() => {
 		return (
-			article?.images?.map((url: string) => ({
+			article?.images?.map((img: ArticleImage) => ({
 				id: crypto.randomUUID(),
 				file: {} as File,
-				previewUrl: url,
+				previewUrl: img.url,
 			})) || []
 		);
 	});
@@ -121,19 +126,19 @@ export default function CreateArticle({
 	//
 	// Si type = raquette : Notes technique
 	const [rcharacteristicsManiability, setRCharacteristicsManiability] =
-		useState<number>(article?.tech_ratings?.maniabilité ?? 0);
+		useState<number>(article?.ratings?.maniabilité ?? 0);
 	const [rCharacteristicsPower, setRCharacteristicsPower] = useState<number>(
-		article?.tech_ratings?.puissance ?? 0,
+		article?.ratings?.puissance ?? 0,
 	);
 	const [rCharacteristicsComfort, setRCharacteristicsComfort] =
-		useState<number>(article?.tech_ratings?.confort ?? 0);
+		useState<number>(article?.ratings?.confort ?? 0);
 	const [rCharacteristicsSpin, setRCharacteristicsSpin] = useState<number>(
-		article?.tech_ratings?.effet ?? 0,
+		article?.ratings?.effet ?? 0,
 	);
 	const [rCharacteristicsTolerance, setRCharacteristicsTolerance] =
-		useState<number>(article?.tech_ratings?.tolerance ?? 0);
+		useState<number>(article?.ratings?.tolerance ?? 0);
 	const [rCharacteristicsControl, setRCharacteristicsControl] =
-		useState<number>(article?.tech_ratings?.contrôle ?? 0);
+		useState<number>(article?.ratings?.contrôle ?? 0);
 
 	//
 	//
@@ -282,6 +287,9 @@ export default function CreateArticle({
 		finalPrice = 0;
 	}
 
+	// Arrondi à 2 décimales
+	finalPrice = Number(finalPrice.toFixed(2));
+
 	// gestion des dates
 	// Conversion en Date
 	const startDate = articlePromoStart ? new Date(articlePromoStart) : null;
@@ -310,6 +318,153 @@ export default function CreateArticle({
 		setSCharacteristicsSize(newSizes);
 	};
 
+	// const handleSubmit = async (e: React.FormEvent) => {
+	// 	e.preventDefault();
+
+	// 	try {
+	// 		const newArticle = buildNewArticle({
+	// 			articleType,
+	// 			articleName,
+	// 			articleDescription,
+	// 			articleReference,
+	// 			articleBrand,
+	// 			articlePriceTTC,
+	// 			articleQty,
+	// 			articleStatus,
+	// 			articleShippingCost,
+	// 			techCharacteristicsState: getTechCharacteristicsState(articleType, {
+	// 				rCharacteristicsWeight,
+	// 				rCharacteristicsColor,
+	// 				rCharacteristicsShape,
+	// 				rCharacteristicsFoam,
+	// 				rCharacteristicsSurface,
+	// 				rCharacteristicsLevel,
+	// 				rCharacteristicsGender,
+	// 				bCharacteristicsWeight,
+	// 				bCharacteristicsType,
+	// 				bCharacteristicsVolume,
+	// 				bCharacteristicsDimensions,
+	// 				bCharacteristicsMaterial,
+	// 				bCharacteristicsColor,
+	// 				bCharacteristicsCompartment,
+	// 				ballCharacteristicsWeight,
+	// 				ballCharacteristicsDiameter,
+	// 				ballCharacteristicsRebound,
+	// 				ballCharacteristicsPressure,
+	// 				ballCharacteristicsMaterial,
+	// 				ballCharacteristicsColor,
+	// 				ballCharacteristicsType,
+	// 				cCharacteristicsType,
+	// 				cCharacteristicsGender,
+	// 				cCharacteristicsMaterial,
+	// 				cCharacteristicsColor,
+	// 				cCharacteristicsSize,
+	// 				sCharacteristicsWeight,
+	// 				sCharacteristicsColor,
+	// 				sCharacteristicsSole,
+	// 				sCharacteristicsGender,
+	// 				sCharacteristicsSize,
+	// 			}),
+	// 			articlePromo,
+	// 			articleDiscountValue,
+	// 			articlePromoType,
+	// 			articleDescriptionPromo,
+	// 			articlePromoStart,
+	// 			articlePromoEnd,
+	// 			images: [],
+	// 		});
+
+	// 		console.log("Référence envoyée :", articleReference);
+
+	// 		// 1️⃣ Crée l'article
+	// 		const articleRes = await addArticle(newArticle);
+	// 		console.log("✅ Article créé :", articleRes);
+
+	// 		// 2️⃣ Crée la promo si elle existe
+	// 		if (articleDiscountValue && Number(articleDiscountValue) > 0) {
+	// 			await addPromo(articleRes.article_id, {
+	// 				name: "Promo auto",
+	// 				description: articleDescriptionPromo,
+	// 				discount_type: articlePromoType,
+	// 				discount_value: Number(articleDiscountValue),
+	// 				start_date: articlePromoStart,
+	// 				end_date: articlePromoEnd,
+	// 				status: "active",
+	// 			});
+	// 			console.log("✅ Promo créée pour l'article");
+	// 		}
+
+	// 		// 3️⃣ Upload des images
+	// 		if (images.length > 0) {
+	// 			await uploadArticleImages(articleRes.article_id, images);
+	// 		}
+
+	// 		alert("Article, promo et images enregistrés !");
+	// 	} catch (err) {
+	// 		console.error(err);
+	// 		alert("Erreur lors de la création de l'article/promo");
+	// 	}
+	// };
+
+	// fonctionne avec article + images + marque + promo
+	// const handleSubmit = async (e: React.FormEvent) => {
+	// 	e.preventDefault();
+
+	// 	try {
+	// 		// Construire l'article avec la promo incluse dans 'promotions'
+	// 		const newArticle = buildNewArticle({
+	// 			articleType,
+	// 			articleName,
+	// 			articleDescription,
+	// 			articleReference,
+	// 			articleBrand,
+	// 			articlePriceTTC,
+	// 			articleQty,
+	// 			articleStatus,
+	// 			articleShippingCost,
+	// 			techCharacteristicsState: getTechCharacteristicsState(articleType, {
+	// 				// ... tes caractéristiques
+	// 			}),
+	// 			articlePromo,
+	// 			articleDiscountValue,
+	// 			articlePromoType,
+	// 			articleDescriptionPromo,
+	// 			articlePromoStart,
+	// 			articlePromoEnd,
+	// 			images: [],
+	// 		});
+
+	// 		//  1️⃣ Crée l'article
+	// 		const articleRes = await addArticle(newArticle);
+	// 		console.log("✅ Article créé :", articleRes);
+
+	// 		//  2️⃣ Upload des images
+	// 		if (images.length > 0) {
+	// 			await uploadArticleImages(articleRes.article_id, images);
+	// 		}
+
+	// 		//  3️⃣ Crée la promo si elle existe
+	// 		if (articleDiscountValue && Number(articleDiscountValue) > 0) {
+	// 			await addPromo(articleRes.article_id, {
+	// 				name: "Promo auto",
+	// 				description: articleDescriptionPromo,
+	// 				discount_type: articlePromoType,
+	// 				discount_value: Number(articleDiscountValue),
+	// 				start_date: articlePromoStart,
+	// 				end_date: articlePromoEnd,
+	// 				status: "active",
+	// 			});
+	// 			console.log("✅ Promo créée pour l'article");
+	// 		}
+
+	// 		alert("Article, promo et images enregistrés !");
+	// 	} catch (err) {
+	// 		console.error(err);
+	// 		alert("Erreur lors de la création de l'article/promo");
+	// 	}
+	// };
+
+	// V3 pour carac
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
@@ -324,7 +479,10 @@ export default function CreateArticle({
 				articleQty,
 				articleStatus,
 				articleShippingCost,
+
+				// caractéristiques selon type
 				techCharacteristicsState: getTechCharacteristicsState(articleType, {
+					// Raquette
 					rCharacteristicsWeight,
 					rCharacteristicsColor,
 					rCharacteristicsShape,
@@ -332,6 +490,8 @@ export default function CreateArticle({
 					rCharacteristicsSurface,
 					rCharacteristicsLevel,
 					rCharacteristicsGender,
+
+					// Sac
 					bCharacteristicsWeight,
 					bCharacteristicsType,
 					bCharacteristicsVolume,
@@ -339,6 +499,8 @@ export default function CreateArticle({
 					bCharacteristicsMaterial,
 					bCharacteristicsColor,
 					bCharacteristicsCompartment,
+
+					// Balles
 					ballCharacteristicsWeight,
 					ballCharacteristicsDiameter,
 					ballCharacteristicsRebound,
@@ -346,35 +508,84 @@ export default function CreateArticle({
 					ballCharacteristicsMaterial,
 					ballCharacteristicsColor,
 					ballCharacteristicsType,
+
+					// Vêtements
 					cCharacteristicsType,
 					cCharacteristicsGender,
 					cCharacteristicsMaterial,
 					cCharacteristicsColor,
 					cCharacteristicsSize,
+
+					// Chaussures
 					sCharacteristicsWeight,
 					sCharacteristicsColor,
 					sCharacteristicsSole,
 					sCharacteristicsGender,
 					sCharacteristicsSize,
 				}),
+
+				// uniquement pour les raquettes : ratings
+				techRatings:
+					articleType === "racket"
+						? {
+								maneuverability: rcharacteristicsManiability,
+								power: rCharacteristicsPower,
+								comfort: rCharacteristicsComfort,
+								spin: rCharacteristicsSpin,
+								tolerance: rCharacteristicsTolerance,
+								control: rCharacteristicsControl,
+							}
+						: {},
+
+				// promo
 				articlePromo,
 				articleDiscountValue,
 				articlePromoType,
 				articleDescriptionPromo,
 				articlePromoStart,
 				articlePromoEnd,
+
+				// images (upload à part)
 				images: [],
 			});
 
-			const res = await submitArticle(newArticle);
-			console.log("Article créé :", res);
-			alert("Article créé avec succès !");
+			// 1️⃣ création de l’article
+			const articleRes = await addArticle(newArticle);
 
-			// Ensuite tu peux uploader les images séparément si besoin
-			// await uploadImages(res.article_id, images);
+			// 2️⃣ upload images
+			if (images.length > 0) {
+				await uploadArticleImages(articleRes.article_id, images);
+			}
+
+			if (articleType === "racket") {
+				await addTechRatings(articleRes.article_id, {
+					maneuverability: rcharacteristicsManiability,
+					power: rCharacteristicsPower,
+					comfort: rCharacteristicsComfort,
+					spin: rCharacteristicsSpin,
+					tolerance: rCharacteristicsTolerance,
+					control: rCharacteristicsControl,
+				});
+				console.log("✅ TechRatings créées pour la raquette");
+			}
+
+			// 3️⃣ promo
+			if (articleDiscountValue && Number(articleDiscountValue) > 0) {
+				await addPromo(articleRes.article_id, {
+					name: "Promo auto",
+					description: articleDescriptionPromo,
+					discount_type: articlePromoType,
+					discount_value: Number(articleDiscountValue),
+					start_date: articlePromoStart,
+					end_date: articlePromoEnd,
+					status: "active",
+				});
+			}
+
+			alert("Article, caractéristiques, promo et images enregistrés !");
 		} catch (err) {
 			console.error(err);
-			alert("Erreur lors de la création de l'article");
+			alert("Erreur lors de la création de l'article/promo");
 		}
 	};
 

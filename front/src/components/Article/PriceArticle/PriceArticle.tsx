@@ -14,25 +14,50 @@ export default function PriceArticle({ article }: { article: Article }) {
 
 	let displayPrice: number = article.price_ttc;
 
+	// Chercher la promo active
+	const now = new Date();
+	let activePromo = null;
 	if (article.promotions && article.promotions.length > 0) {
-		const promo = article.promotions[0];
-		if (promo.discount_type === "percentage") {
-			displayPrice = (article.price_ttc * (100 - promo.discount_value)) / 100;
-		} else if (promo.discount_type === "amount") {
-			displayPrice = article.price_ttc - promo.discount_value;
+		activePromo = article.promotions.find((promo) => {
+			const start = new Date(promo.start_date);
+			const end = new Date(promo.end_date);
+			return promo.status === "active" && start <= now && now <= end;
+		});
+	}
+
+	if (activePromo) {
+		const discountValue = parseFloat(activePromo.discount_value.toString());
+
+		switch (activePromo.discount_type.toLowerCase()) {
+			case "%":
+			case "percent":
+			case "percentage":
+				displayPrice = (displayPrice * (100 - discountValue)) / 100;
+				break;
+			case "€":
+			case "amount":
+			case "euro":
+				displayPrice = displayPrice - discountValue;
+				break;
 		}
 	}
 	displayPrice = Math.max(displayPrice, 0);
+
+	const firstImageUrl = article.images?.[0]?.url
+		? `${import.meta.env.VITE_API_URL}${article.images[0].url}`
+		: "/icons/default.svg";
 
 	const addOnCart = () => {
 		addToCart({
 			id: article.article_id.toString(),
 			name: article.name,
-			brand: article.brand || "Inconnue",
+			brand: article.brand,
 			price: displayPrice,
-			image: article.images[0] || "/icons/default.svg",
-			quantity: quantity,
+			image: firstImageUrl,
+			type: article.type,
+			quantity: 1,
 		});
+
 		const id = Date.now();
 		setInfoModal((prev) => [
 			...prev,
@@ -51,13 +76,15 @@ export default function PriceArticle({ article }: { article: Article }) {
 					<div className="flex flex-col w-1/2 justify-end">
 						{/* Partie promo */}
 						<div>
-							{article.promotions && article.promotions.length > 0 && (
+							{activePromo && (
 								<div className="flex mb-2">
 									<p className="text-xs bg-gray-300 rounded-md font-semibold px-2 py-1">
-										{article.promotions[0].discount_type === "percentage"
-											? `-${article.promotions[0].discount_value}%`
-											: `-${article.promotions[0].discount_value}€`}
+										{activePromo.discount_type === "percent" ||
+										activePromo.discount_type === "%"
+											? `-${activePromo.discount_value}%`
+											: `-${activePromo.discount_value}€`}
 									</p>
+
 									<p className="text-xs bg-red-500 rounded-md text-white font-semibold px-2 py-1 ml-2 animate-bounce">
 										PROMO
 									</p>
@@ -67,17 +94,15 @@ export default function PriceArticle({ article }: { article: Article }) {
 
 						{/* Partie prix */}
 						<div>
-							{article.promotions && article.promotions.length > 0 ? (
+							{activePromo ? (
 								<p className="font-bold text-red-600 text-lg">
 									{displayPrice.toFixed(2)} €{" "}
 									<span className="line-through text-black text-sm">
-										{article.price_ttc.toFixed(2)} €
+										{article.price_ttc} €
 									</span>
 								</p>
 							) : (
-								<p className="font-bold text-lg">
-									{article.price_ttc.toFixed(2)} €
-								</p>
+								<p className="font-bold text-lg">{article.price_ttc} €</p>
 							)}
 						</div>
 					</div>

@@ -10,7 +10,7 @@ export default function SocialNetwork({ name, link }: SocialNetworkProps) {
 				<img
 					src={`/icons/${name}.svg`}
 					alt={`logo ${name}`}
-					className="rounded-md bg-gray-300 w-9 hover:cursor-pointer"
+					className="rounded-md bg-white w-9 hover:cursor-pointer"
 				/>
 			</a>
 		</>
