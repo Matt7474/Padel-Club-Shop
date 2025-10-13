@@ -34,7 +34,10 @@ function App() {
 							<Route path="/login" element={<Login />} />
 							<Route path="/connexion" element={<Connection />} />
 
-							<Route path="/CreateArticle" element={<CreateArticle />} />
+							<Route
+								path="/CreateArticle"
+								element={<CreateArticle mode={"create"} />}
+							/>
 
 							<Route path="/articles" element={<ArticlesWrapper />} />
 

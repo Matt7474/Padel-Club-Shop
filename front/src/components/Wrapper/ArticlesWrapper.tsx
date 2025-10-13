@@ -6,6 +6,7 @@ export default function ArticlesWrapper() {
 	const [searchParams] = useSearchParams();
 	const searchQuery = searchParams.get("search") || "";
 
-	// Passe les deux props à Articles
-	return <Articles type={type || undefined} searchQuery={searchQuery} />;
+	console.log("Type depuis URL:", type); // 👈 Ajoutez ce log pour débugger
+
+	return <Articles type={type} searchQuery={searchQuery} />;
 }

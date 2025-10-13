@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { getArticles, getArticlesDeleted } from "../../../api/Article";
 import type Article from "../../../types/Article";
 import { useSortableData } from "../Tools/useSortableData";
-import ArticleDetails from "./ArticleDetails";
 import CreateArticle from "./CreateArticle";
 
 // Type unique pour le tri
 type ArticleSortable = Article & {
 	brandName?: string; // pour trier par marque
 	promoActive?: number; // pour trier par promo active
+	promoStatusLabel?: string; // pour trier par statut de promo
 };
 
 export default function ArticlesList() {
@@ -45,11 +45,34 @@ export default function ArticlesList() {
 	const currentArticles = isChecked ? deletedArticles : articles;
 
 	// Ajouter les champs calculés pour le tri
-	const articlesForSort: ArticleSortable[] = currentArticles.map((a) => ({
-		...a,
-		brandName: a.brand?.name || "Sans marque",
-		promoActive: a.promotions?.some((p) => p.status === "active") ? 1 : 0,
-	}));
+	const articlesForSort: ArticleSortable[] = currentArticles.map((a) => {
+		const now = new Date();
+
+		let promoStatusLabel = "Inactive";
+
+		if (a.promotions && a.promotions.length > 0) {
+			const activePromo = a.promotions.find(
+				(p) => new Date(p.start_date) <= now && now <= new Date(p.end_date),
+			);
+			const upcomingPromo = a.promotions.find(
+				(p) => new Date(p.start_date) > now,
+			);
+
+			if (activePromo) promoStatusLabel = "Active";
+			else if (upcomingPromo) promoStatusLabel = "En attente";
+		}
+
+		return {
+			...a,
+			brandName: a.brand?.name || "Sans marque",
+			promoActive: a.promotions?.some(
+				(p) => new Date(p.start_date) <= now && now <= new Date(p.end_date),
+			)
+				? 1
+				: 0,
+			promoStatusLabel, // <- ici
+		};
+	});
 
 	// Hook de tri
 	const {
@@ -152,9 +175,9 @@ export default function ArticlesList() {
 				<button
 					type="button"
 					className="text-xs pr-1 cursor-pointer hidden xl:block"
-					onClick={() => requestSort("promoActive")}
+					onClick={() => requestSort("promoStatusLabel")}
 				>
-					PROMO ? {getClassNamesFor("promoActive")}
+					PROMO ? {getClassNamesFor("promoStatusLabel")}
 				</button>
 				<div>
 					<div>
@@ -215,15 +238,18 @@ export default function ArticlesList() {
 							<p className="border-r px-1 h-8 flex items-center text-start xl:justify-center text-xs truncate">
 								{article.type}
 							</p>
-							<div className="border-r px-1 h-8 hidden xl:flex">
-								<div className="flex items-center justify-center h-full w-full">
-									{article.promotions && article.promotions.length > 0 ? (
-										<div className="h-5 w-5 rounded-full bg-green-500"></div>
-									) : (
-										<div className="h-5 w-5 rounded-full bg-red-500"></div>
-									)}
-								</div>
+							<div className="border-r px-1 h-8 hidden xl:flex items-center justify-center">
+								{article.promoStatusLabel === "Active" && (
+									<div className="h-4 w-4 rounded-full bg-green-500" />
+								)}
+								{article.promoStatusLabel === "En attente" && (
+									<div className="h-4 w-4 rounded-full bg-blue-500" />
+								)}
+								{article.promoStatusLabel === "Inactive" && (
+									<div className="h-4 w-4 rounded-full bg-red-500" />
+								)}
 							</div>
+
 							<div>
 								<div className="border-r px-1 text-xs truncate flex justify-center items-center">
 									{article.status === "available" && (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getArticlesType } from "../api/Article";
+import { getArticles, getArticlesType } from "../api/Article";
 import ArticleCard from "../components/ArticleCard/ArticleCard";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import type Article from "../types/Article";
@@ -22,18 +22,47 @@ export default function Articles({
 	useEffect(() => {
 		const fetchArticles = async () => {
 			try {
-				const res = await getArticlesType(type || "");
+				let res: Article[];
+
+				// ✅ Si on cherche les promotions → on récupère TOUS les articles
+				if (type?.toLowerCase() === "promotion" || showPromos) {
+					res = await getArticles();
+				} else if (type) {
+					// Sinon → articles d’un type précis
+					res = await getArticlesType(type);
+				} else {
+					// Si aucun type précisé → tout afficher
+					res = await getArticles();
+				}
+
 				setArticles(res);
 			} catch (err) {
 				console.error("Erreur fetching articles:", err);
 			}
 		};
+
 		fetchArticles();
-	}, [type]);
+	}, [type, showPromos]);
 
 	// --- Filtrage côté front ---
-	let filteredArticles = articles;
+	let filteredArticles = [...articles];
 
+	// 🎯 Filtrage promo (À FAIRE EN PREMIER avant la recherche)
+	if (type?.toLowerCase() === "promotion" || showPromos) {
+		filteredArticles = filteredArticles.filter((article) =>
+			article.promotions?.some((promo: Promotion) => {
+				if (promo.status !== "active") return false;
+
+				// Vérifier que la promo est valide aujourd'hui
+				const startDate = new Date(promo.start_date);
+				const endDate = new Date(promo.end_date);
+
+				return now >= startDate && now <= endDate;
+			}),
+		);
+	}
+
+	// 🔍 Recherche (après le filtrage promo)
 	if (searchQuery) {
 		const query = searchQuery.toLowerCase();
 		filteredArticles = filteredArticles.filter(
@@ -42,16 +71,11 @@ export default function Articles({
 				article.brand?.name?.toLowerCase().includes(query) ||
 				article.description?.toLowerCase().includes(query),
 		);
-	} else if (type?.toLowerCase() === "promotion" || showPromos) {
-		filteredArticles = filteredArticles.filter((article) =>
-			article.promotions?.some(
-				(promo: Promotion) =>
-					promo.status === "active" &&
-					new Date(promo.start_date) <= now &&
-					now <= new Date(promo.end_date),
-			),
-		);
 	}
+
+	console.log("Articles avant filtrage:", articles.length);
+	console.log("Articles après filtrage promo:", filteredArticles.length);
+	console.log("Type:", type, "ShowPromos:", showPromos);
 
 	// --- Dictionnaire de traduction ---
 	const translations: Record<string, string> = {
@@ -88,20 +112,20 @@ export default function Articles({
 	const breadcrumbItems = [
 		{ label: "home", href: "/" },
 		{
-			label: showPromos
-				? "promotions"
-				: searchQuery
-					? "search"
-					: type
-						? type
-						: "articles",
-			href: showPromos
-				? "/articles/promotions"
-				: searchQuery
-					? `/articles?search=${searchQuery}`
-					: type
-						? `/articles/${type}`
-						: "/articles",
+			label:
+				showPromos || type?.toLowerCase() === "promotion"
+					? "promotions"
+					: searchQuery
+						? "search"
+						: type || "articles",
+			href:
+				showPromos || type?.toLowerCase() === "promotion"
+					? "/articles/promotions"
+					: searchQuery
+						? `/articles?search=${searchQuery}`
+						: type
+							? `/articles/${type}`
+							: "/articles",
 		},
 	];
 
@@ -113,7 +137,7 @@ export default function Articles({
 					{filteredArticles.length}{" "}
 					{searchQuery ? (
 						<>résultat(s) pour "{searchQuery}"</>
-					) : showPromos ? (
+					) : showPromos || type?.toLowerCase() === "promotion" ? (
 						"Promotions disponibles"
 					) : type ? (
 						<>{translateKey(type)}(s) disponibles</>
