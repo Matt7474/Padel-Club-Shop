@@ -1,17 +1,21 @@
+/** biome-ignore-all lint/suspicious/noImplicitAnyLet: <explanation> */
 import { useEffect, useMemo, useState } from "react";
 import {
 	addArticle,
-	addPromo,
 	addTechRatings,
+	attachPromoToArticle,
+	deleteArticleById,
+	detachPromoFromArticle,
+	restoreArticleById,
+	updateArticle,
+	updatePromo,
+	updateTechRatings,
 	uploadArticleImages,
 } from "../../../api/Article";
 import { getBrands } from "../../../api/Brand";
 import type Article from "../../../types/Article";
-import type { ArticleImage, Brand } from "../../../types/Article";
-import {
-	buildNewArticle,
-	getTechCharacteristicsState,
-} from "../../../utils/ArticleHelpers";
+import type { ArticleImage, Brand, NewArticle } from "../../../types/Article";
+import { getTechCharacteristicsState } from "../../../utils/ArticleHelpers";
 import ArticleForm from "../CreateArticle/ArticleForm";
 import BagForm from "../CreateArticle/BagForm";
 import BallForm from "../CreateArticle/BallForm";
@@ -21,17 +25,25 @@ import RacketForm from "../CreateArticle/RacketForm";
 import ShoesForm from "../CreateArticle/ShoesForm";
 import Toogle from "../Toogle/Toogle";
 import Button from "../Tools/Button";
+import InfoModal from "../../Modal/InfoModal";
+import type { Promotion } from "../../../types/Promotions";
 
 type ImageWithId = {
 	id: string;
 	file: File;
 	previewUrl: string;
+	isExisting?: boolean;
+	image_id?: number;
 };
 
 interface CreateArticlePropos {
 	title?: string;
 	buttonText?: string;
 	article?: Article;
+	mode: "create" | "edit";
+	setMenuSelected?: React.Dispatch<React.SetStateAction<string>>;
+	onReturn?: () => void;
+	onUpdated?: () => void;
 }
 
 interface SizeOption {
@@ -43,8 +55,16 @@ export default function CreateArticle({
 	title,
 	buttonText,
 	article,
+	mode,
+	setMenuSelected,
+	onReturn,
+	onUpdated,
 }: CreateArticlePropos) {
 	const today = new Date();
+	const [infoModal, setInfoModal] = useState<{ id: number; text: string }[]>(
+		[],
+	);
+	const [noImage, setNoImage] = useState(false);
 
 	const [articleType, setArticleType] = useState(article?.type || "");
 	const [articleName, setArticleName] = useState(article?.name || "");
@@ -59,13 +79,15 @@ export default function CreateArticle({
 	);
 
 	const [images, setImages] = useState<ImageWithId[]>(() => {
-		return (
-			article?.images?.map((img: ArticleImage) => ({
-				id: crypto.randomUUID(),
-				file: {} as File,
-				previewUrl: img.url,
-			})) || []
-		);
+		if (!article?.images) return [];
+
+		return article.images.map((img: ArticleImage) => ({
+			id: img.image_id?.toString() || crypto.randomUUID(),
+			file: {} as File,
+			previewUrl: `${import.meta.env.VITE_API_URL}${img.url}`,
+			isExisting: true,
+			image_id: img.image_id,
+		}));
 	});
 	const [articlePriceTTC, setArticlePriceTTC] = useState(
 		article?.price_ttc?.toString() || "",
@@ -89,56 +111,66 @@ export default function CreateArticle({
 	const [articlePromoType, setArticlePromoType] = useState<string>(
 		article?.promotions?.[0]?.discount_type || "%",
 	);
+
+	const [articleNamePromo, setArticleNamePromo] = useState(
+		article?.promotions?.[0]?.name || "",
+	);
+
 	const [articleDescriptionPromo, setArticleDescriptionPromo] = useState(
 		article?.promotions?.[0]?.description || "",
 	);
+	const formatDateForInput = (dateString?: string) => {
+		if (!dateString) return "";
+		return dateString.split("T")[0];
+	};
+
 	const [articlePromoStart, setArticlePromoStart] = useState(
-		article?.promotions?.[0]?.start_date || "",
+		formatDateForInput(article?.promotions?.[0]?.start_date),
 	);
 	const [articlePromoEnd, setArticlePromoEnd] = useState(
-		article?.promotions?.[0]?.end_date || "",
+		formatDateForInput(article?.promotions?.[0]?.end_date),
 	);
 
 	//
 	//
 	// Si type = raquette : Caractéristiques technique
 	const [rCharacteristicsWeight, setRCharacteristicsWeight] = useState(
-		article?.tech_characteristics?.poids || "",
+		article?.tech_characteristics?.weight || "",
 	);
 	const [rCharacteristicsColor, setRCharacteristicsColor] = useState(
-		article?.tech_characteristics?.couleur || "",
+		article?.tech_characteristics?.color || "",
 	);
 	const [rCharacteristicsShape, setRCharacteristicsShape] = useState(
-		article?.tech_characteristics?.forme || "",
+		article?.tech_characteristics?.shape || "",
 	);
 	const [rCharacteristicsFoam, setRCharacteristicsFoam] = useState(
-		article?.tech_characteristics?.mousse || "",
+		article?.tech_characteristics?.foam || "",
 	);
 	const [rCharacteristicsSurface, setRCharacteristicsSurface] = useState(
 		article?.tech_characteristics?.surface || "",
 	);
 	const [rCharacteristicsLevel, setRCharacteristicsLevel] = useState(
-		article?.tech_characteristics?.niveau || "",
+		article?.tech_characteristics?.level || "",
 	);
 	const [rCharacteristicsGender, setRCharacteristicsGender] = useState(
-		article?.tech_characteristics?.genre || "",
+		article?.tech_characteristics?.gender || "",
 	);
 	//
 	// Si type = raquette : Notes technique
 	const [rcharacteristicsManiability, setRCharacteristicsManiability] =
-		useState<number>(article?.ratings?.maniabilité ?? 0);
+		useState<number>(article?.ratings?.maneuverability ?? 0);
 	const [rCharacteristicsPower, setRCharacteristicsPower] = useState<number>(
-		article?.ratings?.puissance ?? 0,
+		article?.ratings?.power ?? 0,
 	);
 	const [rCharacteristicsComfort, setRCharacteristicsComfort] =
-		useState<number>(article?.ratings?.confort ?? 0);
+		useState<number>(article?.ratings?.comfort ?? 0);
 	const [rCharacteristicsSpin, setRCharacteristicsSpin] = useState<number>(
-		article?.ratings?.effet ?? 0,
+		article?.ratings?.spin ?? 0,
 	);
 	const [rCharacteristicsTolerance, setRCharacteristicsTolerance] =
 		useState<number>(article?.ratings?.tolerance ?? 0);
 	const [rCharacteristicsControl, setRCharacteristicsControl] =
-		useState<number>(article?.ratings?.contrôle ?? 0);
+		useState<number>(article?.ratings?.control ?? 0);
 
 	//
 	//
@@ -270,6 +302,11 @@ export default function CreateArticle({
 
 	// Suppression des images
 	const handleDeleteImage = (id: string) => {
+		const imageToDelete = images.find((img) => img.id === id);
+
+		// Si c'est une image existante (de la BDD)
+		if (imageToDelete?.isExisting && imageToDelete.image_id) {
+		}
 		setImages((prev) => prev.filter((img) => img.id !== id));
 	};
 
@@ -318,170 +355,33 @@ export default function CreateArticle({
 		setSCharacteristicsSize(newSizes);
 	};
 
-	// const handleSubmit = async (e: React.FormEvent) => {
-	// 	e.preventDefault();
-
-	// 	try {
-	// 		const newArticle = buildNewArticle({
-	// 			articleType,
-	// 			articleName,
-	// 			articleDescription,
-	// 			articleReference,
-	// 			articleBrand,
-	// 			articlePriceTTC,
-	// 			articleQty,
-	// 			articleStatus,
-	// 			articleShippingCost,
-	// 			techCharacteristicsState: getTechCharacteristicsState(articleType, {
-	// 				rCharacteristicsWeight,
-	// 				rCharacteristicsColor,
-	// 				rCharacteristicsShape,
-	// 				rCharacteristicsFoam,
-	// 				rCharacteristicsSurface,
-	// 				rCharacteristicsLevel,
-	// 				rCharacteristicsGender,
-	// 				bCharacteristicsWeight,
-	// 				bCharacteristicsType,
-	// 				bCharacteristicsVolume,
-	// 				bCharacteristicsDimensions,
-	// 				bCharacteristicsMaterial,
-	// 				bCharacteristicsColor,
-	// 				bCharacteristicsCompartment,
-	// 				ballCharacteristicsWeight,
-	// 				ballCharacteristicsDiameter,
-	// 				ballCharacteristicsRebound,
-	// 				ballCharacteristicsPressure,
-	// 				ballCharacteristicsMaterial,
-	// 				ballCharacteristicsColor,
-	// 				ballCharacteristicsType,
-	// 				cCharacteristicsType,
-	// 				cCharacteristicsGender,
-	// 				cCharacteristicsMaterial,
-	// 				cCharacteristicsColor,
-	// 				cCharacteristicsSize,
-	// 				sCharacteristicsWeight,
-	// 				sCharacteristicsColor,
-	// 				sCharacteristicsSole,
-	// 				sCharacteristicsGender,
-	// 				sCharacteristicsSize,
-	// 			}),
-	// 			articlePromo,
-	// 			articleDiscountValue,
-	// 			articlePromoType,
-	// 			articleDescriptionPromo,
-	// 			articlePromoStart,
-	// 			articlePromoEnd,
-	// 			images: [],
-	// 		});
-
-	// 		console.log("Référence envoyée :", articleReference);
-
-	// 		// 1️⃣ Crée l'article
-	// 		const articleRes = await addArticle(newArticle);
-	// 		console.log("✅ Article créé :", articleRes);
-
-	// 		// 2️⃣ Crée la promo si elle existe
-	// 		if (articleDiscountValue && Number(articleDiscountValue) > 0) {
-	// 			await addPromo(articleRes.article_id, {
-	// 				name: "Promo auto",
-	// 				description: articleDescriptionPromo,
-	// 				discount_type: articlePromoType,
-	// 				discount_value: Number(articleDiscountValue),
-	// 				start_date: articlePromoStart,
-	// 				end_date: articlePromoEnd,
-	// 				status: "active",
-	// 			});
-	// 			console.log("✅ Promo créée pour l'article");
-	// 		}
-
-	// 		// 3️⃣ Upload des images
-	// 		if (images.length > 0) {
-	// 			await uploadArticleImages(articleRes.article_id, images);
-	// 		}
-
-	// 		alert("Article, promo et images enregistrés !");
-	// 	} catch (err) {
-	// 		console.error(err);
-	// 		alert("Erreur lors de la création de l'article/promo");
-	// 	}
-	// };
-
-	// fonctionne avec article + images + marque + promo
-	// const handleSubmit = async (e: React.FormEvent) => {
-	// 	e.preventDefault();
-
-	// 	try {
-	// 		// Construire l'article avec la promo incluse dans 'promotions'
-	// 		const newArticle = buildNewArticle({
-	// 			articleType,
-	// 			articleName,
-	// 			articleDescription,
-	// 			articleReference,
-	// 			articleBrand,
-	// 			articlePriceTTC,
-	// 			articleQty,
-	// 			articleStatus,
-	// 			articleShippingCost,
-	// 			techCharacteristicsState: getTechCharacteristicsState(articleType, {
-	// 				// ... tes caractéristiques
-	// 			}),
-	// 			articlePromo,
-	// 			articleDiscountValue,
-	// 			articlePromoType,
-	// 			articleDescriptionPromo,
-	// 			articlePromoStart,
-	// 			articlePromoEnd,
-	// 			images: [],
-	// 		});
-
-	// 		//  1️⃣ Crée l'article
-	// 		const articleRes = await addArticle(newArticle);
-	// 		console.log("✅ Article créé :", articleRes);
-
-	// 		//  2️⃣ Upload des images
-	// 		if (images.length > 0) {
-	// 			await uploadArticleImages(articleRes.article_id, images);
-	// 		}
-
-	// 		//  3️⃣ Crée la promo si elle existe
-	// 		if (articleDiscountValue && Number(articleDiscountValue) > 0) {
-	// 			await addPromo(articleRes.article_id, {
-	// 				name: "Promo auto",
-	// 				description: articleDescriptionPromo,
-	// 				discount_type: articlePromoType,
-	// 				discount_value: Number(articleDiscountValue),
-	// 				start_date: articlePromoStart,
-	// 				end_date: articlePromoEnd,
-	// 				status: "active",
-	// 			});
-	// 			console.log("✅ Promo créée pour l'article");
-	// 		}
-
-	// 		alert("Article, promo et images enregistrés !");
-	// 	} catch (err) {
-	// 		console.error(err);
-	// 		alert("Erreur lors de la création de l'article/promo");
-	// 	}
-	// };
-
-	// V3 pour carac
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
 		try {
-			const newArticle = buildNewArticle({
-				articleType,
-				articleName,
-				articleDescription,
-				articleReference,
-				articleBrand,
-				articlePriceTTC,
-				articleQty,
-				articleStatus,
-				articleShippingCost,
+			if (!articleBrand) {
+				alert("⚠️ Veuillez sélectionner une marque");
+				return;
+			}
 
-				// caractéristiques selon type
-				techCharacteristicsState: getTechCharacteristicsState(articleType, {
+			// Prépare l'objet commun pour création ou édition
+			const newArticle: NewArticle = {
+				type: articleType,
+				name: articleName,
+				description: articleDescription || undefined,
+				// reference: articleReference || undefined,
+				brand_id: articleBrand,
+				price_ttc: Number(articlePriceTTC),
+				stock_quantity: Number(articleQty) || 0,
+				status: articleStatus as
+					| "available"
+					| "preorder"
+					| "out_of_stock"
+					| undefined,
+				shipping_cost: articleShippingCost
+					? Number(articleShippingCost)
+					: undefined,
+				tech_characteristics: getTechCharacteristicsState(articleType, {
 					// Raquette
 					rCharacteristicsWeight,
 					rCharacteristicsColor,
@@ -490,7 +390,6 @@ export default function CreateArticle({
 					rCharacteristicsSurface,
 					rCharacteristicsLevel,
 					rCharacteristicsGender,
-
 					// Sac
 					bCharacteristicsWeight,
 					bCharacteristicsType,
@@ -499,7 +398,6 @@ export default function CreateArticle({
 					bCharacteristicsMaterial,
 					bCharacteristicsColor,
 					bCharacteristicsCompartment,
-
 					// Balles
 					ballCharacteristicsWeight,
 					ballCharacteristicsDiameter,
@@ -508,14 +406,12 @@ export default function CreateArticle({
 					ballCharacteristicsMaterial,
 					ballCharacteristicsColor,
 					ballCharacteristicsType,
-
 					// Vêtements
 					cCharacteristicsType,
 					cCharacteristicsGender,
 					cCharacteristicsMaterial,
 					cCharacteristicsColor,
 					cCharacteristicsSize,
-
 					// Chaussures
 					sCharacteristicsWeight,
 					sCharacteristicsColor,
@@ -523,96 +419,208 @@ export default function CreateArticle({
 					sCharacteristicsGender,
 					sCharacteristicsSize,
 				}),
+				promotions:
+					articleDiscountValue && Number(articleDiscountValue) > 0
+						? [
+								{
+									name: articleNamePromo,
+									description: articleDescriptionPromo,
+									discount_type: articlePromoType || "%",
+									discount_value: Number(articleDiscountValue),
+									start_date: articlePromoStart,
+									end_date: articlePromoEnd,
+									status: "active",
+								},
+							]
+						: undefined,
+			};
 
-				// uniquement pour les raquettes : ratings
-				techRatings:
-					articleType === "racket"
-						? {
-								maneuverability: rcharacteristicsManiability,
-								power: rCharacteristicsPower,
-								comfort: rCharacteristicsComfort,
-								spin: rCharacteristicsSpin,
-								tolerance: rCharacteristicsTolerance,
-								control: rCharacteristicsControl,
-							}
-						: {},
+			console.log("articlePromo", articlePromo);
 
-				// promo
-				articlePromo,
-				articleDiscountValue,
-				articlePromoType,
-				articleDescriptionPromo,
-				articlePromoStart,
-				articlePromoEnd,
-
-				// images (upload à part)
-				images: [],
-			});
-
-			// 1️⃣ création de l’article
-			const articleRes = await addArticle(newArticle);
-
-			// 2️⃣ upload images
-			if (images.length > 0) {
-				await uploadArticleImages(articleRes.article_id, images);
+			// Si aucune image sélectionnée en création
+			if (mode === "create" && images.length === 0) {
+				setNoImage(true);
+				return;
 			}
 
-			if (articleType === "racket") {
-				await addTechRatings(articleRes.article_id, {
-					maneuverability: rcharacteristicsManiability,
-					power: rCharacteristicsPower,
-					comfort: rCharacteristicsComfort,
-					spin: rCharacteristicsSpin,
-					tolerance: rCharacteristicsTolerance,
-					control: rCharacteristicsControl,
-				});
-				console.log("✅ TechRatings créées pour la raquette");
+			let articleRes: Article | undefined;
+			let articleId: number;
+
+			if (mode === "create") {
+				articleRes = await addArticle(newArticle);
+				articleId = articleRes.article_id;
+
+				if (images.length > 0) {
+					await uploadArticleImages(articleId, images);
+				}
+
+				if (articleType === "racket") {
+					await addTechRatings(articleId, {
+						maneuverability: rcharacteristicsManiability,
+						power: rCharacteristicsPower,
+						comfort: rCharacteristicsComfort,
+						spin: rCharacteristicsSpin,
+						tolerance: rCharacteristicsTolerance,
+						control: rCharacteristicsControl,
+					});
+				}
+
+				// if (newArticle.promotions?.[0]) {
+				// 	await attachPromoToArticle(articleId, newArticle.promotions[0]);
+				// }
 			}
 
-			// 3️⃣ promo
-			if (articleDiscountValue && Number(articleDiscountValue) > 0) {
-				await addPromo(articleRes.article_id, {
-					name: "Promo auto",
-					description: articleDescriptionPromo,
-					discount_type: articlePromoType,
-					discount_value: Number(articleDiscountValue),
-					start_date: articlePromoStart,
-					end_date: articlePromoEnd,
-					status: "active",
-				});
+			onReturn?.();
+
+			// 🟠 MODE ÉDITION
+			if (mode === "edit" && article) {
+				articleId = article.article_id;
+
+				await updateArticle(articleId, newArticle);
+
+				const newImages = images.filter((img) => !img.isExisting);
+				if (newImages.length > 0) {
+					await uploadArticleImages(articleId, newImages);
+				}
+
+				if (articleType === "racket") {
+					await updateTechRatings(articleId, {
+						maneuverability: rcharacteristicsManiability,
+						power: rCharacteristicsPower,
+						comfort: rCharacteristicsComfort,
+						spin: rCharacteristicsSpin,
+						tolerance: rCharacteristicsTolerance,
+						control: rCharacteristicsControl,
+					});
+				}
+
+				// ✅ Gestion des promotions
+				const existingPromo = article.promotions?.[0] ?? null;
+				const newPromoData = newArticle.promotions?.[0] ?? null;
+
+				// L'utilisateur veut une promo
+				if (articlePromo === true) {
+					if (newPromoData) {
+						if (existingPromo) {
+							// Modifier la promo existante
+							console.log("📝 Modification de la promo existante");
+							await updatePromo(
+								existingPromo.promo_id,
+								newPromoData,
+								articleId,
+							);
+						} else {
+							// Créer une nouvelle promo
+							console.log("➕ Création d'une nouvelle promo");
+							await attachPromoToArticle(articleId, newPromoData);
+						}
+					}
+				}
+				// L'utilisateur ne veut plus de promo
+				else if (articlePromo === false) {
+					if (existingPromo) {
+						console.log("🗑️ Suppression de la promo existante");
+						await detachPromoFromArticle(articleId, existingPromo.promo_id);
+					}
+				}
+				// Cas 3 : Pas de promo avant, pas de promo après → rien à faire
 			}
 
-			alert("Article, caractéristiques, promo et images enregistrés !");
+			setInfoModal((prev) => [
+				...prev,
+				{
+					id: Date.now(),
+					text:
+						mode === "edit"
+							? "Article modifié avec succès"
+							: "Article créé avec succès",
+				},
+			]);
+
+			onUpdated?.();
+			onReturn?.();
+			if (setMenuSelected) setMenuSelected("null");
 		} catch (err) {
 			console.error(err);
-			alert("Erreur lors de la création de l'article/promo");
+			alert("Erreur lors de la sauvegarde de l'article");
 		}
 	};
 
-	const handleDelete = () => {
-		console.log("handleDelete");
+	const handleDelete = (id: number | undefined) => {
+		if (!id) return;
+		deleteArticleById(id);
+		console.log("handleDelete", id);
+		alert("Article supprimé avec succés");
+	};
+	const handleRestore = (id: number | undefined) => {
+		if (!id) return;
+		restoreArticleById(id);
+		console.log("handleRestore", id);
+		alert("Article restauré avec succés");
+	};
+
+	const removeInfoModal = (id: number) => {
+		setInfoModal((prev) => prev.filter((t) => t.id !== id));
 	};
 
 	return (
 		<>
 			<div>
+				{mode === "edit" && (
+					<button
+						type="button"
+						onClick={onReturn}
+						className="flex mt-4 cursor-pointer"
+					>
+						<img
+							src="/icons/arrow.svg"
+							alt="fleche retour"
+							className="w-4 rotate-180"
+						/>
+						Retour
+					</button>
+				)}
+
 				<div className="flex justify-between bg-gray-500/80 p-3 mt-7 xl:mt-4 h10">
 					<h2 className="font-semibold text-lg xl:mt-0 flex justify-between">
 						{title}
 					</h2>
-					<button type="button" onClick={handleDelete}>
-						<img
-							src="/icons/trash2.svg"
-							alt="poubelle"
-							className="w-7 cursor-pointer"
-						/>
-					</button>
+					{mode === "edit" &&
+						(article?.is_deleted === false ? (
+							<div className="flex items-center">
+								<p>Archiver l'article ?</p>
+								<button
+									type="button"
+									onClick={() => handleDelete(article?.article_id)}
+								>
+									<img
+										src="/icons/trash2.svg"
+										alt="poubelle"
+										className="w-6 cursor-pointer ml-2"
+									/>
+								</button>
+							</div>
+						) : (
+							<div className="flex items-center">
+								<p>Restaurer l'article ?</p>
+								<button
+									type="button"
+									onClick={() => handleRestore(article?.article_id)}
+								>
+									<img
+										src="/icons/restore3.svg"
+										alt="restaurer"
+										className="w-8 cursor-pointer ml-2"
+									/>
+								</button>
+							</div>
+						))}
 				</div>
 				<div>
 					<form onSubmit={handleSubmit}>
 						<div className="xl:grid xl:grid-cols-3 gap-4">
 							<div>
-								<div className="border-b border-gray-400 xl:border-none mt-4 "></div>
+								<div className="border-b border-gray-400 xl:border-none mt-2 "></div>
 								<ArticleForm
 									articleType={articleType}
 									setArticleType={setArticleType}
@@ -636,6 +644,8 @@ export default function CreateArticle({
 									setArticleShippingCost={setArticleShippingCost}
 									articleStatus={articleStatus}
 									setArticleStatus={setArticleStatus}
+									noImage={noImage}
+									mode={mode}
 								/>
 							</div>
 
@@ -657,6 +667,8 @@ export default function CreateArticle({
 											articlePromoType={articlePromoType}
 											setArticlePromoType={setArticlePromoType}
 											finalPrice={finalPrice}
+											articleNamePromo={articleNamePromo}
+											setArticleNamePromo={setArticleNamePromo}
 											articleDescriptionPromo={articleDescriptionPromo}
 											setArticleDescriptionPromo={setArticleDescriptionPromo}
 											articlePromoStart={articlePromoStart}
@@ -665,6 +677,11 @@ export default function CreateArticle({
 											setArticlePromoEnd={setArticlePromoEnd}
 											promoState={promoState}
 											today={today}
+											formatDateForInput={formatDateForInput}
+											promoId={
+												(article?.promotions?.[0] as unknown as Promotion)
+													?.promo_id
+											}
 										/>
 									)}
 								</div>
@@ -796,12 +813,21 @@ export default function CreateArticle({
 								)}
 							</div>
 						</div>
-						<div className="xl:flex xl:justify-center">
+						<div className="xl:flex xl:justify-center xl:w-1/3 mx-auto">
 							<Button type="submit" buttonText={`${buttonText}`} />
 						</div>
 					</form>
 				</div>
 			</div>
+			{infoModal.map((infoModal) => (
+				<InfoModal
+					key={infoModal.id}
+					id={infoModal.id}
+					bg="bg-green-500"
+					text={infoModal.text}
+					onClose={removeInfoModal}
+				/>
+			))}
 		</>
 	);
 }

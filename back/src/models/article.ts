@@ -1,4 +1,4 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, JSONB, Model } from "sequelize";
 import { sequelize } from "../database/db";
 
 export class Article extends Model {
@@ -78,6 +78,11 @@ Article.init(
 			type: DataTypes.DECIMAL(10, 2),
 			allowNull: true,
 			field: "shipping_cost",
+		},
+		tech_characteristics: {
+			type: DataTypes.JSONB,
+			allowNull: true,
+			field: "tech_characteristics",
 		},
 		is_deleted: {
 			type: DataTypes.BOOLEAN,

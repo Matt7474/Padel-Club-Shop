@@ -10,6 +10,7 @@ interface ArticleDetailsProps {
 }
 
 export default function ArticleDetails({ article }: ArticleDetailsProps) {
+	const API_URL = import.meta.env.VITE_API_URL;
 	const [clickReturn, setClickReturn] = useState<Article | null>(null);
 	const [changeArticle, setChangeArticle] = useState(false);
 
@@ -33,35 +34,43 @@ export default function ArticleDetails({ article }: ArticleDetailsProps) {
 
 	return (
 		<div>
-			<button
-				type="button"
-				onClick={() => handleClick(article)}
-				className="flex mt-4 cursor-pointer"
-			>
-				<img
-					src="/icons/arrow.svg"
-					alt="fleche retour"
-					className="w-4 rotate-180"
-				/>
-				Retour
-			</button>
+			<div className="flex justify-between">
+				<button
+					type="button"
+					onClick={() => handleClick(article)}
+					className="flex mt-4 cursor-pointer"
+				>
+					<img
+						src="/icons/arrow.svg"
+						alt="fleche retour"
+						className="w-4 rotate-180"
+					/>
+					Retour
+				</button>
+
+				<div className="flex mt-4">
+					<p className="mr-2">Disponibilité </p>
+					<div
+						className={`w-4 h-4 rounded-full mx-auto my-1
+						${article.status === "available" ? "bg-green-500" : ""}
+						${article.status === "preorder" ? "bg-blue-500" : ""}
+						${article.status === "out_of_stock" ? "bg-red-500" : ""}`}
+					/>
+				</div>
+			</div>
 
 			{changeArticle === false && (
 				<div className="xl:flex xl:flex-col xl:items-center">
 					<div className="mt-4 pl-1">
 						<div className="flex justify-between">
 							<h2>Détails de l'article : {article.name}</h2>
-							<div
-								className={`w-4 h-4 rounded-full mx-auto my-1
-							${article.status === "available" ? "bg-green-500" : ""}
-							${article.status === "preorder" ? "bg-blue-500" : ""}
-							${article.status === "out_of_stock" ? "bg-red-500" : ""}`}
-							/>
 						</div>
 						<div className="flex">
 							<div className="my-auto">
 								<img
-									src={article.images?.[0]?.url || "/icons/default.svg"}
+									src={
+										`${API_URL}${article.images[0].url}` || "/icons/default.svg"
+									}
 									alt={article.name || "Image par défaut"}
 									className="w-30"
 								/>
@@ -77,24 +86,18 @@ export default function ArticleDetails({ article }: ArticleDetailsProps) {
 								</p>
 
 								<p className="flex items-center gap-2">
-									Promo :
+									Promo :{""}
 									{article.promotions && article.promotions.length > 0
 										? article.promotions.map((promo: Promotion) => (
 												<span
 													key={promo.promotion_id}
-													className="flex flex-col items-center gap-2 mr-2"
-												>
-													<span className="flex flex-col">
-														<span
-															className={`w-4 h-4 rounded-full
-														${promo.status === "active" ? "bg-green-500" : ""}
-														${promo.status === "upcoming" ? "bg-blue-500" : ""}
-														${promo.status === "expired" ? "bg-red-500" : ""}`}
-														/>
-													</span>
-												</span>
+													className={`w-4 h-4 rounded-full mr-2
+								${promo.status === "active" ? "bg-green-500" : ""}
+								${promo.status === "upcoming" ? "bg-blue-500" : ""}
+								${promo.status === "expired" ? "bg-red-500" : ""}`}
+												/>
 											))
-										: " Aucune"}
+										: "Aucune"}
 								</p>
 								{article.promotions?.map((promo: Promotion) => (
 									<div className="text-sm" key={promo.promotion_id}>
@@ -108,8 +111,7 @@ export default function ArticleDetails({ article }: ArticleDetailsProps) {
 								))}
 							</div>
 						</div>
-					</div>
-					<div className="xl:w-full xl:flex xl:justify-center">
+
 						<Button
 							type="button"
 							onClick={handleChange}
@@ -124,6 +126,7 @@ export default function ArticleDetails({ article }: ArticleDetailsProps) {
 						title={"Modifier l'article"}
 						buttonText={"MODIFIER L'ARTICLE"}
 						article={article}
+						mode={"edit"}
 					/>
 				</div>
 			)}

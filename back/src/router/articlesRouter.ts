@@ -18,6 +18,14 @@ articlesRouter.post(
 	},
 	articlesControllers.createTechRatings,
 );
+articlesRouter.patch(
+	"/:id/ratings",
+	(req, res, next) => {
+		console.log("🎯 Route ratings atteinte !", req.params, req.body);
+		next();
+	},
+	articlesControllers.updateTechRatings,
+);
 
 articlesRouter.get("/", articlesControllers.getAllArticles);
 articlesRouter.get("/id/:id", articlesControllers.getOneArticle);
@@ -26,7 +34,9 @@ articlesRouter.get("/name/:name", articlesControllers.getOneArticleByName);
 
 articlesRouter.patch("/:id", articlesControllers.updateArticle);
 
-articlesRouter.patch("/:id/archive", articlesControllers.archiveArticle);
-articlesRouter.patch("/:id/restore", articlesControllers.restoreArticle);
+articlesRouter.get("/deleted", articlesControllers.getAllArticlesDeleted);
+
+articlesRouter.patch("/archive/:id", articlesControllers.archiveArticle);
+articlesRouter.patch("/restore/:id", articlesControllers.restoreArticle);
 
 export { articlesRouter };

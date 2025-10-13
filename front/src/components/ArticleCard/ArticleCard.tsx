@@ -101,7 +101,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 				to={`/articles/${type}/${article.name}`}
 				key={article.article_id}
 				state={{ article }}
-				className="border rounded-lg shadow-lg bg-white cursor-pointer flex flex-col hover:-translate-y-2 transition-transform"
+				className="border rounded-lg shadow-lg bg-white cursor-pointer flex flex-col hover:-translate-y-2 transition-transform "
 			>
 				<div className="flex h-42">
 					{/* Colonne image */}
@@ -117,7 +117,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 					</div>
 
 					{/* Colonne texte */}
-					<div className="w-2/3 pl-2 flex flex-col bg-gray-50 rounded-lg justify-between">
+					<div className="w-2/3 px-2 flex flex-col bg-gray-50 rounded-lg justify-between ">
 						<div>
 							<div className="flex justify-between">
 								<div className="bg-gray-300 inline-block mt-1 -ml-1 rounded-lg">
@@ -176,14 +176,16 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 							</div>
 
 							{/* Bouton panier */}
-							<button
-								type="button"
-								className="flex items-center justify-center bg-amber-300 text-black rounded-md px-2 py-1 transition-colors hover:bg-amber-400"
-								onClick={addToCart}
-							>
-								<span className="text-md font-bold mr-1">+</span>
-								<img src="/icons/cart.svg" alt="panier" className="w-5 h-5" />
-							</button>
+							{article.type !== "clothing" && article.type !== "shoes" && (
+								<button
+									type="button"
+									className="flex items-center justify-center bg-amber-300 text-black rounded-md px-2 py-1 transition-colors hover:bg-amber-400"
+									onClick={addToCart}
+								>
+									<span className="text-md font-bold mr-1">+</span>
+									<img src="/icons/cart.svg" alt="panier" className="w-5 h-5" />
+								</button>
+							)}
 						</div>
 					</div>
 				</div>

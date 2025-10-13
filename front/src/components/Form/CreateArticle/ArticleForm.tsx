@@ -26,6 +26,8 @@ interface ArticleFormProps {
 	setArticleShippingCost: (val: string) => void;
 	articleStatus: string;
 	setArticleStatus: (val: string) => void;
+	noImage: boolean;
+	mode: "create" | "edit";
 }
 
 export default function ArticleForm({
@@ -51,6 +53,8 @@ export default function ArticleForm({
 	setArticleShippingCost,
 	articleStatus,
 	setArticleStatus,
+	noImage,
+	mode,
 }: ArticleFormProps) {
 	// Quand le stock change
 	const handleQtyChange = (val: string | number) => {
@@ -107,6 +111,7 @@ export default function ArticleForm({
 								"Chaussure",
 								"Accessoire",
 							]}
+							disabled={mode === "edit"}
 						/>
 					</div>
 
@@ -146,16 +151,20 @@ export default function ArticleForm({
 					/>
 				</div>
 				{/* Reference de l'article */}
-				<div className="-mt-1.5">
-					<Input
-						htmlFor={"reference"}
-						label={"Reférence de l'article"}
-						type={"text"}
-						value={articleReference}
-						onChange={setArticleReference}
-						width="w-full"
-					/>
-				</div>
+				{mode === "edit" && (
+					<div className="-mt-1.5">
+						<Input
+							htmlFor={"reference"}
+							label={"Reférence de l'article"}
+							type={"text"}
+							value={articleReference}
+							onChange={setArticleReference}
+							width="w-full"
+							readOnly
+							disabled={mode === "edit"}
+						/>
+					</div>
+				)}
 				<div className="flex gap-4">
 					{/* Marque de l'article */}
 					<div className="w-full ">
@@ -222,7 +231,9 @@ export default function ArticleForm({
 
 						<label
 							htmlFor="file-upload"
-							className="border mt-4 h-10 flex max-w-[100%] pt-3 pl-3 z-200 w-full cursor-pointer bg-white"
+							className={`border mt-4 h-10 flex max-w-[100%] pt-3 pl-3 z-200 w-full cursor-pointer bg-white ${
+								noImage ? "border-red-500" : "border-gray-300"
+							}`}
 						>
 							<p className="absolute text-gray-500 text-xs top-0 left-1">
 								Sélectionnez des images
@@ -240,6 +251,12 @@ export default function ArticleForm({
 								className="w-8"
 							/>
 						</button>
+
+						{noImage && (
+							<p className="text-red-500 mt-0">
+								Veuillez ajouter au moins 1 image.
+							</p>
+						)}
 					</div>
 
 					{/* preview */}

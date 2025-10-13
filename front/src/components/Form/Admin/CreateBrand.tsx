@@ -1,7 +1,9 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import Input from "../Tools/Input";
 import { createBrand } from "../../../api/Brand";
+import InfoModal from "../../Modal/InfoModal";
+import Input from "../Tools/Input";
+import Button from "../Tools/Button";
 
 export default function CreateBrand() {
 	const [newBrand, setNewBrand] = useState("");
@@ -9,7 +11,9 @@ export default function CreateBrand() {
 	const [imagePreview, setImagePreview] = useState<string>(""); // src affiché dans <img>
 	const [addURL, setAddURL] = useState<string>("");
 	const [error, setError] = useState<string | null>(null);
+	const [isDataUrl, setIsDataUrl] = useState<boolean>(false); // pour savoir si c'est une data URL
 	const objectUrlRef = useRef<string | null>(null);
+	const [showModal, setShowModal] = useState(false);
 
 	// Nettoyage à la désactivation du composant
 	useEffect(() => {
@@ -37,6 +41,7 @@ export default function CreateBrand() {
 		setSelectedFile(file);
 		setImagePreview(previewUrl);
 		setAddURL("");
+		setIsDataUrl(false);
 		setError(null);
 	};
 
@@ -48,6 +53,19 @@ export default function CreateBrand() {
 			img.onerror = () => reject();
 			img.src = url;
 		});
+
+	// Convertit une data URL en File
+	const dataURLtoFile = (dataurl: string, filename: string): File => {
+		const arr = dataurl.split(",");
+		const mime = arr[0].match(/:(.*?);/)?.[1] || "image/png";
+		const bstr = atob(arr[1]);
+		let n = bstr.length;
+		const u8arr = new Uint8Array(n);
+		while (n--) {
+			u8arr[n] = bstr.charCodeAt(n);
+		}
+		return new File([u8arr], filename, { type: mime });
+	};
 
 	// Normalise l'URL entrée (ajoute https:// si nécessaire)
 	const normalizeUrl = (raw: string) => {
@@ -77,7 +95,17 @@ export default function CreateBrand() {
 				objectUrlRef.current = null;
 			}
 
-			setSelectedFile(null);
+			// Vérifier si c'est une data URL
+			if (url.startsWith("data:")) {
+				// Convertir la data URL en File pour un traitement uniforme
+				const file = dataURLtoFile(url, `pasted-image-${Date.now()}.png`);
+				setSelectedFile(file);
+				setIsDataUrl(true);
+			} else {
+				setSelectedFile(null);
+				setIsDataUrl(false);
+			}
+
 			setImagePreview(url);
 			setError(null);
 		} catch (_err) {
@@ -95,6 +123,7 @@ export default function CreateBrand() {
 		setSelectedFile(null);
 		setImagePreview("");
 		setAddURL("");
+		setIsDataUrl(false);
 		setError(null);
 	};
 
@@ -103,12 +132,16 @@ export default function CreateBrand() {
 
 		try {
 			if (selectedFile) {
+				// Cas 1: fichier local ou data URL convertie en fichier
 				const fd = new FormData();
 				fd.append("image", selectedFile);
 				fd.append("brandName", newBrand);
 				const result = await createBrand(fd);
-				console.log("Marque créée avec fichier local :", result);
-			} else if (imagePreview) {
+				window.dispatchEvent(new Event("brandCreate"));
+				setShowModal(true);
+				console.log("Marque créée avec fichier :", result);
+			} else if (imagePreview && !isDataUrl) {
+				// Cas 2: URL distante (pas une data URL)
 				const payload = { brandName: newBrand, image_url: imagePreview };
 				const result = await createBrand(payload);
 				console.log("Marque créée avec URL distante :", result);
@@ -121,6 +154,8 @@ export default function CreateBrand() {
 			setNewBrand("");
 			setSelectedFile(null);
 			setImagePreview("");
+			setAddURL("");
+			setIsDataUrl(false);
 		} catch (err) {
 			console.error("Erreur submit :", err);
 		}
@@ -131,7 +166,6 @@ export default function CreateBrand() {
 			<h2 className="p-3 bg-gray-500/80 font-semibold text-lg mt-7 xl:mt-0 flex justify-between">
 				Création d'une marque
 			</h2>
-
 			<form onSubmit={handleSubmit}>
 				<div className="xl:w-1/3 xl:flex xl:flex-col xl:place-self-center gap-4 xl:gap-0">
 					<Input
@@ -196,8 +230,8 @@ export default function CreateBrand() {
 						{error && <p className="text-sm text-red-500 mb-2">{error}</p>}
 
 						{imagePreview ? (
-							<div className="flex justify-center mt-4">
-								<div className="relative group w-32 h-32">
+							<div className="flex flex-col items-center mt-4">
+								<div className="relative group w-32 h-32 items-center">
 									{/* alt informatif */}
 									<img
 										src={imagePreview}
@@ -216,6 +250,14 @@ export default function CreateBrand() {
 										×
 									</button>
 								</div>
+								{/* Indicateur du type d'image */}
+								<div className="ml-2 text-xs text-gray-500 ">
+									{isDataUrl
+										? "URL distante"
+										: selectedFile
+											? "Fichier local"
+											: "URL distante"}
+								</div>
 							</div>
 						) : (
 							<p className="text-sm text-gray-500 text-center">
@@ -223,17 +265,18 @@ export default function CreateBrand() {
 							</p>
 						)}
 					</div>
-				</div>
-
-				<div className="flex justify-center">
-					<button
-						type="submit"
-						className="w-full xl:w-1/3 bg-green-500 text-white font-semibold p-2 rounded-lg mt-6"
-					>
-						AJOUTER LA MARQUE
-					</button>
+					<Button type={"submit"} buttonText="AJOUTER LA MARQUE" />
 				</div>
 			</form>
+			{showModal && (
+				<InfoModal
+					id={1}
+					bg="bg-green-500"
+					text="Marque créée avec succès"
+					onClose={() => setShowModal(false)}
+					duration={2000}
+				/>
+			)}
 		</div>
 	);
 }

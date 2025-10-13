@@ -3,6 +3,7 @@ interface textAreaProps {
 	placeholder?: string;
 	length: number;
 	border?: string;
+	height?: string;
 	value: string;
 	maxLength?: number;
 	onChange: (value: string) => void;
@@ -13,6 +14,7 @@ export default function TextArea({
 	placeholder,
 	length,
 	border,
+	height,
 	value,
 	onChange,
 	maxLength,
@@ -39,7 +41,7 @@ export default function TextArea({
 						id="additionalInfo"
 						value={value}
 						onChange={(e) => onChange(e.target.value)}
-						className="bg-white border h-25 p-2 pt-6 resize-none w-full"
+						className={`bg-white border h-25 ${height} p-2 pt-6 resize-none w-full`}
 						placeholder={placeholder}
 						maxLength={maxLength}
 					/>

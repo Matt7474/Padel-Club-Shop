@@ -92,7 +92,7 @@ export const getTechCharacteristicsState = (
 				shape: state.rCharacteristicsShape,
 				foam: state.rCharacteristicsFoam,
 				surface: state.rCharacteristicsSurface,
-				skill_level: state.rCharacteristicsLevel,
+				level: state.rCharacteristicsLevel,
 				gender: state.rCharacteristicsGender,
 			};
 		case "bag":

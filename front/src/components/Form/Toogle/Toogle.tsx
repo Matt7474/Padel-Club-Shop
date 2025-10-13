@@ -37,7 +37,7 @@ export default function Toogle({ title, checked, onChange }: ToogleProps) {
 					</div>
 
 					{/* Texte OFF / ON - Positionnement relatif au container */}
-					<div className="absolute top-1 left-0 w-full pointer-events-none">
+					<div className="absolute top-1 left-0 w-full pointer-events-none ">
 						{!checked ? (
 							<div className="absolute right-3 top-0">
 								<span className="text-sm font-semibold text-red-500 [text-shadow:0_0_8px_rgba(239,68,68,1),0_0_25px_rgba(239,68,68,0.9)]">

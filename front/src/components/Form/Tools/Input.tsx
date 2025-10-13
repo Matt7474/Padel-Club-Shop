@@ -11,6 +11,8 @@ interface inputProps {
 	max?: number;
 	suffixe?: string;
 	onBlur?: () => void;
+	readOnly?: boolean;
+	disabled?: boolean;
 }
 
 export default function Input({
@@ -26,6 +28,8 @@ export default function Input({
 	max,
 	suffixe,
 	onBlur,
+	readOnly,
+	disabled,
 }: inputProps) {
 	return (
 		<>
@@ -39,7 +43,10 @@ export default function Input({
 				<input
 					id={htmlFor}
 					type={type}
-					className="bg-white border h-10 pl-2 pt-3"
+					// className="bg-white border h-10 pl-2 pt-3"
+					className={`bg-white border h-10 pl-2 pt-3 cursor-pointer ${
+						disabled ? "opacity-50 cursor-not-allowed" : ""
+					}`}
 					value={value}
 					onChange={(e) => onChange(e.target.value)}
 					required={required}
@@ -48,6 +55,7 @@ export default function Input({
 					min={min}
 					max={max}
 					onBlur={onBlur}
+					readOnly={type === "date" ? true : readOnly}
 				/>
 				{suffixe && (
 					<span className="absolute text-md top-0 pt-4 right-2 pl-2 border-l">

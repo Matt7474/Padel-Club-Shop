@@ -55,7 +55,7 @@ export default function InfoModal({
 	return (
 		<div
 			className={
-				`${bg} px-4 py-2 rounded-lg shadow-lg text-white font-semibold ` +
+				`${bg} absolute left-0 -bottom-10 px-4 py-2 rounded-lg shadow-lg text-white font-semibold ` +
 				"transition-all duration-300 ease-in-out " +
 				getTransformClass()
 			}

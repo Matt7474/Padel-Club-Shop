@@ -4,8 +4,8 @@ import { Article } from "../models/article";
 import { ArticleImage } from "../models/articleImage";
 import { ArticleRatings } from "../models/articleRatings";
 import { Brand } from "../models/brand";
-import { Promotion } from "../models/promotion";
-import type { PromotionCreationAttributes } from "../types/PromotionType";
+import { Promotions } from "../models/promotions";
+import type { PromotionsCreationAttributes } from "../types/PromotionType";
 
 export async function getAllArticles(_req: Request, res: Response) {
 	try {
@@ -13,8 +13,9 @@ export async function getAllArticles(_req: Request, res: Response) {
 			where: { is_deleted: false },
 			include: [
 				{ model: Brand, as: "brand", attributes: ["brand_id", "name", "logo"] },
-				{ model: Promotion, as: "promotions" },
+				{ model: Promotions, as: "promotions" },
 				{ model: ArticleImage, as: "images" },
+				{ model: ArticleRatings, as: "ratings" },
 			],
 		});
 		res.json(articles);
@@ -34,7 +35,7 @@ export async function getOneArticle(req: Request, res: Response) {
 			where: { article_id: id },
 			include: [
 				{ model: Brand, as: "brand", attributes: ["brand_id", "name", "logo"] },
-				{ model: Promotion, as: "promotions" },
+				{ model: Promotions, as: "promotions" },
 				{ model: ArticleImage, as: "images" },
 				{ model: ArticleRatings, as: "ratings" },
 			],
@@ -64,7 +65,7 @@ export async function getOneArticleByName(req: Request, res: Response) {
 			where: { name },
 			include: [
 				{ model: Brand, as: "brand", attributes: ["brand_id", "name", "logo"] },
-				{ model: Promotion, as: "promotions" },
+				{ model: Promotions, as: "promotions" },
 				{ model: ArticleImage, as: "images" },
 				{ model: ArticleRatings, as: "ratings" },
 			],
@@ -94,7 +95,7 @@ export async function getArticlesByType(req: Request, res: Response) {
 			where: whereClause,
 			include: [
 				{ model: Brand, as: "brand", attributes: ["brand_id", "name", "logo"] },
-				{ model: Promotion, as: "promotions" },
+				{ model: Promotions, as: "promotions" },
 				{ model: ArticleImage, as: "images" },
 				{ model: ArticleRatings, as: "ratings" },
 			],
@@ -113,7 +114,7 @@ export async function createArticle(req: Request, res: Response) {
 			type,
 			name,
 			description,
-			reference,
+			// reference,
 			brand_id,
 			price_ttc,
 			stock_quantity,
@@ -123,7 +124,7 @@ export async function createArticle(req: Request, res: Response) {
 			promotions,
 		} = req.body;
 
-		console.log("🟢 createArticle reçu avec ref:", reference);
+		// console.log("🟢 createArticle reçu avec ref:", reference);
 
 		// Vérification des champs obligatoires
 		if (!name || !price_ttc || !brand_id) {
@@ -132,15 +133,25 @@ export async function createArticle(req: Request, res: Response) {
 			});
 		}
 
-		// Vérifier la marque
+		// Vérification de la marque
 		const brand = await Brand.findByPk(brand_id);
 		if (!brand) {
 			return res.status(404).json({ error: "Marque introuvable" });
 		}
 
+		// Vérification de tech_characteristics
+		let parsedCharacteristics = null;
+		if (tech_characteristics) {
+			if (typeof tech_characteristics !== "object") {
+				return res.status(400).json({
+					error: "tech_characteristics doit être un objet JSON",
+				});
+			}
+			parsedCharacteristics = tech_characteristics;
+		}
+
 		// Générer une référence unique
-		let uniqueReference =
-			reference || `REF-${Math.floor(Math.random() * 1000000)}`;
+		let uniqueReference = `REF-${Math.floor(Math.random() * 1000000)}`;
 		while (await Article.findOne({ where: { reference: uniqueReference } })) {
 			uniqueReference = `REF-${Math.floor(Math.random() * 1000000)}`;
 		}
@@ -150,48 +161,53 @@ export async function createArticle(req: Request, res: Response) {
 			type,
 			name,
 			description,
-			reference: uniqueReference, // ✅ corrige l’erreur de doublon
+			reference: uniqueReference,
 			brand_id,
 			price_ttc,
 			stock_quantity,
 			status,
 			shipping_cost,
-			tech_characteristics,
+			tech_characteristics: parsedCharacteristics, // ✅ JSON direct
 			is_deleted: false,
 		});
 
 		// 2️⃣ Créer les promotions si elles existent
 		if (promotions && promotions.length > 0) {
-			await Promise.all(
-				promotions.map((promo: PromotionCreationAttributes) => {
-					const now = new Date();
-					let promoStatus: "active" | "upcoming" | "expired" = "upcoming";
+			for (const promo of promotions) {
+				const existingPromo = await Promotions.findOne({
+					where: { article_id: article.article_id },
+				});
 
-					const startDate = new Date(promo.start_date);
-					const endDate = new Date(promo.end_date);
-
-					if (startDate <= now && endDate >= now) promoStatus = "active";
-					else if (endDate < now) promoStatus = "expired";
-
-					return Promotion.create({
+				if (existingPromo) {
+					await existingPromo.update({
+						name: promo.name ?? existingPromo.name,
+						description: promo.description ?? existingPromo.description,
+						discount_type: promo.discount_type ?? existingPromo.discount_type,
+						discount_value: promo.discount_value,
+						start_date: promo.start_date,
+						end_date: promo.end_date,
+						status: promo.status,
+					});
+				} else {
+					await Promotions.create({
 						article_id: article.article_id,
 						name: promo.name ?? null,
 						description: promo.description ?? null,
 						discount_type: promo.discount_type ?? "%",
 						discount_value: promo.discount_value,
-						start_date: startDate,
-						end_date: endDate,
-						status: promoStatus,
+						start_date: promo.start_date,
+						end_date: promo.end_date,
+						status: promo.status,
 					});
-				}),
-			);
+				}
+			}
 		}
 
 		// Récupérer l'article avec sa marque et promotions
 		const articleWithRelations = await Article.findByPk(article.article_id, {
 			include: [
 				{ model: Brand, as: "brand", attributes: ["brand_id", "name"] },
-				{ model: Promotion, as: "promotions" },
+				{ model: Promotions, as: "promotions" },
 			],
 		});
 
@@ -233,18 +249,32 @@ export async function addImagesArticle(req: Request, res: Response) {
 }
 
 export const createTechRatings = async (req: Request, res: Response) => {
-	console.log("dans le controller createTechRatings");
-
 	try {
 		const articleId = Number(req.params.id);
-		console.log("articleId", articleId);
 		const ratings = req.body;
-		console.log("ratings", ratings);
 
 		const result = await ArticleRatings.create({
 			article_id: articleId,
 			...ratings,
 		});
+		res.status(201).json(result);
+	} catch (err) {
+		console.error(err);
+		res
+			.status(500)
+			.json({ error: "Erreur lors de la création des TechRatings" });
+	}
+};
+
+export const updateTechRatings = async (req: Request, res: Response) => {
+	try {
+		const articleId = Number(req.params.id);
+		const ratings = req.body;
+
+		const result = await ArticleRatings.update(
+			{ ...ratings },
+			{ where: { article_id: articleId } },
+		);
 		res.status(201).json(result);
 	} catch (err) {
 		console.error(err);
@@ -275,7 +305,7 @@ export async function updateArticle(req: Request, res: Response) {
 export async function archiveArticle(req: Request, res: Response) {
 	try {
 		const { id } = req.params;
-
+		console.log("controller archive", id);
 		const article = await Article.findByPk(id);
 		if (!article) {
 			return res.status(404).json({ error: "Article not found" });
@@ -294,6 +324,7 @@ export async function archiveArticle(req: Request, res: Response) {
 export async function restoreArticle(req: Request, res: Response) {
 	try {
 		const { id } = req.params;
+		console.log("controller restore", id);
 		const article = await Article.findByPk(id);
 
 		if (!article) {
@@ -307,5 +338,24 @@ export async function restoreArticle(req: Request, res: Response) {
 	} catch (err) {
 		console.error("❌ Error restoring article:", err);
 		return res.status(500).json({ error: "Internal Server Error" });
+	}
+}
+
+export async function getAllArticlesDeleted(_req: Request, res: Response) {
+	try {
+		const articles = await Article.findAll({
+			where: { is_deleted: true },
+			include: [
+				{ model: Brand, as: "brand", attributes: ["brand_id", "name", "logo"] },
+				{ model: Promotions, as: "promotions" },
+				{ model: ArticleImage, as: "images" },
+				{ model: ArticleRatings, as: "ratings" },
+			],
+		});
+		res.json(articles);
+		console.log(articles);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Internal Server Error" });
 	}
 }

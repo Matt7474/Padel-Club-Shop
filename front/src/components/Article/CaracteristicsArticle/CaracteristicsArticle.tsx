@@ -6,6 +6,28 @@ export default function CaracteristicsArticle({
 	article: Article;
 }) {
 	const characteristics = article.tech_characteristics ?? {};
+
+	const translations: Record<string, string> = {
+		material: "Matériau",
+		color: "Couleur",
+		size: "Taille",
+		weight: "Poids",
+		length: "Longueur",
+		width: "Largeur",
+		height: "Hauteur",
+		brand: "Marque",
+		category: "Catégorie",
+		capacity: "Capacité",
+		durability: "Durabilité",
+		gender: "Genre",
+		foam: "Mousse",
+		level: "Niveau",
+		shape: "Forme",
+	};
+
+	const translateKey = (key: string) =>
+		translations[key] || key.replace(/_/g, " ");
+
 	return (
 		<>
 			<div className="xl:w-full">
@@ -16,16 +38,18 @@ export default function CaracteristicsArticle({
 				{/* Responsive : 1 colonne en mobile, 2 en desktop */}
 				<div className="grid grid-cols-1 xl:grid-cols-2 gap-x-4 gap-y-2 xl:gap-y-6 mt-6 xl:mt-10">
 					{Object.entries(characteristics)
-						.filter(([_, value]) => value && value !== null)
+						.filter(([key, value]) => key !== "fit" && value && value !== null)
 						.map(([key, value]) => (
 							<div
 								key={key}
-								className="flex border border-gray-300 rounded-lg overflow-hidden items-end"
+								className="flex border border-gray-300 h-10 rounded-lg overflow-hidden"
 							>
-								<p className="bg-gray-300 px-3 py-2 w-2/5 font-semibold xl:w-1/2 capitalize">
-									{key.replace(/_/g, " ")}
+								<p className="bg-gray-300 h-full flex items-center px-3 w-2/5 font-semibold xl:w-1/2 capitalize">
+									{translateKey(key)}
 								</p>
-								<p className="px-3 py-2 flex-1">{value}</p>
+								<div className="flex w-1/2 items-center px-2 text-sm">
+									<p>{value}</p>
+								</div>
 							</div>
 						))}
 				</div>

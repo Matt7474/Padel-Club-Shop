@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type Article from "../../../types/Article";
+import ZoomImage from "../../Wrapper/ZoomImage";
 
 export default function ImagesArticle({ article }: { article: Article }) {
 	const BASE_URL = import.meta.env.VITE_API_URL;
@@ -46,10 +47,13 @@ export default function ImagesArticle({ article }: { article: Article }) {
 			</div>
 
 			{/* LAYOUT DESKTOP */}
-			<div className="hidden xl:flex xl:gap-4 xl:w-1/2">
+			<div className="hidden xl:flex xl:gap-0 xl:w-1/2">
 				{/* Petites images à gauche avec scroll vertical */}
 				<div className="xl:flex xl:flex-col xl:gap-2 xl:w-24">
-					<div className="flex flex-col gap-2 max-h-113 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-1">
+					<div
+						className="flex flex-col gap-2 max-h-127 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-1"
+						style={{ scrollbarGutter: "stable" }}
+					>
 						{article.images.map((img) => (
 							<button
 								type="button"
@@ -64,7 +68,7 @@ export default function ImagesArticle({ article }: { article: Article }) {
 								<img
 									src={BASE_URL + img.url}
 									alt={article.name}
-									className="w-20 h-20 object-cover rounded-sm"
+									className="w-22 object-cover aspect-square rounded-sm"
 								/>
 							</button>
 						))}
@@ -73,10 +77,12 @@ export default function ImagesArticle({ article }: { article: Article }) {
 
 				{/* Grande image à droite */}
 				<div className="xl:w-full">
-					<img
+					<ZoomImage
 						src={selectedImage}
 						alt={article.name}
-						className="border border-gray-300 rounded-sm w-full aspect-square"
+						zoom={3}
+						size={180}
+						shape="circle"
 					/>
 				</div>
 			</div>

@@ -7,3 +7,12 @@ export interface Promotion {
 	end_date: string;
 	status?: "active" | "upcoming" | "expired";
 }
+
+export interface Promo {
+	promo_id: number;
+	name: string | null;
+	description: string;
+	start_date: string;
+	end_date: string;
+	status?: "active" | "upcoming" | "expired";
+}

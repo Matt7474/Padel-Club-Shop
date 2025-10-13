@@ -1,32 +1,40 @@
 import { useEffect, useState } from "react";
 import { getArticles } from "../../../api/Article";
-import { getBrands } from "../../../api/Brand";
+import { deleteBrands, getBrands } from "../../../api/Brand";
 import type Article from "../../../types/Article";
 import type { Brand } from "../../../types/Article";
-import Button from "../Tools/Button";
-import Input from "../Tools/Input";
+import ConfirmModal from "../../Modal/ConfirmModal";
+import InfoModal from "../../Modal/InfoModal";
 import { useSortableData } from "../Tools/useSortableData";
 
 export default function BrandList() {
 	const BASE_URL = import.meta.env.VITE_API_URL;
-	const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null);
+
+	// States
+	const [selectedBrand] = useState<Brand | null>(null);
 	const [brands, setBrands] = useState<Brand[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [articles, setArticles] = useState<Article[]>([]);
+	const [showConfirm, setShowConfirm] = useState(false);
+	const [brandToDelete, setBrandToDelete] = useState<number | null>(null);
+	const [showModal, setShowModal] = useState(false);
 
-	// Récupération des marques depuis l'API
+	// Récupération des marques + articles
 	useEffect(() => {
-		const fetchBrands = async () => {
+		const fetchData = async () => {
 			try {
 				const data = await getBrands();
-				const articles = await getArticles();
+				const articlesData = await getArticles();
+
+				// On complète les URLs des logos
 				const dataWithFullLogo = data.map((b: Brand) => ({
 					...b,
 					logo: b.logo ? BASE_URL + b.logo : "/icons/default.svg",
 				}));
+
 				setBrands(dataWithFullLogo);
-				setArticles(articles);
+				setArticles(articlesData);
 			} catch (err: unknown) {
 				if (err instanceof Error) setError(err.message);
 				else setError("Erreur inconnue");
@@ -35,7 +43,7 @@ export default function BrandList() {
 			}
 		};
 
-		fetchBrands();
+		fetchData();
 	}, []);
 
 	// Hook pour le tri
@@ -54,31 +62,47 @@ export default function BrandList() {
 			: undefined;
 	};
 
-	const handleBrandClick = (brand: Brand) => setSelectedBrand(brand);
+	// Suppression d'une marque
+	const handleDelete = (brandId: number) => {
+		// Vérifie si la marque a des articles associés
+		const hasArticles =
+			articles?.some((article) => article.brand.brand_id === brandId) ?? false;
 
-	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (!e.target.files || !selectedBrand) return;
-		const file = e.target.files[0];
-		const reader = new FileReader();
-		reader.onload = () => {
-			if (typeof reader.result === "string") {
-				setSelectedBrand({ ...selectedBrand, logo: reader.result });
-			}
-		};
-		reader.readAsDataURL(file);
+		if (hasArticles) {
+			alert(
+				"⚠️ Impossible de supprimer une marque associée à un ou plusieurs articles !",
+			);
+			return;
+		}
+		setBrandToDelete(brandId);
+		setShowConfirm(true);
 	};
 
-	const handleBrandSubmit = () => {
-		console.log("Marque modifiée :", selectedBrand);
-		setSelectedBrand(null);
+	const confirmDelete = async () => {
+		if (brandToDelete !== null) {
+			await deleteBrands(brandToDelete);
+			const refreshed = await getBrands();
+
+			// Remettre les URL complètes
+			const dataWithFullLogo = refreshed.map((b: Brand) => ({
+				...b,
+				logo: b.logo ? BASE_URL + b.logo : "/icons/default.svg",
+			}));
+
+			setBrands(dataWithFullLogo);
+		}
+		window.dispatchEvent(new Event("brandDelete"));
+		setShowModal(true);
+		setShowConfirm(false);
+		setBrandToDelete(null);
 	};
 
-	const handleDelete = () => {
-		console.log("handleDelete");
+	const cancelDelete = () => {
+		setShowConfirm(false);
+		setBrandToDelete(null);
 	};
 
-	const handleClick = () => setSelectedBrand(null);
-
+	// UI
 	if (loading) return <p>Chargement des marques...</p>;
 	if (error) return <p className="text-red-500">{error}</p>;
 
@@ -90,133 +114,72 @@ export default function BrandList() {
 						Liste des Marques
 					</h2>
 
-					<div className="grid grid-cols-[2fr_3fr_1fr] bg-gray-300 mt-4 mb-2 text-sm">
+					<div className="grid grid-cols-[2fr_2fr_1fr_1fr] h-10 bg-gray-300 mt-4 mb-2 text-sm items-center">
 						<button
 							type="button"
-							className="border-b pl-1 cursor-pointer"
+							className=" pl-1 cursor-pointer"
 							onClick={() => requestSort("name")}
 						>
 							NOM {getClassNamesFor("name")}
 						</button>
-						<p className="border-b text-center cusror-pointer">LOGO</p>
-						<p className="border-b text-center cusror-pointer">NB.ART</p>
+						<p className=" text-center">LOGO</p>
+						<p className=" text-center">NB.ART</p>
+						<p className=" text-center">SUPPR.</p>
 					</div>
 
 					{sortedBrands.map((brand) => (
-						<div key={brand.name}>
-							<button
-								type="button"
-								onClick={() => handleBrandClick(brand)}
-								className="cursor-pointer w-full text-left hover:bg-gray-300"
-							>
-								<div className="grid grid-cols-[2fr_3fr_1fr] items-center">
-									<p className="pl-1 text-center">{brand.name}</p>
+						<div key={brand.brand_id}>
+							<div className="grid grid-cols-[2fr_2fr_1fr_1fr] h-10 items-center">
+								<p className="pl-1 border-x h-8 text-center">{brand.name}</p>
+
+								<div className="border-r h-8">
 									<img
 										src={brand.logo || "/icons/default.svg"}
 										alt={brand.name || "Image par défaut"}
-										className="border-x w-full px-1 h-10"
+										className="h-10 w-full px-1 object-contain"
 									/>
-									<p className="text-center">
+								</div>
+
+								<div className="flex items-center justify-center border-r h-8">
+									<p>
 										{articles.filter((a) => a.brand.name === brand.name).length}
 									</p>
 								</div>
-								<div className="w-full border-b border-gray-200"></div>
-							</button>
+
+								<div className="flex items-center justify-center border-r h-8">
+									<button
+										type="button"
+										onClick={() => handleDelete(brand.brand_id!)}
+									>
+										<img
+											src="/icons/trash.svg"
+											alt="poubelle"
+											className="w-6 cursor-pointer"
+										/>
+									</button>
+								</div>
+							</div>
+							<div className="w-full border-b border-gray-200"></div>
 						</div>
 					))}
 				</div>
 			)}
 
-			{selectedBrand && (
-				<div>
-					<button
-						type="button"
-						onClick={handleClick}
-						className="flex my-4 cursor-pointer"
-					>
-						<img
-							src="/icons/arrow.svg"
-							alt="fleche retour"
-							className="w-4 rotate-180"
-						/>
-						Retour
-					</button>
-
-					<h2 className="p-3 bg-gray-500/80 font-semibold text-lg mt-7 xl:mt-0 flex justify-between">
-						Modification de la marque {selectedBrand.name}
-					</h2>
-
-					<form onSubmit={() => handleBrandSubmit()}>
-						<div className="mt-4 flex flex-col gap-4 xl:flex xl:flex-col xl:items-center ">
-							<div className="xl:w-1/4">
-								<Input
-									htmlFor="brandName"
-									label="Nom de la marque"
-									type="text"
-									value={selectedBrand.name ?? ""}
-									onChange={(val) =>
-										setSelectedBrand({ ...selectedBrand, name: val })
-									}
-								/>
-							</div>
-
-							<div className="relative -mt-4 xl:w-1/4">
-								<input
-									id="file-upload"
-									type="file"
-									accept="image/*"
-									onChange={handleImageChange}
-									className="hidden"
-								/>
-								<label
-									htmlFor="file-upload"
-									className="border mt-4 h-10 flex max-w-[100%] pt-3 pl-3 z-200 w-full cursor-pointer bg-white"
-								>
-									<p className="absolute text-gray-500 text-xs top-4 left-1">
-										Sélectionnez une image
-									</p>
-								</label>
-
-								<button
-									type="button"
-									onClick={() =>
-										document.getElementById("file-upload")?.click()
-									}
-									className="absolute right-1 top-5"
-								>
-									<img
-										src="/icons/add-item.svg"
-										alt="Ajouter un fichier"
-										className="w-8"
-									/>
-								</button>
-							</div>
-
-							<div className="flex justify-center">
-								<img
-									src={selectedBrand.logo || "/icons/default.svg"}
-									alt={selectedBrand.name}
-									className="w-50 border "
-								/>
-							</div>
-						</div>
-
-						<div className="flex justify-between gap-4">
-							<div className="flex-1">
-								<Button type="submit" buttonText="MODIFIER LA MARQUE" />
-							</div>
-							<div>
-								<button type="button" onClick={handleDelete}>
-									<img
-										src="/icons/trash.svg"
-										alt="poubelle"
-										className="w-9 mt-6"
-									/>
-								</button>
-							</div>
-						</div>
-					</form>
-				</div>
+			{showConfirm && (
+				<ConfirmModal
+					onConfirm={confirmDelete}
+					onCancel={cancelDelete}
+					message="⚠️ Voulez-vous vraiment supprimer cette marque ?"
+				/>
+			)}
+			{showModal && (
+				<InfoModal
+					id={1}
+					bg="bg-green-500"
+					text="Marque suprimée avec succès"
+					onClose={() => setShowModal(false)}
+					duration={2000}
+				/>
 			)}
 		</div>
 	);

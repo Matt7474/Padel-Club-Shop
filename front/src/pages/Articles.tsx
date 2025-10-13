@@ -18,27 +18,20 @@ export default function Articles({
 }: ArticlesProps) {
 	const [articles, setArticles] = useState<Article[]>([]);
 	const now = new Date();
-	console.log(articles);
 
 	useEffect(() => {
 		const fetchArticles = async () => {
 			try {
-				if (type) {
-					const res = await getArticlesType(type);
-					setArticles(res);
-				} else {
-					const res = await getArticlesType();
-					setArticles(res);
-				}
+				const res = await getArticlesType(type || "");
+				setArticles(res);
 			} catch (err) {
 				console.error("Erreur fetching articles:", err);
 			}
 		};
-
 		fetchArticles();
 	}, [type]);
 
-	// Filtrage côté front pour recherche ou promos
+	// --- Filtrage côté front ---
 	let filteredArticles = articles;
 
 	if (searchQuery) {
@@ -60,17 +53,48 @@ export default function Articles({
 		);
 	}
 
-	// Breadcrumb
+	// --- Dictionnaire de traduction ---
+	const translations: Record<string, string> = {
+		home: "Accueil",
+		racket: "Raquette",
+		rackets: "Raquettes",
+		bag: "Sac",
+		bags: "Sacs",
+		ball: "Balle",
+		balls: "Balles",
+		clothing: "Vêtement",
+		clothings: "Vêtements",
+		shoes: "Chaussure",
+		shoess: "Chaussures",
+		accessory: "Accessoire",
+		accessorys: "Accessoires",
+		brand: "Marque",
+		brands: "Marques",
+		articles: "Articles",
+		promotions: "Promotions",
+		search: "Recherche",
+	};
+
+	// --- Fonction de traduction ---
+	const translateKey = (key: string) => {
+		const cleanKey = key
+			.toLowerCase()
+			.replace(/\(s\)/g, "s")
+			.replace(/[^a-z]/g, "");
+		return translations[cleanKey] || key;
+	};
+
+	// --- Breadcrumb ---
 	const breadcrumbItems = [
-		{ label: "Accueil", href: "/" },
+		{ label: "home", href: "/" },
 		{
 			label: showPromos
-				? "Promotions"
+				? "promotions"
 				: searchQuery
-					? `Recherche`
+					? "search"
 					: type
-						? `${type.charAt(0).toUpperCase() + type.slice(1)}(s)`
-						: "",
+						? type
+						: "articles",
 			href: showPromos
 				? "/articles/promotions"
 				: searchQuery
@@ -87,13 +111,15 @@ export default function Articles({
 			<div className="mt-4">
 				<h1 className="text-xl font-bold mb-4">
 					{filteredArticles.length}{" "}
-					{searchQuery
-						? `résultat(s) pour "${searchQuery}"`
-						: showPromos
-							? "Promotions"
-							: type
-								? `${type}(s) disponibles`
-								: "Articles disponibles"}
+					{searchQuery ? (
+						<>résultat(s) pour "{searchQuery}"</>
+					) : showPromos ? (
+						"Promotions disponibles"
+					) : type ? (
+						<>{translateKey(type)}(s) disponibles</>
+					) : (
+						"Articles disponibles"
+					)}
 				</h1>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

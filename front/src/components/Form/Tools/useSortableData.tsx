@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 
 type SortDirection = "asc" | "desc";
 
@@ -25,12 +25,22 @@ export function useSortableData<T>(
 			const aValue = a[key];
 			const bValue = b[key];
 
+			// ✅ string
 			if (typeof aValue === "string" && typeof bValue === "string") {
+				// vérifier si c’est une date
+				const dateA = Date.parse(aValue);
+				const dateB = Date.parse(bValue);
+
+				if (!Number.isNaN(dateA) && !Number.isNaN(dateB)) {
+					return direction === "asc" ? dateA - dateB : dateB - dateA;
+				}
+
 				return direction === "asc"
 					? aValue.localeCompare(bValue)
 					: bValue.localeCompare(aValue);
 			}
 
+			// ✅ number
 			if (typeof aValue === "number" && typeof bValue === "number") {
 				return direction === "asc" ? aValue - bValue : bValue - aValue;
 			}

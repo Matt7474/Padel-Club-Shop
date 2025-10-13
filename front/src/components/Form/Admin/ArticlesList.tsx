@@ -1,40 +1,64 @@
 import { useEffect, useState } from "react";
-import { getArticles } from "../../../api/Article";
+import { getArticles, getArticlesDeleted } from "../../../api/Article";
 import type Article from "../../../types/Article";
-import type { Brand } from "../../../types/Article";
 import { useSortableData } from "../Tools/useSortableData";
 import ArticleDetails from "./ArticleDetails";
+import CreateArticle from "./CreateArticle";
 
-type ArticleWithBrandName = Article & { brandName: Brand };
+// Type unique pour le tri
+type ArticleSortable = Article & {
+	brandName?: string; // pour trier par marque
+	promoActive?: number; // pour trier par promo active
+};
 
 export default function ArticlesList() {
-	const [articles, setArticles] = useState<ArticleWithBrandName[]>([]);
+	const API_URL = import.meta.env.VITE_API_URL;
+
+	const [articles, setArticles] = useState<Article[]>([]);
+	const [deletedArticles, setDeletedArticles] = useState<Article[]>([]);
+	const [isChecked, setIsChecked] = useState(false);
 	const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
-	// Récupération des articles depuis l’API
+	// Articles normaux
 	useEffect(() => {
 		getArticles()
-			.then((data) => {
-				const articlesWithBrandName = data.map((a) => ({
-					...a,
-					brandName: a.brand || "Sans marque",
-				}));
-				setArticles(articlesWithBrandName);
-			})
+			.then((data) => setArticles(data))
 			.catch((err) => console.error("Erreur API Articles:", err));
 	}, []);
+
+	// Articles supprimés
+	useEffect(() => {
+		if (isChecked) {
+			getArticlesDeleted()
+				.then((data) => setDeletedArticles(data))
+				.catch((err) => console.error("Erreur API Articles:", err));
+		} else {
+			setDeletedArticles([]);
+		}
+	}, [isChecked]);
 
 	const handleArticleClick = (article: Article) => {
 		setSelectedArticle(article);
 	};
 
+	// Liste courante
+	const currentArticles = isChecked ? deletedArticles : articles;
+
+	// Ajouter les champs calculés pour le tri
+	const articlesForSort: ArticleSortable[] = currentArticles.map((a) => ({
+		...a,
+		brandName: a.brand?.name || "Sans marque",
+		promoActive: a.promotions?.some((p) => p.status === "active") ? 1 : 0,
+	}));
+
+	// Hook de tri
 	const {
 		items: sortedArticles,
 		requestSort,
 		sortConfig,
-	} = useSortableData(articles);
+	} = useSortableData<ArticleSortable>(articlesForSort);
 
-	const getClassNamesFor = (name: keyof Article) => {
+	const getClassNamesFor = (name: keyof ArticleSortable) => {
 		if (!sortConfig) return;
 		return sortConfig.key === name
 			? sortConfig.direction === "asc"
@@ -43,60 +67,118 @@ export default function ArticlesList() {
 			: undefined;
 	};
 
+	const refreshArticles = async () => {
+		try {
+			const data = await getArticles();
+			setArticles(data);
+		} catch (err) {
+			console.error("Erreur API Articles:", err);
+		}
+	};
+
 	if (selectedArticle) {
-		return <ArticleDetails article={selectedArticle} />;
+		return (
+			<CreateArticle
+				title={"Modifier l'article"}
+				buttonText={"MODIFIER L'ARTICLE"}
+				article={selectedArticle}
+				mode="edit"
+				onReturn={() => setSelectedArticle(null)}
+				onUpdated={refreshArticles}
+			/>
+		);
 	}
 
 	return (
 		<div>
-			<h2 className="p-3 bg-gray-500/80 font-semibold text-lg mt-7 xl:mt-0 flex justify-between">
-				Liste des Articles
-			</h2>
-			<div className="grid grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr] xl:grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr] bg-gray-300 mt-4 mb-2">
-				<button
-					type="button"
-					className="text-xs border-b pl-1 cursor-pointer"
-					onClick={() => requestSort("images")}
-				>
-					IMAGE {getClassNamesFor("images")}
+			<div className="p-3 bg-gray-500/80 font-semibold text-lg mt-7 xl:mt-0 flex justify-between items-center">
+				<div className="">
+					<h2 className="">Liste des Articles</h2>
+				</div>
+				<div className="w-1/2 text-end">
+					<label htmlFor="articleDeleted">
+						Voir les articles archivé ?
+						<input
+							type="checkbox"
+							id="articleDeleted"
+							className="ml-2"
+							checked={isChecked}
+							onChange={() => setIsChecked((prev) => !prev)}
+						/>
+					</label>
+				</div>
+			</div>
+
+			{/* Header colonnes */}
+			<div className="grid grid-cols-[2fr_5fr_3fr_3fr_2fr_1fr] h-10 xl:grid-cols-[1fr_2fr_5fr_1fr_1fr_1fr_1fr_1fr] bg-gray-300 mt-4 mb-2 items-center">
+				<button type="button" className="text-xs  cursor-pointer">
+					IMAGE
 				</button>
 				<button
 					type="button"
-					className="text-xs border-b pl-1 cursor-pointer"
+					className="text-xs  cursor-pointer"
 					onClick={() => requestSort("name")}
 				>
 					NOM {getClassNamesFor("name")}
 				</button>
 				<button
 					type="button"
-					className="text-xs border-b pl-1 cursor-pointer"
+					className="text-xs  cursor-pointer hidden xl:block"
+					onClick={() => requestSort("description")}
+				>
+					DESCRIPTION {getClassNamesFor("description")}
+				</button>
+				<button
+					type="button"
+					className="text-xs  cursor-pointer"
 					onClick={() => requestSort("brandName")}
 				>
 					MARQUE {getClassNamesFor("brand")}
 				</button>
 				<button
 					type="button"
-					className="text-xs border-b pl-1 cursor-pointer"
+					className="text-xs  cursor-pointer"
 					onClick={() => requestSort("reference")}
 				>
 					REF {getClassNamesFor("reference")}
 				</button>
 				<button
 					type="button"
-					className="text-xs border-b pl-1 cursor-pointer"
+					className="text-xs pr-1 cursor-pointer"
 					onClick={() => requestSort("type")}
 				>
 					TYPE {getClassNamesFor("type")}
 				</button>
 				<button
 					type="button"
-					className="text-xs border-b pl-1 cursor-pointer"
-					onClick={() => requestSort("status")}
+					className="text-xs pr-1 cursor-pointer hidden xl:block"
+					onClick={() => requestSort("promoActive")}
 				>
-					DIS {getClassNamesFor("status")}
+					PROMO ? {getClassNamesFor("promoActive")}
 				</button>
+				<div>
+					<div>
+						<button
+							type="button"
+							className="text-xs cursor-pointer xl:hidden"
+							onClick={() => requestSort("status")}
+						>
+							DIS {getClassNamesFor("status")}
+						</button>
+					</div>
+					<div>
+						<button
+							type="button"
+							className="text-xs pl-1 cursor-pointer hidden xl:block"
+							onClick={() => requestSort("status")}
+						>
+							DISPONIBILITE {getClassNamesFor("status")}
+						</button>
+					</div>
+				</div>
 			</div>
 
+			{/* Liste d’articles */}
 			{sortedArticles.map((article) => (
 				<div key={article.article_id}>
 					<button
@@ -104,28 +186,75 @@ export default function ArticlesList() {
 						onClick={() => handleArticleClick(article)}
 						className="cursor-pointer w-full text-left hover:bg-gray-300"
 					>
-						<div className="grid grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr] xl:grid-cols-[2fr_3fr_3fr_3fr_2fr_1fr] xl:text-center">
-							<img
-								src={article.images?.[0].url || "/icons/default.svg"}
-								alt={article.name || "Image par défaut"}
-								className=" px-1 py-1 w-12 mx-auto"
-							/>
-							<p className="border-x px-1 py-1 text-xs">{article.name}</p>
-							<p className="border-r px-1 py-1 text-xs truncate">
+						<div className="grid grid-cols-[2fr_5fr_3fr_3fr_2fr_1fr] h-10 items-center xl:grid-cols-[1fr_2fr_5fr_1fr_1fr_1fr_1fr_1fr] xl:text-center">
+							<div className="border-x">
+								<img
+									src={
+										`${API_URL}${article.images?.[0]?.url}` ||
+										"/icons/default.svg"
+									}
+									alt={article.name || "Image par défaut"}
+									className="mx-auto px-1 w-8 h-8"
+								/>
+							</div>
+							<p className="border-r px-1 h-8 flex items-center justify-start xl:justify-center text-xs">
+								{article.name}
+							</p>
+							<p className="border-r px-1 h-8 text-xs text-start hidden xl:flex items-center">
+								{article.description
+									? article.description.split(" ").slice(0, 20).join(" ") +
+										"..."
+									: ""}
+							</p>
+							<p className="border-r px-1 h-8 flex items-center justify-center text-xs truncate">
 								{article.brand?.name}
 							</p>
-							<p className="border-r px-1 py-1 text-xs truncate">
+							<p className="border-r px-1 h-8 flex items-center justify-center text-xs truncate">
 								{article.reference}
 							</p>
-							<p className="border-r px-1 py-1 text-xs truncate">
+							<p className="border-r px-1 h-8 flex items-center text-start xl:justify-center text-xs truncate">
 								{article.type}
 							</p>
-							<div
-								className={`w-4 h-4 rounded-full mx-auto my-1
-                  ${article.status === "available" ? "bg-green-500" : ""}
-                  ${article.status === "preorder" ? "bg-blue-500" : ""}
-                  ${article.status === "out_of_stock" ? "bg-red-500" : ""}`}
-							/>
+							<div className="border-r px-1 h-8 hidden xl:flex">
+								<div className="flex items-center justify-center h-full w-full">
+									{article.promotions && article.promotions.length > 0 ? (
+										<div className="h-5 w-5 rounded-full bg-green-500"></div>
+									) : (
+										<div className="h-5 w-5 rounded-full bg-red-500"></div>
+									)}
+								</div>
+							</div>
+							<div>
+								<div className="border-r px-1 text-xs truncate flex justify-center items-center">
+									{article.status === "available" && (
+										<div>
+											<span className="px-2 py-1 text-white text-xs rounded-full bg-green-500 xl:hidden" />
+
+											<span className="px-2 py-1 text-white text-xs rounded-full bg-green-500 hidden xl:block">
+												Disponible
+											</span>
+										</div>
+									)}
+									{article.status === "preorder" && (
+										<div>
+											<span className="px-2 py-1 text-white text-xs rounded-full bg-blue-500 xl:hidden" />
+
+											<span className="px-2 py-1 text-white text-xs rounded-full bg-blue-500 hidden xl:block">
+												Commande
+											</span>
+										</div>
+									)}
+									{article.status === "out_of_stock" && (
+										<div>
+											<span className="px-2 py-1 text-white text-xs rounded-full bg-red-500 xl:hidden" />
+
+											<span className="px-2 py-1 text-white text-xs rounded-full bg-red-500 hidden xl:block">
+												Rupture
+											</span>
+										</div>
+									)}
+								</div>
+							</div>
 						</div>
 						<div className="w-full border-b border-gray-200"></div>
 					</button>

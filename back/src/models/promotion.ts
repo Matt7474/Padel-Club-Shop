@@ -10,11 +10,8 @@ export class Promotion
 	implements PromotionAttributes
 {
 	public promo_id!: number;
-	public article_id!: number;
 	public name!: string | null;
 	public description!: string | null;
-	public discount_type!: "amount" | "%";
-	public discount_value!: number;
 	public start_date!: string | Date;
 	public end_date!: string | Date;
 	public status?: "active" | "upcoming" | "expired";
@@ -31,15 +28,6 @@ Promotion.init(
 			autoIncrement: true,
 			primaryKey: true,
 		},
-		article_id: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			references: {
-				model: "articles",
-				key: "article_id",
-			},
-			onDelete: "CASCADE",
-		},
 		name: {
 			type: DataTypes.TEXT,
 			allowNull: true,
@@ -47,15 +35,6 @@ Promotion.init(
 		description: {
 			type: DataTypes.TEXT,
 			allowNull: true,
-		},
-		discount_type: {
-			type: DataTypes.ENUM("amount", "percent"),
-			allowNull: false,
-			defaultValue: "percent",
-		},
-		discount_value: {
-			type: DataTypes.DECIMAL(10, 2),
-			allowNull: false,
 		},
 		start_date: {
 			type: DataTypes.DATE,
@@ -71,7 +50,7 @@ Promotion.init(
 		},
 	},
 	{
-		tableName: "promotions",
+		tableName: "promotion",
 		sequelize,
 		timestamps: true,
 		createdAt: "created_at",

@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: <explanation> */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { getArticleByName } from "../api/Article";
@@ -20,6 +22,8 @@ export default function Article() {
 		stateArticle || null,
 	);
 	const [loading, setLoading] = useState(!stateArticle);
+
+	const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (stateArticle) return;
@@ -53,7 +57,52 @@ export default function Article() {
 			{/* LAYOUT MOBILE */}
 			<div className="xl:hidden mt-6">
 				<ImagesArticle article={article} />
-				<PriceArticle article={article} />
+				<div>
+					{(article.type === "clothing" || article.type === "shoes") &&
+						article.tech_characteristics?.fit && (
+							<div className="mb-6 mt-6 xl:mt-0">
+								<h3 className="font-semibold text-md mb-2">
+									Tailles disponibles
+								</h3>
+								<div className="flex flex-wrap gap-2">
+									{article.tech_characteristics.fit
+										.split(",")
+										.map((sizeStr) => {
+											const [size, qty] = sizeStr.split(":");
+											const isSelected = selectedSize === size;
+
+											return (
+												<div
+													key={size}
+													onClick={() =>
+														Number(qty) > 0 && setSelectedSize(size)
+													} // seulement clickable si qty > 0
+													className={
+														Number(qty) === 0
+															? "pointer-events-none opacity-50"
+															: ""
+													}
+												>
+													<div
+														className={`border px-2 py-1 rounded-md flex flex-col text-xs items-center 
+														${Number(qty) === 0 ? "bg-gray-100 bg-[repeating-linear-gradient(45deg,#e5e7eb,#e5e7eb_10px,#f9fafb_10px,#f9fafb_15px)] cursor-not-allowed" : "cursor-pointer"}
+														${isSelected && Number(qty) > 0 ? "bg-gray-300" : Number(qty) > 0 ? "hover:bg-gray-300" : ""}`}
+													>
+														<span className="font-semibold h-5 w-7 flex justify-center items-center">
+															{size}
+														</span>
+														{Number(qty) === 0 && (
+															<span className="text-[10px] text-red-500" />
+														)}
+													</div>
+												</div>
+											);
+										})}
+								</div>
+							</div>
+						)}
+				</div>
+				<PriceArticle article={article} selectedSize={selectedSize} />
 				<p className="font-semibold text-lg mt-6">{article.name}</p>
 				<p className="text-sm">{article.reference}</p>
 				{article.ratings && Object.keys(article.ratings).length > 0 && (
@@ -111,13 +160,65 @@ export default function Article() {
 									{article.description}
 								</p>
 							</div>
-							<PriceArticle article={article} />
+							<div className="flex flex-col justify-between">
+								<div>
+									{(article.type === "clothing" || article.type === "shoes") &&
+										article.tech_characteristics?.fit && (
+											<div className="mb-6">
+												<h3 className="font-semibold text-md mb-2">
+													Tailles disponibles
+												</h3>
+												<div className=" grid grid-cols-10 gap-4">
+													{article.tech_characteristics.fit
+														.split(",")
+														.map((sizeStr) => {
+															const [size, qty] = sizeStr.split(":");
+															const isSelected = selectedSize === size;
+
+															return (
+																<div
+																	key={size}
+																	onClick={() =>
+																		Number(qty) > 0 && setSelectedSize(size)
+																	} // seulement clickable si qty > 0
+																	className={
+																		Number(qty) === 0
+																			? "pointer-events-none opacity-50"
+																			: ""
+																	}
+																>
+																	<div
+																		className={`border px-2 py-1 rounded-md flex flex-col text-xs items-center 
+																		${Number(qty) === 0 ? "bg-gray-100 bg-[repeating-linear-gradient(45deg,#e5e7eb,#e5e7eb_10px,#f9fafb_10px,#f9fafb_15px)] cursor-not-allowed" : "cursor-pointer"}
+																		${isSelected && Number(qty) > 0 ? "bg-gray-300" : Number(qty) > 0 ? "hover:bg-gray-300" : ""}`}
+																	>
+																		<span className="font-semibold h-5 w-7 flex justify-center items-center">
+																			{size}
+																		</span>
+																		{Number(qty) === 0 && (
+																			<span className="text-[10px] text-red-500" />
+																		)}
+																		<span className=" h-5 w-7 flex justify-center items-center text-[8px] text-red-500">
+																			{size.length} dispo
+																		</span>
+																	</div>
+																</div>
+															);
+														})}
+												</div>
+											</div>
+										)}
+								</div>
+								<div className="-mt-4">
+									<PriceArticle article={article} selectedSize={selectedSize} />
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 
 				<div className="hidden xl:flex justify-center gap-6 xl:mt-6">
-					<RatingArticle article={article} />
+					{article.type === "racket" && <RatingArticle article={article} />}
 					<div className="w-1/2">
 						<h3 className="font-semibold text-lg mb-4 xl:text-center xl:mt-10">
 							Caractéristiques

@@ -6,15 +6,19 @@ import CreateBrand from "../components/Form/Admin/CreateBrand";
 import OrderList from "../components/Form/Admin/OrderList";
 import UserList from "../components/Form/Admin/UsersList";
 import Select from "../components/Form/Tools/Select";
+import CreatePromo from "../components/Form/Admin/CreatePromo";
+import PromoList from "../components/Form/Admin/PromoList";
 
 export default function AdminMenu() {
 	const [menuSelected, setMenuSelected] = useState("");
 
 	const menuOptions = [
 		"Ajouter un article",
-		"Ajouter une marque",
 		"Liste des articles",
+		"Ajouter une marque",
 		"Liste des marques",
+		"Ajouter une promotion",
+		"Liste des promotions",
 		"Liste des utilisateurs",
 		"Voir les commandes",
 	];
@@ -23,7 +27,7 @@ export default function AdminMenu() {
 		<>
 			<div className="relative">
 				<h2 className="p-3 bg-orange-500/80 font-semibold text-lg mt-7 xl:mt-0 xl:mb-4 flex justify-between">
-					MENU ADMINASTRATEUR
+					MENU ADMINISTRATEUR
 				</h2>
 				{/* menu déroulant en version mobile */}
 				<div className="xl:hidden cursor-pointer">
@@ -53,25 +57,17 @@ export default function AdminMenu() {
 						</button>
 					))}
 				</div>
+
+				{/* Articles */}
 				{/* Ajouter un article */}
 				{menuSelected === "Ajouter un article" && (
 					<div>
 						<CreateArticle
-							title={"Création d'un article"}
+							title="Création d'un article"
 							buttonText="AJOUTER L'ARTICLE"
+							mode="create"
+							onReturn={() => setMenuSelected("Liste des articles")}
 						/>
-					</div>
-				)}
-				{/* Ajouter une marque */}
-				{menuSelected === "Ajouter une marque" && (
-					<div>
-						<CreateBrand />
-					</div>
-				)}
-				{/* Liste des utilisateurs */}
-				{menuSelected === "Liste des utilisateurs" && (
-					<div>
-						<UserList />
 					</div>
 				)}
 				{/* Liste des articles */}
@@ -80,12 +76,46 @@ export default function AdminMenu() {
 						<ArticlesList />
 					</div>
 				)}
+
+				{/* Marques */}
+				{/* Ajouter une marque */}
+				{menuSelected === "Ajouter une marque" && (
+					<div>
+						<CreateBrand />
+					</div>
+				)}
 				{/* Liste des marques */}
 				{menuSelected === "Liste des marques" && (
 					<div>
 						<BrandList />
 					</div>
 				)}
+
+				{/* Promotions */}
+				{/* Ajouter une promotion */}
+				{menuSelected === "Ajouter une promotion" && (
+					<div>
+						<CreatePromo setMenuSelected={setMenuSelected} />
+					</div>
+				)}
+				{/* Liste des promotions */}
+				{menuSelected === "Liste des promotions" && (
+					<div>
+						<div>
+							<PromoList setMenuSelected={setMenuSelected} />
+						</div>
+					</div>
+				)}
+
+				{/* Utlisateurs */}
+				{/* Liste des utilisateurs */}
+				{menuSelected === "Liste des utilisateurs" && (
+					<div>
+						<UserList />
+					</div>
+				)}
+
+				{/* Commandes */}
 				{/*	Voir les commandes */}
 				{menuSelected === "Voir les commandes" && (
 					<div>

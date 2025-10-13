@@ -4,6 +4,7 @@ interface SelectProps<T extends string | number> {
 	options: T[];
 	labels?: string[];
 	onChange: (value: T) => void;
+	disabled?: boolean;
 }
 
 export default function Select<T extends string | number>({
@@ -12,23 +13,26 @@ export default function Select<T extends string | number>({
 	options,
 	labels,
 	onChange,
+	disabled,
 }: SelectProps<T>) {
 	return (
 		<div className="relative">
 			<select
-				value={value}
+				value={String(value ?? "")}
 				onChange={(e) => {
 					const raw = e.target.value;
-					// Si les options sont number[], on cast en number
 					const val = (typeof options[0] === "number" ? Number(raw) : raw) as T;
 					onChange(val);
 				}}
-				className="border mt-4 h-10 pt-3 pl-2 w-full bg-white cursor-pointer"
+				className={`border mt-4 h-10 pt-3 pl-1 w-full bg-white cursor-pointer ${
+					disabled ? "opacity-50 cursor-not-allowed" : ""
+				}`}
+				disabled={disabled}
 				required
 			>
-				<option value="" className="text-gray-500"></option>
+				<option value=""></option>
 				{options.map((option, idx) => (
-					<option key={option} value={option}>
+					<option key={option} value={String(option)}>
 						{labels?.[idx] || option}
 					</option>
 				))}

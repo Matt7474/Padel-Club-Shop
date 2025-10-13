@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function Homepage() {
 	return (
 		<>
-			<div>
+			<div className="xl:w-9/10 xl:flex xl:flex-col xl:justify-self-center">
 				<p className="xl:ml-30 mt-6 text-2xl font-semibold">NOS CATEGORIES</p>
 
 				<div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-3 mt-5 2xl:mx-30">
@@ -18,7 +18,7 @@ export default function Homepage() {
 							alt="raquettes"
 							className="max-w-full max-h-full object-contain"
 						/>
-						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
+						<p className="absolute text-white text-2xl font-bold hidden group-hover:block z-10">
 							RAQUETTES
 						</p>
 					</Link>
@@ -34,7 +34,7 @@ export default function Homepage() {
 							alt="vetements"
 							className="max-w-full max-h-full object-contain"
 						/>
-						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
+						<p className="absolute text-white text-2xl font-bold hidden group-hover:block z-10">
 							VÊTEMENTS
 						</p>
 					</Link>
@@ -50,7 +50,7 @@ export default function Homepage() {
 							alt="sacs"
 							className="max-w-full max-h-full object-contain"
 						/>
-						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
+						<p className="absolute text-white text-2xl font-bold hidden group-hover:block z-10">
 							SACS
 						</p>
 					</Link>
@@ -66,7 +66,7 @@ export default function Homepage() {
 							alt="accessoires"
 							className="max-w-full max-h-full object-contain"
 						/>
-						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
+						<p className="absolute text-white text-2xl font-bold hidden group-hover:block z-10">
 							ACCESSOIRES
 						</p>
 					</Link>
@@ -82,7 +82,7 @@ export default function Homepage() {
 							alt="balles"
 							className="max-w-full max-h-full object-contain p-8"
 						/>
-						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
+						<p className="absolute text-white text-2xl font-bold hidden group-hover:block z-10">
 							BALLES
 						</p>
 					</Link>
@@ -98,7 +98,7 @@ export default function Homepage() {
 							alt="chaussures"
 							className="max-w-full max-h-full object-contain"
 						/>
-						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
+						<p className="absolute text-white text-2xl font-bold hidden group-hover:block z-10">
 							CHAUSSURES
 						</p>
 					</Link>
@@ -114,7 +114,7 @@ export default function Homepage() {
 							alt="promotions"
 							className="max-w-full max-h-full object-contain"
 						/>
-						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
+						<p className="absolute text-white text-2xl font-bold hidden group-hover:block z-10">
 							PROMOTIONS
 						</p>
 					</Link>
@@ -129,7 +129,7 @@ export default function Homepage() {
 							alt="promotions"
 							className="max-w-full max-h-full object-contain"
 						/>
-						<p className="absolute text-white text-3xl font-bold hidden group-hover:block z-10">
+						<p className="absolute text-white text-2xl font-bold hidden group-hover:block z-10">
 							PROMOTIONS
 						</p>
 					</Link> */}

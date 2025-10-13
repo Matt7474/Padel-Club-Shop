@@ -3,7 +3,13 @@ import { useCartStore } from "../../../store/cartStore";
 import type Article from "../../../types/Article";
 import InfoModal from "../../Modal/InfoModal";
 
-export default function PriceArticle({ article }: { article: Article }) {
+export default function PriceArticle({
+	article,
+	selectedSize,
+}: {
+	article: Article;
+	selectedSize?: string | null;
+}) {
 	const addToCart = useCartStore((state) => state.addToCart);
 	const [quantity, setQuantity] = useState(1);
 	const increment = () => setQuantity((prev) => prev + 1);
@@ -11,6 +17,7 @@ export default function PriceArticle({ article }: { article: Article }) {
 	const [infoModal, setInfoModal] = useState<{ id: number; text: string }[]>(
 		[],
 	);
+	const [alert, setAlert] = useState<boolean>();
 
 	let displayPrice: number = article.price_ttc;
 
@@ -48,6 +55,31 @@ export default function PriceArticle({ article }: { article: Article }) {
 		: "/icons/default.svg";
 
 	const addOnCart = () => {
+		const needsSize =
+			(article.type === "clothing" || article.type === "shoes") &&
+			article.tech_characteristics?.fit &&
+			article.tech_characteristics?.fit.length > 1;
+
+		if (needsSize && !selectedSize) {
+			const id = Date.now();
+			setInfoModal((prev) => [
+				...prev,
+				{ id, text: "Veuillez sélectionner une taille !" },
+			]);
+			setAlert(true);
+			return;
+		}
+
+		if (!selectedSize && article.type === "clothing") {
+			const id = Date.now();
+			setInfoModal((prev) => [
+				...prev,
+				{ id, text: "Veuillez sélectionner une taille !" },
+			]);
+			setAlert(true);
+			return;
+		}
+
 		addToCart({
 			id: article.article_id.toString(),
 			name: article.name,
@@ -56,6 +88,7 @@ export default function PriceArticle({ article }: { article: Article }) {
 			image: firstImageUrl,
 			type: article.type,
 			quantity: quantity,
+			size: selectedSize ?? undefined,
 		});
 
 		const id = Date.now();
@@ -72,7 +105,7 @@ export default function PriceArticle({ article }: { article: Article }) {
 	return (
 		<>
 			<div>
-				<div className="flex mt-6 xl:flex-col">
+				<div className="flex mt-6 xl:flex-col xl:mt-0">
 					<div className="flex flex-col w-1/2 justify-end">
 						{/* Partie promo */}
 						<div>
@@ -108,7 +141,7 @@ export default function PriceArticle({ article }: { article: Article }) {
 					</div>
 
 					{/* Partie quantité */}
-					<div className="w-1/2 flex flex-col items-end xl:items-start xl:mt-3 -mt-1">
+					<div className="w-1/2 flex flex-col items-end xl:items-start xl:mt-1 -mt-1 ">
 						<p className="font-semibold">Quantité</p>
 						<div className="inline-flex items-center border rounded-lg overflow-hidden">
 							<button
@@ -133,13 +166,20 @@ export default function PriceArticle({ article }: { article: Article }) {
 						</div>
 					</div>
 				</div>
-				<button
-					type="button"
-					className="bg-amber-300 rounded-lg mt-3 py-2 w-full font-semibold cursor-pointer hover:brightness-80"
-					onClick={addOnCart}
-				>
-					Ajouter au panier
-				</button>
+				<div className="relative">
+					<button
+						type="button"
+						className="bg-amber-300 rounded-lg mt-3 py-2 w-full font-semibold cursor-pointer hover:brightness-80"
+						onClick={addOnCart}
+					>
+						Ajouter au panier
+					</button>
+					{alert && selectedSize === null && (
+						<span className="text-red-500 absolute left-1/2 transform -translate-x-1/2 mt-13">
+							Veuillez sélectionner une taille !
+						</span>
+					)}
+				</div>
 			</div>
 
 			{/* infoModal */}

@@ -26,7 +26,6 @@ export const createBrand = async (
 
 export async function getBrands(): Promise<Brand[]> {
 	try {
-		// const token = getAuthToken();
 		const res = await axios.get(`${API_URL}/brands/`);
 
 		return res.data;
@@ -37,5 +36,32 @@ export async function getBrands(): Promise<Brand[]> {
 			);
 		}
 		throw new Error("❌ Erreur inconnue lors de la requête");
+	}
+}
+
+export async function updateBrand(id: number, brand: Partial<Brand>) {
+	try {
+		const res = await axios.patch(`${API_URL}/brands/${id}`, brand);
+		return res.data;
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			throw new Error(
+				`❌ Erreur API: ${err.response?.status} ${err.response?.statusText}`,
+			);
+		}
+		throw new Error("❌ Erreur inconnue lors de la mise à jour de la marque");
+	}
+}
+
+export async function deleteBrands(brandId: number): Promise<void> {
+	try {
+		await axios.delete(`${API_URL}/brands/${brandId}`);
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			throw new Error(
+				`❌ Erreur API: ${err.response?.status} ${err.response?.statusText}`,
+			);
+		}
+		throw new Error("❌ Erreur inconnue lors de la suppression");
 	}
 }

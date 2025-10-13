@@ -24,7 +24,7 @@ export interface TechCharacteristics {
 	shape?: string;
 	foam?: string;
 	surface?: string;
-	skill_level?: string;
+	level?: string;
 
 	[key: string]: string | undefined; // autorise d'autres clés optionnelles
 }
@@ -52,6 +52,7 @@ export interface TechRatings {
 
 // ---------- Promotion ----------
 export interface Promotion {
+	promo_id: number;
 	promotion_id: number;
 	name: string;
 	description: string;
@@ -81,6 +82,7 @@ export default interface Article {
 	reference: string;
 	brand: Brand;
 	images: ArticleImage[];
+	is_deleted?: boolean;
 	price_ttc: number;
 	stock_quantity: number | Record<string, number | undefined>;
 	status: "available" | "out_of_stock" | "preorder" | string;
@@ -107,14 +109,15 @@ export interface ArticleImage {
 export interface NewArticle {
 	type: string;
 	name: string;
-	reference: string;
+	reference?: string;
 	description?: string;
-	brand_id: number;
+	brand_id?: number;
 	price_ttc: number;
 	stock_quantity?: number;
 	status?: "available" | "preorder" | "out_of_stock";
 	shipping_cost?: number;
-	tech_characteristics?: TechCharacteristics;
+	tech_characteristics?: Record<string, any>;
+	tech_ratings?: Record<string, number>; // <- facultatif, juste un objet
 	promotions?: NewPromotion[];
 }
 
@@ -142,6 +145,7 @@ export interface ArticleFormState {
 
 // ---------- Promo Article ----------
 export interface NewPromotion {
+	promo_id?: NewPromotion;
 	name?: string;
 	description?: string;
 	discount_type: "percentage" | "amount" | string;

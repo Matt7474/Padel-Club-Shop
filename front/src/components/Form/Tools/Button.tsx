@@ -7,15 +7,13 @@ interface buttonProps {
 export default function Button({ type, onClick, buttonText }: buttonProps) {
 	return (
 		<>
-			<div>
-				<button
-					type={type}
-					onClick={onClick}
-					className="w-full   bg-green-500 text-white font-semibold p-2 rounded-sm mt-6 cursor-pointer"
-				>
-					{buttonText}
-				</button>
-			</div>
+			<button
+				type={type}
+				onClick={onClick}
+				className="w-full bg-green-500 text-white font-semibold p-2 rounded-sm mt-6 cursor-pointer"
+			>
+				{buttonText}
+			</button>
 		</>
 	);
 }

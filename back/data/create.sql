@@ -73,6 +73,7 @@ CREATE TABLE articles (
     stock_quantity INT DEFAULT 0,
     status TEXT CHECK (status IN ('available','preorder','out_of_stock')),
     shipping_cost NUMERIC(10,2),
+    tech_characteristics JSONB,
     is_deleted BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
@@ -86,19 +87,19 @@ CREATE TABLE article_images (
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE article_characteristics (
-    characteristic_id SERIAL PRIMARY KEY,
-    article_id INT NOT NULL REFERENCES articles(article_id) ON DELETE CASCADE,
-    weight TEXT,
-    color TEXT,
-    shape TEXT,
-    foam TEXT,
-    surface TEXT,
-    level TEXT,
-    gender TEXT,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
-);
+-- CREATE TABLE article_characteristics (
+--     characteristic_id SERIAL PRIMARY KEY,
+--     article_id INT NOT NULL REFERENCES articles(article_id) ON DELETE CASCADE,
+--     weight TEXT,
+--     color TEXT,
+--     shape TEXT,
+--     foam TEXT,
+--     surface TEXT,
+--     level TEXT,
+--     gender TEXT,
+--     created_at TIMESTAMP DEFAULT NOW(),
+--     updated_at TIMESTAMP DEFAULT NOW()
+-- );
 
 CREATE TABLE article_ratings (
     rating_id SERIAL PRIMARY KEY,
@@ -118,8 +119,21 @@ CREATE TABLE promotions (
     description TEXT,
     discount_type TEXT,
     discount_value NUMERIC(5,2),
-    start_date TIMESTAMP,
-    end_date TIMESTAMP,
+    start_date DATE,
+    end_date DATE,
+    status TEXT CHECK (status IN ('active','upcoming','expired')),
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    CONSTRAINT unique_promo_per_article UNIQUE (article_id)
+);
+
+-- pour pré remplissage de promotionS
+CREATE TABLE promotion (
+    promo_id SERIAL PRIMARY KEY,
+    name TEXT,
+    description TEXT,
+    start_date DATE,
+    end_date DATE,
     status TEXT CHECK (status IN ('active','upcoming','expired')),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()

@@ -12,14 +12,15 @@ export type CartItem = {
 	image: string;
 	quantity: number;
 	type: string;
+	size?: string | undefined;
 };
 
 // Typage du store
 type CartStore = {
 	cart: CartItem[];
 	addToCart: (item: CartItem) => void;
-	removeFromCart: (id: string) => void;
-	updateQuantity: (id: string, quantity: number) => void;
+	removeFromCart: (id: string, size?: string) => void;
+	updateQuantity: (id: string, quantity: number, size?: string) => void;
 	clearCart: () => void;
 };
 
@@ -31,35 +32,40 @@ export const useCartStore = create<CartStore>()(
 
 			addToCart: (item) => {
 				set((state) => {
-					const existing = state.cart.find((p) => p.id === item.id);
+					const existing = state.cart.find(
+						(p) => p.id === item.id && p.size === item.size,
+					);
+
 					if (existing) {
 						return {
 							cart: state.cart.map((p) =>
-								p.id === item.id
+								p.id === item.id && p.size === item.size
 									? { ...p, quantity: p.quantity + item.quantity }
 									: p,
 							),
 						};
 					}
+
 					return { cart: [...state.cart, item] };
 				});
 			},
 
-			removeFromCart: (id) => {
+			removeFromCart: (id, size) => {
 				set((state) => ({
-					cart: state.cart.filter((item) => item.id !== id),
+					cart: state.cart.filter(
+						(item) => !(item.id === id && item.size === size),
+					),
 				}));
 			},
 
-			updateQuantity: (id, quantity) => {
+			updateQuantity: (id, quantity, size) => {
 				if (quantity <= 0) {
-					// si quantité <= 0, on supprime l'article
-					get().removeFromCart(id);
+					get().removeFromCart(id, size);
 					return;
 				}
 				set((state) => ({
 					cart: state.cart.map((item) =>
-						item.id === id ? { ...item, quantity } : item,
+						item.id === id && item.size === size ? { ...item, quantity } : item,
 					),
 				}));
 			},

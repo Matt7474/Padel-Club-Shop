@@ -12,7 +12,7 @@ export default function Footer() {
 					className="w-40 mx-auto"
 				/>
 			</div>
-			<div className="flex justify-center -mt-2 gap-3 xl:w-1/2 xl:gap-3">
+			<div className="flex justify-center -mt-2 gap-3 xl:w-1/2 xl:gap-3 z-50">
 				<SocialNetwork
 					name="linkedin"
 					link="https://www.linkedin.com/in/matthieu-dimier-a51539290"

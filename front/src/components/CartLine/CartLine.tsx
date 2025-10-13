@@ -18,33 +18,39 @@ export default function CartLine({
 	};
 
 	return (
-		<div className="flex items-center gap-4 border-b pb-2">
+		<div className="flex items-center gap-4 justify-between border-b pb-2">
 			<Link
 				to={`/articles/${item.type}/${item.name}`}
 				onClick={() => handleClick()}
 			>
-				<img
-					src={item.image || "/icons/default.svg"}
-					alt={item.name}
-					className="w-20 h-20 object-contain"
-				/>
+				<div className="flex items-center gap-4 pb-2">
+					<img
+						src={item.image || "/icons/default.svg"}
+						alt={item.name}
+						className="w-20 h-20 object-contain"
+					/>
+					<div className="flex flex-col flex-1">
+						<p className="text-sm font-semibold">{item.brand.name}</p>
+						<p className="text-sm">{item.name}</p>
+						<p className="text-sm text-gray-600">
+							{" "}
+							{Number(item.price).toFixed(2)} €
+						</p>
+						{typeof item.size === "string" && item.size.length > 0 && (
+							<p>Taille : {item.size}</p>
+						)}
+					</div>
+				</div>
 			</Link>
-
-			<div className="flex flex-col flex-1">
-				<p className="text-sm font-semibold">{item.brand.name}</p>
-				<p className="text-sm">{item.name}</p>
-				<p className="text-sm text-gray-600">
-					{" "}
-					{Number(item.price).toFixed(2)} €
-				</p>
-			</div>
 
 			{/* Quantité */}
 			<div className="flex flex-col items-center">
 				<div className="inline-flex items-center border rounded-lg overflow-hidden">
 					<button
 						type="button"
-						onClick={() => updateQuantity(item.id, item.quantity - 1)}
+						onClick={() =>
+							updateQuantity(item.id, item.quantity - 1, item.size)
+						}
 						className="px-3 py-1 text-md font-bold hover:bg-gray-200 cursor-pointer"
 					>
 						-
@@ -54,7 +60,9 @@ export default function CartLine({
 					</span>
 					<button
 						type="button"
-						onClick={() => updateQuantity(item.id, item.quantity + 1)}
+						onClick={() =>
+							updateQuantity(item.id, item.quantity + 1, item.size)
+						}
 						className="px-3 py-1 text-md font-bold hover:bg-gray-200 cursor-pointer"
 					>
 						+
@@ -62,8 +70,8 @@ export default function CartLine({
 				</div>
 				<button
 					type="button"
-					onClick={() => removeFromCart(item.id)}
-					className="text-xs mt-1 text-red-500 hover:underline"
+					onClick={() => removeFromCart(item.id, item.size)}
+					className="text-xs mt-1 text-red-500 hover:underline cursor-pointer"
 				>
 					Supprimer
 				</button>

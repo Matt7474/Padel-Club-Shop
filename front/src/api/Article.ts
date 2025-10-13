@@ -9,6 +9,25 @@ import type {
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+export async function addArticle(article: NewArticle): Promise<Article> {
+	try {
+		console.log("🚀 Body envoyé au serveur :", article);
+
+		const res = await axios.post(`${API_URL}/articles`, article, {
+			headers: { "Content-Type": "application/json" },
+		});
+
+		return res.data;
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			console.error("❌ Erreur Axios:", err.response?.data || err.message);
+		} else {
+			console.error("❌ Erreur inconnue:", err);
+		}
+		throw err;
+	}
+}
+
 export async function getArticles(): Promise<Article[]> {
 	const API_URL = import.meta.env.VITE_API_URL;
 	try {
@@ -72,22 +91,78 @@ export async function getArticlesType(type?: string): Promise<Article[]> {
 	}
 }
 
-export async function addArticle(article: NewArticle): Promise<Article> {
+export async function deleteArticleById(id: number): Promise<Article> {
 	try {
-		console.log("🚀 Body envoyé au serveur :", article);
+		console.log("deleteArticleById", id);
 
-		const res = await axios.post(`${API_URL}/articles`, article, {
-			headers: { "Content-Type": "application/json" },
-		});
+		const res = await axios.patch(`${API_URL}/articles/archive/${id}`);
 
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
-			console.error("❌ Erreur Axios:", err.response?.data || err.message);
-		} else {
-			console.error("❌ Erreur inconnue:", err);
+			throw new Error(
+				`❌ Erreur API: ${err.response?.status} ${err.response?.statusText}`,
+			);
 		}
-		throw err;
+		throw new Error("❌ Erreur inconnue lors de la requête");
+	}
+}
+
+export async function restoreArticleById(id: number): Promise<Article> {
+	try {
+		const res = await axios.patch(`${API_URL}/articles/restore/${id}`);
+
+		return res.data;
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			throw new Error(
+				`❌ Erreur API: ${err.response?.status} ${err.response?.statusText}`,
+			);
+		}
+		throw new Error("❌ Erreur inconnue lors de la requête");
+	}
+}
+
+export async function getArticlesDeleted(): Promise<Article[]> {
+	const API_URL = import.meta.env.VITE_API_URL;
+	try {
+		// const token = getAuthToken();
+		const res = await axios.get(`${API_URL}/articles/deleted`);
+
+		return res.data;
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			throw new Error(
+				`❌ Erreur API: ${err.response?.status} ${err.response?.statusText}`,
+			);
+		}
+		throw new Error("❌ Erreur inconnue lors de la requête");
+	}
+}
+
+export async function updateArticle(
+	id: number,
+	updatedData: Partial<NewArticle>,
+) {
+	try {
+		console.log("📤 Données envoyées :", updatedData);
+		const response = await axios.patch(
+			`${API_URL}/articles/${id}`,
+			updatedData,
+			{
+				headers: {
+					"Content-Type": "application/json",
+				},
+			},
+		);
+
+		return response.data;
+	} catch (error: any) {
+		console.error(
+			"Erreur lors de la mise à jour de l'article :",
+			error.response?.data || error.message,
+		);
+		throw error;
 	}
 }
 
@@ -126,7 +201,6 @@ export async function uploadArticleImages(
 
 // Créer les notes pour une raquette
 export async function addTechRatings(articleId: number, ratings: TechRatings) {
-	console.log("Test d'ajout de notes dans api", articleId);
 	try {
 		const res = await axios.post(
 			`${API_URL}/articles/${articleId}/ratings`,
@@ -150,8 +224,35 @@ export async function addTechRatings(articleId: number, ratings: TechRatings) {
 	}
 }
 
+export async function updateTechRatings(
+	articleId: number,
+	ratings: TechRatings,
+) {
+	try {
+		const res = await axios.patch(
+			`${API_URL}/articles/${articleId}/ratings`,
+			ratings,
+			{
+				headers: { "Content-Type": "application/json" },
+			},
+		);
+		console.log("🔢 Notes modifiés :", res.data);
+		return res.data;
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			console.error(
+				"❌ Erreur Axios de modification des notes (ratings)",
+				err.response?.data || err.message,
+			);
+		} else {
+			console.error("❌ Erreur inconnue:", err);
+		}
+		throw err;
+	}
+}
+
 // Créer une promo pour un article
-export async function addPromo(
+export async function attachPromoToArticle(
 	articleId: number,
 	promo: NewPromotion,
 ): Promise<Promotion> {
@@ -168,6 +269,59 @@ export async function addPromo(
 		if (axios.isAxiosError(err)) {
 			console.error(
 				"❌ Erreur Axios ajout promo",
+				err.response?.data || err.message,
+			);
+		} else {
+			console.error("❌ Erreur inconnue:", err);
+		}
+		throw err;
+	}
+}
+
+// Modifier la promo pour un article
+export async function updatePromo(
+	promoId: number,
+	promo: NewPromotion,
+	articleId: number,
+): Promise<Promotion> {
+	try {
+		const res = await axios.patch(
+			`${API_URL}/promotions/article/${articleId}/${promoId}`,
+			promo,
+			{
+				headers: { "Content-Type": "application/json" },
+			},
+		);
+		return res.data;
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			console.error(
+				"❌ Erreur Axios update promo",
+				err.response?.data || err.message,
+			);
+		} else {
+			console.error("❌ Erreur inconnue:", err);
+		}
+		throw err;
+	}
+}
+
+// Supprimer une promo pour un article
+export async function detachPromoFromArticle(
+	articleId: number,
+	promoId: number,
+): Promise<void> {
+	try {
+		await axios.delete(
+			`${API_URL}/promotions/article/${articleId}/${promoId}`,
+			{
+				headers: { "Content-Type": "application/json" },
+			},
+		);
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			console.error(
+				"❌ Erreur Axios suppression promo",
 				err.response?.data || err.message,
 			);
 		} else {

@@ -8,9 +8,30 @@ export default function BrandIcon() {
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
-		getBrands()
-			.then((data) => setBrands(data))
-			.catch((err: Error) => setError(err.message));
+		const fetchBrands = () => {
+			getBrands()
+				.then((data) =>
+					setBrands(
+						data.sort((a, b) =>
+							a.name.localeCompare(b.name, "fr", { sensitivity: "base" }),
+						),
+					),
+				)
+				.catch((err: Error) => setError(err.message));
+		};
+
+		fetchBrands();
+
+		// écouter l’event
+		const handleUpdate = () => fetchBrands();
+		window.addEventListener("brandDelete", handleUpdate);
+		window.addEventListener("brandCreate", handleUpdate);
+
+		// cleanup
+		return () => {
+			window.removeEventListener("brandDelete", handleUpdate);
+			window.removeEventListener("brandCreate", handleUpdate);
+		};
 	}, []);
 
 	if (error) {
@@ -40,7 +61,7 @@ export default function BrandIcon() {
 							<img
 								src={logoSrc}
 								alt={brand.name}
-								className="hover:cursor-pointer h-12 border border-gray-300 rounded-md shadow-md hover:bg-gray-300 xl:hover:-translate-y-2 transition-transform"
+								className="hover:cursor-pointer w-20 h-12 border border-gray-300 rounded-md shadow-md hover:bg-gray-300 xl:hover:-translate-y-2 transition-transform"
 							/>
 						</Link>
 					);
