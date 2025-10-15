@@ -24,14 +24,13 @@ export default function Articles({
 			try {
 				let res: Article[];
 
-				// ✅ Si on cherche les promotions → on récupère TOUS les articles
 				if (type?.toLowerCase() === "promotion" || showPromos) {
 					res = await getArticles();
+				} else if (type?.toLowerCase() === "articles") {
+					res = await getArticles();
 				} else if (type) {
-					// Sinon → articles d’un type précis
 					res = await getArticlesType(type);
 				} else {
-					// Si aucun type précisé → tout afficher
 					res = await getArticles();
 				}
 
@@ -44,10 +43,8 @@ export default function Articles({
 		fetchArticles();
 	}, [type, showPromos]);
 
-	// --- Filtrage côté front ---
 	let filteredArticles = [...articles];
 
-	// 🎯 Filtrage promo (À FAIRE EN PREMIER avant la recherche)
 	if (type?.toLowerCase() === "promotion" || showPromos) {
 		filteredArticles = filteredArticles.filter((article) =>
 			article.promotions?.some((promo: Promotion) => {
@@ -62,7 +59,6 @@ export default function Articles({
 		);
 	}
 
-	// 🔍 Recherche (après le filtrage promo)
 	if (searchQuery) {
 		const query = searchQuery.toLowerCase();
 		filteredArticles = filteredArticles.filter(
@@ -73,11 +69,6 @@ export default function Articles({
 		);
 	}
 
-	console.log("Articles avant filtrage:", articles.length);
-	console.log("Articles après filtrage promo:", filteredArticles.length);
-	console.log("Type:", type, "ShowPromos:", showPromos);
-
-	// --- Dictionnaire de traduction ---
 	const translations: Record<string, string> = {
 		home: "Accueil",
 		racket: "Raquette",
@@ -99,7 +90,6 @@ export default function Articles({
 		search: "Recherche",
 	};
 
-	// --- Fonction de traduction ---
 	const translateKey = (key: string) => {
 		const cleanKey = key
 			.toLowerCase()
@@ -108,7 +98,6 @@ export default function Articles({
 		return translations[cleanKey] || key;
 	};
 
-	// --- Breadcrumb ---
 	const breadcrumbItems = [
 		{ label: "home", href: "/" },
 		{

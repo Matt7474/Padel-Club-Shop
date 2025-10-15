@@ -29,7 +29,7 @@ export default function LinkMenu({
 			<div>
 				<Link
 					to={`/articles/${to}`}
-					className={`border-b-${border} border-gray-300 -mt-3 py-3 pl-3 hover:cursor-pointer ${animate} hover:bg-gray-300 flex justify-between ${color} font-semibold`}
+					className={`border-b-${border} border-gray-300 -mt-3 py-3 pl-3 hover:cursor-pointer ${animate} hover:bg-gray-300 flex justify-between ${color} font-semibold flex w-[110%]`}
 					onClick={handleClick}
 				>
 					{name}

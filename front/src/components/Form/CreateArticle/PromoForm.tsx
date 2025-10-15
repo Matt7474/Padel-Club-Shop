@@ -6,13 +6,13 @@ import TextArea from "../Tools/TextArea";
 import useAvailablePromos from "./useAvailablePromos";
 
 // ✅ Définition du type pour une promotion
-type Promo = {
-	promo_id: number;
-	name: string;
-	description: string;
-	start_date: string;
-	end_date: string;
-};
+// type Promo = {
+// 	promo_id: number;
+// 	name: string;
+// 	description: string;
+// 	start_date: string;
+// 	end_date: string;
+// };
 
 // ✅ Typage complet des props
 interface PromoFormProps {

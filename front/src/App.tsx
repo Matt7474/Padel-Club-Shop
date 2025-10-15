@@ -12,13 +12,13 @@ import AboutUs from "./pages/AboutUs";
 import AdminMenu from "./pages/AdminMenu";
 import AllArticles from "./pages/AllArticles";
 import Article from "./pages/Article";
-import Connection from "./pages/Connection";
 import Homepage from "./pages/Homepage";
 import LegalNotice from "./pages/LegalNotice";
 import Login from "./pages/login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
 import TermsOfSale from "./pages/TermsOfSale";
+import Register from "./pages/Register";
 
 function App() {
 	return (
@@ -32,7 +32,8 @@ function App() {
 					<div className="px-3">
 						<Routes>
 							<Route path="/login" element={<Login />} />
-							<Route path="/connexion" element={<Connection />} />
+							<Route path="/register" element={<Register />} />
+							{/* <Route path="/connexion" element={<Connection />} /> */}
 
 							<Route
 								path="/CreateArticle"

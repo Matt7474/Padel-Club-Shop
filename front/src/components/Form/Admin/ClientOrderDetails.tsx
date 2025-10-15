@@ -133,8 +133,8 @@ export default function ClientOrderDetails({
 					<p className="font-semibold text-xl mb-2">DESTINATAIRE</p>
 
 					<div className="flex">
-						<p className="uppercase">{user.lastname}</p>
-						<p className="ml-1">{user.firstname}</p>
+						<p className="uppercase">{user.lastName}</p>
+						<p className="ml-1">{user.firstName}</p>
 					</div>
 
 					<div className="flex">
@@ -162,14 +162,14 @@ export default function ClientOrderDetails({
 							<div className="flex">
 								<img src="/icons/delivery.svg" alt="delivery" className="w-5" />
 								<p className="ml-1">
-									{user?.addresses[0]?.street_number}{" "}
-									{user?.addresses[0]?.street_name}{" "}
-									{user?.addresses[0]?.complement}
+									{user?.address?.[0]?.street_number}{" "}
+									{user?.address?.[0]?.street_name}{" "}
+									{user?.address?.[0]?.complement}
 								</p>
 							</div>
 							<p>
-								{user?.addresses[0]?.zip_code} {user?.addresses[0]?.city}, {""}
-								{user?.addresses[0]?.country}
+								{user?.address?.[0]?.zip_code} {user?.address?.[0]?.city}, {""}
+								{user?.address?.[0]?.country}
 							</p>
 						</div>
 					</div>

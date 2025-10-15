@@ -34,14 +34,14 @@ export default function UsersList() {
 				<button
 					type="button"
 					className="border-b pl-1 cursor-pointer text-start"
-					onClick={() => requestSort("lastname")}
+					onClick={() => requestSort("lastName")}
 				>
 					NOM ↓
 				</button>
 				<button
 					type="button"
 					className="border-b pl-1 cursor-pointer text-start"
-					onClick={() => requestSort("firstname")}
+					onClick={() => requestSort("firstName")}
 				>
 					PRENOM ↓
 				</button>
@@ -61,7 +61,7 @@ export default function UsersList() {
 			</div>
 
 			{sortedUsers.map((user) => (
-				<div key={user.user_id}>
+				<div key={user.userId}>
 					<button
 						type="button"
 						onClick={() => handleUserClick(user)}
@@ -73,8 +73,8 @@ export default function UsersList() {
 									<img src="/icons/tie.svg" alt="Admin" className="w-7 h-7" />
 								)}
 							</p>
-							<p className="px-1 text-xs">{user.lastname}</p>
-							<p className="px-1 text-xs">{user.firstname}</p>
+							<p className="px-1 text-xs">{user.lastName}</p>
+							<p className="px-1 text-xs">{user.firstName}</p>
 							<p className="px-1 text-xs truncate">{user.email}</p>
 							<p className="px-1 text-xs text-center hidden xl:block">
 								{user.phone}

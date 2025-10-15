@@ -20,7 +20,7 @@ export default function UserDetails({ user }: UserProps) {
 	const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 	const [menuSelected, setMenuSelected] = useState("");
 
-	const userOrders = data.orders.filter((o) => o.user_id === user.user_id);
+	const userOrders = data.orders.filter((o) => o.user_id === user.userId);
 	const hasOrders = userOrders.length > 0;
 	const userRole = user.role === 1 ? "Admin" : "Client";
 
@@ -72,11 +72,11 @@ export default function UserDetails({ user }: UserProps) {
 							</div>
 							<div className="grid grid-cols-[2fr_3fr]">
 								<p>Nom :</p>
-								<p>{user.lastname}</p>
+								<p>{user.lastName}</p>
 							</div>
 							<div className="grid grid-cols-[2fr_3fr]">
 								<p>Prénom :</p>
-								<p>{user.firstname}</p>
+								<p>{user.firstName}</p>
 							</div>
 							<div className="grid grid-cols-[2fr_3fr]">
 								<p>Email :</p>
@@ -99,28 +99,28 @@ export default function UserDetails({ user }: UserProps) {
 							<div>
 								<div className="grid grid-cols-[2fr_3fr]">
 									<p>N° rue :</p>
-									<p>{user.addresses[0].street_number}</p>
+									<p>{user.address?.[0].street_number}</p>
 								</div>
 								<div className="grid grid-cols-[2fr_3fr]">
 									<p>Nom de rue :</p>
-									<p>{user.addresses[0].street_name}</p>
+									<p>{user.address?.[0].street_name}</p>
 								</div>
 								<div className="grid grid-cols-[2fr_3fr]">
 									<p>Code postal :</p>
-									<p>{user.addresses[0].zip_code}</p>
+									<p>{user.address?.[0].zip_code}</p>
 								</div>
 								<div className="grid grid-cols-[2fr_3fr]">
 									<p>Ville :</p>
-									<p>{user.addresses[0].city}</p>
+									<p>{user.address?.[0].city}</p>
 								</div>
 								<div className="grid grid-cols-[2fr_3fr]">
 									<p>Pays :</p>
-									<p>{user.addresses[0].country}</p>
+									<p>{user.address?.[0].country}</p>
 								</div>
 							</div>
 						</div>
 
-						{user.addresses[1] && (
+						{user.address?.[1] && (
 							<div className="mt-4">
 								<div className="flex justify-between">
 									<h2 className="mb-2 underline">Adresse de facturation</h2>
@@ -133,23 +133,23 @@ export default function UserDetails({ user }: UserProps) {
 								<div>
 									<div className="grid grid-cols-[2fr_3fr]">
 										<p>N° rue :</p>
-										<p>{user.addresses[1].street_number}</p>
+										<p>{user.address?.[1].street_number}</p>
 									</div>
 									<div className="grid grid-cols-[2fr_3fr]">
 										<p>Nom de rue :</p>
-										<p>{user.addresses[1].street_name}</p>
+										<p>{user.address?.[1].street_name}</p>
 									</div>
 									<div className="grid grid-cols-[2fr_3fr]">
 										<p>Code postal :</p>
-										<p>{user.addresses[1].zip_code}</p>
+										<p>{user.address?.[1].zip_code}</p>
 									</div>
 									<div className="grid grid-cols-[2fr_3fr]">
 										<p>Ville :</p>
-										<p>{user.addresses[1].city}</p>
+										<p>{user.address?.[1].city}</p>
 									</div>
 									<div className="grid grid-cols-[2fr_3fr]">
 										<p>Pays :</p>
-										<p>{user.addresses[1].country}</p>
+										<p>{user.address?.[1].country}</p>
 									</div>
 								</div>
 							</div>
@@ -158,14 +158,14 @@ export default function UserDetails({ user }: UserProps) {
 						<div className="w-full border-b my-4 border-gray-200"></div>
 						{/* Toggle pour modifier le rôle */}
 						<Toogle
-							title={`Modifier le rôle de ${user.lastname} ${user.firstname}`}
+							title={`Modifier le rôle de ${user.lastName} ${user.firstName}`}
 							checked={changeUserRole}
 							onChange={setChangeUserRole}
 						/>
 						{changeUserRole && (
 							<div className="mt-2">
 								<Select
-									label={`Quel rôle attribuer à ${user.lastname} ${user.firstname} ?`}
+									label={`Quel rôle attribuer à ${user.lastName} ${user.firstName} ?`}
 									value={menuSelected}
 									onChange={setMenuSelected}
 									options={menuOptions}
@@ -188,7 +188,7 @@ export default function UserDetails({ user }: UserProps) {
 						{hasOrders && (
 							<div>
 								<Toogle
-									title={`Voir les commandes de ${user.lastname} ${user.firstname}`}
+									title={`Voir les commandes de ${user.lastName} ${user.firstName}`}
 									checked={showOrder}
 									onChange={setShowOrder}
 								/>

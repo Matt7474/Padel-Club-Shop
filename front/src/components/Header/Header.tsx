@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
+import { useAuthStore } from "../../store/useAuthStore";
 import CartModal from "../Modal/CartModal";
 import MenuModal from "../Modal/MenuModal";
 import SearchBar from "../SearchBar/SearchBar";
 
 export default function Header() {
+	const { user, isAuthenticated } = useAuthStore();
+
 	const navigate = useNavigate();
 	const [isQuantity, setIsQuantity] = useState(0);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,6 +46,12 @@ export default function Header() {
 		setIsCartOpen(false);
 	};
 
+	const handleLogout = () => {
+		const logout = useAuthStore.getState().logout;
+		logout();
+		console.log("Utilisateur déconnecté ✅");
+	};
+
 	return (
 		<>
 			<div className="flex justify-between mx-3 mt-3">
@@ -78,25 +87,48 @@ export default function Header() {
 				<SearchBar onSearch={handleSearch} className="hidden 2xl:block" />
 
 				<div className="flex gap-3 xl:-mt-4 mr-1 items-center">
-					<Link
-						to="/admin/profile"
-						className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"
+					<button
+						type="button"
+						className="w-6.5 hover:cursor-pointer xl:mt-2.5 2xl:w-8 2xl:mr-4 mt-1"
+						onClick={() => {
+							if (isAuthenticated) {
+								handleLogout();
+							} else {
+								navigate("/login");
+							}
+						}}
 					>
-						<div className="relative">
-							<img
-								src="/icons/profile.svg"
-								alt="icon-compte"
-								className="block"
-							/>
-							<div>
+						<img
+							src="/icons/logout.svg"
+							alt="icon-logout"
+							className={`block transition-transform duration-200 ${
+								!isAuthenticated ? "rotate-180" : ""
+							}`}
+						/>
+					</button>
+
+					{/* MODIFICATION CLIENT ->  ADMIN A FAIRE  APRES TESTS */}
+					{isAuthenticated && user?.role === "client" && (
+						<Link
+							to="/admin/profile"
+							className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"
+						>
+							<div className="relative">
 								<img
-									src="/icons/tie.svg"
-									alt="cravate"
-									className="absolute -mt-3 left-1 w-4 xl:-mt-4 xl:left-2"
+									src="/icons/profile.svg"
+									alt="icon-compte"
+									className="block"
 								/>
+								<div>
+									<img
+										src="/icons/tie.svg"
+										alt="cravate"
+										className="absolute -mt-3 left-1 w-4 xl:-mt-4 xl:left-2"
+									/>
+								</div>
 							</div>
-						</div>
-					</Link>
+						</Link>
+					)}
 
 					<Link
 						to="/profile"
@@ -107,7 +139,7 @@ export default function Header() {
 
 					<button
 						type="button"
-						className="relative w-6 hover:cursor-pointer xl:mt-2 2xl:w-8"
+						className="relative w-6 hover:cursor-pointer mt-0.5 xl:mt-2 2xl:w-8 "
 						onClick={toggleCart}
 					>
 						{isQuantity > 0 && (

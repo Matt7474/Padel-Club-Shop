@@ -6,6 +6,13 @@ export default function Navbar() {
 			<div className="hidden 2xl:block  ">
 				<div className="flex gap-y-3 mt-4 ml-3 justify-center gap-7">
 					<LinkMenu
+						to="articles"
+						name="TOUS LES ARTICLES"
+						color="text-black"
+						border={0}
+						marginLeft={4}
+					/>
+					<LinkMenu
 						to="racket"
 						name="RAQUETTES"
 						color="text-black"
