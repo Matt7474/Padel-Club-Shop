@@ -5,7 +5,6 @@ import { ArticleImage } from "../models/articleImage";
 import { ArticleRatings } from "../models/articleRatings";
 import { Brand } from "../models/brand";
 import { Promotions } from "../models/promotions";
-import type { PromotionsCreationAttributes } from "../types/PromotionType";
 
 export async function getAllArticles(_req: Request, res: Response) {
 	try {

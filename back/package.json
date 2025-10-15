@@ -19,6 +19,7 @@
 		"dotenv": "^17.2.2",
 		"express": "^5.1.0",
 		"joi": "^18.0.1",
+		"jsonwebtoken": "^9.0.2",
 		"multer": "^2.0.2",
 		"pg": "^8.16.3",
 		"pg-hstore": "^2.3.4",
@@ -27,6 +28,7 @@
 	"devDependencies": {
 		"@types/cors": "^2.8.19",
 		"@types/express": "^5.0.3",
+		"@types/jsonwebtoken": "^9.0.10",
 		"@types/multer": "^2.0.0",
 		"@types/node": "^24.5.2",
 		"@types/sequelize": "^6.12.0",

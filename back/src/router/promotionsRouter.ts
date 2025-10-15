@@ -1,6 +1,6 @@
 import { Router } from "express";
-import * as promotionController from "../controllers/promotionController";
-import * as promotionsController from "../controllers/promotionsController";
+import * as promotionController from "../controllers/promotionControllers";
+import * as promotionsController from "../controllers/promotionsControllers";
 
 const promotionsRouter = Router();
 

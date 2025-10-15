@@ -2,20 +2,22 @@ BEGIN;
 
 -- ROLES
 INSERT INTO roles (role_id, label) VALUES
-(1, 'admin'),
-(2, 'client');
+(1, 'super admin'),
+(2, 'admin'),
+(3, 'client');
 
 -- USERS
 INSERT INTO users (user_id, last_name, first_name, phone, email, password, role_id) VALUES
-(1, 'Pierre', 'Thibaut', '0601000000', 'thibaut.pierre@example.com', 'hashedpassword1', 2),
-(2, 'Dupont', 'Alice', '0602000000', 'alice.dupont@example.com', 'hashedpassword2', 2),
-(3, 'Martin', 'Paul', '0603000000', 'paul.martin@example.com', 'hashedpassword3', 1);
+(1, 'Dimier', 'Matthieu', '0631548949', 'dimier.matt@example.com', '$argon2id$v=19$m=65536,t=3,p=4$pB8YSq9atfPP+MANKgZJMw$NZQpoodO9GpTHZka7rvGkynhpRaMaRK+wZPkdSJjaHU', 1); -- Pa$$w0rd!
+-- (2, 'Dupont', 'Alice', '0602000000', 'alice.dupont@example.com', 'hashedpassword2', 2),
+-- (3, 'Martin', 'Paul', '0603000000', 'paul.martin@example.com', 'hashedpassword3', 1);
+
 
 -- ADDRESSES
-INSERT INTO addresses (address_id, user_id, type, street_number, street_name, complement, zip_code, city, country, is_default) VALUES
-(1, 1, 'shipping', '50', 'avenue de Delahaye', '', '37802', 'Bruneau', 'France', TRUE),
-(2, 1, 'billing', '15', 'rue des Lilas', 'Appartement 4B', '75012', 'Paris', 'France', FALSE),
-(3, 2, 'shipping', '10', 'rue de la Gare', '', '69001', 'Lyon', 'France', TRUE);
+-- INSERT INTO addresses (address_id, user_id, type, street_number, street_name, complement, zip_code, city, country, is_default) VALUES
+-- (1, 1, 'shipping', '50', 'avenue de Delahaye', '', '37802', 'Bruneau', 'France', TRUE),
+-- (2, 1, 'billing', '15', 'rue des Lilas', 'Appartement 4B', '75012', 'Paris', 'France', FALSE),
+-- (3, 2, 'shipping', '10', 'rue de la Gare', '', '69001', 'Lyon', 'France', TRUE);
 
 -- BRANDS
 INSERT INTO brands (brand_id, name, logo) VALUES
@@ -35,9 +37,9 @@ INSERT INTO brands (brand_id, name, logo) VALUES
 
 -- ARTICLES
 INSERT INTO articles (article_id, type, name, description, reference, brand_id, price_ttc, stock_quantity, status, shipping_cost, tech_characteristics) VALUES
-(1, 'racket', 'BABOLAT AIR VERON 2025', 'Raquette de padel Babolat Air Veron 2025 avec une forme en goutte d''eau et un équilibre uniforme avec le Carbon Flex et les plans 3D Spin pour frapper la balle avec des effets, de la puissance et de la précision.', '115740-P', 2, 240, 8, 'available', 9.99,
+(1, 'racket', 'BABOLAT AIR VERON 2025', 'Raquette de padel Babolat Air Veron 2025 avec une forme en goutte d''eau et un équilibre uniforme avec le Carbon Flex et les plans 3D Spin pour frapper la balle avec des effets, de la puissance et de la précision.', 'REF-498351', 2, 240, 8, 'available', 9.99,
  '{"weight":"106","color":"Medium Purple","shape":"diamond","foam":"EVA hard","surface":"carbon","level":"advanced","gender":"unisex"}'),
-(2, 'racket', 'BULLPADEL INDIGA PWR 2024', 'Bullpadel Indiga Pwr 2024, raquette de padel en diamant pour joueurs débutants ou occasionnels. Raquette padel diamant au toucher doux.', '32437-P', 4, 79.95, 12, 'available', 9.99,
+(2, 'racket', 'BULLPADEL INDIGA PWR 2024', 'Bullpadel Indiga Pwr 2024, raquette de padel en diamant pour joueurs débutants ou occasionnels. Raquette padel diamant au toucher doux.', 'REF-975351', 4, 79.95, 12, 'available', 9.99,
  '{"weight":"305","color":"Black/Green","shape":"teardrop","foam":"EVA soft","surface":"carbon","level":"intermediate","gender":"unisex"}');
 
 -- ARTICLES IMAGES
@@ -68,9 +70,9 @@ INSERT INTO article_ratings (rating_id, article_id, maneuverability, power, comf
 (2, 2, 7, 5, 7, 6, 6, 8);
 
 -- REVIEWS
-INSERT INTO reviews (review_id, article_id, user_id, comment, rating) VALUES
-(1, 1, 1, 'Excellent control and precision for advanced players.', 5),
-(2, 2, 2, 'Good racket for intermediate players.', 4);
+-- INSERT INTO reviews (review_id, article_id, user_id, comment, rating) VALUES
+-- (1, 1, 1, 'Excellent control and precision for advanced players.', 5),
+-- (2, 2, 2, 'Good racket for intermediate players.', 4);
 
 -- PROMOTIONS
 INSERT INTO promotions (promo_id, article_id, name, description, discount_type, discount_value, start_date, end_date, status) VALUES
@@ -109,23 +111,23 @@ Conditions générales :
 Ne manquez pas cette occasion unique de gâter vos proches ou de vous faire plaisir pour Noël ! 🌟', '2025-12-01', '2025-12-31', 'upcoming');
 
 -- ORDERS
-INSERT INTO orders (order_id, reference, user_id, created_at, vat_rate, status) VALUES
-(1, 'CMD-2025-0001', 1, '2025-01-05 10:30:00', 20, 'pending');
+-- INSERT INTO orders (order_id, reference, user_id, created_at, vat_rate, status) VALUES
+-- (1, 'CMD-2025-0001', 1, '2025-01-05 10:30:00', 20, 'pending');
 
-INSERT INTO order_lines (order_line_id, order_id, article_id, quantity) VALUES
-(1, 1, 1, 1),
-(2, 1, 2, 2);
+-- INSERT INTO order_lines (order_line_id, order_id, article_id, quantity) VALUES
+-- (1, 1, 1, 1),
+-- (2, 1, 2, 2);
 
-INSERT INTO payments (payment_id, order_id, payment_method, paid_at) VALUES
-(1, 1, 'Bank Transfer', '2025-01-05 11:00:00');
+-- INSERT INTO payments (payment_id, order_id, payment_method, paid_at) VALUES
+-- (1, 1, 'Bank Transfer', '2025-01-05 11:00:00');
 
 -- CARTS
-INSERT INTO carts (cart_id, user_id) VALUES
-(1, 2);
+-- INSERT INTO carts (cart_id, user_id) VALUES
+-- (1, 2);
 
-INSERT INTO cart_lines (cart_line_id, cart_id, article_id, quantity) VALUES
-(1, 1, 1, 3),
-(2, 1, 2, 1);
+-- INSERT INTO cart_lines (cart_line_id, cart_id, article_id, quantity) VALUES
+-- (1, 1, 1, 3),
+-- (2, 1, 2, 1);
 
 COMMIT;
 
