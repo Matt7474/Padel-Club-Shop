@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
 import { useEffect, useState } from "react";
 import { deleteUser, getUserById, updateUser } from "../api/User";
 import Toogle from "../components/Form/Toogle/Toogle";
