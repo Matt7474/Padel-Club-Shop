@@ -8,6 +8,7 @@ import OrderList from "../components/Form/Admin/OrderList";
 import PromoList from "../components/Form/Admin/PromoList";
 import UserList from "../components/Form/Admin/UsersList";
 import Select from "../components/Form/Tools/Select";
+import Profile from "./Profile";
 
 export default function AdminMenu() {
 	const [menuSelected, setMenuSelected] = useState("");
@@ -21,6 +22,7 @@ export default function AdminMenu() {
 		"Liste des promotions",
 		"Liste des utilisateurs",
 		"Voir les commandes",
+		"Voir mon profil",
 	];
 
 	return (
@@ -120,6 +122,14 @@ export default function AdminMenu() {
 				{menuSelected === "Voir les commandes" && (
 					<div>
 						<OrderList />
+					</div>
+				)}
+
+				{/* Profil */}
+				{/*	Voir mon profil */}
+				{menuSelected === "Voir mon profil" && (
+					<div>
+						<Profile />
 					</div>
 				)}
 			</div>

@@ -54,6 +54,8 @@ export default function Header() {
 		console.log("Utilisateur déconnecté ✅");
 	};
 
+	console.log(user?.role);
+
 	return (
 		<>
 			<div className="flex justify-between mx-3 mt-3">
@@ -112,29 +114,30 @@ export default function Header() {
 					</button>
 
 					{/* MODIFICATION CLIENT ->  ADMIN A FAIRE  APRES TESTS */}
-					{isAuthenticated && user?.role === "super admin" && (
-						<Link
-							to="/admin/profile"
-							className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"
-						>
-							<div className="relative">
-								<img
-									src="/icons/profile.svg"
-									alt="icon-compte"
-									className="block"
-								/>
-								<div>
+					{isAuthenticated &&
+						(user?.role === "super admin" || user?.role === "admin") && (
+							<Link
+								to="/admin/profile"
+								className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"
+							>
+								<div className="relative">
 									<img
-										src="/icons/tie.svg"
-										alt="cravate"
-										className="absolute -mt-3 left-1 w-4 xl:-mt-4 xl:left-2"
+										src="/icons/profile.svg"
+										alt="icon-compte"
+										className="block"
 									/>
+									<div>
+										<img
+											src="/icons/tie.svg"
+											alt="cravate"
+											className="absolute -mt-3 left-1 w-4 xl:-mt-4 xl:left-2"
+										/>
+									</div>
 								</div>
-							</div>
-						</Link>
-					)}
+							</Link>
+						)}
 
-					{isAuthenticated && (
+					{isAuthenticated && user?.role === "client" && (
 						<Link
 							to="/profile"
 							className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"

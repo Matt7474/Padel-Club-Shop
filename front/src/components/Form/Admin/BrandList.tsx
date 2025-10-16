@@ -29,11 +29,14 @@ export default function BrandList() {
 				const data = await getBrands();
 				const articlesData = await getArticles();
 
-				// On complète les URLs des logos
-				const dataWithFullLogo = data.map((b: Brand) => ({
-					...b,
-					logo: b.logo ? BASE_URL + b.logo : "/icons/default.svg",
-				}));
+				// On complète les URLs des logos correctement
+				const dataWithFullLogo = data.map((b: Brand) => {
+					let logoSrc = b.logo || "/icons/default.svg";
+					if (b.logo?.startsWith("/uploads/")) {
+						logoSrc = BASE_URL + b.logo;
+					}
+					return { ...b, logo: logoSrc };
+				});
 
 				setBrands(dataWithFullLogo);
 				setArticles(articlesData);
@@ -136,23 +139,29 @@ export default function BrandList() {
 					{sortedBrands.map((brand) => (
 						<div key={brand.brand_id}>
 							<div className="grid grid-cols-[2fr_2fr_1fr_1fr] h-10 items-center">
-								<p className="pl-1 border-x h-8 text-center">{brand.name}</p>
+								{/* Nom */}
+								<div className="flex items-center justify-center border-x h-10 px-1">
+									<p className="text-center">{brand.name}</p>
+								</div>
 
-								<div className="border-r h-8">
+								{/* Logo */}
+								<div className="flex items-center justify-center border-r h-10 px-1">
 									<img
 										src={brand.logo || "/icons/default.svg"}
 										alt={brand.name || "Image par défaut"}
-										className="h-10 w-full px-1 object-contain"
+										className="h-8 w-auto object-contain"
 									/>
 								</div>
 
-								<div className="flex items-center justify-center border-r h-8">
+								{/* Nombre d'articles */}
+								<div className="flex items-center justify-center border-r h-10">
 									<p>
 										{articles.filter((a) => a.brand.name === brand.name).length}
 									</p>
 								</div>
 
-								<div className="flex items-center justify-center border-r h-8">
+								{/* Bouton supprimer */}
+								<div className="flex items-center justify-center border-r h-10">
 									<button
 										type="button"
 										onClick={() => handleDelete(brand.brand_id!)}
@@ -160,7 +169,7 @@ export default function BrandList() {
 										<img
 											src="/icons/trash.svg"
 											alt="poubelle"
-											className="w-6 cursor-pointer"
+											className="w-6 h-6 cursor-pointer"
 										/>
 									</button>
 								</div>

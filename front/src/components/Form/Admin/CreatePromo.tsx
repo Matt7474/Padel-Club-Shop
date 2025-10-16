@@ -26,7 +26,7 @@ export default function CreatePromo({
 }: CreatePromoProps) {
 	const today = new Date();
 	const addToast = useToastStore((state) => state.addToast);
-
+	const [errorMessage, setErrorMessage] = useState("");
 	const [confirm, setConfirm] = useState(false);
 
 	const [promoName, setPromoName] = useState("");
@@ -64,6 +64,14 @@ export default function CreatePromo({
 		setError(null);
 		setSuccess(null);
 
+		if (promoStartDate > promoEndDate) {
+			setErrorMessage(
+				"La date de fin ne peut pas être inférieure à la date de début.",
+			);
+			setLoading(false);
+			return;
+		}
+
 		try {
 			if (mode !== "edit") {
 				const newPromo = await createPromo({
@@ -72,9 +80,6 @@ export default function CreatePromo({
 					start_date: promoStartDate,
 					end_date: promoEndDate,
 				});
-				console.log("Promo créée :", newPromo);
-
-				setSuccess(`Promotion "${newPromo.name}" créée avec succès !`);
 
 				// Réinitialisation uniquement en création
 				setPromoName("");
@@ -88,31 +93,25 @@ export default function CreatePromo({
 				);
 				const endDate = new Date(newPromo.end_date).toLocaleDateString("fr-FR");
 				addToast(
-					`La promotion ${newPromo.name} valide du ${startDate} au ${endDate} à été créé avec succès`,
+					`La promotion ${newPromo.name} valide du ${startDate} au ${endDate} a été créée avec succès`,
 					"bg-green-500",
 				);
 			} else if (mode === "edit" && promo) {
-				// Appelle une fonction updatePromo côté API
 				const updatedPromo = await updatePromo(promo.promo_id, {
 					name: promoName,
 					description: promoDescription,
 					start_date: promoStartDate,
 					end_date: promoEndDate,
 				});
-				console.log("promo.promo_id, :", promo.promo_id);
-				console.log("Promo modifiée :", updatedPromo);
 
-				setSuccess(
-					`Promotion "${updatedPromo.name}" mise à jour avec succès !`,
-				);
 				onCancel?.();
 				addToast(
-					`La promotion ${updatedPromo.name} à été modifiée avec succès`,
+					`La promotion ${updatedPromo.name} a été modifiée avec succès`,
 					"bg-green-500",
 				);
 			}
-		} catch (err: any) {
-			setError(err.message || "Erreur lors de la sauvegarde de la promotion");
+		} catch (error) {
+			console.error("Erreur lors de la sauvegarde de la promotion :", error);
 		} finally {
 			setLoading(false);
 		}
@@ -193,14 +192,14 @@ export default function CreatePromo({
 							type="date"
 							value={promoStartDate}
 							onChange={(e) => setPromoStartDate(e.target.value)}
-							className="border rounded px-2 py-1 bg-gray-100 cursor-not-allowed h-10 mt-4"
+							className="border rounded px-2 py-1 bg-white cursor-pointer  h-10 mt-4"
 							required
 						/>
 						<input
 							type="date"
 							value={promoEndDate}
 							onChange={(e) => setPromoEndDate(e.target.value)}
-							className="border rounded px-2 py-1 bg-gray-100 cursor-not-allowed h-10 mt-4"
+							className="border rounded px-2 py-1 bg-white cursor-pointer  h-10 mt-4"
 							required
 						/>
 
@@ -231,6 +230,11 @@ export default function CreatePromo({
 					{error && <p className="text-red-500 mt-2">{error}</p>}
 					{success && <p className="text-green-500 mt-2">{success}</p>}
 
+					{errorMessage && (
+						<div className="text-red-500 text-sm mt-4 -mb-4 text-center">
+							{errorMessage}
+						</div>
+					)}
 					<Button
 						type="submit"
 						buttonText={

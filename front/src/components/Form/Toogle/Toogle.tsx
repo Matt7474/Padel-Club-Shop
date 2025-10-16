@@ -8,7 +8,7 @@ export default function Toogle({ title, checked, onChange }: ToogleProps) {
 	return (
 		<div>
 			<div className="flex justify-between gap-4 relative">
-				<span>{title}</span>
+				<span className="mt-1">{title}</span>
 				{/* Container relatif pour le toggle et les textes */}
 				<div className="relative">
 					{/* Track du toggle */}

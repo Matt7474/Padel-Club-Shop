@@ -37,7 +37,7 @@ export default function Login() {
 				response.token,
 			);
 			console.log("Token reçu :", response.token);
-			addToast(`Bienvenu ${response.user.first_name}`, "bg-green-600");
+			addToast(`Bienvenu ${response.user.first_name}`, "bg-green-500");
 			navigate("/");
 		} catch (error: unknown) {
 			if (error instanceof Error) {

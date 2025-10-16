@@ -92,6 +92,35 @@ export async function getUserById(id: number): Promise<UserApiResponse> {
 	}
 }
 
+// getAllUsers
+export async function getAllUsers(): Promise<UserApiResponse[]> {
+	const token = useAuthStore.getState().token;
+
+	try {
+		const res = await axios.get<UserApiResponse[]>(`${API_URL}/user/`, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+		});
+
+		return res.data;
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			const backendMessage = err.response?.data?.error;
+			const message =
+				backendMessage ||
+				err.message ||
+				"Erreur inconnue lors de la connexion au compte";
+			console.error("❌ Erreur connexion utilisateur:", message);
+			throw new Error(message);
+		} else {
+			console.error("❌ Erreur inattendue:", err);
+			throw new Error("Erreur inattendue côté client");
+		}
+	}
+}
+
 // updateUser
 export async function updateUser(
 	id: number,
@@ -106,6 +135,31 @@ export async function updateUser(
 				Authorization: `Bearer ${token}`,
 			},
 		});
+		return res.data;
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			const backendMessage = err.response?.data?.error || err.message;
+			throw new Error(backendMessage);
+		} else {
+			throw new Error("Erreur inattendue côté client");
+		}
+	}
+}
+
+// updateUserRole
+export async function updateUserRole(userId: number, roleId: number) {
+	const token = useAuthStore.getState().token;
+	try {
+		const res = await axios.patch(
+			`${API_URL}/user/role/${userId}`,
+			{ roleId },
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+			},
+		);
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {

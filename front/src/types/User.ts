@@ -18,6 +18,7 @@ export interface UserApiResponse {
 	first_name: string;
 	phone: string;
 	email: string;
+	password?: string | undefined;
 	role_id: number;
 	addresses: Address[];
 	created_at: string;
@@ -31,7 +32,7 @@ export interface User {
 	firstName?: string;
 	phone?: string;
 	email: string;
-	password: string;
+	password?: string | undefined;
 	role?: number;
 	address?: Address[];
 }

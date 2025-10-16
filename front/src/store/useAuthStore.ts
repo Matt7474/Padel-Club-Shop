@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import type {} from "../types/AuthResponse";
 import type { AuthUser } from "../types/User";
 
 interface AuthState {
@@ -10,11 +9,23 @@ interface AuthState {
 	logout: () => void;
 }
 
+const savedUser = localStorage.getItem("user");
+const savedToken = localStorage.getItem("token");
+
 export const useAuthStore = create<AuthState>((set) => ({
-	user: null,
-	isAuthenticated: false,
-	token: undefined,
-	login: (userData, token) =>
-		set({ user: userData, isAuthenticated: true, token }),
-	logout: () => set({ user: null, isAuthenticated: false, token: undefined }),
+	user: savedUser ? JSON.parse(savedUser) : null,
+	isAuthenticated: !!savedToken,
+	token: savedToken || undefined,
+
+	login: (userData, token) => {
+		localStorage.setItem("token", token);
+		localStorage.setItem("user", JSON.stringify(userData));
+		set({ user: userData, isAuthenticated: true, token });
+	},
+
+	logout: () => {
+		localStorage.removeItem("token");
+		localStorage.removeItem("user");
+		set({ user: null, isAuthenticated: false, token: undefined });
+	},
 }));
