@@ -29,9 +29,10 @@ export default function UsersList() {
 
 				setUsers(mappedUsers);
 				console.log("Users mappés:", mappedUsers);
-			} catch (err: any) {
+			} catch (err) {
+				const error = err as Error;
 				setError(
-					err.message || "Erreur lors de la récupération des utilisateurs",
+					error.message || "Erreur lors de la récupération des utilisateurs",
 				);
 			} finally {
 				setLoading(false);
