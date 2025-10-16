@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
 import { useEffect, useState } from "react";
 import { deleteUser, getUserById, updateUser } from "../api/User";
 import Toogle from "../components/Form/Toogle/Toogle";
@@ -7,6 +6,7 @@ import Adress from "../components/Form/User/Adress";
 import ConfirmModal from "../components/Modal/ConfirmModal";
 import { useToastStore } from "../store/ToastStore ";
 import { useAuthStore } from "../store/useAuthStore";
+import type { Address, UserApiResponse } from "../types/User";
 
 export default function Profile() {
 	const { user } = useAuthStore();
@@ -60,7 +60,7 @@ export default function Profile() {
 			try {
 				setLoading(true);
 
-				const response: any = await getUserById(user.id);
+				const response: UserApiResponse = await getUserById(user.id);
 				console.log("Utilisateur récupéré :", response);
 
 				// Infos de base
@@ -74,11 +74,11 @@ export default function Profile() {
 				});
 
 				// Adresses
-				const shippingAddr: any = response.addresses?.find(
-					(addr: any) => addr.type === "shipping",
+				const shippingAddr: Address | undefined = response.addresses?.find(
+					(addr: Address) => addr.type === "shipping",
 				);
-				const billingAddr: any = response.addresses?.find(
-					(addr: any) => addr.type === "billing",
+				const billingAddr: Address | undefined = response.addresses?.find(
+					(addr: Address) => addr.type === "billing",
 				);
 
 				if (shippingAddr) {
@@ -178,7 +178,7 @@ export default function Profile() {
 
 		try {
 			setLoading(true);
-			const response: any = await getUserById(user.id);
+			const response: UserApiResponse = await getUserById(user.id);
 			console.log("🔁 Données réinitialisées :", response);
 
 			setProfile({
@@ -190,11 +190,11 @@ export default function Profile() {
 				confirmPassword: "",
 			});
 
-			const shippingAddr: any = response.addresses?.find(
-				(addr: any) => addr.type === "shipping",
+			const shippingAddr: Address | undefined = response.addresses?.find(
+				(addr: Address) => addr.type === "shipping",
 			);
-			const billingAddr: any = response.addresses?.find(
-				(addr: any) => addr.type === "billing",
+			const billingAddr: Address | undefined = response.addresses?.find(
+				(addr: Address) => addr.type === "billing",
 			);
 
 			setShippingAddress({

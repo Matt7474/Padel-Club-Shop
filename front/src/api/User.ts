@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useAuthStore } from "../store/useAuthStore";
 import type { AuthResponse } from "../types/AuthResponse";
-import type { CreateUser, User } from "../types/User";
+import type { CreateUser, User, UserApiResponse } from "../types/User";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -63,12 +63,12 @@ export async function loginUser(user: {
 }
 
 // getUserById
-export async function getUserById(id: number): Promise<User> {
+export async function getUserById(id: number): Promise<UserApiResponse> {
 	const token = useAuthStore.getState().token;
 	console.log("getUserById", id);
 
 	try {
-		const res = await axios.get<User>(`${API_URL}/user/${id}`, {
+		const res = await axios.get<UserApiResponse>(`${API_URL}/user/${id}`, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${token}`,
