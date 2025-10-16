@@ -99,15 +99,28 @@ export default function ArticlesList() {
 		}
 	};
 
+	const refreshDeletedArticles = async () => {
+		if (!isChecked) return;
+		try {
+			const data = await getArticlesDeleted();
+			setDeletedArticles(data);
+		} catch (err) {
+			console.error("Erreur API Articles:", err);
+		}
+	};
+
 	if (selectedArticle) {
 		return (
 			<CreateArticle
-				title={"Modifier l'article"}
-				buttonText={"MODIFIER L'ARTICLE"}
+				title="Modifier l'article"
+				buttonText="MODIFIER L'ARTICLE"
 				article={selectedArticle}
 				mode="edit"
 				onReturn={() => setSelectedArticle(null)}
-				onUpdated={refreshArticles}
+				onUpdated={() => {
+					refreshArticles();
+					if (isChecked) refreshDeletedArticles();
+				}}
 			/>
 		);
 	}

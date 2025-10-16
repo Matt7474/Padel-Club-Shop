@@ -1,7 +1,7 @@
 import axios from "axios";
+import { useAuthStore } from "../store/useAuthStore";
 import type { AuthResponse } from "../types/AuthResponse";
 import type { CreateUser, User } from "../types/User";
-import { useAuthStore } from "../store/useAuthStore";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -88,6 +88,51 @@ export async function getUserById(id: number): Promise<User> {
 		} else {
 			console.error("❌ Erreur inattendue:", err);
 			throw new Error("Erreur inattendue côté client");
+		}
+	}
+}
+
+// updateUser
+export async function updateUser(
+	id: number,
+	updatedData: Partial<User>,
+): Promise<User> {
+	const token = useAuthStore.getState().token;
+
+	try {
+		const res = await axios.patch<User>(`${API_URL}/user/${id}`, updatedData, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+		});
+		return res.data;
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			const backendMessage = err.response?.data?.error || err.message;
+			throw new Error(backendMessage);
+		} else {
+			throw new Error("Erreur inattendue côté client");
+		}
+	}
+}
+
+// deleteUser
+export async function deleteUser(id: number): Promise<void> {
+	const token = useAuthStore.getState().token;
+
+	try {
+		await axios.delete(`${API_URL}/user/${id}`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			const backendMessage = err.response?.data?.error || err.message;
+			throw new Error(backendMessage);
+		} else {
+			throw new Error("Erreur inattendue lors de la suppression du compte.");
 		}
 	}
 }

@@ -1,7 +1,7 @@
 export default function AboutUs() {
 	return (
 		<>
-			<div id="apropos" className="page-content">
+			<div id="apropos" className="page-content mt-4">
 				<h2 className="text-3xl font-bold text-blue-800 mb-6 pb-3 border-b-2 border-gray-200">
 					À Propos de Nous
 				</h2>

@@ -4,6 +4,7 @@ import {
 	deletePromoById,
 	updatePromo,
 } from "../../../api/Promotion";
+import { useToastStore } from "../../../store/ToastStore ";
 import type { Promo } from "../../../types/Promotions";
 import ConfirmModal from "../../Modal/ConfirmModal";
 import Button from "../Tools/Button";
@@ -24,6 +25,8 @@ export default function CreatePromo({
 	onCancel,
 }: CreatePromoProps) {
 	const today = new Date();
+	const addToast = useToastStore((state) => state.addToast);
+
 	const [confirm, setConfirm] = useState(false);
 
 	const [promoName, setPromoName] = useState("");
@@ -79,6 +82,15 @@ export default function CreatePromo({
 				setPromoStartDate("");
 				setPromoEndDate("");
 				setMenuSelected?.("Liste des promotions");
+
+				const startDate = new Date(newPromo.start_date).toLocaleDateString(
+					"fr-FR",
+				);
+				const endDate = new Date(newPromo.end_date).toLocaleDateString("fr-FR");
+				addToast(
+					`La promotion ${newPromo.name} valide du ${startDate} au ${endDate} à été créé avec succès`,
+					"bg-green-500",
+				);
 			} else if (mode === "edit" && promo) {
 				// Appelle une fonction updatePromo côté API
 				const updatedPromo = await updatePromo(promo.promo_id, {
@@ -93,9 +105,11 @@ export default function CreatePromo({
 				setSuccess(
 					`Promotion "${updatedPromo.name}" mise à jour avec succès !`,
 				);
-
-				// IMPORTANT: Réinitialiser l'état de PromoList
 				onCancel?.();
+				addToast(
+					`La promotion ${updatedPromo.name} à été modifiée avec succès`,
+					"bg-green-500",
+				);
 			}
 		} catch (err: any) {
 			setError(err.message || "Erreur lors de la sauvegarde de la promotion");
@@ -109,12 +123,11 @@ export default function CreatePromo({
 
 		try {
 			await deletePromoById(id);
-			console.log("✅ Promotion supprimée avec succès");
-
 			setTimeout(() => {
 				onCancel?.();
 				setMenuSelected?.("Liste des promotions");
 			}, 300);
+			addToast(`La promotion à été supprimée avec succès`, "bg-green-500");
 		} catch (error) {
 			console.error("❌ Erreur lors de la suppression :", error);
 		}
@@ -237,13 +250,6 @@ export default function CreatePromo({
 						onCancel={() => setConfirm(false)}
 						message={`Voulez vous supprimer la promotion ${promoName}`}
 					/>
-					// <InfoModal
-					// 	id={1}
-					// 	bg="bg-green-500"
-					// 	text="Promotion supprimée avec succès"
-					// 	onClose={() => setShowDeleteModal(false)}
-					// 	duration={2000}
-					// />
 				)}
 			</div>
 		</div>

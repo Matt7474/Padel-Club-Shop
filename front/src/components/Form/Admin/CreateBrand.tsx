@@ -1,11 +1,14 @@
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { createBrand } from "../../../api/Brand";
-import InfoModal from "../../Modal/InfoModal";
-import Input from "../Tools/Input";
+import { useToastStore } from "../../../store/ToastStore ";
 import Button from "../Tools/Button";
+import Input from "../Tools/Input";
 
 export default function CreateBrand() {
+	const addToast = useToastStore((state) => state.addToast);
+
+	const [errorMessage, setErrorMessage] = useState(false);
 	const [newBrand, setNewBrand] = useState("");
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [imagePreview, setImagePreview] = useState<string>(""); // src affiché dans <img>
@@ -13,7 +16,6 @@ export default function CreateBrand() {
 	const [error, setError] = useState<string | null>(null);
 	const [isDataUrl, setIsDataUrl] = useState<boolean>(false); // pour savoir si c'est une data URL
 	const objectUrlRef = useRef<string | null>(null);
-	const [showModal, setShowModal] = useState(false);
 
 	// Nettoyage à la désactivation du composant
 	useEffect(() => {
@@ -138,8 +140,9 @@ export default function CreateBrand() {
 				fd.append("brandName", newBrand);
 				const result = await createBrand(fd);
 				window.dispatchEvent(new Event("brandCreate"));
-				setShowModal(true);
 				console.log("Marque créée avec fichier :", result);
+				setErrorMessage(false);
+				addToast(`La marque ${newBrand} à créé avec succès`, "bg-green-500");
 			} else if (imagePreview && !isDataUrl) {
 				// Cas 2: URL distante (pas une data URL)
 				const payload = { brandName: newBrand, image_url: imagePreview };
@@ -158,6 +161,7 @@ export default function CreateBrand() {
 			setIsDataUrl(false);
 		} catch (err) {
 			console.error("Erreur submit :", err);
+			setErrorMessage(true);
 		}
 	};
 
@@ -265,18 +269,17 @@ export default function CreateBrand() {
 							</p>
 						)}
 					</div>
-					<Button type={"submit"} buttonText="AJOUTER LA MARQUE" />
+
+					{errorMessage && (
+						<span className="text-sm text-red-500 pl-0.5">
+							Création impossible, une marque porte deja ce nom
+						</span>
+					)}
+					<div className="-mt-4">
+						<Button type={"submit"} buttonText="AJOUTER LA MARQUE" />
+					</div>
 				</div>
 			</form>
-			{showModal && (
-				<InfoModal
-					id={1}
-					bg="bg-green-500"
-					text="Marque créée avec succès"
-					onClose={() => setShowModal(false)}
-					duration={2000}
-				/>
-			)}
 		</div>
 	);
 }

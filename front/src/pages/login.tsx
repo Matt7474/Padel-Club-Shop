@@ -2,11 +2,14 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/User";
 import Input from "../components/Form/Tools/Input";
+import { useToastStore } from "../store/ToastStore ";
 import { useAuthStore } from "../store/useAuthStore";
 import type { AuthResponse } from "../types/AuthResponse";
 
 export default function Login() {
 	const navigate = useNavigate();
+	const addToast = useToastStore((state) => state.addToast);
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
@@ -33,6 +36,7 @@ export default function Login() {
 				response.token,
 			);
 			console.log("Token reçu :", response.token);
+			addToast(`Bienvenu ${response.user.first_name}`, "bg-green-600");
 			navigate("/");
 		} catch (error: any) {
 			console.error("❌ Erreur front :", error.message);
@@ -69,7 +73,7 @@ export default function Login() {
 										onChange={setPassword}
 									/>
 
-									<div className="text-xs">
+									<div className="text-sm">
 										<p className="ml-0">
 											Mot de passe oublié ?{" "}
 											<button
@@ -89,8 +93,11 @@ export default function Login() {
 							>
 								SE CONNECTER
 							</button>
-							<span className="mr-1">Pas encore de compte ?</span>
-							<Link to={"/register"} className="underline cursor-pointer">
+							<span className="mr-1 text-sm">Pas encore de compte ?</span>
+							<Link
+								to={"/register"}
+								className="underline cursor-pointer text-sm"
+							>
 								Créez en un ici
 							</Link>
 						</div>

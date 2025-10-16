@@ -4,9 +4,11 @@ import { createUser } from "../api/User";
 import Toogle from "../components/Form/Toogle/Toogle";
 import Input from "../components/Form/Tools/Input";
 import Adress from "../components/Form/User/Adress";
+import { useToastStore } from "../store/ToastStore ";
 
 export default function Register() {
 	const navigate = useNavigate();
+	const addToast = useToastStore((state) => state.addToast);
 	const [errorMessage, setErrorMessage] = useState("");
 
 	const [lastName, setLastName] = useState("");
@@ -22,7 +24,10 @@ export default function Register() {
 	};
 	const [registerEmail, setRegisterEmail] = useState("");
 	const [registerPassword, setRegisterPassword] = useState("");
+	const [showRegisteredPassword, setShowRegisteredPassword] = useState(false);
 	const [passwordConfirm, setPasswordConfirm] = useState("");
+	const [showRegisteredConfirmPassword, setShowRegisteredConfirmPassword] =
+		useState(false);
 	const [isNotSameRegisterPassword, setIsNotSameRegisterPassword] =
 		useState(false);
 	// Adresse de livraison (shippping)
@@ -96,6 +101,10 @@ export default function Register() {
 
 			setErrorMessage("");
 			navigate("/login");
+			addToast(
+				`${newUser.first_name} votre compte à bien été créer`,
+				"bg-green-600",
+			);
 		} catch (error: any) {
 			console.error("❌ Erreur front :", error.message);
 			setErrorMessage(error.message);
@@ -103,164 +112,213 @@ export default function Register() {
 	};
 
 	return (
-		<>
-			<div className="xl:bg-[url('/icons/backgroundH.avif')] xl:h-180 xl:bg-cover xl:bg-center flex flex-col xl:flex-row xl:p-6 gap-10 xl:gap-40 items-center xl:items-start xl:justify-center">
-				{/* Partie register */}
-				<div className="p-3 w-full bg-white/60 xl:w-2/7">
-					<form onSubmit={registerSubmit} autoComplete="off">
-						<h2 className="p-3  bg-gray-500/80 font-semibold text-lg">
-							Création de compte
-						</h2>
-						<div className="flex flex-col">
-							<div>
-								{/* Partie Nom */}
-								<Input
-									htmlFor="lastName"
-									label="Nom"
-									type="text"
-									value={lastName}
-									onChange={setLastName}
-								/>
-								{/* Partie Prenom */}
-								<Input
-									htmlFor="firstName"
-									label="Prénom"
-									type="text"
-									value={firstName}
-									onChange={setFirstName}
-								/>
-								{/* Partie téléphone */}
-								<Input
-									htmlFor={"phone"}
-									label={"N° téléphone"}
-									type={"text"}
-									value={phone}
-									onChange={(value) => setPhone(formatPhone(value))}
-									pattern={"^\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d{2}$"}
-								/>
-								{/* Partie email */}
-								<Input
-									htmlFor="registerEmail"
-									label="Email"
-									type="email"
-									value={registerEmail}
-									onChange={setRegisterEmail}
-								/>
+		<div className="xl:bg-[url('/icons/backgroundH.avif')] xl:h-180 xl:bg-cover xl:bg-center flex flex-col items-center xl:justify-center">
+			{/* Partie register */}
+			<div className="p-3 w-full bg-white/60 xl:w-5/7 xl:max-h-[80vh] xl:overflow-y-auto xl:my-4">
+				<form onSubmit={registerSubmit} autoComplete="off">
+					<h2 className="p-3 bg-gray-500/80 font-semibold text-lg">
+						Création de compte
+					</h2>
 
-								{/* Partie Mot de passe */}
+					<div className="flex flex-col xl:flex-row gap-4">
+						{/* Colonne gauche : données personnelles */}
+						<div className="xl:w-1/2 xl:mr-3 flex flex-col gap-0">
+							<p className="mt-6 font-semibold text-sm -mb-2 pl-0.5">
+								Données personnelles
+							</p>
+							<Input
+								htmlFor="lastName"
+								label="Nom"
+								type="text"
+								value={lastName}
+								onChange={setLastName}
+							/>
+							<Input
+								htmlFor="firstName"
+								label="Prénom"
+								type="text"
+								value={firstName}
+								onChange={setFirstName}
+							/>
+							<Input
+								htmlFor="phone"
+								label="N° téléphone"
+								type="text"
+								value={phone}
+								onChange={(value) => setPhone(formatPhone(value))}
+								pattern={"^\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d{2}$"}
+							/>
+							<Input
+								htmlFor="registerEmail"
+								label="Email"
+								type="email"
+								value={registerEmail}
+								onChange={setRegisterEmail}
+							/>
+
+							{/* Mot de passe */}
+							<div className="relative">
 								<Input
 									htmlFor="registerPassword"
 									label="Mot de passe"
-									type="password"
+									type={showRegisteredPassword ? "text" : "password"}
 									value={registerPassword}
 									onChange={setRegisterPassword}
-									// pattern={"^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$"}
 									pattern={"^(?=.*[A-Z])(?=.*\\d).{8,}$"}
 								/>
-								{/* Indicateurs */}
-								<div className="mt-2 text-xs transition-all duration-300">
-									<span
-										className={hasMinLength ? "text-green-600" : "text-red-600"}
-									>
-										{hasMinLength ? "✔" : "✘"} Au moins 8 caractères
-									</span>
-									<br />
-									<span
-										className={hasUppercase ? "text-green-600" : "text-red-600"}
-									>
-										{hasUppercase ? "✔" : "✘"} Une majuscule
-									</span>
-									<br />
-									<span
-										className={hasNumber ? "text-green-600" : "text-red-600"}
-									>
-										{hasNumber ? "✔" : "✘"} Un chiffre
-									</span>
-								</div>
-
-								{/* Partie Confirmation de mot de passe */}
-								<div className="relative flex flex-col mt-4 ">
-									<Input
-										htmlFor="passwordConfirm"
-										label="Confirmation du mot de passe"
-										type="password"
-										value={passwordConfirm}
-										onChange={setPasswordConfirm}
-										pattern={"^(?=.*[A-Z])(?=.*\\d).{8,}$"}
+								<button
+									type="button"
+									onClick={() =>
+										setShowRegisteredPassword(!showRegisteredPassword)
+									}
+									className="absolute top-1/2 right-2 -translate-y-1/2 p-1"
+								>
+									<img
+										src={
+											showRegisteredPassword
+												? "/icons/hide.svg"
+												: "/icons/show.svg"
+										}
+										alt={
+											showRegisteredPassword
+												? "Cacher le mot de passe"
+												: "Afficher le mot de passe"
+										}
+										className="w-5 h-5"
 									/>
-									{isNotSameRegisterPassword && (
-										<span className="text-red-600 text-sm absolute mt-14">
-											Les mots de passe ne sont pas identique.
-										</span>
-									)}
-								</div>
+								</button>
 							</div>
-							<div className="border-b xl:border-r border-gray-400 mt-7 "></div>
-							<div>
-								<div>
-									<Adress
-										title={"Adresse de livraison"}
-										streetNumber={sStreetNumber}
-										setStreetNumber={setSStreetNumber}
-										streetName={sStreetName}
-										setStreetName={setSStreetName}
-										zipcode={sZipcode}
-										setZipcode={setSZipcode}
-										city={sCity}
-										setCity={setSCity}
-										country={sCountry}
-										setCountry={setSCountry}
-										additionalInfo={sAdditionalInfo}
-										setAdditionalInfo={setSAdditionalInfo}
+
+							{/* Indicateurs */}
+							<div className="mt-2 text-xs">
+								<span
+									className={hasMinLength ? "text-green-600" : "text-red-600"}
+								>
+									{hasMinLength ? "✔" : "✘"} Au moins 8 caractères
+								</span>
+								<br />
+								<span
+									className={hasUppercase ? "text-green-600" : "text-red-600"}
+								>
+									{hasUppercase ? "✔" : "✘"} Une majuscule
+								</span>
+								<br />
+								<span className={hasNumber ? "text-green-600" : "text-red-600"}>
+									{hasNumber ? "✔" : "✘"} Un chiffre
+								</span>
+							</div>
+
+							{/* Confirmation mot de passe */}
+							<div className="relative">
+								<Input
+									htmlFor="passwordConfirm"
+									label="Confirmation du mot de passe"
+									type={showRegisteredConfirmPassword ? "text" : "password"}
+									value={passwordConfirm}
+									onChange={setPasswordConfirm}
+									pattern={"^(?=.*[A-Z])(?=.*\\d).{8,}$"}
+								/>
+								<button
+									type="button"
+									onClick={() =>
+										setShowRegisteredConfirmPassword(
+											!showRegisteredConfirmPassword,
+										)
+									}
+									className="absolute top-1/2 right-2 -translate-y-1/2 p-1"
+								>
+									<img
+										src={
+											showRegisteredConfirmPassword
+												? "/icons/hide.svg"
+												: "/icons/show.svg"
+										}
+										alt={
+											showRegisteredConfirmPassword
+												? "Cacher le mot de passe"
+												: "Afficher le mot de passe"
+										}
+										className="w-5 h-5"
 									/>
-								</div>
-								<div className="border-b xl:border-r border-gray-400 my-4 "></div>
-								<div>
-									<Toogle
-										title="Adresse de facturation differente ?"
-										checked={isBillingDifferent}
-										onChange={setIsBillingDifferent}
-									/>
-								</div>
-								{isBillingDifferent === true && (
-									<div>
-										<Adress
-											title={"Adresse de facturation"}
-											streetNumber={bStreetNumber}
-											setStreetNumber={setBStreetNumber}
-											streetName={bStreetName}
-											setStreetName={setBStreetName}
-											zipcode={bZipcode}
-											setZipcode={setBZipcode}
-											city={bCity}
-											setCity={setBCity}
-											country={bCountry}
-											setCountry={setBCountry}
-											additionalInfo={bAdditionalInfo}
-											setAdditionalInfo={setBAdditionalInfo}
-										/>
-									</div>
+								</button>
+
+								{isNotSameRegisterPassword && (
+									<span className="text-red-600 text-sm absolute mt-1 pl-0.5">
+										Les mots de passe ne sont pas identiques.
+									</span>
 								)}
 							</div>
 						</div>
 
+						<div className="border-b xl:border-r border-gray-400 mt-4"></div>
+
+						{/* Colonne droite : adresses */}
+						<div className="xl:w-1/2 xl:ml-3 flex flex-col -mt-4 xl:mt-0">
+							<Adress
+								title="Adresse de livraison"
+								streetNumber={sStreetNumber}
+								setStreetNumber={setSStreetNumber}
+								streetName={sStreetName}
+								setStreetName={setSStreetName}
+								zipcode={sZipcode}
+								setZipcode={setSZipcode}
+								city={sCity}
+								setCity={setSCity}
+								country={sCountry}
+								setCountry={setSCountry}
+								additionalInfo={sAdditionalInfo}
+								setAdditionalInfo={setSAdditionalInfo}
+							/>
+							<div className="border-b xl:border-r border-gray-400 mt-4"></div>
+							<div className="mt-4">
+								<Toogle
+									title="Adresse de facturation differente ?"
+									checked={isBillingDifferent}
+									onChange={setIsBillingDifferent}
+								/>
+							</div>
+
+							{isBillingDifferent && (
+								<div className="">
+									<Adress
+										title="Adresse de facturation"
+										streetNumber={bStreetNumber}
+										setStreetNumber={setBStreetNumber}
+										streetName={bStreetName}
+										setStreetName={setBStreetName}
+										zipcode={bZipcode}
+										setZipcode={setBZipcode}
+										city={bCity}
+										setCity={setBCity}
+										country={bCountry}
+										setCountry={setBCountry}
+										additionalInfo={bAdditionalInfo}
+										setAdditionalInfo={setBAdditionalInfo}
+									/>
+								</div>
+							)}
+						</div>
+					</div>
+
+					{/* Boutons et liens */}
+					<div className="xl:w-1/2 xl:mx-auto">
 						<button
 							type="submit"
 							className="bg-amber-500 text-white font-bold mt-10 p-2 w-full cursor-pointer"
 						>
 							CREER UN COMPTE
 						</button>
-						<span className="mr-1">Vous avez deja un compte ?</span>
-						<Link to={"/login"} className="underline cursor-pointer">
-							Clickez ici
+						<span className="mr-1 text-sm">Vous avez déjà un compte ?</span>
+						<Link to="/login" className="underline cursor-pointer text-sm">
+							Ca se passe ici
 						</Link>
-						{/* Pa$$w0rd! */}
 						{errorMessage && (
 							<span className="text-xs text-red-500">{errorMessage}</span>
 						)}
-					</form>
-				</div>
+						{/* Pa$$w0rd! */}
+					</div>
+				</form>
 			</div>
-		</>
+		</div>
 	);
 }

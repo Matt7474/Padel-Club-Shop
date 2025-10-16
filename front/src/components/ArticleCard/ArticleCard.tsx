@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import type Article from "../../types/Article";
 import InfoModal from "../Modal/InfoModal";
+import { useToastStore } from "../../store/ToastStore ";
 
 interface ArticleCardProps {
 	article: Article;
@@ -11,6 +12,8 @@ interface ArticleCardProps {
 export default function ArticleCard({ article }: ArticleCardProps) {
 	const navigate = useNavigate();
 	const now = new Date();
+	const addToast = useToastStore((state) => state.addToast);
+
 	const [infoModal, setInfoModal] = useState<{ id: number; text: string }[]>(
 		[],
 	);
@@ -85,12 +88,11 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 		});
 
 		const id = Date.now();
-		setInfoModal((prev) => [
-			...prev,
-			{ id, text: "Produit ajouté au panier !" },
-		]);
+		addToast(
+			`L'article ${article.name} à été ajouté au panier`,
+			"bg-green-500",
+		);
 	};
-
 	const removeInfoModal = (id: number) => {
 		setInfoModal((prev) => prev.filter((t) => t.id !== id));
 	};
@@ -179,7 +181,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 							{article.type !== "clothing" && article.type !== "shoes" && (
 								<button
 									type="button"
-									className="flex items-center justify-center bg-amber-300 text-black rounded-md px-2 py-1 transition-colors hover:bg-amber-400"
+									className="flex items-center justify-center bg-amber-300 text-black rounded-md px-2 py-1 transition-colors hover:bg-amber-400 cursor-pointer"
 									onClick={addToCart}
 								>
 									<span className="text-md font-bold mr-1">+</span>

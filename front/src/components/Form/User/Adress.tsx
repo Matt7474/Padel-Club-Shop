@@ -15,6 +15,7 @@ interface adressProps {
 	setCountry: (value: string) => void;
 	additionalInfo: string;
 	setAdditionalInfo: (value: string) => void;
+	disabled?: boolean;
 }
 
 export default function Adress({
@@ -31,6 +32,7 @@ export default function Adress({
 	setCountry,
 	additionalInfo,
 	setAdditionalInfo,
+	disabled,
 }: adressProps) {
 	return (
 		<>
@@ -47,6 +49,7 @@ export default function Adress({
 							value={streetNumber}
 							onChange={setStreetNumber}
 							width="w-1/5"
+							disabled={disabled}
 						/>
 
 						{/* Partie nom de rue */}
@@ -57,6 +60,7 @@ export default function Adress({
 							value={streetName}
 							onChange={setStreetName}
 							width="w-full"
+							disabled={disabled}
 						/>
 					</div>
 
@@ -68,6 +72,7 @@ export default function Adress({
 						value={zipcode}
 						onChange={setZipcode}
 						width="w-full"
+						disabled={disabled}
 					/>
 
 					{/* Partie ville */}
@@ -78,6 +83,7 @@ export default function Adress({
 						value={city}
 						onChange={setCity}
 						width="w-full"
+						disabled={disabled}
 					/>
 
 					{/* Partie pays */}
@@ -88,6 +94,7 @@ export default function Adress({
 						value={country}
 						onChange={setCountry}
 						width="w-full"
+						disabled={disabled}
 					/>
 
 					{/* Partie informations complémentaires */}
@@ -98,6 +105,7 @@ export default function Adress({
 						value={additionalInfo}
 						onChange={setAdditionalInfo}
 						maxLength={200}
+						disabled={disabled}
 					/>
 				</div>
 			</div>

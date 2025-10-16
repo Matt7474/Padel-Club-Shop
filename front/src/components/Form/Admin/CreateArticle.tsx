@@ -25,8 +25,9 @@ import RacketForm from "../CreateArticle/RacketForm";
 import ShoesForm from "../CreateArticle/ShoesForm";
 import Toogle from "../Toogle/Toogle";
 import Button from "../Tools/Button";
-import InfoModal from "../../Modal/InfoModal";
 import type { Promotion } from "../../../types/Promotions";
+import { useToastStore } from "../../../store/ToastStore ";
+import ConfirmModal from "../../Modal/ConfirmModal";
 
 type ImageWithId = {
 	id: string;
@@ -61,9 +62,14 @@ export default function CreateArticle({
 	onUpdated,
 }: CreateArticlePropos) {
 	const today = new Date();
-	const [infoModal, setInfoModal] = useState<{ id: number; text: string }[]>(
-		[],
+	const addToast = useToastStore((state) => state.addToast);
+	const [showConfirm, setShowConfirm] = useState(false);
+	const [articleToDelete, setArticleToDelete] = useState<number | null>(null);
+	const [showRestoreConfirm, setShowRestoreConfirm] = useState(false);
+	const [articleToRestore, setArticleToRestore] = useState<Article | null>(
+		null,
 	);
+
 	const [noImage, setNoImage] = useState(false);
 
 	const [articleType, setArticleType] = useState(article?.type || "");
@@ -465,9 +471,7 @@ export default function CreateArticle({
 					});
 				}
 
-				// if (newArticle.promotions?.[0]) {
-				// 	await attachPromoToArticle(articleId, newArticle.promotions[0]);
-				// }
+				addToast(`Article ${newArticle.name} créé avec succès`, "bg-green-500");
 			}
 
 			onReturn?.();
@@ -523,44 +527,77 @@ export default function CreateArticle({
 						await detachPromoFromArticle(articleId, existingPromo.promo_id);
 					}
 				}
-				// Cas 3 : Pas de promo avant, pas de promo après → rien à faire
 			}
-
-			setInfoModal((prev) => [
-				...prev,
-				{
-					id: Date.now(),
-					text:
-						mode === "edit"
-							? "Article modifié avec succès"
-							: "Article créé avec succès",
-				},
-			]);
 
 			onUpdated?.();
 			onReturn?.();
 			if (setMenuSelected) setMenuSelected("null");
+			addToast(
+				`Article ${newArticle.name} modifié avec succès`,
+				"bg-green-500",
+			);
 		} catch (err) {
 			console.error(err);
 			alert("Erreur lors de la sauvegarde de l'article");
 		}
 	};
 
-	const handleDelete = (id: number | undefined) => {
-		if (!id) return;
-		deleteArticleById(id);
-		console.log("handleDelete", id);
-		alert("Article supprimé avec succés");
-	};
-	const handleRestore = (id: number | undefined) => {
-		if (!id) return;
-		restoreArticleById(id);
-		console.log("handleRestore", id);
-		alert("Article restauré avec succés");
+	// --- Ouvre la modale de confirmation de suppression ---
+	const handleDelete = (article_id: number) => {
+		setArticleToDelete(article_id);
+		setShowConfirm(true);
 	};
 
-	const removeInfoModal = (id: number) => {
-		setInfoModal((prev) => prev.filter((t) => t.id !== id));
+	// --- Confirmation de suppression ---
+	const handleDeleteConfirmed = async () => {
+		if (!articleToDelete) return;
+		try {
+			await deleteArticleById(articleToDelete);
+			addToast(
+				`L'article "${article?.name}" a été archivé avec succès`,
+				"bg-green-500",
+			);
+			onUpdated?.();
+			onReturn?.();
+		} catch (err) {
+			console.error(err);
+			addToast("Erreur lors de la suppression de l'article", "bg-red-500");
+		} finally {
+			setShowConfirm(false);
+			setArticleToDelete(null);
+		}
+	};
+
+	// --- Annulation ---
+	const handleCancelDelete = () => {
+		setShowConfirm(false);
+		setArticleToDelete(null);
+	};
+
+	// --- Ouvre la modale de confirmation de restauration ---
+	const handleRestoreClick = (id: number | undefined) => {
+		if (!id || !article) return;
+		setArticleToRestore(article);
+		setShowRestoreConfirm(true);
+	};
+
+	// --- Confirmation de restauration ---
+	const handleConfirmRestore = async () => {
+		if (!articleToRestore) return;
+		try {
+			await restoreArticleById(articleToRestore.article_id);
+			addToast(
+				`L'article "${articleToRestore.name}" a été restauré avec succès`,
+				"bg-green-500",
+			);
+			setShowRestoreConfirm(false);
+			setArticleToRestore(null);
+			onUpdated?.();
+			onReturn?.();
+		} catch (err) {
+			console.error(err);
+			addToast("Erreur lors de la restauration de l'article", "bg-red-500");
+		}
 	};
 
 	return (
@@ -605,7 +642,7 @@ export default function CreateArticle({
 								<p>Restaurer l'article ?</p>
 								<button
 									type="button"
-									onClick={() => handleRestore(article?.article_id)}
+									onClick={() => handleRestoreClick(article?.article_id)}
 								>
 									<img
 										src="/icons/restore3.svg"
@@ -817,17 +854,23 @@ export default function CreateArticle({
 							<Button type="submit" buttonText={`${buttonText}`} />
 						</div>
 					</form>
+					{showConfirm && (
+						<ConfirmModal
+							message="Voulez-vous vraiment archiver cet article ?"
+							onConfirm={handleDeleteConfirmed}
+							onCancel={handleCancelDelete}
+						/>
+					)}
+
+					{showRestoreConfirm && (
+						<ConfirmModal
+							message={`Souhaitez-vous restaurer l'article "${articleToRestore?.name}" ?`}
+							onConfirm={handleConfirmRestore}
+							onCancel={() => setShowRestoreConfirm(false)}
+						/>
+					)}
 				</div>
 			</div>
-			{infoModal.map((infoModal) => (
-				<InfoModal
-					key={infoModal.id}
-					id={infoModal.id}
-					bg="bg-green-500"
-					text={infoModal.text}
-					onClose={removeInfoModal}
-				/>
-			))}
 		</>
 	);
 }

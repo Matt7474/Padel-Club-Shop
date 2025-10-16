@@ -5,9 +5,11 @@ import { useAuthStore } from "../../store/useAuthStore";
 import CartModal from "../Modal/CartModal";
 import MenuModal from "../Modal/MenuModal";
 import SearchBar from "../SearchBar/SearchBar";
+import { useToastStore } from "../../store/ToastStore ";
 
 export default function Header() {
 	const { user, isAuthenticated } = useAuthStore();
+	const addToast = useToastStore((state) => state.addToast);
 
 	const navigate = useNavigate();
 	const [isQuantity, setIsQuantity] = useState(0);
@@ -93,22 +95,24 @@ export default function Header() {
 						onClick={() => {
 							if (isAuthenticated) {
 								handleLogout();
+								addToast(`👋 A bientôt ${user?.firstName}`, "bg-red-500");
+								navigate("/");
 							} else {
 								navigate("/login");
 							}
 						}}
 					>
 						<img
-							src="/icons/logout.svg"
-							alt="icon-logout"
+							src={isAuthenticated ? "/icons/logout.svg" : "/icons/login.svg"}
+							alt={isAuthenticated ? "icon-logout" : "icon-login"}
 							className={`block transition-transform duration-200 ${
-								!isAuthenticated ? "rotate-180" : ""
+								!isAuthenticated ? "rotate-0" : "rotate-180"
 							}`}
 						/>
 					</button>
 
 					{/* MODIFICATION CLIENT ->  ADMIN A FAIRE  APRES TESTS */}
-					{isAuthenticated && user?.role === "client" && (
+					{isAuthenticated && user?.role === "super admin" && (
 						<Link
 							to="/admin/profile"
 							className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"
@@ -130,16 +134,22 @@ export default function Header() {
 						</Link>
 					)}
 
-					<Link
-						to="/profile"
-						className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"
-					>
-						<img src="/icons/profile.svg" alt="icon-compte" className="block" />
-					</Link>
+					{isAuthenticated && (
+						<Link
+							to="/profile"
+							className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"
+						>
+							<img
+								src="/icons/profile.svg"
+								alt="icon-compte"
+								className="block"
+							/>
+						</Link>
+					)}
 
 					<button
 						type="button"
-						className="relative w-6 hover:cursor-pointer mt-0.5 xl:mt-2 2xl:w-8 "
+						className="relative w-6 hover:cursor-pointer mt-0.5 xl:mt-3 xl:w-7.5 "
 						onClick={toggleCart}
 					>
 						{isQuantity > 0 && (

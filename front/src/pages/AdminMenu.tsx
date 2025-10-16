@@ -3,11 +3,11 @@ import ArticlesList from "../components/Form/Admin/ArticlesList";
 import BrandList from "../components/Form/Admin/BrandList";
 import CreateArticle from "../components/Form/Admin/CreateArticle";
 import CreateBrand from "../components/Form/Admin/CreateBrand";
+import CreatePromo from "../components/Form/Admin/CreatePromo";
 import OrderList from "../components/Form/Admin/OrderList";
+import PromoList from "../components/Form/Admin/PromoList";
 import UserList from "../components/Form/Admin/UsersList";
 import Select from "../components/Form/Tools/Select";
-import CreatePromo from "../components/Form/Admin/CreatePromo";
-import PromoList from "../components/Form/Admin/PromoList";
 
 export default function AdminMenu() {
 	const [menuSelected, setMenuSelected] = useState("");

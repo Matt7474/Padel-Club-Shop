@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getArticles } from "../../../api/Article";
 import { deleteBrands, getBrands } from "../../../api/Brand";
+import { useToastStore } from "../../../store/ToastStore ";
 import type Article from "../../../types/Article";
 import type { Brand } from "../../../types/Article";
 import ConfirmModal from "../../Modal/ConfirmModal";
@@ -9,6 +10,7 @@ import { useSortableData } from "../Tools/useSortableData";
 
 export default function BrandList() {
 	const BASE_URL = import.meta.env.VITE_API_URL;
+	const addToast = useToastStore((state) => state.addToast);
 
 	// States
 	const [selectedBrand] = useState<Brand | null>(null);
@@ -92,7 +94,11 @@ export default function BrandList() {
 			setBrands(dataWithFullLogo);
 		}
 		window.dispatchEvent(new Event("brandDelete"));
-		setShowModal(true);
+		// setShowModal(true);
+		if (showConfirm === true) {
+			addToast(`La marque à été supprimé avec succès`, "bg-green-500");
+		}
+
 		setShowConfirm(false);
 		setBrandToDelete(null);
 	};

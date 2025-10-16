@@ -1,7 +1,7 @@
 export default function TermsOfSale() {
 	return (
 		<>
-			<div id="cgv" className="page-content">
+			<div id="cgv" className="page-content mt-4">
 				<h2 className="text-3xl font-bold text-blue-800 mb-6 pb-3 border-b-2 border-gray-200">
 					Conditions Générales de Vente
 				</h2>

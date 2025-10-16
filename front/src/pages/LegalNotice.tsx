@@ -1,7 +1,7 @@
 export default function LegalNotice() {
 	return (
 		<>
-			<div id="mentions" className="page-content">
+			<div id="mentions" className="page-content mt-4">
 				<h2 className="text-3xl font-bold text-blue-800 mb-6 pb-3 border-b-2 border-gray-200">
 					Mentions Légales
 				</h2>

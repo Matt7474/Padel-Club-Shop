@@ -7,6 +7,7 @@ interface textAreaProps {
 	value: string;
 	maxLength?: number;
 	onChange: (value: string) => void;
+	disabled?: boolean;
 }
 
 export default function TextArea({
@@ -18,6 +19,7 @@ export default function TextArea({
 	value,
 	onChange,
 	maxLength,
+	disabled,
 }: textAreaProps) {
 	return (
 		<>
@@ -44,6 +46,7 @@ export default function TextArea({
 						className={`bg-white border h-25 ${height} p-2 pt-6 resize-none w-full`}
 						placeholder={placeholder}
 						maxLength={maxLength}
+						disabled={disabled}
 					/>
 				</div>
 			</div>

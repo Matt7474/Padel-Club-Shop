@@ -1,16 +1,17 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
 import { useEffect, useState } from "react";
-import { getUserById } from "../api/User";
+import { deleteUser, getUserById, updateUser } from "../api/User";
 import Toogle from "../components/Form/Toogle/Toogle";
 import Input from "../components/Form/Tools/Input";
 import Adress from "../components/Form/User/Adress";
+import ConfirmModal from "../components/Modal/ConfirmModal";
 import { useAuthStore } from "../store/useAuthStore";
-// import type { Address, User } from "../types/User";
 
 export default function Profile() {
 	const { user } = useAuthStore();
 	const [loading, setLoading] = useState(true);
-	// const [registerPassword, setRegisterPassword] = useState("");
+	const [isEditing, setIsEditing] = useState(false);
+	const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
 	// State utilisateur
 	const [profile, setProfile] = useState({
@@ -42,19 +43,12 @@ export default function Profile() {
 	});
 
 	const [isBillingDifferent, setIsBillingDifferent] = useState(false);
-	// const [isNotSameRegisterPassword, setIsNotSameRegisterPassword] =
-	useState(false);
 
 	// Formatage du téléphone
 	const formatPhone = (value: string) => {
-		let digits = value.replace(/\D/g, "").substring(0, 10);
+		const digits = value.replace(/\D/g, "").substring(0, 10);
 		return digits.replace(/(\d{2})(?=\d)/g, "$1.");
 	};
-
-	// Règles de validation
-	// const hasMinLength = profile.password.length >= 8;
-	// const hasUppercase = /[A-Z]/.test(profile.password);
-	// const hasNumber = /\d/.test(profile.password);
 
 	// Récupération des infos utilisateur
 	useEffect(() => {
@@ -66,6 +60,7 @@ export default function Profile() {
 
 				const response: any = await getUserById(user.id);
 				console.log("Utilisateur récupéré :", response);
+
 				// Infos de base
 				setProfile({
 					lastName: response.last_name || "",
@@ -120,28 +115,136 @@ export default function Profile() {
 
 	if (loading) return <p>Chargement...</p>;
 
-	// Handlers
 	const handleChange = () => {
-		console.log("modification activé");
+		setIsEditing(true);
+		console.log("Mode édition activé");
 	};
 
-	const handleCancelChange = () => {
-		console.log("cancelChange");
-	};
-
-	const handleChangeSubmit = (e: React.FormEvent) => {
+	const handleChangeSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (profile.password !== profile.confirmPassword) {
-			// setIsNotSameRegisterPassword(true);
-			console.log("mot de passe non identique");
-		} else {
-			// setIsNotSameRegisterPassword(false);
-			console.log("Soumission OK, on peut envoyer les données au backend");
+		if (!user?.id) return;
+
+		try {
+			const updatedUser = {
+				last_name: profile.lastName,
+				first_name: profile.firstName,
+				email: profile.email,
+				phone: profile.phone.replace(/\D/g, ""),
+				password: profile.password || undefined,
+				addresses: [
+					{
+						type: "shipping",
+						street_number: shippingAddress.streetNumber,
+						street_name: shippingAddress.streetName,
+						zip_code: shippingAddress.zipCode,
+						city: shippingAddress.city,
+						country: shippingAddress.country,
+						complement: shippingAddress.additionalInfo,
+					},
+					...(isBillingDifferent
+						? [
+								{
+									type: "billing",
+									street_number: billingAddress.streetNumber,
+									street_name: billingAddress.streetName,
+									zip_code: billingAddress.zipCode,
+									city: billingAddress.city,
+									country: billingAddress.country,
+									complement: billingAddress.additionalInfo,
+								},
+							]
+						: []),
+				],
+			};
+
+			console.log("✅ Données envoyées :", updatedUser);
+
+			const response = await updateUser(user.id, updatedUser);
+			console.log("🟢 Profil mis à jour :", response);
+
+			setIsEditing(false);
+			alert("Profil mis à jour avec succès !");
+		} catch (error) {
+			console.error("❌ Erreur lors de la mise à jour :", error);
+			alert("Une erreur est survenue lors de la mise à jour du profil.");
+		}
+	};
+
+	const handleCancelChange = async () => {
+		if (!user?.id) return;
+
+		try {
+			setLoading(true);
+			const response: any = await getUserById(user.id);
+			console.log("🔁 Données réinitialisées :", response);
+
+			setProfile({
+				lastName: response.last_name || "",
+				firstName: response.first_name || "",
+				email: response.email || "",
+				phone: response.phone ? formatPhone(response.phone) : "",
+				password: "",
+				confirmPassword: "",
+			});
+
+			const shippingAddr: any = response.addresses?.find(
+				(addr: any) => addr.type === "shipping",
+			);
+			const billingAddr: any = response.addresses?.find(
+				(addr: any) => addr.type === "billing",
+			);
+
+			setShippingAddress({
+				streetNumber: shippingAddr?.street_number || "",
+				streetName: shippingAddr?.street_name || "",
+				zipCode: shippingAddr?.zip_code || "",
+				city: shippingAddr?.city || "",
+				country: shippingAddr?.country || "",
+				additionalInfo: shippingAddr?.complement || "",
+			});
+
+			if (billingAddr) {
+				setBillingAddress({
+					streetNumber: billingAddr.street_number || "",
+					streetName: billingAddr.street_name || "",
+					zipCode: billingAddr.zip_code || "",
+					city: billingAddr.city || "",
+					country: billingAddr.country || "",
+					additionalInfo: billingAddr.complement || "",
+				});
+				setIsBillingDifferent(true);
+			} else {
+				setIsBillingDifferent(false);
+			}
+
+			setIsEditing(false);
+			alert("Modifications annulées.");
+		} catch (error) {
+			console.error("Erreur lors du reset :", error);
+			alert("Impossible de recharger les données utilisateur.");
+		} finally {
+			setLoading(false);
 		}
 	};
 
 	const handleDeleteProfile = () => {
-		console.log("deleteProfile");
+		setIsConfirmOpen(true);
+	};
+
+	const confirmDelete = async () => {
+		if (!user) return;
+		setLoading(true);
+		try {
+			await deleteUser(user.id);
+			// LogOut();
+			alert("Votre compte a été supprimé avec succès.");
+			window.location.href = "/";
+		} catch (error: any) {
+			alert(`Erreur lors de la suppression du compte : ${error.message}`);
+		} finally {
+			setLoading(false);
+			setIsConfirmOpen(false);
+		}
 	};
 
 	return (
@@ -175,6 +278,7 @@ export default function Profile() {
 									type="text"
 									value={profile.lastName}
 									onChange={(val) => setProfile({ ...profile, lastName: val })}
+									disabled={!isEditing}
 								/>
 								<Input
 									htmlFor="firstName"
@@ -182,6 +286,7 @@ export default function Profile() {
 									type="text"
 									value={profile.firstName}
 									onChange={(val) => setProfile({ ...profile, firstName: val })}
+									disabled={!isEditing}
 								/>
 								<Input
 									htmlFor="email"
@@ -189,52 +294,9 @@ export default function Profile() {
 									type="email"
 									value={profile.email}
 									onChange={(val) => setProfile({ ...profile, email: val })}
+									disabled={!isEditing}
+									readOnly={!!user}
 								/>
-								{/* <p className="mt-4 -mb-3 text-sm pl-1">
-									Souhaitez vous changer de mot de passe ?
-								</p>
-								<Input
-									htmlFor="password"
-									label="Mot de passe"
-									type="password"
-									value={profile.password}
-									onChange={(val) => setProfile({ ...profile, password: val })}
-									pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
-								/>
-								<div className="mt-2 text-xs transition-all duration-300">
-									<span
-										className={hasMinLength ? "text-green-600" : "text-red-600"}
-									>
-										{hasMinLength ? "✔" : "✘"} Au moins 8 caractères
-									</span>
-									<br />
-									<span
-										className={hasUppercase ? "text-green-600" : "text-red-600"}
-									>
-										{hasUppercase ? "✔" : "✘"} Une majuscule
-									</span>
-									<br />
-									<span
-										className={hasNumber ? "text-green-600" : "text-red-600"}
-									>
-										{hasNumber ? "✔" : "✘"} Un chiffre
-									</span>
-								</div>
-								<Input
-									htmlFor="confirmPassword"
-									label="Confirmation du mot de passe"
-									type="password"
-									value={profile.confirmPassword}
-									onChange={(val) =>
-										setProfile({ ...profile, confirmPassword: val })
-									}
-									pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
-								/>
-								{isNotSameRegisterPassword && (
-									<span className="text-red-600 text-sm mt-4">
-										Les mots de passe ne sont pas identiques.
-									</span>
-								)} */}
 								<Input
 									htmlFor="phone"
 									label="N° téléphone"
@@ -244,6 +306,7 @@ export default function Profile() {
 										setProfile({ ...profile, phone: formatPhone(val) })
 									}
 									pattern="^(\d{2}\.){4}\d{2}$"
+									disabled={!isEditing}
 								/>
 							</div>
 						</div>
@@ -276,6 +339,7 @@ export default function Profile() {
 							setAdditionalInfo={(val) =>
 								setShippingAddress({ ...shippingAddress, additionalInfo: val })
 							}
+							disabled={!isEditing}
 						/>
 					</div>
 
@@ -314,36 +378,46 @@ export default function Profile() {
 							setAdditionalInfo={(val) =>
 								setBillingAddress({ ...billingAddress, additionalInfo: val })
 							}
+							disabled={!isEditing}
 						/>
 					)}
 
-					<div className="flex justify-between mt-4 gap-4 xl:w-1/2 xl:mt-10 xl:mx-auto pl-1">
-						<button
-							type="button"
-							className="w-4/10 p-2 bg-red-400 font-semibold rounded-md cursor-pointer hover:brightness-80"
-							onClick={handleCancelChange}
-						>
-							Annuler
-						</button>
-						<button
-							type="submit"
-							className="w-4/10 p-2 bg-green-500 font-semibold rounded-md cursor-pointer hover:brightness-80"
-						>
-							Sauvegarder
-						</button>
-						<button
-							type="button"
-							className="w-1/10"
-							onClick={handleDeleteProfile}
-						>
-							<img
-								src="/icons/trash.svg"
-								alt="poubelle"
-								className="w-8 cursor-pointer hover:brightness-80"
-							/>
-						</button>
-					</div>
+					{isEditing && (
+						<div className="flex justify-between mt-4 gap-4 xl:w-1/2 xl:mt-10 xl:mx-auto pl-1">
+							<button
+								type="button"
+								className="w-4/10 p-2 bg-red-400 font-semibold rounded-md cursor-pointer hover:brightness-80"
+								onClick={handleCancelChange}
+							>
+								Annuler
+							</button>
+							<button
+								type="submit"
+								className="w-4/10 p-2 bg-green-500 font-semibold rounded-md cursor-pointer hover:brightness-80"
+							>
+								Sauvegarder
+							</button>
+							<button
+								type="button"
+								className="w-1/10"
+								onClick={handleDeleteProfile}
+							>
+								<img
+									src="/icons/trash.svg"
+									alt="poubelle"
+									className="w-8 cursor-pointer hover:brightness-80"
+								/>
+							</button>
+						</div>
+					)}
 				</form>
+				{isConfirmOpen && (
+					<ConfirmModal
+						message="Êtes-vous sûr de vouloir supprimer définitivement votre compte ? Cette action est irréversible."
+						onConfirm={confirmDelete}
+						onCancel={() => setIsConfirmOpen(false)}
+					/>
+				)}
 			</div>
 		</div>
 	);

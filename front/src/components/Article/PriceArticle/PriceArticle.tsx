@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useCartStore } from "../../../store/cartStore";
 import type Article from "../../../types/Article";
 import InfoModal from "../../Modal/InfoModal";
+import { useToastStore } from "../../../store/ToastStore ";
 
 export default function PriceArticle({
 	article,
@@ -10,6 +11,7 @@ export default function PriceArticle({
 	article: Article;
 	selectedSize?: string | null;
 }) {
+	const addToast = useToastStore((state) => state.addToast);
 	const addToCart = useCartStore((state) => state.addToCart);
 	const [quantity, setQuantity] = useState(1);
 	const increment = () => setQuantity((prev) => prev + 1);
@@ -92,10 +94,10 @@ export default function PriceArticle({
 		});
 
 		const id = Date.now();
-		setInfoModal((prev) => [
-			...prev,
-			{ id, text: "Produit ajouté au panier !" },
-		]);
+		addToast(
+			`L'article ${article.name} à été ajouté au panier`,
+			"bg-green-500",
+		);
 	};
 
 	const removeInfoModal = (id: number) => {

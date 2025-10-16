@@ -19,6 +19,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
 import TermsOfSale from "./pages/TermsOfSale";
 import Register from "./pages/Register";
+import ToastContainer from "./components/ToastContainer";
 
 function App() {
 	return (
@@ -64,6 +65,7 @@ function App() {
 						</Routes>
 					</div>
 				</div>
+				<ToastContainer />
 
 				<div className="w-full">
 					<Footer />
