@@ -1,14 +1,15 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
 import { useEffect, useState } from "react";
 import { deleteUser, getUserById, updateUser } from "../api/User";
 import Toogle from "../components/Form/Toogle/Toogle";
 import Input from "../components/Form/Tools/Input";
 import Adress from "../components/Form/User/Adress";
 import ConfirmModal from "../components/Modal/ConfirmModal";
+import { useToastStore } from "../store/ToastStore ";
 import { useAuthStore } from "../store/useAuthStore";
 
 export default function Profile() {
 	const { user } = useAuthStore();
+	const addToast = useToastStore((state) => state.addToast);
 	const [loading, setLoading] = useState(true);
 	const [isEditing, setIsEditing] = useState(false);
 	const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -163,7 +164,8 @@ export default function Profile() {
 			console.log("🟢 Profil mis à jour :", response);
 
 			setIsEditing(false);
-			alert("Profil mis à jour avec succès !");
+
+			addToast("Votre profil à bien été modifié", "bg-green-500");
 		} catch (error) {
 			console.error("❌ Erreur lors de la mise à jour :", error);
 			alert("Une erreur est survenue lors de la mise à jour du profil.");
@@ -218,7 +220,7 @@ export default function Profile() {
 			}
 
 			setIsEditing(false);
-			alert("Modifications annulées.");
+			addToast("Les modifications ont été annulés.", "bg-red-500");
 		} catch (error) {
 			console.error("Erreur lors du reset :", error);
 			alert("Impossible de recharger les données utilisateur.");
@@ -236,14 +238,14 @@ export default function Profile() {
 		setLoading(true);
 		try {
 			await deleteUser(user.id);
-			// LogOut();
-			alert("Votre compte a été supprimé avec succès.");
+			addToast("Votre compte a été supprimé avec succès.", "bg-red-500");
 			window.location.href = "/";
-		} catch (error: any) {
-			alert(`Erreur lors de la suppression du compte : ${error.message}`);
-		} finally {
-			setLoading(false);
-			setIsConfirmOpen(false);
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				alert(`Erreur lors de la suppression du compte : ${error.message}`);
+			} else {
+				alert(`Erreur lors de la suppression du compte : ${error}`);
+			}
 		}
 	};
 

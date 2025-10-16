@@ -9,7 +9,7 @@ import { useToastStore } from "../store/ToastStore ";
 export default function Register() {
 	const navigate = useNavigate();
 	const addToast = useToastStore((state) => state.addToast);
-	const [errorMessage, setErrorMessage] = useState("");
+	const [errorMessage, setErrorMessage] = useState(false);
 
 	const [lastName, setLastName] = useState("");
 	const [firstName, setFirstName] = useState("");
@@ -95,19 +95,19 @@ export default function Register() {
 		console.log("Nouvel utilisateur :", newUser);
 
 		try {
-			const response = await createUser(newUser);
-			console.log("✅ Utilisateur créé :", response);
-			// alert("Compte créé avec succès !");
-
-			setErrorMessage("");
+			await createUser(newUser);
 			navigate("/login");
 			addToast(
 				`${newUser.first_name} votre compte à bien été créer`,
 				"bg-green-600",
 			);
-		} catch (error: any) {
-			console.error("❌ Erreur front :", error.message);
-			setErrorMessage(error.message);
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				setErrorMessage(true);
+				console.error("❌ Erreur front :", error.message);
+			} else {
+				console.error("❌ Erreur inconnue :", error);
+			}
 		}
 	};
 
@@ -171,7 +171,7 @@ export default function Register() {
 									onClick={() =>
 										setShowRegisteredPassword(!showRegisteredPassword)
 									}
-									className="absolute top-1/2 right-2 -translate-y-1/2 p-1"
+									className="absolute top-[40%] right-2 p-1 cursor-pointer"
 								>
 									<img
 										src={
@@ -225,7 +225,7 @@ export default function Register() {
 											!showRegisteredConfirmPassword,
 										)
 									}
-									className="absolute top-1/2 right-2 -translate-y-1/2 p-1"
+									className="absolute top-[40%] right-2 p-1 cursor-pointer"
 								>
 									<img
 										src={
@@ -302,6 +302,11 @@ export default function Register() {
 
 					{/* Boutons et liens */}
 					<div className="xl:w-1/2 xl:mx-auto">
+						{errorMessage && (
+							<div className="text-sm text-red-500 mt-4 -mb-9 text-center">
+								L'adresse email existe déja
+							</div>
+						)}
 						<button
 							type="submit"
 							className="bg-amber-500 text-white font-bold mt-10 p-2 w-full cursor-pointer"
@@ -312,9 +317,7 @@ export default function Register() {
 						<Link to="/login" className="underline cursor-pointer text-sm">
 							Ca se passe ici
 						</Link>
-						{errorMessage && (
-							<span className="text-xs text-red-500">{errorMessage}</span>
-						)}
+
 						{/* Pa$$w0rd! */}
 					</div>
 				</form>

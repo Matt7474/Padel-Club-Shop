@@ -12,6 +12,7 @@ export default function Login() {
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [errorMessage, setErrorMessage] = useState(false);
 
 	const loginSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -38,8 +39,13 @@ export default function Login() {
 			console.log("Token reçu :", response.token);
 			addToast(`Bienvenu ${response.user.first_name}`, "bg-green-600");
 			navigate("/");
-		} catch (error: any) {
-			console.error("❌ Erreur front :", error.message);
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				console.error("❌ Erreur front :", error.message);
+				setErrorMessage(true);
+			} else {
+				console.error("❌ Erreur inconnue :", error);
+			}
 		}
 	};
 
@@ -86,6 +92,11 @@ export default function Login() {
 									</div>
 								</div>
 							</div>
+							{errorMessage && (
+								<div className="text-sm text-red-500 mt-4 -mb-9 text-center">
+									Adresse email ou mot de passe incorrect
+								</div>
+							)}
 							<button
 								type="submit"
 								className="bg-amber-500 text-white font-bold mt-10 p-2 w-full cursor-pointer"

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
+import { useToastStore } from "../../store/ToastStore ";
 import type Article from "../../types/Article";
 import InfoModal from "../Modal/InfoModal";
-import { useToastStore } from "../../store/ToastStore ";
 
 interface ArticleCardProps {
 	article: Article;
@@ -87,7 +87,6 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 			quantity: 1,
 		});
 
-		const id = Date.now();
 		addToast(
 			`L'article ${article.name} à été ajouté au panier`,
 			"bg-green-500",

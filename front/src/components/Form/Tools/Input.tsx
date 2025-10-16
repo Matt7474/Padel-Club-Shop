@@ -41,7 +41,7 @@ export default function Input({
 
 	// Classe visuelle selon l'état
 	const stateClasses = disabled
-		? "opacity-50 cursor-not-allowed bg-gray-100 text-gray-400"
+		? "cursor-not-allowed bg-gray-100 text-gray-400"
 		: readOnly
 			? "cursor-not-allowed bg-gray-100 text-gray-500"
 			: "bg-white text-black";

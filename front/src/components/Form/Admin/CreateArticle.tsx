@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/suspicious/noImplicitAnyLet: <explanation> */
 import { useEffect, useMemo, useState } from "react";
 import {
 	addArticle,
@@ -13,9 +12,12 @@ import {
 	uploadArticleImages,
 } from "../../../api/Article";
 import { getBrands } from "../../../api/Brand";
+import { useToastStore } from "../../../store/ToastStore ";
 import type Article from "../../../types/Article";
 import type { ArticleImage, Brand, NewArticle } from "../../../types/Article";
+import type { Promotion } from "../../../types/Promotions";
 import { getTechCharacteristicsState } from "../../../utils/ArticleHelpers";
+import ConfirmModal from "../../Modal/ConfirmModal";
 import ArticleForm from "../CreateArticle/ArticleForm";
 import BagForm from "../CreateArticle/BagForm";
 import BallForm from "../CreateArticle/BallForm";
@@ -25,9 +27,6 @@ import RacketForm from "../CreateArticle/RacketForm";
 import ShoesForm from "../CreateArticle/ShoesForm";
 import Toogle from "../Toogle/Toogle";
 import Button from "../Tools/Button";
-import type { Promotion } from "../../../types/Promotions";
-import { useToastStore } from "../../../store/ToastStore ";
-import ConfirmModal from "../../Modal/ConfirmModal";
 
 type ImageWithId = {
 	id: string;

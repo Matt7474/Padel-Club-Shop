@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useCartStore } from "../../../store/cartStore";
+import { useToastStore } from "../../../store/ToastStore ";
 import type Article from "../../../types/Article";
 import InfoModal from "../../Modal/InfoModal";
-import { useToastStore } from "../../../store/ToastStore ";
 
 export default function PriceArticle({
 	article,
@@ -93,7 +93,6 @@ export default function PriceArticle({
 			size: selectedSize ?? undefined,
 		});
 
-		const id = Date.now();
 		addToast(
 			`L'article ${article.name} à été ajouté au panier`,
 			"bg-green-500",
