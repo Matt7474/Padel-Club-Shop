@@ -1,20 +1,22 @@
+import dotenv from "dotenv";
 import path from "node:path";
 import cors from "cors";
-import dotenv from "dotenv";
 
 const envFile =
 	process.env.NODE_ENV === "production" ? ".env.production" : ".env.dev";
-dotenv.config({ path: envFile }); // MUST be first
+dotenv.config({ path: envFile });
 
 import express from "express";
 import { sequelize } from "./src/database/db";
 import { router } from "./src/router";
+import bodyParser from "body-parser";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(router);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

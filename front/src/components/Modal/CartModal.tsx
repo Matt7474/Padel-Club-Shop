@@ -1,12 +1,34 @@
+import { useState } from "react";
 import { useCartStore } from "../../store/cartStore";
+import { useToastStore } from "../../store/ToastStore ";
 import CartLine from "../CartLine/CartLine";
+import ConfirmationModal from "../Modal/ConfirmModal";
 
 export default function CartModal({ closeCart }: { closeCart: () => void }) {
+	const addToast = useToastStore((state) => state.addToast);
 	const { cart, clearCart } = useCartStore();
+	const [openConfirmModal, setOpenConfirmModal] = useState(false);
 
 	const totalArticles = cart.reduce((acc, item) => acc + item.quantity, 0);
-	// Calcul du total
 	const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+	const showConfirm = () => {
+		if (cart.length > 0) {
+			setOpenConfirmModal(true);
+		} else {
+			return;
+		}
+	};
+
+	const handleConfirmClear = () => {
+		if (cart.length > 0) {
+			clearCart();
+			addToast("Votre panier a bien été vidé", "bg-green-500");
+			setOpenConfirmModal(false);
+		} else {
+			clearCart();
+		}
+	};
 
 	return (
 		<div className="fixed top-0 left-1/2 -translate-x-1/2 xl:right-0 xl:left-auto xl:translate-x-0 z-50 w-[95%] max-w-md h-full bg-white border-l border-gray-300 shadow-lg flex flex-col">
@@ -52,12 +74,21 @@ export default function CartModal({ closeCart }: { closeCart: () => void }) {
 				</button>
 				<button
 					type="button"
-					onClick={clearCart}
-					className="w-full mt-2 text-sm text-red-600 hover:underline"
+					onClick={showConfirm}
+					className="w-full mt-2 text-sm text-red-600 hover:underline cursor-pointer"
 				>
 					Vider le panier
 				</button>
 			</div>
+
+			{/* Modale de confirmation */}
+			{openConfirmModal && (
+				<ConfirmationModal
+					message="Êtes-vous sûr de vouloir vider votre panier ? Cette action est irréversible."
+					onConfirm={handleConfirmClear}
+					onCancel={() => setOpenConfirmModal(false)}
+				/>
+			)}
 		</div>
 	);
 }

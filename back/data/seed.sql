@@ -8,7 +8,7 @@ INSERT INTO roles (role_id, label) VALUES
 
 -- USERS
 INSERT INTO users (user_id, last_name, first_name, phone, email, password, role_id) VALUES
-(1, 'Dimier', 'Matthieu', '0631548949', 'dimier.matt@example.com', '$argon2id$v=19$m=65536,t=3,p=4$pB8YSq9atfPP+MANKgZJMw$NZQpoodO9GpTHZka7rvGkynhpRaMaRK+wZPkdSJjaHU', 1); -- Pa$$w0rd!
+(1, 'Dimier', 'Matthieu', '06.31.54.89.49', 'dimier.matt@example.com', '$argon2id$v=19$m=65536,t=3,p=4$pB8YSq9atfPP+MANKgZJMw$NZQpoodO9GpTHZka7rvGkynhpRaMaRK+wZPkdSJjaHU', 1); -- Pa$$w0rd!
 -- (2, 'Dupont', 'Alice', '0602000000', 'alice.dupont@example.com', 'hashedpassword2', 2),
 -- (3, 'Martin', 'Paul', '0603000000', 'paul.martin@example.com', 'hashedpassword3', 1);
 
