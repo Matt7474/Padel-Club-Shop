@@ -7,8 +7,13 @@ import ConfirmModal from "../components/Modal/ConfirmModal";
 import { useToastStore } from "../store/ToastStore ";
 import { useAuthStore } from "../store/useAuthStore";
 import type { Address, UserApiResponse } from "../types/User";
+import { transformUserApiToAuthUser } from "../utils/transformUserApiToAuthUser";
 
-export default function Profile() {
+interface ProfileProps {
+	text?: string;
+}
+
+export default function Profile({ text }: ProfileProps) {
 	const { user } = useAuthStore();
 	const addToast = useToastStore((state) => state.addToast);
 	const [loading, setLoading] = useState(true);
@@ -135,7 +140,7 @@ export default function Profile() {
 				password: profile.password || undefined,
 				addresses: [
 					{
-						type: "shipping",
+						type: "shipping" as const,
 						street_number: shippingAddress.streetNumber,
 						street_name: shippingAddress.streetName,
 						zip_code: shippingAddress.zipCode,
@@ -146,7 +151,7 @@ export default function Profile() {
 					...(isBillingDifferent
 						? [
 								{
-									type: "billing",
+									type: "billing" as const,
 									street_number: billingAddress.streetNumber,
 									street_name: billingAddress.streetName,
 									zip_code: billingAddress.zipCode,
@@ -161,15 +166,23 @@ export default function Profile() {
 
 			console.log("✅ Données envoyées :", updatedUser);
 
-			const response = await updateUser(user.id, updatedUser);
+			await updateUser(user.id, updatedUser);
+
+			// ✅ Récupérer l'utilisateur mis à jour depuis l'API
+			const response: UserApiResponse = await getUserById(user.id);
 			console.log("🟢 Profil mis à jour :", response);
 
-			setIsEditing(false);
+			// Transformer et mettre à jour le store
+			const transformedUser = transformUserApiToAuthUser(response);
 
-			addToast("Votre profil à bien été modifié", "bg-green-500");
+			const { login, token } = useAuthStore.getState();
+			if (token) login(transformedUser, token);
+
+			setIsEditing(false);
+			addToast("Votre profil a bien été modifié", "bg-green-500");
 		} catch (error) {
 			console.error("❌ Erreur lors de la mise à jour :", error);
-			alert("Une erreur est survenue lors de la mise à jour du profil.");
+			addToast("Une erreur est survenue lors de la mise à jour", "bg-red-500");
 		}
 	};
 
@@ -316,34 +329,42 @@ export default function Profile() {
 
 						<div className="border-b xl:border-r border-gray-400 mt-7 "></div>
 
-						<Adress
-							title="Adresse de livraison"
-							streetNumber={shippingAddress.streetNumber}
-							setStreetNumber={(val) =>
-								setShippingAddress({ ...shippingAddress, streetNumber: val })
-							}
-							streetName={shippingAddress.streetName}
-							setStreetName={(val) =>
-								setShippingAddress({ ...shippingAddress, streetName: val })
-							}
-							zipcode={shippingAddress.zipCode}
-							setZipcode={(val) =>
-								setShippingAddress({ ...shippingAddress, zipCode: val })
-							}
-							city={shippingAddress.city}
-							setCity={(val) =>
-								setShippingAddress({ ...shippingAddress, city: val })
-							}
-							country={shippingAddress.country}
-							setCountry={(val) =>
-								setShippingAddress({ ...shippingAddress, country: val })
-							}
-							additionalInfo={shippingAddress.additionalInfo}
-							setAdditionalInfo={(val) =>
-								setShippingAddress({ ...shippingAddress, additionalInfo: val })
-							}
-							disabled={!isEditing}
-						/>
+						<div>
+							{text && (
+								<p className="text-red-500 font-semibold text-center">{text}</p>
+							)}
+							<Adress
+								title="Adresse de livraison"
+								streetNumber={shippingAddress.streetNumber}
+								setStreetNumber={(val) =>
+									setShippingAddress({ ...shippingAddress, streetNumber: val })
+								}
+								streetName={shippingAddress.streetName}
+								setStreetName={(val) =>
+									setShippingAddress({ ...shippingAddress, streetName: val })
+								}
+								zipcode={shippingAddress.zipCode}
+								setZipcode={(val) =>
+									setShippingAddress({ ...shippingAddress, zipCode: val })
+								}
+								city={shippingAddress.city}
+								setCity={(val) =>
+									setShippingAddress({ ...shippingAddress, city: val })
+								}
+								country={shippingAddress.country}
+								setCountry={(val) =>
+									setShippingAddress({ ...shippingAddress, country: val })
+								}
+								additionalInfo={shippingAddress.additionalInfo}
+								setAdditionalInfo={(val) =>
+									setShippingAddress({
+										...shippingAddress,
+										additionalInfo: val,
+									})
+								}
+								disabled={!isEditing}
+							/>
+						</div>
 					</div>
 
 					<div className="border-b xl:border-r border-gray-400 my-4 "></div>

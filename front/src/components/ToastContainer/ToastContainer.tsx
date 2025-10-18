@@ -1,5 +1,5 @@
-import { useToastStore } from "../store/ToastStore ";
-import InfoModal from "./Modal/InfoModal";
+import { useToastStore } from "../../store/ToastStore ";
+import InfoModal from "../Modal/InfoModal";
 
 export default function ToastContainer() {
 	const { toasts, removeToast } = useToastStore();

@@ -8,14 +8,14 @@ export default function CartLine({
 	closeCart,
 }: {
 	item: CartItem;
-	closeCart: () => void;
+	closeCart?: () => void;
 }) {
 	const addToast = useToastStore((state) => state.addToast);
 	const { updateQuantity, removeFromCart } = useCartStore();
 
 	const handleClick = () => {
 		if (window.innerWidth < 1280) {
-			closeCart();
+			closeCart?.();
 		}
 	};
 
@@ -82,7 +82,7 @@ export default function CartLine({
 					type="button"
 					onClick={() => {
 						addToast(
-							`Vous venez de supprimer l'article ${item.name} de votre panier`,
+							`Vous venez de supprimer l'article ${item.name} de votre panier en contient maintenant ${item.quantity - 1}`,
 							"bg-green-500",
 						);
 						removeFromCart(item.id, item.size);

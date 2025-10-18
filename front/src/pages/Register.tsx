@@ -95,7 +95,9 @@ export default function Register() {
 		console.log("Nouvel utilisateur :", newUser);
 
 		try {
-			await createUser(newUser);
+			const response = await createUser(newUser);
+			console.log("✅ Utilisateur créé :", response);
+
 			navigate("/login");
 			addToast(
 				`${newUser.first_name} votre compte à bien été créer`,

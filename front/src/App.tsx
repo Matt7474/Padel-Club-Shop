@@ -6,6 +6,7 @@ import CreateArticle from "./components/Form/Admin/CreateArticle";
 import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
+import ToastContainer from "./components/ToastContainer/ToastContainer";
 import ArticlesWrapper from "./components/Wrapper/ArticlesWrapper";
 import BrandsWrapper from "./components/Wrapper/BrandsWrapper";
 import AboutUs from "./pages/AboutUs";
@@ -15,11 +16,11 @@ import Article from "./pages/Article";
 import Homepage from "./pages/Homepage";
 import LegalNotice from "./pages/LegalNotice";
 import Login from "./pages/login";
+import Paiement from "./pages/Paiement";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
-import TermsOfSale from "./pages/TermsOfSale";
 import Register from "./pages/Register";
-import ToastContainer from "./components/ToastContainer";
+import TermsOfSale from "./pages/TermsOfSale";
 
 function App() {
 	return (
@@ -34,23 +35,18 @@ function App() {
 						<Routes>
 							<Route path="/login" element={<Login />} />
 							<Route path="/register" element={<Register />} />
-							{/* <Route path="/connexion" element={<Connection />} /> */}
-
 							<Route
 								path="/CreateArticle"
 								element={<CreateArticle mode={"create"} />}
 							/>
-
 							<Route path="/articles" element={<ArticlesWrapper />} />
-
 							<Route path="/allArticle" element={<AllArticles />} />
 							<Route path="/articles/:type" element={<ArticlesWrapper />} />
 							<Route path="/articles/:type/:name" element={<Article />} />
-
 							<Route path="/marques/:brand" element={<BrandsWrapper />} />
-
 							<Route path="/admin/profile" element={<AdminMenu />} />
 							<Route path="/profile" element={<Profile />} />
+							<Route path="/paiement" element={<Paiement />} />
 							<Route path="/" element={<Homepage />} />
 							<Route
 								path="/politique-de-confidentialite"

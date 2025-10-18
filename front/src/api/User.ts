@@ -63,15 +63,21 @@ export async function loginUser(user: {
 }
 
 // getUserById
-export async function getUserById(id: number): Promise<UserApiResponse> {
-	const token = useAuthStore.getState().token;
+export async function getUserById(
+	id: number,
+	token?: string,
+): Promise<UserApiResponse> {
+	const authToken = token || useAuthStore.getState().token;
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
+
 	console.log("getUserById", id);
 
 	try {
 		const res = await axios.get<UserApiResponse>(`${API_URL}/user/${id}`, {
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${authToken}`,
 			},
 		});
 

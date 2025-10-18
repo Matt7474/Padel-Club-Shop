@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
+import { useToastStore } from "../../store/ToastStore ";
 import { useAuthStore } from "../../store/useAuthStore";
 import CartModal from "../Modal/CartModal";
 import MenuModal from "../Modal/MenuModal";
 import SearchBar from "../SearchBar/SearchBar";
-import { useToastStore } from "../../store/ToastStore ";
 
 export default function Header() {
 	const { user, isAuthenticated } = useAuthStore();
@@ -53,8 +53,6 @@ export default function Header() {
 		logout();
 		console.log("Utilisateur déconnecté ✅");
 	};
-
-	console.log(user?.role);
 
 	return (
 		<>

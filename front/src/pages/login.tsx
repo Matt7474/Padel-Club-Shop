@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../api/User";
+import { getUserById, loginUser } from "../api/User";
 import Input from "../components/Form/Tools/Input";
 import { useToastStore } from "../store/ToastStore ";
 import { useAuthStore } from "../store/useAuthStore";
@@ -14,30 +14,43 @@ export default function Login() {
 	const [password, setPassword] = useState("");
 	const [errorMessage, setErrorMessage] = useState(false);
 
+	const roleMap: Record<number, string> = {
+		1: "super admin",
+		2: "admin",
+		3: "client",
+	};
+
 	const loginSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
 		const credentials = { email, password };
 
 		try {
+			// Login initial pour récupérer le token
 			const response: AuthResponse = await loginUser(credentials);
-			console.log("✅ Utilisateur connecté :", response);
 
-			// 🧩 Récupère la fonction login du store
+			const token = response.token;
+
+			// Récupère les infos complètes du user (avec adresses)
+			const fullUser = await getUserById(response.user.id, token);
+
+			// Transforme les données pour le store
+			const transformedUser = {
+				id: fullUser.user_id,
+				firstName: fullUser.first_name,
+				lastName: fullUser.last_name,
+				email: fullUser.email,
+				// ✅ role en string pour que ton JSX continue de fonctionner
+				role: response.user.role || roleMap[fullUser.role_id] || "user",
+				// ✅ adresses complètes
+				addresses: fullUser.addresses || [],
+			};
+
+			// Met à jour le store avec le user complet
 			const login = useAuthStore.getState().login;
+			login(transformedUser, token);
 
-			login(
-				{
-					id: response.user.id,
-					firstName: response.user.first_name,
-					lastName: response.user.last_name,
-					email: response.user.email,
-					role: response.user.role || undefined,
-				},
-				response.token,
-			);
-			console.log("Token reçu :", response.token);
-			addToast(`Bienvenu ${response.user.first_name}`, "bg-green-500");
+			addToast(`Bienvenue ${fullUser.first_name}`, "bg-green-500");
 			navigate("/");
 		} catch (error: unknown) {
 			if (error instanceof Error) {
@@ -93,7 +106,7 @@ export default function Login() {
 								</div>
 							</div>
 							{errorMessage && (
-								<div className="text-sm text-red-500 mt-4 -mb-9 text-center">
+								<div className="text-sm text-red-500 mt-4">
 									Adresse email ou mot de passe incorrect
 								</div>
 							)}

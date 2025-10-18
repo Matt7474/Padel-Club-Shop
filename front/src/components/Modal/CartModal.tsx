@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import { useToastStore } from "../../store/ToastStore ";
 import CartLine from "../CartLine/CartLine";
 import ConfirmationModal from "../Modal/ConfirmModal";
 
 export default function CartModal({ closeCart }: { closeCart: () => void }) {
+	const navigate = useNavigate();
 	const addToast = useToastStore((state) => state.addToast);
 	const { cart, clearCart } = useCartStore();
 	const [openConfirmModal, setOpenConfirmModal] = useState(false);
@@ -30,8 +32,13 @@ export default function CartModal({ closeCart }: { closeCart: () => void }) {
 		}
 	};
 
+	const handleValidate = () => {
+		navigate("paiement");
+		closeCart();
+	};
+
 	return (
-		<div className="fixed top-0 left-1/2 -translate-x-1/2 xl:right-0 xl:left-auto xl:translate-x-0 z-50 w-[95%] max-w-md h-full bg-white border-l border-gray-300 shadow-lg flex flex-col">
+		<div className="fixed top-0 left-1/2 -translate-x-1/2 xl:right-0 xl:left-auto xl:translate-x-0 z-99 w-[95%] max-w-md h-full bg-white border-l border-gray-300 shadow-lg flex flex-col">
 			{/* Header */}
 			<div className="flex items-center justify-between p-4">
 				<h1 className="text-2xl font-semibold">VOTRE PANIER</h1>
@@ -68,14 +75,15 @@ export default function CartModal({ closeCart }: { closeCart: () => void }) {
 				</div>
 				<button
 					type="button"
-					className="w-full bg-green-600 text-white font-semibold px-6 py-2 rounded-lg cursor-pointer hover:brightness-80"
+					onClick={handleValidate}
+					className="w-full bg-green-500 text-white font-semibold px-6 py-2 rounded-lg cursor-pointer hover:brightness-80"
 				>
 					PAYER
 				</button>
 				<button
 					type="button"
 					onClick={showConfirm}
-					className="w-full mt-2 text-sm text-red-600 hover:underline cursor-pointer"
+					className="w-full mt-2 text-sm text-red-500 hover:underline cursor-pointer"
 				>
 					Vider le panier
 				</button>

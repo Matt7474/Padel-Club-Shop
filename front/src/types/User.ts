@@ -44,6 +44,7 @@ export interface AuthUser {
 	email: string;
 	role?: string | number;
 	token?: string;
+	addresses?: Address[];
 }
 
 export interface CreateUser {
