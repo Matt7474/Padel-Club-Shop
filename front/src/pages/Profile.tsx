@@ -14,7 +14,7 @@ interface ProfileProps {
 }
 
 export default function Profile({ text }: ProfileProps) {
-	const { user } = useAuthStore();
+	const { user, updateUser: updateStoreUser } = useAuthStore();
 	const addToast = useToastStore((state) => state.addToast);
 	const [loading, setLoading] = useState(true);
 	const [isEditing, setIsEditing] = useState(false);
@@ -124,7 +124,6 @@ export default function Profile({ text }: ProfileProps) {
 
 	const handleChange = () => {
 		setIsEditing(true);
-		console.log("Mode édition activé");
 	};
 
 	const handleChangeSubmit = async (e: React.FormEvent) => {
@@ -164,22 +163,13 @@ export default function Profile({ text }: ProfileProps) {
 				],
 			};
 
-			console.log("✅ Données envoyées :", updatedUser);
-
 			await updateUser(user.id, updatedUser);
-
-			// ✅ Récupérer l'utilisateur mis à jour depuis l'API
 			const response: UserApiResponse = await getUserById(user.id);
-			console.log("🟢 Profil mis à jour :", response);
-
-			// Transformer et mettre à jour le store
 			const transformedUser = transformUserApiToAuthUser(response);
-
-			const { login, token } = useAuthStore.getState();
-			if (token) login(transformedUser, token);
-
+			const { updateUser: updateStoreUser } = useAuthStore.getState();
+			updateStoreUser(transformedUser);
 			setIsEditing(false);
-			addToast("Votre profil a bien été modifié", "bg-green-500");
+			addToast("Votre profil a bien été mis à jour", "bg-green-500");
 		} catch (error) {
 			console.error("❌ Erreur lors de la mise à jour :", error);
 			addToast("Une erreur est survenue lors de la mise à jour", "bg-red-500");
