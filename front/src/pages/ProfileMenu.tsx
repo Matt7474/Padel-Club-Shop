@@ -36,9 +36,10 @@ export default function ProfileMenu() {
 		"Voir les commandes",
 		"Voir mon profil",
 		"Mes commandes",
+		"Mes messages",
 	];
 
-	const clientMenus = ["Voir mon profil", "Mes commandes"];
+	const clientMenus = ["Voir mon profil", "Mes commandes", "Mes messages"];
 
 	const menuOptions =
 		user?.role === "admin" || user?.role === "super admin"

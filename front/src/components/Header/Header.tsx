@@ -112,28 +112,35 @@ export default function Header() {
 					</button>
 
 					{/* MODIFICATION CLIENT ->  ADMIN A FAIRE  APRES TESTS */}
-					{isAuthenticated &&
-						(user?.role === "super admin" || user?.role === "admin") && (
-							<Link
-								to="/admin/profile"
-								className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"
-							>
-								<div className="relative">
-									<img
-										src="/icons/profile.svg"
-										alt="icon-compte"
-										className="block"
-									/>
-									<div>
-										<img
-											src="/icons/tie.svg"
-											alt="cravate"
-											className="absolute -mt-3 left-1 w-4 xl:-mt-4 xl:left-2"
-										/>
-									</div>
-								</div>
-							</Link>
-						)}
+					{isAuthenticated && user?.role === "super admin" && (
+						<Link
+							to="/profile"
+							className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-9 2xl:mr-4"
+						>
+							<div className="relative">
+								<img
+									src="/icons/superadmin.svg"
+									alt="icon-superadmin"
+									className="block"
+								/>
+							</div>
+						</Link>
+					)}
+
+					{isAuthenticated && user?.role === "admin" && (
+						<Link
+							to="/profile"
+							className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-9 2xl:mr-4"
+						>
+							<div className="relative">
+								<img
+									src="/icons/admin.svg"
+									alt="icon-admin"
+									className="block"
+								/>
+							</div>
+						</Link>
+					)}
 
 					{isAuthenticated && user?.role === "client" && (
 						<Link
@@ -142,7 +149,7 @@ export default function Header() {
 						>
 							<img
 								src="/icons/profile.svg"
-								alt="icon-compte"
+								alt="icon-profile"
 								className="block"
 							/>
 						</Link>
