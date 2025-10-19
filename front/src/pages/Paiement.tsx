@@ -15,6 +15,7 @@ import { useCartStore } from "../store/cartStore";
 import { useToastStore } from "../store/ToastStore ";
 import { useAuthStore } from "../store/useAuthStore";
 import Profile from "./Profile";
+import ToggleSimple from "../components/Form/Toogle/ToogleSimple";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -197,6 +198,24 @@ export default function Paiement() {
 	const addToast = useToastStore((state) => state.addToast);
 	const [confirmMessage, setConfirmMessage] = useState(false);
 	const navigate = useNavigate();
+	const [isBillingAddress, setIsBillingAddress] = useState(false);
+
+	// Vérifie si une adresse de facturation complète existe
+	const hasBillingAddress =
+		user?.addresses?.[1]?.street_number &&
+		user?.addresses?.[1]?.street_name &&
+		user?.addresses?.[1]?.zip_code &&
+		user?.addresses?.[1]?.city &&
+		user?.addresses?.[1]?.country;
+
+	if (!user) return <Navigate to="/login" replace />;
+	if (!user.addresses || user.addresses.length === 0)
+		return <Profile text="Veuillez saisir votre adresse de livraison" />;
+
+	// Sélectionne les données selon le toggle
+	const activeAddress = isBillingAddress
+		? user.addresses[1]
+		: user.addresses[0];
 
 	if (!user) return <Navigate to="/login" replace />;
 
@@ -480,27 +499,47 @@ export default function Paiement() {
 
 					{/* Adresse */}
 					<div className="bg-white rounded-lg shadow-sm border p-6 flex flex-col h-full">
-						<h2 className="text-xl font-semibold mb-4">Adresse de livraison</h2>
+						<div className="flex items-center justify-between mb-4">
+							<h2 className="text-xl font-semibold">
+								{isBillingAddress
+									? "Adresse de facturation"
+									: "Adresse de livraison"}
+							</h2>
+
+							{/* ✅ Affiche le toggle seulement si l'adresse de facturation existe */}
+							{hasBillingAddress && (
+								<div className="flex items-center gap-2">
+									<ToggleSimple
+										checked={isBillingAddress}
+										onChange={setIsBillingAddress}
+									/>
+								</div>
+							)}
+						</div>
+
 						<div className="flex-1 overflow-y-auto">
 							<Adress
-								title="Adresse de livraison"
-								streetNumber={user.addresses[0].street_number}
+								title={
+									isBillingAddress
+										? "Adresse de facturation"
+										: "Adresse de livraison"
+								}
+								streetNumber={activeAddress.street_number}
 								setStreetNumber={() => {}}
-								streetName={user.addresses[0].street_name}
+								streetName={activeAddress.street_name}
 								setStreetName={() => {}}
-								zipcode={user.addresses[0].zip_code}
+								zipcode={activeAddress.zip_code}
 								setZipcode={() => {}}
-								city={user.addresses[0].city}
+								city={activeAddress.city}
 								setCity={() => {}}
-								country={user.addresses[0].country}
+								country={activeAddress.country}
 								setCountry={() => {}}
-								additionalInfo={user.addresses[0].complement || ""}
+								additionalInfo={activeAddress.complement || ""}
 								setAdditionalInfo={() => {}}
 								disabled={true}
 							/>
 						</div>
 					</div>
-
 					{/* Paiement */}
 					<div className="bg-white rounded-lg shadow-sm border p-6  flex flex-col h-full">
 						<Elements stripe={stripePromise}>
