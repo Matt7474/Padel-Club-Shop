@@ -8,7 +8,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { createPaymentIntent } from "../api/payment";
 import Adress from "../components/Form/User/Adress";
 import { useCartStore } from "../store/cartStore";
@@ -48,6 +48,7 @@ function CheckoutForm({
 	const elements = useElements();
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState<string | null>(null);
+	const [success, setSuccess] = useState(false);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -79,6 +80,7 @@ function CheckoutForm({
 				setMessage(result.error.message || "Erreur lors du paiement.");
 			} else if (result.paymentIntent?.status === "succeeded") {
 				setMessage("Paiement réussi 🎉");
+				setSuccess(true);
 				setConfirmMessage(true);
 				clearCart();
 			}
@@ -97,6 +99,21 @@ function CheckoutForm({
 			setLoading(false);
 		}
 	};
+
+	if (success) {
+		return (
+			<div className="flex flex-col items-center justify-center h-full py-20">
+				<div className="text-center p-6 bg-green-50 border border-green-200 rounded-lg shadow-sm max-w-md">
+					<h3 className="text-xl font-semibold text-green-800 mb-3">
+						Paiement confirmé ✅
+					</h3>
+					<p className="text-green-700">
+						Votre commande est en cours de traitement.
+					</p>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<form onSubmit={handleSubmit} className="max-w-2xl  xl:mx-0">
@@ -282,11 +299,15 @@ export default function Paiement() {
 														<div className="flex mt-2 justify-between">
 															{/* Image du produit */}
 															<div className="mt-2">
-																<img
-																	src={item.image}
-																	alt={item.name}
-																	className="w-8"
-																/>
+																<Link
+																	to={`/articles/${item.type}/${item.name}`}
+																>
+																	<img
+																		src={item.image}
+																		alt={item.name}
+																		className="w-8"
+																	/>
+																</Link>
 															</div>
 
 															{/* Quantité */}
@@ -386,9 +407,9 @@ export default function Paiement() {
 							</div>
 						)}
 						{confirmMessage === true && (
-							<div className="max-w-2xl mx-auto text-center pb-4">
+							<div className="max-w-2xl mx-auto text-center ">
 								{/* Icône de succès */}
-								<div className="mb-5">
+								<div className="mb-3">
 									<div className="flex justify-center">
 										<img
 											src="/icons/check-green.svg"
@@ -399,12 +420,12 @@ export default function Paiement() {
 								</div>
 
 								{/* Titre */}
-								<h2 className="text-2xl font-bold text-gray-900 mb-3">
+								<h2 className="text-2xl font-bold text-gray-900 mb-2">
 									Commande confirmée ! 🎉
 								</h2>
 
 								{/* Sous-titre */}
-								<p className="text-lg text-gray-600 mb-8">
+								<p className="text-lg text-gray-600 mb-4">
 									Merci pour votre confiance
 								</p>
 
@@ -430,9 +451,9 @@ export default function Paiement() {
 								</div>
 
 								{/* Prochaines étapes */}
-								<div className="space-y-4 mb-8">
+								<div className="space-y-4 mb-6">
 									<div className="flex items-start gap-3 text-left">
-										<div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-gray-700">
+										<div className="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-gray-700">
 											1
 										</div>
 										<div>
@@ -444,7 +465,7 @@ export default function Paiement() {
 									</div>
 
 									<div className="flex items-start gap-3 text-left">
-										<div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-gray-700">
+										<div className="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-gray-700">
 											2
 										</div>
 										<div>
@@ -456,7 +477,7 @@ export default function Paiement() {
 									</div>
 
 									<div className="flex items-start gap-3 text-left">
-										<div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-gray-700">
+										<div className="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-gray-700">
 											3
 										</div>
 										<div>
@@ -487,7 +508,7 @@ export default function Paiement() {
 								</div>
 
 								{/* Support */}
-								<p className="text-sm text-gray-500 mt-8">
+								<p className="text-sm text-gray-500 mt-5">
 									Une question ? Contactez notre{" "}
 									<a href="/contact" className="text-blue-600 hover:underline">
 										service client
