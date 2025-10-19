@@ -8,7 +8,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { createPaymentIntent } from "../api/payment";
 import Adress from "../components/Form/User/Adress";
 import { useCartStore } from "../store/cartStore";
@@ -37,7 +37,11 @@ const ELEMENT_OPTIONS = {
 };
 
 // ---- Sous composant pour le paiement ----
-function CheckoutForm() {
+function CheckoutForm({
+	setConfirmMessage,
+}: {
+	setConfirmMessage: (value: boolean) => void;
+}) {
 	const { cart, clearCart } = useCartStore();
 	const stripe = useStripe();
 	const elements = useElements();
@@ -74,6 +78,7 @@ function CheckoutForm() {
 				setMessage(result.error.message || "Erreur lors du paiement.");
 			} else if (result.paymentIntent?.status === "succeeded") {
 				setMessage("Paiement réussi 🎉");
+				setConfirmMessage(true);
 				clearCart();
 			}
 		} catch (err: unknown) {
@@ -93,8 +98,8 @@ function CheckoutForm() {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="max-w-2xl mx-auto xl:mx-0">
-			<div className="bg-white p-6 rounded-lg shadow-sm border xl:p-0 xl:border-none xl:shadow-none">
+		<form onSubmit={handleSubmit} className="max-w-2xl  xl:mx-0">
+			<div className="bg-white rounded-lg ">
 				<h3 className="text-lg font-semibold mb-6">Informations de paiement</h3>
 				<div className="xl:mt-14">
 					<div className="flex items-center -mt-4 mb-3 gap-3 ">
@@ -190,6 +195,8 @@ export default function Paiement() {
 	const { cart } = useCartStore();
 	const { updateQuantity } = useCartStore();
 	const addToast = useToastStore((state) => state.addToast);
+	const [confirmMessage, setConfirmMessage] = useState(false);
+	const navigate = useNavigate();
 
 	if (!user) return <Navigate to="/login" replace />;
 
@@ -229,136 +236,244 @@ export default function Paiement() {
 				<div className="grid xl:grid-cols-3 gap-8 items-start">
 					{/* 🧾 Récapitulatif */}
 					<div className="bg-white rounded-lg shadow-sm border p-6 flex flex-col h-full">
-						<h2 className="text-xl font-semibold mb-4">
-							Récapitulatif de la commande
-						</h2>
+						{confirmMessage === false && (
+							<div>
+								<h2 className="text-xl font-semibold mb-4">
+									Récapitulatif de la commande
+								</h2>
 
-						{/* Liste d'articles scrollable */}
-						<div className="flex-1 max-h-70 border overflow-y-auto">
-							<div className="space-y-3">
-								{cart.length > 0 ? (
-									cart.map((item) => (
-										<div key={item.id} className="p-2 border rounded shadow-sm">
-											<div className="flex flex-col">
-												<div>
-													{/* Nom du produit */}
-													<div className="flex-1">
-														<p className="text-xs font-semibold">{item.name}</p>
-													</div>
-												</div>
-												<div className="flex mt-2 justify-between">
-													{/* Image du produit */}
-													<div className="mt-2">
-														<img
-															src={item.image}
-															alt={item.name}
-															className="w-8"
-														/>
-													</div>
+								{/* Liste d'articles scrollable */}
+								<div className="flex-1 h-70 border overflow-y-auto">
+									<div className="space-y-3">
+										{cart.length > 0 ? (
+											cart.map((item) => (
+												<div
+													key={item.id}
+													className="p-2 border rounded shadow-sm"
+												>
+													<div className="flex flex-col">
+														<div>
+															{/* Nom du produit */}
+															<div className="flex-1">
+																<p className="text-xs font-semibold">
+																	{item.name}
+																</p>
+															</div>
+														</div>
+														<div className="flex mt-2 justify-between">
+															{/* Image du produit */}
+															<div className="mt-2">
+																<img
+																	src={item.image}
+																	alt={item.name}
+																	className="w-8"
+																/>
+															</div>
 
-													{/* Quantité */}
-													<div>
-														<p className="text-xs font-bold mb-1 text-center">
-															Quantité
-														</p>
-														{/* <div className="px-4">
+															{/* Quantité */}
+															<div>
+																<p className="text-xs font-bold mb-1 text-center">
+																	Quantité
+																</p>
+																{/* <div className="px-4">
 															<span className="text-xs">{item.quantity}x</span>
 														</div> */}
-														<div className="inline-flex items-center border rounded overflow-hidden">
-															<button
-																type="button"
-																onClick={() => {
-																	addToast(
-																		`Vous venez de retirer 1 exemplaire de ${item.name}, votre panier en contient maintenant ${item.quantity - 1}`,
-																		"bg-green-500",
-																	);
-																	updateQuantity(
-																		item.id,
-																		item.quantity - 1,
-																		item.size,
-																	);
-																}}
-																className="px-1  text-md  hover:bg-gray-200 cursor-pointer"
-															>
-																-
-															</button>
-															<span className="w-6 text-center  text-sm font-semibold">
-																{item.quantity}
-															</span>
-															<button
-																type="button"
-																onClick={() => {
-																	addToast(
-																		`Vous venez d'ajouter 1 exemplaire de ${item.name}, votre panier en contient maintenant ${item.quantity + 1}`,
-																		"bg-green-500",
-																	);
-																	updateQuantity(
-																		item.id,
-																		item.quantity + 1,
-																		item.size,
-																	);
-																}}
-																className="px-1  text-md  hover:bg-gray-200 cursor-pointer"
-															>
-																+
-															</button>
+																<div className="inline-flex items-center border rounded overflow-hidden">
+																	<button
+																		type="button"
+																		onClick={() => {
+																			addToast(
+																				`Vous venez de retirer 1 exemplaire de ${item.name}, votre panier en contient maintenant ${item.quantity - 1}`,
+																				"bg-green-500",
+																			);
+																			updateQuantity(
+																				item.id,
+																				item.quantity - 1,
+																				item.size,
+																			);
+																		}}
+																		className="px-1  text-md  hover:bg-gray-200 cursor-pointer"
+																	>
+																		-
+																	</button>
+																	<span className="w-6 text-center  text-sm font-semibold">
+																		{item.quantity}
+																	</span>
+																	<button
+																		type="button"
+																		onClick={() => {
+																			addToast(
+																				`Vous venez d'ajouter 1 exemplaire de ${item.name}, votre panier en contient maintenant ${item.quantity + 1}`,
+																				"bg-green-500",
+																			);
+																			updateQuantity(
+																				item.id,
+																				item.quantity + 1,
+																				item.size,
+																			);
+																		}}
+																		className="px-1  text-md  hover:bg-gray-200 cursor-pointer"
+																	>
+																		+
+																	</button>
+																</div>
+															</div>
+
+															{/* Prix */}
+															<div>
+																<p className="text-xs font-bold mb-1">
+																	Prix unitaire
+																</p>
+																<span className="text-sm flex justify-center mt-2">
+																	{item.price.toFixed(2)} €
+																</span>
+															</div>
+
+															{/* Prix */}
+															<div>
+																<p className="text-xs font-bold mb-1">
+																	Sous total
+																</p>
+																<span className="text-sm font-semibold flex justify-end mt-2">
+																	{(item.price * item.quantity).toFixed(2)} €
+																</span>
+															</div>
 														</div>
 													</div>
-
-													{/* Prix */}
-													<div>
-														<p className="text-xs font-bold mb-1">
-															Prix unitaire
-														</p>
-														<span className="text-sm flex justify-center mt-2">
-															{item.price.toFixed(2)} €
-														</span>
-													</div>
-
-													{/* Prix */}
-													<div>
-														<p className="text-xs font-bold mb-1">Sous total</p>
-														<span className="text-sm font-semibold flex justify-end mt-2">
-															{(item.price * item.quantity).toFixed(2)} €
-														</span>
-													</div>
 												</div>
-											</div>
-										</div>
-									))
-								) : (
-									<p className="text-center text-gray-500 py-8">
-										Votre panier est vide.
-									</p>
-								)}
-							</div>
-						</div>
-
-						{/* Liste d'articles scrollable */}
-						{/* <div className="flex-1 max-h-70 border overflow-y-auto">
-							<div className="space-y-3">
-								{cart.length > 0 ? (
-									cart.map((item) => <CartLine key={item.id} item={item} />)
-								) : (
-									<p className="text-center text-gray-500 py-8">
-										Votre panier est vide.
-									</p>
-								)}
-							</div>
-						</div> */}
-
-						<div className="mt-4">
-							<p>Votre panier contient {totalArticles} articles</p>
-						</div>
-
-						{cart.length > 0 && (
-							<div className="pt-4">
-								<div className="flex justify-between items-center">
-									<span className="text-lg font-semibold">Total</span>
-									<span className="text-2xl font-bold text-blue-600">
-										{total.toFixed(2)} €
-									</span>
+											))
+										) : (
+											<p className="text-center text-gray-500 py-8">
+												Votre panier est vide.
+											</p>
+										)}
+									</div>
 								</div>
+
+								<div className="mt-4 justify-end">
+									<p>Votre panier contient {totalArticles} articles</p>
+								</div>
+
+								{cart.length > 0 && (
+									<div className="pt-4">
+										<div className="flex justify-between items-center">
+											<span className="text-lg font-semibold">Total</span>
+											<span className="text-2xl font-bold text-blue-600">
+												{total.toFixed(2)} €
+											</span>
+										</div>
+									</div>
+								)}
+							</div>
+						)}
+						{confirmMessage === true && (
+							<div className="max-w-2xl mx-auto text-center pb-4">
+								{/* Icône de succès */}
+								<div className="mb-5">
+									<div className="flex justify-center">
+										<img
+											src="/icons/check-green.svg"
+											alt="check"
+											className="w-16"
+										/>
+									</div>
+								</div>
+
+								{/* Titre */}
+								<h2 className="text-2xl font-bold text-gray-900 mb-3">
+									Commande confirmée ! 🎉
+								</h2>
+
+								{/* Sous-titre */}
+								<p className="text-lg text-gray-600 mb-8">
+									Merci pour votre confiance
+								</p>
+
+								{/* Informations */}
+								<div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+									<div className="flex items-start gap-3 text-left">
+										<img
+											src="/icons/letter.svg"
+											alt="letter"
+											className="w-6 mt-0.5"
+										/>
+										<div>
+											<p className="font-semibold text-blue-900 mb-1">
+												Email de confirmation envoyé
+											</p>
+											<p className="text-sm text-blue-800">
+												Vous allez recevoir un récapitulatif complet de votre
+												commande à l'adresse{" "}
+												<span className="font-medium">{user?.email}</span>
+											</p>
+										</div>
+									</div>
+								</div>
+
+								{/* Prochaines étapes */}
+								<div className="space-y-4 mb-8">
+									<div className="flex items-start gap-3 text-left">
+										<div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-gray-700">
+											1
+										</div>
+										<div>
+											<p className="font-medium text-gray-900">Préparation</p>
+											<p className="text-sm text-gray-600">
+												Votre commande est en cours de traitement
+											</p>
+										</div>
+									</div>
+
+									<div className="flex items-start gap-3 text-left">
+										<div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-gray-700">
+											2
+										</div>
+										<div>
+											<p className="font-medium text-gray-900">Expédition</p>
+											<p className="text-sm text-gray-600">
+												Vous recevrez un numéro de suivi par email
+											</p>
+										</div>
+									</div>
+
+									<div className="flex items-start gap-3 text-left">
+										<div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-gray-700">
+											3
+										</div>
+										<div>
+											<p className="font-medium text-gray-900">Livraison</p>
+											<p className="text-sm text-gray-600">
+												Réception sous 3 à 5 jours ouvrés
+											</p>
+										</div>
+									</div>
+								</div>
+
+								{/* Actions */}
+								<div className="flex flex-col sm:flex-row gap-4 justify-center">
+									<button
+										type="button"
+										onClick={() => navigate("/profile/my-orders")}
+										className="px-6 xl:px-2 py-3 xl:py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+									>
+										Suivre ma commande
+									</button>
+									<button
+										type="button"
+										onClick={() => navigate("/")}
+										className="px-6 xl:px-2 py-3 xl:py-1 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+									>
+										Retour à l'accueil
+									</button>
+								</div>
+
+								{/* Support */}
+								<p className="text-sm text-gray-500 mt-8">
+									Une question ? Contactez notre{" "}
+									<a href="/contact" className="text-blue-600 hover:underline">
+										service client
+									</a>
+								</p>
 							</div>
 						)}
 					</div>
@@ -389,7 +504,7 @@ export default function Paiement() {
 					{/* Paiement */}
 					<div className="bg-white rounded-lg shadow-sm border p-6  flex flex-col h-full">
 						<Elements stripe={stripePromise}>
-							<CheckoutForm />
+							<CheckoutForm setConfirmMessage={setConfirmMessage} />
 						</Elements>
 					</div>
 				</div>
