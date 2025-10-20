@@ -157,12 +157,16 @@ export async function updateArticle(
 		);
 
 		return response.data;
-	} catch (error: any) {
-		console.error(
-			"Erreur lors de la mise à jour de l'article :",
-			error.response?.data || error.message,
-		);
-		throw error;
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			console.error(
+				"Erreur lors de la mise à jour de l'article :",
+				err.response?.data || err.message,
+			);
+		} else {
+			console.error("❌ Erreur inconnue:", err);
+		}
+		throw err;
 	}
 }
 

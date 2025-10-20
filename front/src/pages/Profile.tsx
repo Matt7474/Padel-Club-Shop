@@ -14,7 +14,7 @@ interface ProfileProps {
 }
 
 export default function Profile({ text }: ProfileProps) {
-	const { user, updateUser: updateStoreUser } = useAuthStore();
+	const { user, updateUser: _updateStoreUser } = useAuthStore();
 	const addToast = useToastStore((state) => state.addToast);
 	const [loading, setLoading] = useState(true);
 	const [isEditing, setIsEditing] = useState(false);
@@ -168,6 +168,7 @@ export default function Profile({ text }: ProfileProps) {
 			const transformedUser = transformUserApiToAuthUser(response);
 			const { updateUser: updateStoreUser } = useAuthStore.getState();
 			updateStoreUser(transformedUser);
+
 			setIsEditing(false);
 			addToast("Votre profil a bien été mis à jour", "bg-green-500");
 		} catch (error) {

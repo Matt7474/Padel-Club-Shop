@@ -22,9 +22,6 @@ interface AddToCartParams {
 	setAlert: (value: boolean) => void;
 }
 
-/**
- * Parse la chaîne "36:5,37:2,38:3" et retourne la quantité disponible pour une taille
- */
 const getAvailableQuantityForSize = (
 	fitString: string | undefined,
 	size: string,
@@ -40,6 +37,10 @@ const getAvailableQuantityForSize = (
 	return Number(qty) || 0;
 };
 
+interface ToastStore {
+	addToast: (message: string, color?: string) => void;
+}
+
 export const useAddToCartHandler = ({
 	article,
 	displayPrice,
@@ -50,7 +51,7 @@ export const useAddToCartHandler = ({
 	setAlert,
 }: AddToCartParams) => {
 	const addToCartStore = useCartStore((state) => state.addToCart);
-	const addToast = useToastStore((state: any) => state.addToast);
+	const addToast = useToastStore((state: ToastStore) => state.addToast);
 
 	const handleAddToCart = async (e?: MouseEvent) => {
 		e?.preventDefault();
@@ -122,14 +123,10 @@ export const useAddToCartHandler = ({
 
 		console.log("🛒 Résultat addToCart:", result);
 
-		if (result === true) {
-			addToast(
-				`${quantity} article(s) "${article.name}" ajouté(s) au panier`,
-				"bg-green-500",
-			);
-		} else {
-			addToast(result as string, "bg-red-600");
-		}
+		addToast(
+			`${quantity} article(s) "${article.name}" ajouté(s) au panier`,
+			"bg-green-500",
+		);
 	};
 
 	return handleAddToCart;
