@@ -3,6 +3,8 @@ import { sequelize } from "../database/db";
 import { Article } from "../models/article";
 import { Order } from "../models/order";
 import { OrderItem } from "../models/orderItem";
+import { User } from "../models/user";
+import { sendMail } from "../services/mailer";
 
 export const createOrderAndUpdateStock = async (
 	req: Request,
@@ -20,7 +22,7 @@ export const createOrderAndUpdateStock = async (
 
 		const order = await sequelize.transaction(async (t) => {
 			const now = new Date();
-			const tempRef = `TMP-${now.getTime()}`; // temporaire
+			const tempRef = `TMP-${now.getTime()}`; // référence temporaire
 
 			// 1️⃣ Crée la commande avec référence temporaire
 			const newOrder = await Order.create(
@@ -70,6 +72,71 @@ export const createOrderAndUpdateStock = async (
 				{ reference: ref, updated_at: new Date() },
 				{ transaction: t },
 			);
+
+			// 4️⃣ Envoie le mail avec la vraie référence
+			const user = await User.findByPk(userId);
+			if (user) {
+				await sendMail({
+					to: user.email,
+					subject: `Votre commande ${ref} a été confirmée`,
+					html: `
+		<!DOCTYPE html>
+		<html lang="fr">
+		<head>
+			<meta charset="UTF-8" />
+			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+			<title>Confirmation de commande</title>
+		</head>
+		<body style="font-family: Arial, sans-serif; margin:0; padding:0;">
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td align="center">
+						<table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; margin:20px 0; padding:20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+							<tr>
+								<td align="center" style="padding-bottom: 20px;">
+									<h1 style="color: #333;">Merci pour votre commande !</h1>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<p style="font-size: 16px; color: #555;">Bonjour ${user.first_name || ""},</p>
+									<p style="font-size: 16px; color: #555;">
+										Nous avons bien reçu votre commande. Voici les détails :
+									</p>
+									<table width="100%" cellpadding="5" cellspacing="0" style="border-collapse: collapse; margin: 20px 0;">
+										<tr>
+											<td style="font-weight: bold; border-bottom: 1px solid #ddd;">Référence :</td>
+											<td style="border-bottom: 1px solid #ddd;">${ref}</td>
+										</tr>
+										<tr>
+											<td style="font-weight: bold; border-bottom: 1px solid #ddd;">Montant total :</td>
+											<td style="border-bottom: 1px solid #ddd;">${newOrder.total_amount} €</td>
+										</tr>
+										<tr>
+											<td style="font-weight: bold; border-bottom: 1px solid #ddd;">Statut :</td>
+											<td style="border-bottom: 1px solid #ddd;">En cours de préparation</td>
+										</tr>
+									</table>
+									<p style="font-size: 16px; color: #555;">
+										Nous préparons votre commande et vous tiendrons informé dès son expédition.
+									</p>
+									<p style="font-size: 16px; color: #555;">Merci de votre confiance,<br/><strong>L'équipe de PCS</strong></p>
+								</td>
+							</tr>
+							<tr>
+								<td align="center" style="padding-top: 20px; font-size: 12px; color: #999;">
+									<p>© ${new Date().getFullYear()} PCS. Tous droits réservés.</p>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</body>
+		</html>
+		`,
+				});
+			}
 
 			return newOrder;
 		});
