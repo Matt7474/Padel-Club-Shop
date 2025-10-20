@@ -10,5 +10,6 @@ orderRouter.post(
 	authenticateToken,
 	orderControllers.createOrderAndUpdateStock,
 );
+orderRouter.get("/my-orders", authenticateToken, orderControllers.getMyOrders);
 
 export { orderRouter };

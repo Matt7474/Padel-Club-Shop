@@ -103,6 +103,7 @@ export interface Brand {
 export interface ArticleImage {
 	image_id: number;
 	url: string;
+	is_main: boolean;
 }
 
 // ---------- New Article ----------

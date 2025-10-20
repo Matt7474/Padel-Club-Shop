@@ -1,3 +1,5 @@
+import type Article from "./Article";
+
 // Une ligne de commande
 export interface OrderLine {
 	order_line_id: number;
@@ -22,4 +24,13 @@ export interface Order {
 	total_ttc?: number;
 	tva_rate?: number;
 	status?: string;
+}
+
+export interface OrderItem {
+	article_id: number;
+	name: string;
+	price: number;
+	quantity: number;
+	image_url?: string;
+	article?: Article;
 }

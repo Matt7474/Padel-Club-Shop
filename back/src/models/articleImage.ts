@@ -5,6 +5,7 @@ export class ArticleImage extends Model {
 	public image_id!: number;
 	public article_id!: number;
 	public url!: string;
+	public is_main!: boolean;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 }
@@ -23,6 +24,11 @@ ArticleImage.init(
 		url: {
 			type: DataTypes.TEXT,
 			allowNull: false,
+		},
+		is_main: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
 		},
 	},
 	{

@@ -83,6 +83,7 @@ CREATE TABLE article_images (
     image_id SERIAL PRIMARY KEY,
     article_id INT NOT NULL REFERENCES articles(article_id) ON DELETE CASCADE,
     url TEXT NOT NULL,
+    is_main BOOLEAN,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );

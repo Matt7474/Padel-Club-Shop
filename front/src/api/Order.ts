@@ -40,3 +40,39 @@ export async function createOrderAndUpdateStock(cart: CartItem[]) {
 		throw error;
 	}
 }
+
+export interface getMyOrdersProps {
+	order_id: number;
+	reference: string;
+	total_amount: number;
+	status: "pending" | "paid" | "cancelled" | "shipped";
+	created_at: string;
+}
+
+export async function getMyOrders(): Promise<getMyOrdersProps[]> {
+	try {
+		const authToken = useAuthStore.getState().token;
+		const userId = useAuthStore.getState().user?.id;
+
+		if (!authToken)
+			throw new Error("Token manquant pour récupérer l'utilisateur");
+		if (!userId) throw new Error("Utilisateur non identifié");
+
+		const res = await axios.get(`${API_URL}/order/my-orders`, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authToken}`,
+			},
+			params: { userId },
+		});
+		console.log("COMMANDES RECUES :", res.data.orders);
+		return res.data.orders;
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error("Erreur récupération commandes :", error.message);
+		} else {
+			console.error("Erreur inconnue récupération commandes :", error);
+		}
+		throw error;
+	}
+}

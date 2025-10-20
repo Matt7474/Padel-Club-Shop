@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { sequelize } from "../database/db";
 import { Article } from "../models/article";
+import { ArticleImage } from "../models/articleImage";
 import { Order } from "../models/order";
 import { OrderItem } from "../models/orderItem";
 import { User } from "../models/user";
@@ -157,5 +158,70 @@ export const createOrderAndUpdateStock = async (
 				message: "Erreur serveur lors de la création de la commande",
 			});
 		}
+	}
+};
+
+export const getMyOrders = async (req: Request, res: Response) => {
+	try {
+		const userId = Number(req.query.userId);
+		if (!userId)
+			return res.status(401).json({ message: "Utilisateur non authentifié" });
+
+		console.log("userId", userId);
+
+		const orders = await Order.findAll({
+			where: { user_id: userId },
+			include: [
+				{
+					model: OrderItem,
+					as: "items",
+					include: [
+						{
+							model: Article,
+							as: "article",
+							include: [
+								{
+									model: ArticleImage,
+									as: "images",
+									attributes: ["url", "is_main"],
+									required: false,
+								},
+							],
+						},
+					],
+				},
+			],
+			order: [
+				["created_at", "DESC"],
+				[
+					{ model: OrderItem, as: "items" },
+					{ model: Article, as: "article" },
+					{ model: ArticleImage, as: "images" },
+					"is_main",
+					"DESC",
+				],
+				[
+					{ model: OrderItem, as: "items" },
+					{ model: Article, as: "article" },
+					{ model: ArticleImage, as: "images" },
+					"image_id",
+					"ASC",
+				],
+			],
+			attributes: [
+				"order_id",
+				"reference",
+				"total_amount",
+				"status",
+				"created_at",
+			],
+		});
+
+		res.status(200).json({ orders });
+	} catch (err: unknown) {
+		console.error(err);
+		res.status(500).json({
+			message: "Erreur serveur lors de la récupération des commandes",
+		});
 	}
 };
