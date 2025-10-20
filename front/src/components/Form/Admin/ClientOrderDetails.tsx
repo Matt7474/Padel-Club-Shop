@@ -23,6 +23,8 @@ export default function ClientOrderDetails({
 	// Calcul des totaux TTC/HT/TVA
 	const totalTTC = order.order_lines.reduce((sum, line) => {
 		const article = getArticleById(line.article);
+		console.log("getArticleById", article);
+
 		if (!article || typeof line.quantity !== "number") return sum;
 		return sum + article.price_ttc * line.quantity;
 	}, 0);

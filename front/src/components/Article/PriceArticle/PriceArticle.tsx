@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useCartStore } from "../../../store/cartStore";
 import { useToastStore } from "../../../store/ToastStore ";
 import type Article from "../../../types/Article";
+import { useStockCheck } from "../../../utils/useStockCheck";
 import InfoModal from "../../Modal/InfoModal";
 
 export default function PriceArticle({
@@ -20,6 +21,8 @@ export default function PriceArticle({
 		[],
 	);
 	const [alert, setAlert] = useState<boolean>();
+	const cart = useCartStore((state) => state.cart);
+	const { checkStock } = useStockCheck();
 
 	let displayPrice: number = article.price_ttc;
 
@@ -56,7 +59,15 @@ export default function PriceArticle({
 		? `${import.meta.env.VITE_API_URL}${article.images[0].url}`
 		: "/icons/default.svg";
 
-	const addOnCart = () => {
+	const addOnCart = async () => {
+		const cartItem = cart.find(
+			(c) =>
+				c.id === article.article_id.toString() &&
+				(c.size ?? null) === (selectedSize ?? null),
+		);
+
+		const quantityInCart = cartItem?.quantity ?? 0;
+
 		const needsSize =
 			(article.type === "clothing" || article.type === "shoes") &&
 			article.tech_characteristics?.fit &&
@@ -82,6 +93,13 @@ export default function PriceArticle({
 			return;
 		}
 
+		const isInStock = await checkStock({
+			articleId: article.article_id,
+			quantity: quantityInCart + quantity,
+			selectedSize: selectedSize ?? undefined,
+		});
+
+		if (!isInStock) return;
 		addToCart({
 			id: article.article_id.toString(),
 			name: article.name,

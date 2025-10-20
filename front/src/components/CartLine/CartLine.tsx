@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import type { CartItem } from "../../store/cartStore";
 import { useCartStore } from "../../store/cartStore";
 import { useToastStore } from "../../store/ToastStore ";
+import { useStockCheck } from "../../utils/useStockCheck";
 
 export default function CartLine({
 	item,
@@ -12,6 +13,7 @@ export default function CartLine({
 }) {
 	const addToast = useToastStore((state) => state.addToast);
 	const { updateQuantity, removeFromCart } = useCartStore();
+	const { checkStock } = useStockCheck();
 
 	const handleClick = () => {
 		if (window.innerWidth < 1280) {
@@ -47,7 +49,7 @@ export default function CartLine({
 
 			{/* Quantité */}
 			<div className="flex flex-col items-center">
-				<div className="inline-flex items-center border rounded-lg overflow-hidden">
+				<div className="inline-flex items-center border rounded-lg overflow-hidden max-w-27">
 					<button
 						type="button"
 						onClick={() => {
@@ -59,14 +61,30 @@ export default function CartLine({
 						}}
 						className="px-3 py-1 text-md font-bold hover:bg-gray-200 cursor-pointer"
 					>
-						-
+						{item.quantity > 1 ? (
+							<span>-</span>
+						) : (
+							<img
+								src="/icons/trash.svg"
+								alt="Supprimer l'article"
+								className="w-5"
+							/>
+						)}
 					</button>
 					<span className="w-10 text-center py-1 text-md font-semibold">
 						{item.quantity}
 					</span>
 					<button
 						type="button"
-						onClick={() => {
+						onClick={async () => {
+							const isInStock = await checkStock({
+								articleId: Number(item.id),
+								quantity: item.quantity + 1,
+								selectedSize: item.size ?? undefined,
+							});
+
+							if (!isInStock) return;
+
 							addToast(
 								`Vous venez d'ajouter 1 exemplaire de ${item.name}, votre panier en contient maintenant ${item.quantity + 1}`,
 								"bg-green-500",
@@ -82,7 +100,7 @@ export default function CartLine({
 					type="button"
 					onClick={() => {
 						addToast(
-							`Vous venez de supprimer l'article ${item.name} de votre panier en contient maintenant ${item.quantity - 1}`,
+							`Vous venez de supprimer l'article ${item.name} de votre panier`,
 							"bg-green-500",
 						);
 						removeFromCart(item.id, item.size);

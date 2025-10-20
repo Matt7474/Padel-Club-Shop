@@ -282,7 +282,7 @@ export default function ArticleForm({
 						))}
 					</div>
 				</div>
-				<div className="grid grid-cols-3 gap-4">
+				<div className="flex justify-between gap-4">
 					{/* Prix de l'article */}
 					<div className="-mt-2 relative">
 						<Input
@@ -297,16 +297,18 @@ export default function ArticleForm({
 					</div>
 
 					{/* Stock de l'article */}
-					<div className="-mt-2">
-						<Input
-							htmlFor={"quantity"}
-							label={"Quantité"}
-							type={"number"}
-							value={articleQty}
-							onChange={handleQtyChange}
-							width="w-full"
-						/>
-					</div>
+					{articleType !== "clothing" && articleType !== "shoes" && (
+						<div className="-mt-2">
+							<Input
+								htmlFor={"quantity"}
+								label={"Quantité"}
+								type={"number"}
+								value={articleQty}
+								onChange={handleQtyChange}
+								width="w-full"
+							/>
+						</div>
+					)}
 
 					{/* Frais d'envoi de l'article */}
 					<div className="-mt-2 relative">

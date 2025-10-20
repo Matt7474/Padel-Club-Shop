@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import { useToastStore } from "../../store/ToastStore ";
 import type Article from "../../types/Article";
+import { useStockCheck } from "../../utils/useStockCheck";
 import InfoModal from "../Modal/InfoModal";
 
 interface ArticleCardProps {
@@ -13,6 +14,8 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 	const navigate = useNavigate();
 	const now = new Date();
 	const addToast = useToastStore((state) => state.addToast);
+	const { checkStock } = useStockCheck();
+	const cart = useCartStore((state) => state.cart);
 
 	const [infoModal, setInfoModal] = useState<{ id: number; text: string }[]>(
 		[],
@@ -73,9 +76,21 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 		? `${import.meta.env.VITE_API_URL}${article.images[0].url}`
 		: "/icons/default.svg";
 
-	const addToCart = (e: React.MouseEvent) => {
+	const addToCart = async (e: React.MouseEvent) => {
 		e.preventDefault();
 		e.stopPropagation();
+
+		// Vérifie le stock avant ajout
+		const cartItem = cart.find((c) => c.id === article.article_id.toString());
+		const quantityInCart = cartItem?.quantity ?? 0;
+
+		const isInStock = await checkStock({
+			articleId: article.article_id,
+			quantity: quantityInCart + 1,
+		});
+		console.log("isInStock", isInStock);
+
+		if (!isInStock) return;
 
 		addToCartStore({
 			id: article.article_id.toString(),

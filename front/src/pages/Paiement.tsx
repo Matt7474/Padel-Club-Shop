@@ -16,6 +16,7 @@ import { useToastStore } from "../store/ToastStore ";
 import { useAuthStore } from "../store/useAuthStore";
 import Profile from "./Profile";
 import ToggleSimple from "../components/Form/Toogle/ToogleSimple";
+import { useStockCheck } from "../utils/useStockCheck";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -216,6 +217,7 @@ export default function Paiement() {
 	const [confirmMessage, setConfirmMessage] = useState(false);
 	const navigate = useNavigate();
 	const [isBillingAddress, setIsBillingAddress] = useState(false);
+	const { checkStock } = useStockCheck();
 
 	// Vérifie si une adresse de facturation complète existe
 	const hasBillingAddress =
@@ -341,7 +343,15 @@ export default function Paiement() {
 																	</span>
 																	<button
 																		type="button"
-																		onClick={() => {
+																		onClick={async () => {
+																			const isInStock = await checkStock({
+																				articleId: Number(item.id),
+																				quantity: item.quantity + 1,
+																				selectedSize: item.size ?? undefined,
+																			});
+
+																			if (!isInStock) return;
+
 																			addToast(
 																				`Vous venez d'ajouter 1 exemplaire de ${item.name}, votre panier en contient maintenant ${item.quantity + 1}`,
 																				"bg-green-500",
