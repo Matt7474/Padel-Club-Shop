@@ -9,14 +9,16 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import { createOrderAndUpdateStock } from "../api/Order";
 import { createPaymentIntent } from "../api/payment";
+import { verifyStockBeforePayment } from "../api/Stock";
+import ToggleSimple from "../components/Form/Toogle/ToogleSimple";
 import Adress from "../components/Form/User/Adress";
 import { useCartStore } from "../store/cartStore";
 import { useToastStore } from "../store/ToastStore ";
 import { useAuthStore } from "../store/useAuthStore";
-import Profile from "./Profile";
-import ToggleSimple from "../components/Form/Toogle/ToogleSimple";
 import { useStockCheck } from "../utils/useStockCheck";
+import Profile from "./Profile";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -50,6 +52,16 @@ function CheckoutForm({
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState<string | null>(null);
 	const [success, setSuccess] = useState(false);
+	const addToast = useToastStore((state) => state.addToast);
+	const { updateQuantity } = useCartStore();
+	const [reference, setReference] = useState("");
+
+	interface StockUpdate {
+		id: number;
+		name: string;
+		newQuantity: number;
+		size: string;
+	}
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -59,42 +71,59 @@ function CheckoutForm({
 		setMessage(null);
 
 		try {
-			// 1️⃣ Crée le PaymentIntent côté serveur
-			const { clientSecret } = await createPaymentIntent(cart);
+			// 1️⃣ Vérifier le stock
+			const stockStatus = await verifyStockBeforePayment(cart);
 
-			// 2️⃣ Confirme le paiement avec Stripe
-			const cardNumberElement = elements.getElement(CardNumberElement);
+			if (
+				stockStatus.status === "error" &&
+				Array.isArray(stockStatus.updates)
+			) {
+				const updates: StockUpdate[] = stockStatus.updates;
+				updates.forEach((update) => {
+					updateQuantity(update.id.toString(), update.newQuantity, update.size);
 
-			if (!cardNumberElement) {
-				setMessage("Erreur : élément de carte non trouvé");
+					addToast(
+						`La quantité de "${update.name}" a été ajustée (${update.newQuantity} en stock disponible)`,
+						"bg-red-500",
+					);
+				});
+				setMessage(
+					"Certaines quantités ont été ajustées, veuillez vérifier votre panier.",
+				);
 				setLoading(false);
 				return;
 			}
 
+			// 2️⃣ PaymentIntent Stripe
+			const { clientSecret } = await createPaymentIntent(cart);
+			const cardNumberElement = elements.getElement(CardNumberElement);
+			if (!cardNumberElement) throw new Error("Élément de carte non trouvé");
+
 			const result = await stripe.confirmCardPayment(clientSecret, {
-				payment_method: {
-					card: cardNumberElement,
-				},
+				payment_method: { card: cardNumberElement },
 			});
 
 			if (result.error) {
 				setMessage(result.error.message || "Erreur lors du paiement.");
-			} else if (result.paymentIntent?.status === "succeeded") {
-				setMessage("Paiement réussi 🎉");
+				setLoading(false);
+				return;
+			}
+
+			if (result.paymentIntent?.status === "succeeded") {
+				// 3️⃣ Créer la commande côté backend
+				const orderRes = await createOrderAndUpdateStock(cart);
+				const orderReference = orderRes.order.reference;
+				console.log("orderReference", orderReference);
+				setReference(`${orderReference}`);
+
+				setMessage(`Paiement réussi 🎉 - Réf commande : ${orderReference}`);
 				setSuccess(true);
 				setConfirmMessage(true);
 				clearCart();
 			}
 		} catch (err: unknown) {
 			let errorMessage = "Erreur serveur lors du paiement.";
-
-			if (err instanceof Error) {
-				console.error("Erreur détaillée :", err);
-				errorMessage = err.message;
-			} else {
-				console.error("Erreur inconnue :", err);
-			}
-
+			if (err instanceof Error) errorMessage = err.message;
 			setMessage(errorMessage);
 		} finally {
 			setLoading(false);
@@ -108,6 +137,9 @@ function CheckoutForm({
 					<h3 className="text-xl font-semibold text-green-800 mb-3">
 						Paiement confirmé ✅
 					</h3>
+					<p className="text-green-700">
+						Votre numéro de commande est le : {reference}
+					</p>
 					<p className="text-green-700">
 						Votre commande est en cours de traitement.
 					</p>
@@ -341,6 +373,7 @@ export default function Paiement() {
 																	<span className="w-6 text-center  text-sm font-semibold">
 																		{item.quantity}
 																	</span>
+
 																	<button
 																		type="button"
 																		onClick={async () => {
@@ -453,8 +486,8 @@ export default function Paiement() {
 											</p>
 											<p className="text-sm text-blue-800">
 												Vous allez recevoir un récapitulatif complet de votre
-												commande à l'adresse{" "}
-												<span className="font-medium">{user?.email}</span>
+												commande à l'adresse
+												<span className="font-medium"> {user?.email}</span>
 											</p>
 										</div>
 									</div>

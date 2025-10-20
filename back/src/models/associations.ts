@@ -3,6 +3,8 @@ import { Article } from "./article";
 import { ArticleImage } from "./articleImage";
 import { ArticleRatings } from "./articleRatings";
 import { Brand } from "./brand";
+import { Order } from "./order";
+import { OrderItem } from "./orderItem";
 import { Promotions } from "./promotions";
 import { Role } from "./role";
 import { User } from "./user";
@@ -30,3 +32,15 @@ User.belongsTo(Role, { foreignKey: "role_id" });
 // User -> Address
 User.hasMany(Address, { as: "addresses", foreignKey: "user_id" });
 Address.belongsTo(User, { foreignKey: "user_id" });
+
+// User -> Order
+User.hasMany(Order, { as: "orders", foreignKey: "user_id" });
+Order.belongsTo(User, { as: "user", foreignKey: "user_id" });
+
+// Order -> OrderItem
+Order.hasMany(OrderItem, { as: "items", foreignKey: "order_id" });
+OrderItem.belongsTo(Order, { foreignKey: "order_id" });
+
+// Article -> OrderItem
+Article.hasMany(OrderItem, { as: "orderItems", foreignKey: "article_id" });
+OrderItem.belongsTo(Article, { as: "article", foreignKey: "article_id" });
