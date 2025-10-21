@@ -72,8 +72,8 @@ function CheckoutForm({
 
 		try {
 			// 1️⃣ Vérifier le stock
-			const stockStatus = await verifyStockBeforePayment(cart);
 			console.log("cart", cart);
+			const stockStatus = await verifyStockBeforePayment(cart);
 
 			if (
 				stockStatus.status === "error" &&

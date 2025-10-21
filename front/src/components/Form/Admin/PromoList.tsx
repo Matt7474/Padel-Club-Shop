@@ -16,28 +16,39 @@ export default function PromoList({ setMenuSelected }: PromoListProps) {
 	const loadPromotions = () => {
 		getPromotion()
 			.then((data) => {
-				const promos = data.map((p) => ({
-					...p,
-					promo: p.name || "Sans marque",
-				}));
+				const today = new Date();
+
+				// Calcul du statut réel selon les dates
+				const promos = data.map((p: Promo) => {
+					const start = new Date(p.start_date);
+					const end = new Date(p.end_date);
+
+					let realStatus: "active" | "upcoming" | "expired" = "upcoming";
+					if (today >= start && today <= end) realStatus = "active";
+					else if (today > end) realStatus = "expired";
+
+					return {
+						...p,
+						status: realStatus,
+						promo: p.name || "Sans nom",
+					};
+				});
+
 				setPromotions(promos);
 			})
-			.catch((err) => console.error("Erreur API Articles:", err));
+			.catch((err) => console.error("Erreur API Promotions:", err));
 	};
 
-	// Récupération des promotions depuis l'API
 	useEffect(() => {
 		loadPromotions();
 	}, []);
 
-	// Hook de tri
 	const {
 		items: sortedPromotions,
 		requestSort,
 		sortConfig,
 	} = useSortableData(promotions);
 
-	// Fonction pour afficher ▲ ou ▼
 	const getClassNamesFor = (name: keyof Promo) => {
 		if (!sortConfig) return;
 		return sortConfig.key === name
@@ -51,7 +62,6 @@ export default function PromoList({ setMenuSelected }: PromoListProps) {
 		setSelectedPromo(promo);
 	};
 
-	// Fonction pour revenir à la liste et recharger
 	const handleCancelEdit = () => {
 		setSelectedPromo(null);
 		loadPromotions();
@@ -67,12 +77,15 @@ export default function PromoList({ setMenuSelected }: PromoListProps) {
 			/>
 		);
 	}
+
 	return (
 		<div>
 			<h2 className="p-3 bg-gray-500/80 font-semibold text-lg mt-7 xl:mt-0 flex justify-between">
 				Liste des Promotions
 			</h2>
+
 			<div>
+				{/* En-têtes de colonnes */}
 				<div className="grid grid-cols-[3fr_2fr_2fr_2fr] text-center h-10 xl:grid-cols-[1fr_5fr_1fr_1fr_1fr] bg-gray-300 mt-4 mb-2">
 					<button
 						type="button"
@@ -83,7 +96,7 @@ export default function PromoList({ setMenuSelected }: PromoListProps) {
 					</button>
 					<button
 						type="button"
-						className="text-xs border-b pl-1 cursor-pointer  hidden xl:block"
+						className="text-xs border-b pl-1 cursor-pointer hidden xl:block"
 						onClick={() => requestSort("description")}
 					>
 						DESCRIPTION {getClassNamesFor("description")}
@@ -93,7 +106,7 @@ export default function PromoList({ setMenuSelected }: PromoListProps) {
 						className="text-xs border-b pl-1 cursor-pointer"
 						onClick={() => requestSort("start_date")}
 					>
-						DATE DEBUT {getClassNamesFor("start_date")}
+						DATE DÉBUT {getClassNamesFor("start_date")}
 					</button>
 					<button
 						type="button"
@@ -111,6 +124,7 @@ export default function PromoList({ setMenuSelected }: PromoListProps) {
 					</button>
 				</div>
 
+				{/* Liste des promotions */}
 				{sortedPromotions.map((promo) => (
 					<div key={promo.promo_id}>
 						<button
@@ -122,18 +136,22 @@ export default function PromoList({ setMenuSelected }: PromoListProps) {
 								<p className="border-x px-1 py-1 text-xs h-8 flex items-center justify-center">
 									{promo.name}
 								</p>
-								<p className="border-r px-1 py-1 text-xs h-8 items-center text-start hidden xl:block">
+
+								<p className="border-r px-1 py-1 text-xs h-8 text-start hidden xl:block truncate">
 									{promo.description
 										? promo.description.split(" ").slice(0, 20).join(" ") +
 											"..."
 										: ""}
 								</p>
+
 								<p className="border-r px-1 py-1 text-xs h-8 flex items-center justify-center truncate">
 									{new Date(promo.start_date).toLocaleDateString("fr-FR")}
 								</p>
+
 								<p className="border-r px-1 py-1 text-xs h-8 flex items-center justify-center truncate">
 									{new Date(promo.end_date).toLocaleDateString("fr-FR")}
 								</p>
+
 								<p className="border-r px-1 py-1 text-xs h-8 flex items-center justify-center truncate">
 									{promo.status === "active" && (
 										<span className="px-2 py-1 text-white text-xs rounded-full bg-green-500">

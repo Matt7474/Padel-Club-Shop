@@ -35,27 +35,32 @@ export const checkStockBeforePayment = async (req: Request, res: Response) => {
 
 			// --- 1️⃣ Cas : article AVEC tailles ---
 			if (tech_characteristics?.fit && item.size) {
-				const fitString = tech_characteristics.fit as string;
-				const sizePairs = fitString.split(",").map((pair: string) => {
-					const [label, stock] = pair.split(":");
-					return { label: label.trim(), stock: Number(stock) };
-				});
+				let fitMap: Record<string, number> = {};
 
-				const sizeData = sizePairs.find((s) => s.label === item.size);
+				if (typeof tech_characteristics.fit === "string") {
+					tech_characteristics.fit.split(",").forEach((pair: string) => {
+						const [label, stock] = pair.split(":");
+						fitMap[label.trim()] = Number(stock);
+					});
+				} else if (typeof tech_characteristics.fit === "object") {
+					fitMap = { ...tech_characteristics.fit };
+				}
 
-				if (!sizeData) {
+				const sizeStock = fitMap[item.size] ?? 0;
+
+				if (item.quantity > sizeStock) {
+					updates.push({
+						id: item.id,
+						name,
+						size: item.size,
+						newQuantity: sizeStock,
+					});
+				} else if (sizeStock <= 0) {
 					updates.push({
 						id: item.id,
 						name,
 						size: item.size,
 						newQuantity: 0,
-					});
-				} else if (item.quantity > sizeData.stock) {
-					updates.push({
-						id: item.id,
-						name,
-						size: item.size,
-						newQuantity: sizeData.stock,
 					});
 				}
 			}

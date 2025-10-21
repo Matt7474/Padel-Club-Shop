@@ -115,7 +115,7 @@ export default function Header() {
 					{isAuthenticated && user?.role === "super admin" && (
 						<Link
 							to="/profile"
-							className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-9 2xl:mr-4"
+							className="w-7 xl:w-6 hover:cursor-pointer xl:mt-2 2xl:w-9 2xl:mr-4"
 						>
 							<div className="relative">
 								<img

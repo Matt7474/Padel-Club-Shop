@@ -7,6 +7,7 @@ import PriceArticle from "../components/Article/PriceArticle/PriceArticle";
 import RatingArticle from "../components/Article/RatingArticle/RatingArticle";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
 import type ArticleType from "../types/Article";
+import DisplayPromo from "../components/DisplayPromo/DisplayPromo";
 
 export default function Article() {
 	const [isDescriptionOn, setIsDescriptionOn] = useState(true);
@@ -48,6 +49,27 @@ export default function Article() {
 	];
 
 	console.log(article);
+
+	let selectedQty: number | undefined;
+	if (selectedSize && article.tech_characteristics?.fit) {
+		const sizeObj = article.tech_characteristics.fit
+			.split(",")
+			.map((pair) => {
+				const [size, qty] = pair.split(":");
+				return { size, qty: Number(qty) };
+			})
+			.find((s) => s.size === selectedSize);
+
+		if (sizeObj) selectedQty = sizeObj.qty;
+	}
+	console.log("selectedSize:", selectedSize);
+	console.log("selectedQty:", selectedQty);
+	console.log(
+		"stockMessage:",
+		selectedQty && selectedQty < 5
+			? `Il ne reste que ${selectedQty}...`
+			: undefined,
+	);
 
 	return (
 		<>
@@ -99,9 +121,20 @@ export default function Article() {
 							</div>
 						)}
 				</div>
-				<PriceArticle article={article} selectedSize={selectedSize} />
+				<PriceArticle
+					article={article}
+					selectedSize={selectedSize}
+					qty={selectedQty}
+					isSelected={!!selectedSize}
+				/>
 				<p className="font-semibold text-lg mt-6">{article.name}</p>
 				<p className="text-sm">{article.reference}</p>
+
+				{/* PROMOTION */}
+				<div className="mt-5 -mb-3">
+					<DisplayPromo article={article} />
+				</div>
+
 				{article.ratings && Object.keys(article.ratings).length > 0 && (
 					<RatingArticle article={article} />
 				)}
@@ -165,6 +198,7 @@ export default function Article() {
 												<h3 className="font-semibold text-md mb-2">
 													Tailles disponibles
 												</h3>
+
 												<div className=" grid grid-cols-10 gap-2">
 													{article.tech_characteristics.fit
 														.split(",")
@@ -195,17 +229,6 @@ export default function Article() {
 																			{size}
 																		</span>
 																	</button>
-
-																	{/* Alerte si stock < 5 */}
-																	{Number(qty) > 0 &&
-																		Number(qty) < 7 &&
-																		isSelected && (
-																			<p className="text-red-500 text-[10px] absolute mt-10">
-																				Il ne reste que {qty} article
-																				{Number(qty) > 1 ? "s" : ""} à cette
-																				taille
-																			</p>
-																		)}
 																</div>
 															);
 														})}
@@ -214,11 +237,21 @@ export default function Article() {
 										)}
 								</div>
 								<div className="-mt-4">
-									<PriceArticle article={article} selectedSize={selectedSize} />
+									<PriceArticle
+										article={article}
+										selectedSize={selectedSize}
+										qty={selectedQty}
+										isSelected={!!selectedSize}
+									/>
 								</div>
 							</div>
 						</div>
 					</div>
+				</div>
+
+				{/* PROMOTION */}
+				<div className="mt-5 -mb-10 flex justify-center">
+					<DisplayPromo article={article} />
 				</div>
 
 				<div className="hidden xl:flex justify-center gap-6 xl:mt-6">

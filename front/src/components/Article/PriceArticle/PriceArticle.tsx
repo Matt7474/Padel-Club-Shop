@@ -5,13 +5,23 @@ import type Article from "../../../types/Article";
 import { useStockCheck } from "../../../utils/useStockCheck";
 import InfoModal from "../../Modal/InfoModal";
 
+interface PriceArticleProps {
+	article: Article;
+	selectedSize?: string | null;
+	qty?: number;
+	isSelected?: boolean;
+	stockMessage?: string;
+}
 export default function PriceArticle({
 	article,
 	selectedSize,
-}: {
-	article: Article;
-	selectedSize?: string | null;
-}) {
+	qty,
+	isSelected,
+	stockMessage,
+}: PriceArticleProps) {
+	console.log("PriceArticle - stockMessage:", stockMessage);
+	console.log("PriceArticle - qty:", qty);
+	console.log("PriceArticle - isSelected:", isSelected);
 	const addToast = useToastStore((state) => state.addToast);
 	const addToCart = useCartStore((state) => state.addToCart);
 	const [quantity, setQuantity] = useState(1);
@@ -177,18 +187,33 @@ export default function PriceArticle({
 						</div>
 					</div>
 				</div>
-				<div className="relative">
+				<div className="relative mt-2">
 					<button
 						type="button"
-						className="bg-amber-300 rounded-lg mt-3 py-2 w-full font-semibold cursor-pointer hover:brightness-80"
+						className="bg-emerald-300 rounded-lg py-2 w-full font-semibold cursor-pointer hover:brightness-80"
 						onClick={addOnCart}
 					>
 						Ajouter au panier
 					</button>
+
 					{alert && selectedSize === null && (
-						<span className="text-red-500  absolute left-1/2 transform -translate-x-1/2 mt-13">
+						<span className="text-red-500 absolute left-1/2 transform -translate-x-1/2 mt-2">
 							Veuillez sélectionner une taille !
 						</span>
+					)}
+
+					{qty! < 6 && (
+						<div className="flex justify-center">
+							<span className="text-red-500 text-sm font-semibold text-center mt-0.5 mr-1">
+								⚠️
+							</span>
+							<p className="text-red-500 text-sm font-semibold text-center mt-1 ">
+								Il ne reste que {qty} article(s) de la taille {selectedSize}
+							</p>
+							<span className="text-red-500 text-sm font-semibold text-center mt-0.5 ml-1">
+								⚠️
+							</span>
+						</div>
 					)}
 				</div>
 			</div>
