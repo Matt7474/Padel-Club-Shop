@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { Article } from "../models/article"; // ✅ ton modèle Sequelize
+import { Article } from "../models/article";
 
 export const checkStockBeforePayment = async (req: Request, res: Response) => {
 	try {
@@ -13,12 +13,13 @@ export const checkStockBeforePayment = async (req: Request, res: Response) => {
 		const updates: {
 			id: number;
 			name: string;
+			size?: string;
 			newQuantity: number;
 		}[] = [];
 
 		for (const item of cart) {
 			const article = await Article.findByPk(item.id, {
-				attributes: ["stock_quantity", "name"],
+				attributes: ["name", "stock_quantity", "tech_characteristics"],
 			});
 
 			if (!article) {
@@ -30,20 +31,52 @@ export const checkStockBeforePayment = async (req: Request, res: Response) => {
 				continue;
 			}
 
-			const dbStock = article.stock_quantity ?? 0;
+			const { name, stock_quantity, tech_characteristics } = article as any;
 
-			if (dbStock <= 0) {
-				updates.push({
-					id: item.id,
-					name: article.name,
-					newQuantity: 0,
+			// --- 1️⃣ Cas : article AVEC tailles ---
+			if (tech_characteristics?.fit && item.size) {
+				const fitString = tech_characteristics.fit as string;
+				const sizePairs = fitString.split(",").map((pair: string) => {
+					const [label, stock] = pair.split(":");
+					return { label: label.trim(), stock: Number(stock) };
 				});
-			} else if (item.quantity > dbStock) {
-				updates.push({
-					id: item.id,
-					name: article.name,
-					newQuantity: dbStock,
-				});
+
+				const sizeData = sizePairs.find((s) => s.label === item.size);
+
+				if (!sizeData) {
+					updates.push({
+						id: item.id,
+						name,
+						size: item.size,
+						newQuantity: 0,
+					});
+				} else if (item.quantity > sizeData.stock) {
+					updates.push({
+						id: item.id,
+						name,
+						size: item.size,
+						newQuantity: sizeData.stock,
+					});
+				}
+			}
+
+			// --- 2️⃣ Cas : article SANS tailles ---
+			else {
+				const dbStock = stock_quantity ?? 0;
+
+				if (dbStock <= 0) {
+					updates.push({
+						id: item.id,
+						name,
+						newQuantity: 0,
+					});
+				} else if (item.quantity > dbStock) {
+					updates.push({
+						id: item.id,
+						name,
+						newQuantity: dbStock,
+					});
+				}
 			}
 		}
 

@@ -6,6 +6,8 @@ export class OrderItem extends Model {
 	public order_id!: number;
 	public article_id!: number;
 	public quantity!: number;
+	public price!: number;
+	public size!: string | null;
 
 	public readonly created_at!: Date;
 	public readonly updated_at!: Date;
@@ -33,6 +35,16 @@ OrderItem.init(
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			field: "quantity",
+		},
+		price: {
+			type: DataTypes.DECIMAL(10, 2),
+			allowNull: false,
+			field: "price",
+		},
+		size: {
+			type: DataTypes.TEXT,
+			allowNull: true,
+			field: "size",
 		},
 	},
 	{

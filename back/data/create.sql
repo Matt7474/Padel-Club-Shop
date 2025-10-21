@@ -88,20 +88,6 @@ CREATE TABLE article_images (
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
--- CREATE TABLE article_characteristics (
---     characteristic_id SERIAL PRIMARY KEY,
---     article_id INT NOT NULL REFERENCES articles(article_id) ON DELETE CASCADE,
---     weight TEXT,
---     color TEXT,
---     shape TEXT,
---     foam TEXT,
---     surface TEXT,
---     level TEXT,
---     gender TEXT,
---     created_at TIMESTAMP DEFAULT NOW(),
---     updated_at TIMESTAMP DEFAULT NOW()
--- );
-
 CREATE TABLE article_ratings (
     rating_id SERIAL PRIMARY KEY,
     article_id INT NOT NULL REFERENCES articles(article_id) ON DELETE CASCADE,
@@ -157,6 +143,7 @@ CREATE TABLE orders (
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     vat_rate NUMERIC(5,2) DEFAULT 20,
     total_amount NUMERIC(10,2) NOT NULL DEFAULT 0;
+    
     status TEXT CHECK (status IN ('pending','paid','cancelled','shipped')),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
@@ -166,6 +153,8 @@ CREATE TABLE order_lines (
     order_line_id SERIAL PRIMARY KEY,
     order_id INT NOT NULL REFERENCES orders(order_id) ON DELETE CASCADE,
     article_id INT NOT NULL REFERENCES articles(article_id) ON DELETE RESTRICT,
+    price DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    size TEXT,
     quantity INT NOT NULL CHECK (quantity > 0),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()

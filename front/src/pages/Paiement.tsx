@@ -73,6 +73,7 @@ function CheckoutForm({
 		try {
 			// 1️⃣ Vérifier le stock
 			const stockStatus = await verifyStockBeforePayment(cart);
+			console.log("cart", cart);
 
 			if (
 				stockStatus.status === "error" &&
@@ -322,13 +323,20 @@ export default function Paiement() {
 													className="p-2 border rounded shadow-sm"
 												>
 													<div className="flex flex-col">
-														<div>
+														<div className="flex justify-between border-b pb-1">
 															{/* Nom du produit */}
-															<div className="flex-1">
-																<p className="text-xs font-semibold">
+															<div className="flex">
+																<p className="text-sm font-semibold">
 																	{item.name}
 																</p>
 															</div>
+															{item.size && (
+																<div>
+																	<p className="text-sm font-semibold">
+																		Taille {item.size}
+																	</p>
+																</div>
+															)}
 														</div>
 														<div className="flex mt-2 justify-between">
 															{/* Image du produit */}
@@ -339,7 +347,7 @@ export default function Paiement() {
 																	<img
 																		src={item.image}
 																		alt={item.name}
-																		className="w-8"
+																		className="w-9"
 																	/>
 																</Link>
 															</div>
@@ -349,9 +357,7 @@ export default function Paiement() {
 																<p className="text-xs font-bold mb-1 text-center">
 																	Quantité
 																</p>
-																{/* <div className="px-4">
-															<span className="text-xs">{item.quantity}x</span>
-														</div> */}
+
 																<div className="inline-flex items-center border rounded overflow-hidden">
 																	<button
 																		type="button"

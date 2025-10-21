@@ -1,5 +1,13 @@
-import { DataTypes, JSONB, Model } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../database/db";
+
+interface TechCharacteristics {
+	fit?: string | Record<string, number>; // string "XS:4,S:3" ou objet { XS: 4, S: 3 }
+	type?: string;
+	color?: string;
+	gender?: string;
+	material?: string;
+}
 
 export class Article extends Model {
 	public article_id!: number;
@@ -12,6 +20,7 @@ export class Article extends Model {
 	public stock_quantity!: number;
 	public status!: string | null;
 	public shipping_cost!: number | null;
+	public tech_characteristics!: TechCharacteristics;
 	public is_deleted!: boolean;
 
 	public readonly createdAt!: Date;

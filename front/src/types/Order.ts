@@ -32,5 +32,6 @@ export interface OrderItem {
 	price: number;
 	quantity: number;
 	image_url?: string;
+	size?: string | null;
 	article?: Article;
 }

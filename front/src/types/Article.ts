@@ -117,8 +117,8 @@ export interface NewArticle {
 	stock_quantity?: number;
 	status?: "available" | "preorder" | "out_of_stock";
 	shipping_cost?: number;
-	tech_characteristics?: Record<string, any>;
-	tech_ratings?: Record<string, number>; // <- facultatif, juste un objet
+	tech_characteristics?: TechCharacteristics;
+	tech_ratings?: Record<string, number>;
 	promotions?: NewPromotion[];
 }
 

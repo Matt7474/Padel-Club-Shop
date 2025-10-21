@@ -41,27 +41,89 @@ export const createOrderAndUpdateStock = async (
 			// 2️⃣ Crée les OrderItems et décrémente le stock
 			for (const item of cart) {
 				const article = await Article.findByPk(item.id, {
-					attributes: ["article_id", "name", "stock_quantity"],
+					attributes: [
+						"article_id",
+						"name",
+						"stock_quantity",
+						"tech_characteristics",
+					],
 					transaction: t,
+					lock: t.LOCK.UPDATE, // Verrouillage pour éviter les conditions de concurrence
 				});
-				if (!article) throw new Error(`Article introuvable : ${item.id}`);
-				if (article.stock_quantity < item.quantity)
-					throw new Error(`Stock insuffisant pour ${article.name}`);
 
+				if (!article) throw new Error(`Article introuvable : ${item.id}`);
+
+				// Normalise le nom de la propriété size (accepte "size" ou "selectedSize")
+				const selectedSize = item.selectedSize || item.size;
+
+				// --- Gestion article avec tailles ---
+				if (article.tech_characteristics?.fit) {
+					// Si l'article a des tailles, on DOIT avoir une taille sélectionnée
+					if (!selectedSize) {
+						throw new Error(
+							`Veuillez sélectionner une taille pour ${article.name}`,
+						);
+					}
+
+					let fitMap: Record<string, number> = {};
+
+					// Parse si fit est une string
+					if (typeof article.tech_characteristics.fit === "string") {
+						article.tech_characteristics.fit.split(",").forEach((pair) => {
+							const [label, qty] = pair.split(":");
+							fitMap[label.trim()] = Number(qty);
+						});
+					} else if (typeof article.tech_characteristics.fit === "object") {
+						fitMap = { ...article.tech_characteristics.fit };
+					}
+
+					const sizeStock = fitMap[selectedSize] ?? 0;
+
+					if (sizeStock < item.quantity) {
+						throw new Error(
+							`Stock insuffisant pour ${article.name} (${selectedSize}). Disponible: ${sizeStock}, demandé: ${item.quantity}`,
+						);
+					}
+
+					// Décrémente le stock de cette taille
+					fitMap[selectedSize] = sizeStock - item.quantity;
+
+					// Met à jour le JSONB
+					article.tech_characteristics.fit = fitMap;
+					await article.update(
+						{
+							tech_characteristics: article.tech_characteristics,
+							updated_at: new Date(),
+						},
+						{ transaction: t },
+					);
+				}
+				// --- Gestion article sans tailles ---
+				else {
+					const stockQty = article.stock_quantity ?? 0;
+					if (stockQty < item.quantity) {
+						throw new Error(
+							`Stock insuffisant pour ${article.name}. Disponible: ${stockQty}, demandé: ${item.quantity}`,
+						);
+					}
+
+					await article.update(
+						{
+							stock_quantity: stockQty - item.quantity,
+							updated_at: new Date(),
+						},
+						{ transaction: t },
+					);
+				}
+
+				// --- Création OrderItem (UNE SEULE FOIS) ---
 				await OrderItem.create(
 					{
 						order_id: newOrder.order_id,
 						article_id: item.id,
 						quantity: item.quantity,
 						price: item.price,
-					},
-					{ transaction: t },
-				);
-
-				await article.update(
-					{
-						stock_quantity: article.stock_quantity - item.quantity,
-						updated_at: new Date(),
+						size: selectedSize ?? null,
 					},
 					{ transaction: t },
 				);
@@ -69,6 +131,7 @@ export const createOrderAndUpdateStock = async (
 
 			// 3️⃣ Génère la vraie référence maintenant que order_id existe
 			const ref = `CMD-${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}-${String(newOrder.order_id).padStart(3, "0")}`;
+
 			await newOrder.update(
 				{ reference: ref, updated_at: new Date() },
 				{ transaction: t },
@@ -175,10 +238,22 @@ export const getMyOrders = async (req: Request, res: Response) => {
 				{
 					model: OrderItem,
 					as: "items",
+					attributes: [
+						"quantity",
+						"price",
+						"size", // ✅ Ajout de la taille
+					],
 					include: [
 						{
 							model: Article,
 							as: "article",
+							attributes: [
+								"article_id",
+								"name",
+								"reference",
+								"type",
+								"price_ttc",
+							],
 							include: [
 								{
 									model: ArticleImage,

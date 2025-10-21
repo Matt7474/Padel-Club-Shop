@@ -76,7 +76,7 @@ export default function Article() {
 													key={size}
 													onClick={() =>
 														Number(qty) > 0 && setSelectedSize(size)
-													} // seulement clickable si qty > 0
+													}
 													className={
 														Number(qty) === 0
 															? "pointer-events-none opacity-50"
