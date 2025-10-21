@@ -28,6 +28,8 @@ export default function ShoesForm({
 	sCharacteristicsSize,
 	handleChangeS,
 }: ShoesProps) {
+	console.log("sCharacteristicsSize", sCharacteristicsSize);
+
 	return (
 		<>
 			<div>

@@ -11,10 +11,10 @@ stockRouter.post(
 	stockControllers.checkStockBeforePayment,
 );
 
-stockRouter.post(
-	"/update-after-payment",
-	authenticateToken,
-	stockControllers.updateStockAfterPayment,
-);
+// stockRouter.post(
+// 	"/update-after-payment",
+// 	authenticateToken,
+// 	stockControllers.updateStockAfterPayment,
+// );
 
 export { stockRouter };

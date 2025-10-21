@@ -1,5 +1,3 @@
-/** biome-ignore-all lint/a11y/noStaticElementInteractions: <explanation> */
-/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { getArticleByName } from "../api/Article";
@@ -13,7 +11,6 @@ import type ArticleType from "../types/Article";
 export default function Article() {
 	const [isDescriptionOn, setIsDescriptionOn] = useState(true);
 	const [isCaracteristiquesOn, setIsCaracteristiquesOn] = useState(false);
-
 	const { name } = useParams<{ name: string }>();
 	const location = useLocation();
 	const stateArticle = (location.state as { article?: ArticleType })?.article;
@@ -50,6 +47,8 @@ export default function Article() {
 		{ label: article.name, href: `/articles/${name}` },
 	];
 
+	console.log(article);
+
 	return (
 		<>
 			<Breadcrumb items={breadcrumbItems} />
@@ -72,30 +71,28 @@ export default function Article() {
 											const isSelected = selectedSize === size;
 
 											return (
-												<div
+												<button
 													key={size}
-													onClick={() =>
-														Number(qty) > 0 && setSelectedSize(size)
-													}
-													className={
+													type="button"
+													disabled={Number(qty) === 0}
+													onClick={() => setSelectedSize(size)}
+													className={`
+													border px-2 py-1 rounded-md flex flex-col text-xs items-center
+													${
 														Number(qty) === 0
-															? "pointer-events-none opacity-50"
-															: ""
+															? "bg-gray-100 bg-[repeating-linear-gradient(45deg,#e5e7eb,#e5e7eb_10px,#f9fafb_10px,#f9fafb_15px)] cursor-not-allowed"
+															: "cursor-pointer"
 													}
+													${isSelected && Number(qty) > 0 ? "bg-gray-300" : Number(qty) > 0 ? "hover:bg-gray-300" : ""}
+													`}
 												>
-													<div
-														className={`border px-2 py-1 rounded-md flex flex-col text-xs items-center 
-														${Number(qty) === 0 ? "bg-gray-100 bg-[repeating-linear-gradient(45deg,#e5e7eb,#e5e7eb_10px,#f9fafb_10px,#f9fafb_15px)] cursor-not-allowed" : "cursor-pointer"}
-														${isSelected && Number(qty) > 0 ? "bg-gray-300" : Number(qty) > 0 ? "hover:bg-gray-300" : ""}`}
-													>
-														<span className="font-semibold h-5 w-7 flex justify-center items-center">
-															{size}
-														</span>
-														{Number(qty) === 0 && (
-															<span className="text-[10px] text-red-500" />
-														)}
-													</div>
-												</div>
+													<span className="font-semibold h-5 w-7 flex justify-center items-center">
+														{size}
+													</span>
+													{Number(qty) === 0 && (
+														<span className="text-[10px] text-red-500" />
+													)}
+												</button>
 											);
 										})}
 								</div>
@@ -168,7 +165,7 @@ export default function Article() {
 												<h3 className="font-semibold text-md mb-2">
 													Tailles disponibles
 												</h3>
-												<div className=" grid grid-cols-10 gap-4">
+												<div className=" grid grid-cols-10 gap-2">
 													{article.tech_characteristics.fit
 														.split(",")
 														.map((sizeStr) => {
@@ -176,32 +173,39 @@ export default function Article() {
 															const isSelected = selectedSize === size;
 
 															return (
-																<div
-																	key={size}
-																	onClick={() =>
-																		Number(qty) > 0 && setSelectedSize(size)
-																	} // seulement clickable si qty > 0
-																	className={
-																		Number(qty) === 0
-																			? "pointer-events-none opacity-50"
-																			: ""
-																	}
-																>
-																	<div
-																		className={`border px-2 py-1 rounded-md flex flex-col text-xs items-center 
-																		${Number(qty) === 0 ? "bg-gray-100 bg-[repeating-linear-gradient(45deg,#e5e7eb,#e5e7eb_10px,#f9fafb_10px,#f9fafb_15px)] cursor-not-allowed" : "cursor-pointer"}
-																		${isSelected && Number(qty) > 0 ? "bg-gray-300" : Number(qty) > 0 ? "hover:bg-gray-300" : ""}`}
+																<div className="flex flex-col items-center">
+																	<button
+																		key={size}
+																		type="button"
+																		disabled={Number(qty) === 0}
+																		onClick={() => setSelectedSize(size)}
+																		className={`
+        relative border px-2 py-1 w-10 h-10 rounded-md flex flex-col text-xs items-center
+        ${Number(qty) === 0 ? "cursor-not-allowed bg-gray-100" : "cursor-pointer"}
+        ${isSelected ? "bg-gray-300" : "hover:bg-gray-300"}
+      `}
 																	>
-																		<span className="font-semibold h-5 w-7 flex justify-center items-center">
+																		{/* Hachures si stock à 0 */}
+																		{Number(qty) === 0 && (
+																			<span className="absolute inset-0 bg-[repeating-linear-gradient(-45deg,rgba(0,0,0,0.05),rgba(0,0,0,0.05)_2px,transparent_1px,transparent_4px)] rounded-md pointer-events-none"></span>
+																		)}
+
+																		{/* Contenu au-dessus */}
+																		<span className="relative z-10 font-semibold h-8 w-8 flex justify-center items-center">
 																			{size}
 																		</span>
-																		{Number(qty) === 0 && (
-																			<span className="text-[10px] text-red-500" />
+																	</button>
+
+																	{/* Alerte si stock < 5 */}
+																	{Number(qty) > 0 &&
+																		Number(qty) < 7 &&
+																		isSelected && (
+																			<p className="text-red-500 text-[10px] absolute mt-10">
+																				Il ne reste que {qty} article
+																				{Number(qty) > 1 ? "s" : ""} à cette
+																				taille
+																			</p>
 																		)}
-																		<span className=" h-5 w-7 flex justify-center items-center text-[8px] text-red-500">
-																			{size.length} dispo
-																		</span>
-																	</div>
 																</div>
 															);
 														})}

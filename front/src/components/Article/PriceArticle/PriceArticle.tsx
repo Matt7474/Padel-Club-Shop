@@ -74,21 +74,13 @@ export default function PriceArticle({
 			article.tech_characteristics?.fit.length > 1;
 
 		if (needsSize && !selectedSize) {
-			const id = Date.now();
-			setInfoModal((prev) => [
-				...prev,
-				{ id, text: "Veuillez sélectionner une taille !" },
-			]);
+			addToast("Veuillez sélectionner une taille !", "bg-red-500");
 			setAlert(true);
 			return;
 		}
 
 		if (!selectedSize && article.type === "clothing") {
-			const id = Date.now();
-			setInfoModal((prev) => [
-				...prev,
-				{ id, text: "Veuillez sélectionner une taille !" },
-			]);
+			addToast("Veuillez sélectionner une taille !", "bg-red-500");
 			setAlert(true);
 			return;
 		}
@@ -194,7 +186,7 @@ export default function PriceArticle({
 						Ajouter au panier
 					</button>
 					{alert && selectedSize === null && (
-						<span className="text-red-500 absolute left-1/2 transform -translate-x-1/2 mt-13">
+						<span className="text-red-500  absolute left-1/2 transform -translate-x-1/2 mt-13">
 							Veuillez sélectionner une taille !
 						</span>
 					)}

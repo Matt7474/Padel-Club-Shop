@@ -542,7 +542,7 @@ export default function Paiement() {
 								<div className="flex flex-col sm:flex-row gap-4 justify-center">
 									<button
 										type="button"
-										onClick={() => navigate("/profile/my-orders")}
+										onClick={() => navigate("/profile/")}
 										className="px-6 xl:px-2 py-3 xl:py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
 									>
 										Suivre ma commande

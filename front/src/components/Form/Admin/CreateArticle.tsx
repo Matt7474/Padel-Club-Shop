@@ -291,6 +291,49 @@ export default function CreateArticle({
 			.catch((err) => console.error(err));
 	}, []);
 
+	useEffect(() => {
+		if (mode === "edit" && article) {
+			const tech = article.tech_characteristics ?? {};
+			console.log("✅ Données tech_characteristics reçues :", tech);
+
+			// --- Chaussures ---
+			if (articleType === "shoes") {
+				setSCharacteristicsWeight(tech.weight || "");
+				setSCharacteristicsColor(tech.color || "");
+				setSCharacteristicsSole(tech.sole || "");
+				setSCharacteristicsGender(tech.gender || "");
+
+				if (typeof tech.fit === "string") {
+					const parsedSizes = tech.fit.split(",").map((pair) => {
+						const [label, stock] = pair.split(":");
+						return { label, stock: Number(stock) || 0 };
+					});
+					setSCharacteristicsSize(parsedSizes);
+				} else if (Array.isArray(tech.fit)) {
+					setSCharacteristicsSize(tech.fit);
+				}
+			}
+
+			// --- Vêtements ---
+			if (articleType === "clothing") {
+				setCCharacteristicsType(tech.type || "");
+				setCCharacteristicsGender(tech.gender || "");
+				setCCharacteristicsMaterial(tech.material || "");
+				setCCharacteristicsColor(tech.color || "");
+
+				if (typeof tech.fit === "string") {
+					const parsedSizes = tech.fit.split(",").map((pair) => {
+						const [label, stock] = pair.split(":");
+						return { label, stock: Number(stock) || 0 };
+					});
+					setCCharacteristicsSize(parsedSizes);
+				} else if (Array.isArray(tech.fit)) {
+					setCCharacteristicsSize(tech.fit);
+				}
+			}
+		}
+	}, [mode, article, articleType]);
+
 	// gestion des images
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (!e.target.files) return;
@@ -526,15 +569,15 @@ export default function CreateArticle({
 						await detachPromoFromArticle(articleId, existingPromo.promo_id);
 					}
 				}
-			}
 
-			onUpdated?.();
-			onReturn?.();
-			if (setMenuSelected) setMenuSelected("null");
-			addToast(
-				`Article ${newArticle.name} modifié avec succès`,
-				"bg-green-500",
-			);
+				onUpdated?.();
+				onReturn?.();
+				if (setMenuSelected) setMenuSelected("null");
+				addToast(
+					`Article ${newArticle.name} modifié avec succès`,
+					"bg-green-500",
+				);
+			}
 		} catch (err) {
 			console.error(err);
 			alert("Erreur lors de la sauvegarde de l'article");
