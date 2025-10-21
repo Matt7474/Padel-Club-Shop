@@ -12,6 +12,7 @@ import BrandsWrapper from "./components/Wrapper/BrandsWrapper";
 import AboutUs from "./pages/AboutUs";
 import AllArticles from "./pages/AllArticles";
 import Article from "./pages/Article";
+import Contact from "./pages/Contact";
 import Homepage from "./pages/Homepage";
 import LegalNotice from "./pages/LegalNotice";
 import Login from "./pages/login";
@@ -57,6 +58,7 @@ function App() {
 								element={<TermsOfSale />}
 							/>
 							<Route path="/a-propos-de-nous" element={<AboutUs />} />
+							<Route path="/contact" element={<Contact />} />
 						</Routes>
 					</div>
 				</div>

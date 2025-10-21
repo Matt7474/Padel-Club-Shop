@@ -6,8 +6,8 @@ import ImagesArticle from "../components/Article/ImagesArticle/ImagesArticle";
 import PriceArticle from "../components/Article/PriceArticle/PriceArticle";
 import RatingArticle from "../components/Article/RatingArticle/RatingArticle";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
-import type ArticleType from "../types/Article";
 import DisplayPromo from "../components/DisplayPromo/DisplayPromo";
+import type ArticleType from "../types/Article";
 
 export default function Article() {
 	const [isDescriptionOn, setIsDescriptionOn] = useState(true);

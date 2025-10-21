@@ -185,4 +185,19 @@ CREATE TABLE cart_lines (
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TABLE contact_messages (
+    id SERIAL PRIMARY KEY,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    phone VARCHAR(10),
+    subject TEXT CHECK (subject IN ('general', 'order', 'product', 'complaint', 'partnership', 'other')) NOT NULL,
+    message TEXT NOT NULL,
+    status TEXT CHECK (status IN ('new', 'in_progress', 'resolved', 'closed')) DEFAULT 'new',
+    responded_at TIMESTAMP NULL,
+    admin_notes TEXT,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
 COMMIT;

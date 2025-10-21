@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { articlesRouter } from "./articlesRouter";
 import { brandsRouter } from "./brandsRouter";
+import { contactRouter } from "./contactRouter";
 import { orderRouter } from "./orderRouter";
 import { promotionsRouter } from "./promotionsRouter";
 import { stockRouter } from "./stockRouter";
@@ -11,6 +12,7 @@ const router = Router();
 
 router.use("/articles", articlesRouter);
 router.use("/brands", brandsRouter);
+router.use("/contact", contactRouter);
 router.use("/order", orderRouter);
 router.use("/promotions", promotionsRouter);
 router.use("/stock", stockRouter);

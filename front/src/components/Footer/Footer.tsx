@@ -68,6 +68,9 @@ export default function Footer() {
 								Qui sommes-nous ?
 							</p>
 						</Link>
+						<Link to="/contact">
+							<p className="text-md hover:underline cursor-pointer">Contact</p>
+						</Link>
 					</div>
 				</div>
 
