@@ -202,7 +202,7 @@ export default function PriceArticle({
 						</span>
 					)}
 
-					{qty! < 6 && (
+					{typeof qty === "number" && qty < 6 && (
 						<div className="flex justify-center">
 							<span className="text-red-500 text-sm font-semibold text-center mt-0.5 mr-1">
 								⚠️
