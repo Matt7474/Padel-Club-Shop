@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAuthStore } from "../store/useAuthStore";
 
 interface ContactFormData {
 	firstName: string;
@@ -29,6 +30,30 @@ export async function sendContactForm(data: ContactFormData) {
 			{
 				headers: {
 					"Content-Type": "application/json",
+				},
+			},
+		);
+		return response.data;
+	} catch (error: unknown) {
+		if (axios.isAxiosError(error)) {
+			throw new Error(
+				error.response?.data?.message || "Erreur lors de l'envoi",
+			);
+		}
+		throw new Error("Erreur inconnue");
+	}
+}
+
+export async function getClientMessages() {
+	try {
+		const authToken = useAuthStore.getState().token;
+		const response = await axios.get(
+			`${API_URL}/contact/messages`,
+
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
 				},
 			},
 		);

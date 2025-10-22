@@ -117,7 +117,15 @@ export default function MenuModal({ closeMenu }: menuModalsProps) {
 						animate="hover:animate-bounce"
 						onLinkClick={closeMenu}
 					/>
-					<Link to="/allArticle">Tous les articles</Link>
+					<LinkMenu
+						to="articles"
+						name="Tous les articles"
+						color="text-black"
+						border={1}
+						marginLeft={0}
+						animate="hover:animate-bounce"
+						onLinkClick={closeMenu}
+					/>
 				</div>
 			</div>
 		</>

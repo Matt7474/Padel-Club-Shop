@@ -7,9 +7,9 @@ const contactRouter = Router();
 // Routes de contact
 contactRouter.post("/contact", contactControllers.createContact);
 contactRouter.get(
-	"/contact",
+	"/messages",
 	authenticateToken,
-	contactControllers.getContacts,
+	contactControllers.getMessages,
 );
 
 export { contactRouter };

@@ -12,6 +12,7 @@ import UserList from "../components/Form/Admin/UsersList";
 import Select from "../components/Form/Tools/Select";
 import { useAuthStore } from "../store/useAuthStore";
 import Profile from "./Profile";
+import ClientMessages from "../components/Form/Admin/ClientsMessages";
 
 export default function ProfileMenu() {
 	const [menuSelected, setMenuSelected] = useState("");
@@ -37,6 +38,7 @@ export default function ProfileMenu() {
 		"Voir les commandes",
 		"Voir mon profil",
 		"Mes commandes",
+		"Voir les messages client",
 		"Mes messages",
 	];
 
@@ -55,7 +57,6 @@ export default function ProfileMenu() {
 					? "MENU ADMINISTRATEUR"
 					: "MENU CLIENT"}
 			</h2>
-
 			{/* Menu déroulant mobile */}
 			<div className="xl:hidden cursor-pointer">
 				<Select
@@ -66,7 +67,6 @@ export default function ProfileMenu() {
 					labels={menuOptions}
 				/>
 			</div>
-
 			{/* Menu latéral desktop */}
 			<div className="hidden xl:flex flex-col w-70 absolute -left-74 top-17 cursor-pointer">
 				{menuOptions.map((option) => (
@@ -84,7 +84,6 @@ export default function ProfileMenu() {
 					</button>
 				))}
 			</div>
-
 			{/* Contenu selon le menu sélectionné */}
 			{menuSelected === "Ajouter un article" && (
 				<CreateArticle
@@ -94,7 +93,6 @@ export default function ProfileMenu() {
 					onReturn={() => setMenuSelected("Liste des articles")}
 				/>
 			)}
-
 			{menuSelected === "Liste des articles" && <ArticlesList />}
 			{menuSelected === "Ajouter une marque" && <CreateBrand />}
 			{menuSelected === "Liste des marques" && <BrandList />}
@@ -108,6 +106,7 @@ export default function ProfileMenu() {
 			{menuSelected === "Voir les commandes" && <OrderList />}
 			{menuSelected === "Voir mon profil" && <Profile />}
 			{menuSelected === "Mes commandes" && <MyOrders />}
+			{menuSelected === "Voir les messages client" && <ClientMessages />}
 		</div>
 	);
 }

@@ -90,8 +90,8 @@ export default function ContactPage() {
 	};
 
 	return (
-		<div className="min-h-screen ">
-			<div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+		<div className="">
+			<div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 xl:px-8">
 				<div className="text-center mb-12">
 					<h1 className="text-4xl font-bold text-gray-900 mb-4">
 						Contactez-nous
@@ -102,8 +102,8 @@ export default function ContactPage() {
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-					<div className="lg:col-span-1 space-y-6">
+				<div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+					<div className="xl:col-span-1 space-y-6">
 						<div className="bg-white rounded-2xl shadow-lg p-6 h-30 hover:shadow-xl transition-shadow">
 							<div className="flex items-start space-x-4">
 								<div className="bg-amber-100 rounded-full p-3">
@@ -167,7 +167,7 @@ export default function ContactPage() {
 						</div>
 					</div>
 
-					<div className="lg:col-span-2">
+					<div className="xl:col-span-2">
 						<div className="bg-white rounded-2xl shadow-lg p-4 xl:p-8">
 							{isSubmitted ? (
 								<div className="text-center py-12">
@@ -343,7 +343,7 @@ export default function ContactPage() {
 										<button
 											type="button"
 											onClick={handleSubmit}
-											className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl"
+											className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl cursor-pointer"
 										>
 											<Send className="w-5 h-5" />
 											<span>Envoyer le message</span>

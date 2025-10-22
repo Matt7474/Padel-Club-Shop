@@ -190,7 +190,7 @@ export default function PriceArticle({
 				<div className="relative mt-2">
 					<button
 						type="button"
-						className="bg-emerald-300 rounded-lg py-2 w-full font-semibold cursor-pointer hover:brightness-80"
+						className="bg-amber-500 hover:bg-amber-600 rounded-lg py-2 w-full font-semibold cursor-pointer hover:brightness-80"
 						onClick={addOnCart}
 					>
 						Ajouter au panier

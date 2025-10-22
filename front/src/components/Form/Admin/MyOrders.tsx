@@ -1,4 +1,4 @@
-import { CreditCard, ShoppingBag } from "lucide-react";
+import { CreditCard, Loader2, ShoppingBag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMyOrders } from "../../../api/Order";
@@ -73,17 +73,14 @@ export default function MyOrders() {
 		navigate("/");
 	};
 
-	if (loading)
+	if (loading) {
 		return (
-			<div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex justify-center items-center">
-				<div className="text-center">
-					<div className="w-16 h-16 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4"></div>
-					<p className="text-slate-600 text-lg font-medium">
-						Chargement de vos commandes...
-					</p>
-				</div>
+			<div className="flex flex-col items-center justify-center h-64 text-gray-600">
+				<Loader2 className="w-8 h-8 animate-spin text-amber-600 mb-3" />
+				<p className="text-sm font-medium">Chargement de vos commandes...</p>
 			</div>
 		);
+	}
 
 	if (orders.length === 0)
 		return (
