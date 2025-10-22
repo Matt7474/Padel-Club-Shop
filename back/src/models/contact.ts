@@ -10,6 +10,7 @@ interface ContactAttributes {
 	subject: string;
 	message: string;
 	status?: "new" | "in_progress" | "resolved" | "closed";
+	order_number?: string;
 	responded_at?: Date | null;
 	admin_notes?: string | null;
 	created_at?: Date;
@@ -40,6 +41,7 @@ export class Contact
 	public subject!: string;
 	public message!: string;
 	public status?: "new" | "in_progress" | "resolved" | "closed";
+	public order_number?: string;
 	public responded_at?: Date | null;
 	public admin_notes?: string | null;
 
@@ -77,6 +79,10 @@ Contact.init(
 		message: {
 			type: DataTypes.TEXT,
 			allowNull: false,
+		},
+		order_number: {
+			type: DataTypes.TEXT,
+			allowNull: true,
 		},
 		status: {
 			type: DataTypes.TEXT,

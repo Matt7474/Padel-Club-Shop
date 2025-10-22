@@ -4,7 +4,15 @@ import { sendMail } from "../services/mailer";
 
 export const createContact = async (req: Request, res: Response) => {
 	try {
-		const { first_name, last_name, email, phone, subject, message } = req.body;
+		const {
+			first_name,
+			last_name,
+			email,
+			phone,
+			subject,
+			message,
+			order_number,
+		} = req.body;
 
 		if (!first_name || !last_name || !email || !subject || !message) {
 			return res.status(400).json({
@@ -19,6 +27,7 @@ export const createContact = async (req: Request, res: Response) => {
 			phone,
 			subject,
 			message,
+			order_number,
 		});
 
 		await sendMail({

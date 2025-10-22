@@ -9,6 +9,7 @@ interface FormData {
 	phone: string;
 	subject: string;
 	message: string;
+	orderNumber: string;
 }
 
 interface FormErrors {
@@ -18,6 +19,7 @@ interface FormErrors {
 	phone?: string;
 	subject?: string;
 	message?: string;
+	orderNumber?: string | null;
 }
 
 export default function ContactPage() {
@@ -28,6 +30,7 @@ export default function ContactPage() {
 		phone: "",
 		subject: "",
 		message: "",
+		orderNumber: "",
 	});
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 	const [errors, setErrors] = useState<FormErrors>({});
@@ -80,6 +83,7 @@ export default function ContactPage() {
 					phone: "",
 					subject: "",
 					message: "",
+					orderNumber: "",
 				});
 			}, 3000);
 		} catch (error: unknown) {
@@ -313,6 +317,28 @@ export default function ContactPage() {
 											</p>
 										)}
 									</div>
+
+									{formData.subject === "order" && (
+										<div>
+											<label
+												htmlFor="orderNumber"
+												className="block text-sm font-medium text-gray-700 mb-2"
+											>
+												Numéro de commande
+											</label>
+											<input
+												type="text"
+												id="orderNumber"
+												name="orderNumber"
+												maxLength={17}
+												value={formData.orderNumber}
+												required
+												onChange={handleChange}
+												className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition"
+												placeholder="CMD-20251021-007"
+											/>
+										</div>
+									)}
 
 									<div>
 										<label

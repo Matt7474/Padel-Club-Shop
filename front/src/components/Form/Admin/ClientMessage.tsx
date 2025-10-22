@@ -1,4 +1,4 @@
-import { Contact, Mail, MessagesSquare, Phone } from "lucide-react";
+import { Contact, FileDigit, Mail, MessagesSquare, Phone } from "lucide-react";
 import type { Imessages } from "./ClientsMessages";
 
 interface ClientMessageProps {
@@ -19,8 +19,10 @@ export default function ClientMessage({
 		other: "Autre",
 	};
 
+	console.log("infos", message);
+
 	return (
-		<div className="min-h-screen bg-gray-50 mt-4">
+		<div className="bg-gray-50 mt-4">
 			<button
 				type="button"
 				onClick={onReturn}
@@ -41,7 +43,7 @@ export default function ClientMessage({
 						<p className="text-center text-md text-gray-700 font-semibold italic -mt-2 mb-3">
 							Fiche Contact
 						</p>
-						<div className="grid grid-cols-[auto_80px_1fr] items-center gap-3">
+						<div className="grid grid-cols-[auto_100px_1fr] items-center gap-3">
 							<div className="bg-amber-100 rounded-full p-3 flex items-center justify-center">
 								<Contact className="w-5 h-5 text-amber-600" />
 							</div>
@@ -55,7 +57,7 @@ export default function ClientMessage({
 					</div>
 
 					{message.email && (
-						<div className="grid grid-cols-[auto_80px_1fr] items-center gap-3 mt-3">
+						<div className="grid grid-cols-[auto_100px_1fr] items-center gap-3 mt-3">
 							<div className="bg-amber-100 rounded-full p-3 flex items-center justify-center">
 								<Mail className="w-5 h-5 text-amber-600" />
 							</div>
@@ -84,7 +86,7 @@ export default function ClientMessage({
 					)}
 
 					{message.phone && (
-						<div className="grid grid-cols-[auto_80px_1fr] items-center gap-3 mt-3">
+						<div className="grid grid-cols-[auto_100px_1fr] items-center gap-3 mt-3">
 							<div className="bg-amber-100 rounded-full p-3 flex items-center justify-center">
 								<Phone className="w-5 h-5 text-amber-600" />
 							</div>
@@ -100,18 +102,35 @@ export default function ClientMessage({
 						</div>
 					)}
 
-					<div className="grid grid-cols-[auto_80px_1fr] items-center gap-3 mt-3">
+					<div className="grid grid-cols-[auto_100px_1fr] items-center gap-3 mt-3 relative">
 						<div className="bg-amber-100 rounded-full p-3 flex items-center justify-center">
 							<MessagesSquare className="w-5 h-5 text-amber-600" />
 						</div>
-
 						<p className="font-semibold text-gray-900 text-sm text-right">
 							Sujet :
 						</p>
-						<p className="font-semibold text-gray-900 text-sm">
-							{message.subject ? subjectMap[message.subject] : "-"}
-						</p>
+						<div className="flex">
+							<p className="font-semibold text-gray-900 text-sm">
+								{message.subject ? subjectMap[message.subject] : "-"}{" "}
+							</p>
+						</div>
 					</div>
+
+					{message.order_number && (
+						<div className="grid grid-cols-[auto_100px_1fr] items-center gap-3 mt-3 relative">
+							<div className="bg-amber-100 rounded-full p-3 flex items-center justify-center">
+								<FileDigit className="w-5 h-5 text-amber-600" />
+							</div>
+							<p className="font-semibold text-gray-900 text-sm text-right">
+								N° commande :
+							</p>
+							<div className="flex">
+								<p className="font-semibold text-gray-900 text-sm">
+									{message.order_number}
+								</p>
+							</div>{" "}
+						</div>
+					)}
 				</div>
 
 				{/* Message */}

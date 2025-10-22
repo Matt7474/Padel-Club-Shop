@@ -12,6 +12,7 @@ export interface Imessages {
 	subject?: string;
 	message?: string;
 	created_at?: string;
+	order_number?: string;
 }
 
 export default function ClientsMessages() {

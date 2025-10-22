@@ -8,6 +8,7 @@ interface ContactFormData {
 	phone: string;
 	subject: string;
 	message: string;
+	orderNumber: string;
 }
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -22,6 +23,7 @@ export async function sendContactForm(data: ContactFormData) {
 			phone: data.phone,
 			subject: data.subject,
 			message: data.message,
+			order_number: data.orderNumber,
 		};
 
 		const response = await axios.post(
