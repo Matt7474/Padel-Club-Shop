@@ -12,4 +12,16 @@ contactRouter.get(
 	contactControllers.getMessages,
 );
 
+contactRouter.patch(
+	`/messages/markMessageAsRead/:id`,
+	authenticateToken,
+	contactControllers.markMessageAsRead,
+);
+
+contactRouter.patch(
+	`/messages/response/:id`,
+	authenticateToken,
+	contactControllers.addResponse,
+);
+
 export { contactRouter };

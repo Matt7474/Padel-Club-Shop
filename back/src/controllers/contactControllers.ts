@@ -110,3 +110,75 @@ export const getMessages = async (_req: Request, res: Response) => {
 		return res.status(500).json({ message: "Erreur inconnue" });
 	}
 };
+
+export const markMessageAsRead = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+		if (!id) return res.status(400).json({ error: "ID du message requis" });
+
+		const [updatedRows, [updatedMessage]] = await Contact.update(
+			{ is_read: true },
+			{
+				where: { id: Number(id) },
+				returning: true,
+			},
+		);
+
+		if (updatedRows === 0) {
+			return res.status(404).json({ error: "Message non trouvé" });
+		}
+
+		res.json({
+			success: true,
+			message: "Message marqué comme lu",
+			data: updatedMessage,
+		});
+	} catch (err: unknown) {
+		console.error(err);
+		if (err instanceof Error) res.status(500).json({ error: err.message });
+		else res.status(500).json({ error: "Erreur serveur inconnue" });
+	}
+};
+
+export const addResponse = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+		const { response } = req.body;
+
+		console.log("id", id);
+		console.log("1", response);
+
+		if (!id) {
+			return res.status(400).json({ error: "ID du message requis" });
+		}
+
+		if (!response || response.trim() === "") {
+			return res.status(400).json({ error: "Réponse vide non autorisée" });
+		}
+
+		const [updatedRows, [updatedMessage]] = await Contact.update(
+			{ response },
+			{
+				where: { id: Number(id) },
+				returning: true,
+			},
+		);
+
+		if (updatedRows === 0) {
+			return res.status(404).json({ error: "Message non trouvé" });
+		}
+
+		res.json({
+			success: true,
+			message: "Réponse ajoutée avec succès",
+			data: updatedMessage,
+		});
+	} catch (err: unknown) {
+		console.error("Erreur dans addResponse :", err);
+		if (err instanceof Error) {
+			res.status(500).json({ error: err.message });
+		} else {
+			res.status(500).json({ error: "Erreur serveur inconnue" });
+		}
+	}
+};

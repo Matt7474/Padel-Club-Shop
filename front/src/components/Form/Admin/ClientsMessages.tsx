@@ -1,18 +1,20 @@
-import { Contact, Loader2, MessagesSquare } from "lucide-react";
+import { Contact, Loader2, MailWarning, MessagesSquare } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getClientMessages } from "../../../api/Contact";
+import { getClientMessages, markMessageAsRead } from "../../../api/Contact";
 import ClientMessage from "./ClientMessage";
 
 export interface Imessages {
-	id?: number;
+	id: number;
 	first_name?: string;
 	last_name?: string;
 	email?: string;
 	phone?: string;
 	subject?: string;
 	message?: string;
+	response?: string;
 	created_at?: string;
 	order_number?: string;
+	is_read?: boolean;
 }
 
 export default function ClientsMessages() {
@@ -23,20 +25,20 @@ export default function ClientsMessages() {
 	);
 	const [, setError] = useState("");
 
-	useEffect(() => {
-		const fetchMessages = async () => {
-			try {
-				setLoading(true);
-				const messages = await getClientMessages();
-				setMessages(messages.data);
-			} catch (err: unknown) {
-				if (err instanceof Error) setError(err.message);
-				else setError("Erreur inconnue");
-			} finally {
-				setLoading(false);
-			}
-		};
+	const fetchMessages = async () => {
+		try {
+			setLoading(true);
+			const messages = await getClientMessages();
+			setMessages(messages.data);
+		} catch (err: unknown) {
+			if (err instanceof Error) setError(err.message);
+			else setError("Erreur inconnue");
+		} finally {
+			setLoading(false);
+		}
+	};
 
+	useEffect(() => {
 		fetchMessages();
 	}, []);
 
@@ -49,8 +51,12 @@ export default function ClientsMessages() {
 		other: "Autre",
 	};
 
-	const handleClick = (message: Imessages) => {
+	const handleClick = async (message: Imessages) => {
+		if (!message.is_read) {
+			await markMessageAsRead(message.id);
+		}
 		setSelectedMessage(message);
+		fetchMessages();
 	};
 
 	if (loading) {
@@ -63,6 +69,7 @@ export default function ClientsMessages() {
 			</div>
 		);
 	}
+	console.log(messages);
 
 	if (selectedMessage) {
 		return (
@@ -118,6 +125,11 @@ export default function ClientsMessages() {
 														},
 													)
 												: "-"}
+											{message.is_read === false && (
+												<div className="mt-5 ml-6">
+													<MailWarning className="text-red-500 animate-bounce" />
+												</div>
+											)}
 										</div>
 									</div>
 

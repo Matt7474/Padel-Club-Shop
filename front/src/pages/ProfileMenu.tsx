@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ArticlesList from "../components/Form/Admin/ArticlesList";
 import BrandList from "../components/Form/Admin/BrandList";
+import ClientsMessages from "../components/Form/Admin/ClientsMessages";
 import CreateArticle from "../components/Form/Admin/CreateArticle";
 import CreateBrand from "../components/Form/Admin/CreateBrand";
 import CreatePromo from "../components/Form/Admin/CreatePromo";
@@ -12,7 +13,6 @@ import UserList from "../components/Form/Admin/UsersList";
 import Select from "../components/Form/Tools/Select";
 import { useAuthStore } from "../store/useAuthStore";
 import Profile from "./Profile";
-import ClientMessages from "../components/Form/Admin/ClientsMessages";
 
 export default function ProfileMenu() {
 	const [menuSelected, setMenuSelected] = useState("");
@@ -106,7 +106,7 @@ export default function ProfileMenu() {
 			{menuSelected === "Voir les commandes" && <OrderList />}
 			{menuSelected === "Voir mon profil" && <Profile />}
 			{menuSelected === "Mes commandes" && <MyOrders />}
-			{menuSelected === "Voir les messages client" && <ClientMessages />}
+			{menuSelected === "Voir les messages client" && <ClientsMessages />}
 		</div>
 	);
 }

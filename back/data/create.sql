@@ -192,6 +192,8 @@ CREATE TABLE contact_messages (
     email TEXT NOT NULL,
     phone VARCHAR(10),
     order_number VARCHAR(17),
+    is_read BOOLEAN DEFAULT FALSE
+    response TEXT,
     subject TEXT CHECK (subject IN ('general', 'order', 'product', 'complaint', 'partnership', 'other')) NOT NULL,
     message TEXT NOT NULL,
     status TEXT CHECK (status IN ('new', 'in_progress', 'resolved', 'closed')) DEFAULT 'new',

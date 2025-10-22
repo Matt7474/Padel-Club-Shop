@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LinkMenu from "../LinkMenu/LinkMenu";
 import SearchBar from "../SearchBar/SearchBar";
 

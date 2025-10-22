@@ -69,3 +69,73 @@ export async function getClientMessages() {
 		throw new Error("Erreur inconnue");
 	}
 }
+
+export async function markMessageAsRead(id: number) {
+	try {
+		const authToken = useAuthStore.getState().token;
+
+		if (!authToken)
+			throw new Error("Token manquant pour récupérer l'utilisateur");
+
+		const res = await axios.patch(
+			`${API_URL}/contact/messages/markMessageAsRead/${id}`,
+			{},
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
+			},
+		);
+
+		return res.data;
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error(
+				"Erreur lors de la modifiaction du marqueur",
+				error.message,
+			);
+		} else {
+			console.error(
+				"Erreur inconnue lors de la modifiaction du marqueur",
+				error,
+			);
+		}
+		throw error;
+	}
+}
+
+export async function responseMessage(id: number, response: string) {
+	try {
+		const authToken = useAuthStore.getState().token;
+
+		if (!authToken)
+			throw new Error("Token manquant pour récupérer l'utilisateur");
+
+		const res = await axios.patch(
+			`${API_URL}/contact/messages/response/${id}`,
+			{ response },
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
+			},
+		);
+
+		return res.data;
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error(
+				"Erreur lors de la modifiaction du marqueur",
+				error.message,
+			);
+		} else {
+			console.error(
+				"Erreur inconnue lors de la modifiaction du marqueur",
+				error,
+			);
+		}
+		throw error;
+	}
+}

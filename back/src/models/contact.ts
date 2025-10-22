@@ -11,6 +11,8 @@ interface ContactAttributes {
 	message: string;
 	status?: "new" | "in_progress" | "resolved" | "closed";
 	order_number?: string;
+	is_read: boolean;
+	response?: string;
 	responded_at?: Date | null;
 	admin_notes?: string | null;
 	created_at?: Date;
@@ -27,6 +29,7 @@ interface ContactCreationAttributes
 		| "admin_notes"
 		| "created_at"
 		| "updated_at"
+		| "is_read"
 	> {}
 
 export class Contact
@@ -42,6 +45,8 @@ export class Contact
 	public message!: string;
 	public status?: "new" | "in_progress" | "resolved" | "closed";
 	public order_number?: string;
+	public is_read!: boolean;
+	public response?: string;
 	public responded_at?: Date | null;
 	public admin_notes?: string | null;
 
@@ -81,6 +86,15 @@ Contact.init(
 			allowNull: false,
 		},
 		order_number: {
+			type: DataTypes.TEXT,
+			allowNull: true,
+		},
+		is_read: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
+		},
+		response: {
 			type: DataTypes.TEXT,
 			allowNull: true,
 		},
