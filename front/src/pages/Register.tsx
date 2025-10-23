@@ -145,10 +145,10 @@ export default function Register() {
 							<Input
 								htmlFor="phone"
 								label="N° téléphone"
-								type="text"
+								type="tel"
 								value={phone}
 								onChange={(value) => setPhone(formatPhone(value))}
-								pattern={"^\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d{2}$"}
+								pattern="^(\+?\d[\d .-]{7,})$"
 							/>
 							<Input
 								htmlFor="registerEmail"

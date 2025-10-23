@@ -3,6 +3,7 @@ import { sequelize } from "../database/db";
 
 interface ContactAttributes {
 	id: number;
+	user_id?: number | null;
 	first_name: string;
 	last_name: string;
 	email: string;
@@ -37,6 +38,7 @@ export class Contact
 	implements ContactAttributes
 {
 	public id!: number;
+	public user_id?: number;
 	public first_name!: string;
 	public last_name!: string;
 	public email!: string;
@@ -61,6 +63,10 @@ Contact.init(
 			autoIncrement: true,
 			primaryKey: true,
 		},
+		user_id: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+		},
 		first_name: {
 			type: DataTypes.TEXT,
 			allowNull: false,
@@ -74,7 +80,7 @@ Contact.init(
 			allowNull: false,
 		},
 		phone: {
-			type: DataTypes.STRING(10),
+			type: DataTypes.STRING(20),
 			allowNull: true,
 		},
 		subject: {

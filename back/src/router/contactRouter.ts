@@ -11,6 +11,11 @@ contactRouter.get(
 	authenticateToken,
 	contactControllers.getMessages,
 );
+contactRouter.get(
+	"/messages/:email",
+	authenticateToken,
+	contactControllers.getMessagesByUserEmail,
+);
 
 contactRouter.patch(
 	`/messages/markMessageAsRead/:id`,

@@ -6,6 +6,7 @@ import { useAuthStore } from "../../store/useAuthStore";
 import CartModal from "../Modal/CartModal";
 import MenuModal from "../Modal/MenuModal";
 import SearchBar from "../SearchBar/SearchBar";
+import { LogIn, LogOut, ShoppingCart, User, UserStar } from "lucide-react";
 
 export default function Header() {
 	const { user, isAuthenticated } = useAuthStore();
@@ -88,7 +89,7 @@ export default function Header() {
 
 				<SearchBar onSearch={handleSearch} className="hidden 2xl:block" />
 
-				<div className="flex gap-3 xl:-mt-4 mr-1 items-center">
+				<div className="flex gap-4 xl:-mt-4 mr-1 items-center">
 					<button
 						type="button"
 						className="w-6.5 hover:cursor-pointer xl:mt-2.5 2xl:w-8 2xl:mr-4 mt-1"
@@ -102,13 +103,15 @@ export default function Header() {
 							}
 						}}
 					>
-						<img
-							src={isAuthenticated ? "/icons/logout.svg" : "/icons/login.svg"}
-							alt={isAuthenticated ? "icon-logout" : "icon-login"}
-							className={`block transition-transform duration-200 ${
-								!isAuthenticated ? "rotate-0" : "rotate-180"
-							}`}
-						/>
+						{isAuthenticated ? (
+							<LogOut
+								className={`w-7 h-7 text-gray-800 transition-transform duration-200 `}
+							/>
+						) : (
+							<LogIn
+								className={`w-7 h-7 text-gray-800 transition-transform duration-200 rotate-0`}
+							/>
+						)}
 					</button>
 
 					{/* MODIFICATION CLIENT ->  ADMIN A FAIRE  APRES TESTS */}
@@ -118,10 +121,13 @@ export default function Header() {
 							className="w-7 xl:w-6 hover:cursor-pointer xl:mt-2 2xl:w-9 2xl:mr-4"
 						>
 							<div className="relative">
-								<img
+								{/* <img
 									src="/icons/superadmin.svg"
 									alt="icon-superadmin"
 									className="block"
+								/> */}
+								<UserStar
+									className={`w-7 h-7 transition-transform duration-200 text-amber-500`}
 								/>
 							</div>
 						</Link>
@@ -132,13 +138,9 @@ export default function Header() {
 							to="/profile"
 							className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-9 2xl:mr-4"
 						>
-							<div className="relative">
-								<img
-									src="/icons/admin.svg"
-									alt="icon-admin"
-									className="block"
-								/>
-							</div>
+							<UserStar
+								className={`w-7 h-7 transition-transform duration-200 text-gray-800`}
+							/>
 						</Link>
 					)}
 
@@ -147,10 +149,8 @@ export default function Header() {
 							to="/profile"
 							className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"
 						>
-							<img
-								src="/icons/profile.svg"
-								alt="icon-profile"
-								className="block"
+							<User
+								className={`w-7 h-7 transition-transform duration-200 text-gray-800`}
 							/>
 						</Link>
 					)}
@@ -165,11 +165,8 @@ export default function Header() {
 								{isQuantity}
 							</span>
 						)}
-
-						<img
-							src="/icons/cart.svg"
-							alt="icon-panier"
-							className="block relative z-10"
+						<ShoppingCart
+							className={`w-7 h-7 transition-transform duration-200 text-gray-800`}
 						/>
 					</button>
 				</div>

@@ -1,8 +1,10 @@
 import { CheckCircle, Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
 import { sendContactForm } from "../api/Contact";
+import { useAuthStore } from "../store/useAuthStore";
 
 interface FormData {
+	user_id?: number | null;
 	firstName: string;
 	lastName: string;
 	email: string;
@@ -23,15 +25,22 @@ interface FormErrors {
 }
 
 export default function ContactPage() {
+	const user = useAuthStore((state) => state.user);
+	console.log("user", user);
+
 	const [formData, setFormData] = useState<FormData>({
-		firstName: "",
-		lastName: "",
-		email: "",
-		phone: "",
+		user_id: user ? user.id : null,
+		firstName: user?.firstName || "",
+		lastName: user?.lastName || "",
+		email: user?.email || "",
+		phone: user?.phone || "",
 		subject: "",
 		message: "",
 		orderNumber: "",
 	});
+
+	console.log(formData.phone);
+
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 	const [errors, setErrors] = useState<FormErrors>({});
 
@@ -47,26 +56,7 @@ export default function ContactPage() {
 		}
 	};
 
-	// const validateForm = (): boolean => {
-	// 	const newErrors: FormErrors = {};
-	// 	if (!formData.firstName.trim())
-	// 		newErrors.firstName = "Le prénom est requis";
-	// 	if (!formData.lastName.trim()) newErrors.lastName = "Le nom est requis";
-	// 	if (!formData.email.trim()) {
-	// 		newErrors.email = "L'email est requis";
-	// 	} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-	// 		newErrors.email = "Email invalide";
-	// 	}
-	// 	if (!formData.subject.trim()) newErrors.subject = "Le sujet est requis";
-	// 	if (!formData.message.trim()) newErrors.message = "Le message est requis";
-
-	// 	setErrors(newErrors);
-	// 	return Object.keys(newErrors).length === 0;
-	// };
-
 	const handleSubmit = async (): Promise<void> => {
-		// if (!validateForm()) return;
-
 		try {
 			console.log("formData", formData);
 
@@ -76,15 +66,6 @@ export default function ContactPage() {
 			// Reset du formulaire après 3 secondes
 			setTimeout(() => {
 				setIsSubmitted(false);
-				setFormData({
-					firstName: "",
-					lastName: "",
-					email: "",
-					phone: "",
-					subject: "",
-					message: "",
-					orderNumber: "",
-				});
 			}, 3000);
 		} catch (error: unknown) {
 			if (error instanceof Error) {
@@ -278,7 +259,7 @@ export default function ContactPage() {
 												type="tel"
 												id="phone"
 												name="phone"
-												maxLength={10}
+												maxLength={20}
 												value={formData.phone}
 												onChange={handleChange}
 												className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition"

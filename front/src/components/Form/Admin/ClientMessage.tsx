@@ -1,4 +1,4 @@
-import { Contact, Mail, Phone, Send } from "lucide-react";
+import { Contact, FileDigit, Mail, Phone, Send } from "lucide-react";
 import { useState } from "react";
 import { responseMessage } from "../../../api/Contact";
 import type { Imessages } from "./ClientsMessages";
@@ -20,6 +20,7 @@ export default function ClientMessage({
 		partnership: "Partenariat",
 		other: "Autre",
 	};
+	console.log("qui est lauteur du message", message);
 
 	const [response, setResponse] = useState("");
 	const [currentMessage, setCurrentMessage] = useState(message);
@@ -62,7 +63,7 @@ export default function ClientMessage({
 						Fiche Contact
 					</p>
 
-					<div className="grid grid-cols-[auto_100px_1fr] items-center gap-3">
+					<div className="grid grid-cols-[auto_90px_1fr] items-center gap-3">
 						<div className="bg-amber-100 rounded-full p-3 flex items-center justify-center">
 							<Contact className="w-5 h-5 text-amber-600" />
 						</div>
@@ -75,7 +76,7 @@ export default function ClientMessage({
 					</div>
 
 					{currentMessage.email && (
-						<div className="grid grid-cols-[auto_100px_1fr] items-center gap-3 mt-3">
+						<div className="grid grid-cols-[auto_90px_1fr] items-center gap-3 mt-3">
 							<div className="bg-amber-100 rounded-full p-3 flex items-center justify-center">
 								<Mail className="w-5 h-5 text-amber-600" />
 							</div>
@@ -97,7 +98,7 @@ export default function ClientMessage({
 					)}
 
 					{currentMessage.phone && (
-						<div className="grid grid-cols-[auto_100px_1fr] items-center gap-3 mt-3">
+						<div className="grid grid-cols-[auto_90px_1fr] items-center gap-3 mt-3">
 							<div className="bg-amber-100 rounded-full p-3 flex items-center justify-center">
 								<Phone className="w-5 h-5 text-amber-600" />
 							</div>
@@ -110,6 +111,20 @@ export default function ClientMessage({
 							>
 								{currentMessage.phone}
 							</a>
+						</div>
+					)}
+
+					{currentMessage.order_number && (
+						<div className="grid grid-cols-[auto_90px_1fr] items-center gap-3 mt-3">
+							<div className="bg-amber-100 rounded-full p-3 flex items-center justify-center">
+								<FileDigit className="w-5 h-5 text-amber-600" />
+							</div>
+							<p className="font-semibold text-gray-900 text-sm text-right">
+								Commande :
+							</p>
+							<p className="font-semibold text-gray-900 text-sm">
+								{currentMessage.order_number}
+							</p>
 						</div>
 					)}
 				</div>
@@ -136,7 +151,37 @@ export default function ClientMessage({
 				</div>
 
 				{/* Réponse admin */}
-				{currentMessage.response ? (
+				{!currentMessage.user ? (
+					<div className="bg-red-50 border-l-4 border-red-400 text-red-700 p-6 rounded-2xl shadow-lg max-w-3xl mx-auto">
+						<p className="font-semibold mb-2">Attention :</p>
+						<p>
+							Cet utilisateur n'est pas inscrit sur le site. Vous ne pouvez pas
+							répondre via le système de messages interne. Merci d’envoyer votre
+							réponse par email directement ou par téléphone.
+						</p>
+						<div className="flex justify-between">
+							{currentMessage.email && (
+								<a
+									href={`mailto:${currentMessage.email}?subject=${encodeURIComponent(
+										subjectMap[currentMessage.subject || "Autre"] ||
+											"Réponse à votre message",
+									)}`}
+									className="mt-3 inline-block font-semibold text-blue-700 hover:underline"
+								>
+									Envoyer un email à {currentMessage.email}
+								</a>
+							)}
+							{currentMessage.phone && (
+								<a
+									href={`tel:${currentMessage.phone}`}
+									className="mt-3 inline-block font-semibold text-blue-700 hover:underline"
+								>
+									Téléphoner au {currentMessage.phone}
+								</a>
+							)}
+						</div>
+					</div>
+				) : currentMessage.response ? (
 					<div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
 						<div className="flex justify-between">
 							<p className="font-semibold text-gray-900 mb-2 flex">Réponse :</p>

@@ -30,7 +30,7 @@ CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     last_name TEXT NOT NULL,
     first_name TEXT NOT NULL,
-    phone TEXT,
+    phone VARCHAR(20),
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     role_id INT NOT NULL REFERENCES roles(role_id) ON DELETE RESTRICT,
@@ -185,14 +185,16 @@ CREATE TABLE cart_lines (
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
+-- MESSAGES
 CREATE TABLE contact_messages (
     id SERIAL PRIMARY KEY,
+    user_id INTEGER,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
-    email TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
     phone VARCHAR(10),
     order_number VARCHAR(17),
-    is_read BOOLEAN DEFAULT FALSE
+    is_read BOOLEAN DEFAULT FALSE,
     response TEXT,
     subject TEXT CHECK (subject IN ('general', 'order', 'product', 'complaint', 'partnership', 'other')) NOT NULL,
     message TEXT NOT NULL,

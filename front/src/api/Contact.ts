@@ -2,6 +2,7 @@ import axios from "axios";
 import { useAuthStore } from "../store/useAuthStore";
 
 interface ContactFormData {
+	user_id?: number | null;
 	firstName: string;
 	lastName: string;
 	email: string;
@@ -17,6 +18,7 @@ export async function sendContactForm(data: ContactFormData) {
 	try {
 		// Transformation des données camelCase vers snake_case
 		const transformedData = {
+			user_id: data.user_id ?? null,
 			first_name: data.firstName,
 			last_name: data.lastName,
 			email: data.email,
@@ -137,5 +139,30 @@ export async function responseMessage(id: number, response: string) {
 			);
 		}
 		throw error;
+	}
+}
+
+export async function getMyMessages(email: string) {
+	try {
+		const authToken = useAuthStore.getState().token;
+		const response = await axios.get(
+			`${API_URL}/contact/messages/${encodeURIComponent(email)}`,
+
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
+			},
+		);
+		return response.data;
+	} catch (error: unknown) {
+		if (axios.isAxiosError(error)) {
+			throw new Error(
+				error.response?.data?.message ||
+					"Erreur lors de la récupération des messages",
+			);
+		}
+		throw new Error("Erreur inconnue");
 	}
 }

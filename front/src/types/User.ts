@@ -42,6 +42,7 @@ export interface AuthUser {
 	firstName: string;
 	lastName: string;
 	email: string;
+	phone: string;
 	role?: string | number;
 	token?: string;
 	addresses?: Address[];

@@ -6,6 +6,7 @@ import ClientsMessages from "../components/Form/Admin/ClientsMessages";
 import CreateArticle from "../components/Form/Admin/CreateArticle";
 import CreateBrand from "../components/Form/Admin/CreateBrand";
 import CreatePromo from "../components/Form/Admin/CreatePromo";
+import MyMessages from "../components/Form/Admin/MyMessages";
 import MyOrders from "../components/Form/Admin/MyOrders";
 import OrderList from "../components/Form/Admin/OrderList";
 import PromoList from "../components/Form/Admin/PromoList";
@@ -107,6 +108,7 @@ export default function ProfileMenu() {
 			{menuSelected === "Voir mon profil" && <Profile />}
 			{menuSelected === "Mes commandes" && <MyOrders />}
 			{menuSelected === "Voir les messages client" && <ClientsMessages />}
+			{menuSelected === "Mes messages" && <MyMessages />}
 		</div>
 	);
 }

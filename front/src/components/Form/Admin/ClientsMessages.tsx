@@ -2,9 +2,11 @@ import { Contact, Loader2, MailWarning, MessagesSquare } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getClientMessages, markMessageAsRead } from "../../../api/Contact";
 import ClientMessage from "./ClientMessage";
+import type { User, UserApiResponse } from "../../../types/User";
 
 export interface Imessages {
 	id: number;
+	user_id?: number;
 	first_name?: string;
 	last_name?: string;
 	email?: string;
@@ -15,6 +17,7 @@ export interface Imessages {
 	created_at?: string;
 	order_number?: string;
 	is_read?: boolean;
+	user: UserApiResponse;
 }
 
 export default function ClientsMessages() {
@@ -29,6 +32,8 @@ export default function ClientsMessages() {
 		try {
 			setLoading(true);
 			const messages = await getClientMessages();
+			console.log("getClientMessages", messages);
+
 			setMessages(messages.data);
 		} catch (err: unknown) {
 			if (err instanceof Error) setError(err.message);
@@ -95,7 +100,7 @@ export default function ClientsMessages() {
 					{messages.map((message) => (
 						<button
 							type="button"
-							key={message.id}
+							key={message.email}
 							className="w-full cursor-pointer"
 							onClick={() => handleClick(message)}
 						>

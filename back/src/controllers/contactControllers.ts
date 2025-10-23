@@ -1,10 +1,12 @@
 import type { Request, Response } from "express";
 import { Contact } from "../models/contact";
+import { User } from "../models/user";
 import { sendMail } from "../services/mailer";
 
 export const createContact = async (req: Request, res: Response) => {
 	try {
 		const {
+			user_id,
 			first_name,
 			last_name,
 			email,
@@ -20,7 +22,11 @@ export const createContact = async (req: Request, res: Response) => {
 			});
 		}
 
+		const safeUserId =
+			user_id && !Number.isNaN(Number(user_id)) ? Number(user_id) : null;
+
 		const newContact = await Contact.create({
+			user_id: safeUserId,
 			first_name,
 			last_name,
 			email,
@@ -100,7 +106,16 @@ export const getMessages = async (_req: Request, res: Response) => {
 	try {
 		const contacts = await Contact.findAll({
 			order: [["created_at", "DESC"]],
+			include: [
+				{
+					model: User,
+					as: "user",
+					attributes: ["user_id", "first_name", "last_name", "email"],
+					required: false,
+				},
+			],
 		});
+
 		return res.status(200).json({ data: contacts });
 	} catch (error: unknown) {
 		console.error(error);
@@ -108,6 +123,34 @@ export const getMessages = async (_req: Request, res: Response) => {
 			return res.status(500).json({ message: error.message });
 		}
 		return res.status(500).json({ message: "Erreur inconnue" });
+	}
+};
+export const getMessagesByUserEmail = async (req: Request, res: Response) => {
+	try {
+		const { email } = req.params;
+
+		if (!email) {
+			return res.status(400).json({ message: "Email utilisateur manquant." });
+		}
+
+		const contacts = await Contact.findAll({
+			where: { email },
+			order: [["created_at", "DESC"]],
+		});
+
+		if (contacts.length === 0) {
+			return res
+				.status(404)
+				.json({ message: "Aucun message trouvé pour cet utilisateur." });
+		}
+
+		return res.status(200).json({ data: contacts });
+	} catch (error: unknown) {
+		console.error("Erreur dans getMessagesByUserEmail :", error);
+		if (error instanceof Error) {
+			return res.status(500).json({ message: error.message });
+		}
+		return res.status(500).json({ message: "Erreur inconnue." });
 	}
 };
 

@@ -115,9 +115,7 @@ export const updateUser = async (req: Request, res: Response) => {
 						country: addressData.country,
 						complement: addressData.complement,
 					});
-					console.log("✅ Adresse mise à jour");
 				} else {
-					console.log("➕ Création nouvelle adresse");
 					// Création d'une nouvelle adresse
 					await Address.create({
 						type: addressData.type,
@@ -129,7 +127,6 @@ export const updateUser = async (req: Request, res: Response) => {
 						complement: addressData.complement,
 						user_id: user.user_id, // 🔥 Utilise user.user_id au lieu de id
 					});
-					console.log("✅ Adresse créée");
 				}
 			}
 

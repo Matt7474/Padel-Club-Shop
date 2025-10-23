@@ -40,6 +40,7 @@ export default function Login() {
 				firstName: fullUser.first_name,
 				lastName: fullUser.last_name,
 				email: fullUser.email,
+				phone: fullUser.phone,
 				// ✅ role en string pour que ton JSX continue de fonctionner
 				role: response.user.role || roleMap[fullUser.role_id] || "user",
 				// ✅ adresses complètes
