@@ -52,5 +52,5 @@ Contact.belongsTo(User, {
 	foreignKey: "email",
 	targetKey: "email",
 	as: "user",
-	constraints: false,
+	// constraints: false,
 });

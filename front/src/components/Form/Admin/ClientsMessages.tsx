@@ -27,24 +27,25 @@ export default function ClientsMessages() {
 		null,
 	);
 	const [, setError] = useState("");
-
-	const fetchMessages = async () => {
-		try {
-			setLoading(true);
-			const messages = await getClientMessages();
-			console.log("getClientMessages", messages);
-
-			setMessages(messages.data);
-		} catch (err: unknown) {
-			if (err instanceof Error) setError(err.message);
-			else setError("Erreur inconnue");
-		} finally {
-			setLoading(false);
-		}
-	};
+	const [, setUnreadMessages] = useState(0);
 
 	useEffect(() => {
+		const fetchMessages = async () => {
+			try {
+				setLoading(true);
+				const messages = await getClientMessages();
+				setUnreadMessages(messages.unreadCount || 0);
+				setMessages(messages.data);
+			} catch (err) {
+				setError(err instanceof Error ? err.message : "Erreur inconnue");
+			} finally {
+				setLoading(false);
+			}
+		};
+
 		fetchMessages();
+		const interval = setInterval(fetchMessages, 60000);
+		return () => clearInterval(interval);
 	}, []);
 
 	const subjectMap: Record<string, string> = {
@@ -61,7 +62,6 @@ export default function ClientsMessages() {
 			await markMessageAsRead(message.id);
 		}
 		setSelectedMessage(message);
-		fetchMessages();
 	};
 
 	if (loading) {
@@ -81,10 +81,6 @@ export default function ClientsMessages() {
 			<ClientMessage
 				onReturn={() => setSelectedMessage(null)}
 				message={selectedMessage}
-				// onUpdated={() => {
-				// 	refreshArticles();
-				// 	if (isChecked) refreshDeletedArticles();
-				// }}
 			/>
 		);
 	}

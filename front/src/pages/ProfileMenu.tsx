@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getClientMessages } from "../api/Contact";
 import ArticlesList from "../components/Form/Admin/ArticlesList";
 import BrandList from "../components/Form/Admin/BrandList";
-import ClientsMessages from "../components/Form/Admin/ClientsMessages";
+import ClientsMessages, {
+	type Imessages,
+} from "../components/Form/Admin/ClientsMessages";
 import CreateArticle from "../components/Form/Admin/CreateArticle";
 import CreateBrand from "../components/Form/Admin/CreateBrand";
 import CreatePromo from "../components/Form/Admin/CreatePromo";
@@ -18,12 +21,30 @@ import Profile from "./Profile";
 export default function ProfileMenu() {
 	const [menuSelected, setMenuSelected] = useState("");
 	const { user, isAuthenticated } = useAuthStore();
+	const [unreadCount, setUnreadCount] = useState(0);
 	const navigate = useNavigate();
 
-	// 🔒 Redirection si non connecté
 	useEffect(() => {
 		if (!isAuthenticated) {
 			navigate("/");
+		} else {
+			const fetchUnreadMessages = async () => {
+				try {
+					const response = await getClientMessages();
+					const unread = response.data.filter(
+						(message: Imessages) => message.is_read === false,
+					).length;
+					setUnreadCount(unread);
+				} catch (error) {
+					console.error("Erreur lors de la récupération des messages:", error);
+				}
+			};
+
+			fetchUnreadMessages();
+
+			// 🔄 Actualisation automatique toutes les 30 secondes
+			const interval = setInterval(fetchUnreadMessages, 15000);
+			return () => clearInterval(interval);
 		}
 	}, [isAuthenticated, navigate]);
 
@@ -75,13 +96,19 @@ export default function ProfileMenu() {
 						type="button"
 						key={option}
 						onClick={() => setMenuSelected(option)}
-						className={`px-4 py-2 border cursor-pointer ${
+						className={`px-4 py-2 border cursor-pointer relative ${
 							menuSelected === option
 								? "bg-orange-500 text-white"
 								: "bg-gray-100 hover:bg-gray-200"
 						}`}
 					>
 						{option}
+						{/* Pastille de notification */}
+						{option === "Voir les messages client" && unreadCount > 0 && (
+							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
+								{unreadCount > 99 ? "99+" : unreadCount}
+							</span>
+						)}
 					</button>
 				))}
 			</div>

@@ -58,8 +58,6 @@ export default function ContactPage() {
 
 	const handleSubmit = async (): Promise<void> => {
 		try {
-			console.log("formData", formData);
-
 			await sendContactForm(formData);
 			setIsSubmitted(true);
 
