@@ -1,8 +1,8 @@
 import { Contact, Loader2, MailWarning, MessagesSquare } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getClientMessages, markMessageAsRead } from "../../../api/Contact";
+import type { UserApiResponse } from "../../../types/User";
 import ClientMessage from "./ClientMessage";
-import type { User, UserApiResponse } from "../../../types/User";
 
 export interface Imessages {
 	id: number;

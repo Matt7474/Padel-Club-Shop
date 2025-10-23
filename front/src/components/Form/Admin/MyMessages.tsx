@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
 import { CheckCheck, Loader2, MailWarning } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getMyMessages } from "../../../api/Contact";
 import { useAuthStore } from "../../../store/useAuthStore";
 import type { Imessages } from "./ClientsMessages";
-import ProfileMenu from "../../../pages/ProfileMenu";
-import { Link, useNavigate } from "react-router-dom";
 
 export default function MyMessages() {
 	const user = useAuthStore((state) => state.user);
-	const navigate = useNavigate();
 	console.log("user", user);
 
 	const [loading, setLoading] = useState(false);
