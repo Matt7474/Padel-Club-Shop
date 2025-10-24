@@ -236,14 +236,14 @@ export default function OrderDetails({
 									<button
 										type="button"
 										onClick={() => setShowDeleteConfirm(true)}
-										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2"
+										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2 xl:w-1/4"
 									>
 										ANNULER LA COMMANDE
 									</button>
 									<button
 										type="button"
 										onClick={() => setShowProcessingConfirm(true)}
-										className="bg-green-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2"
+										className="bg-green-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2 xl:w-1/4"
 									>
 										PREPARER LA COMMANDE
 									</button>
@@ -256,14 +256,14 @@ export default function OrderDetails({
 									<button
 										type="button"
 										onClick={() => setShowDeleteConfirm(true)}
-										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2"
+										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2 xl:w-1/4"
 									>
 										ANNULER LA COMMANDE
 									</button>
 									<button
 										type="button"
 										onClick={() => setShowReadyConfirm(true)}
-										className="bg-green-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2"
+										className="bg-green-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2 xl:w-1/4"
 									>
 										COMMANDE PRETE
 									</button>
@@ -276,14 +276,14 @@ export default function OrderDetails({
 									<button
 										type="button"
 										onClick={() => setShowDeleteConfirm(true)}
-										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2"
+										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2 xl:w-1/4"
 									>
 										ANNULER LA COMMANDE
 									</button>
 									<button
 										type="button"
 										onClick={() => setShowShippedConfirm(true)}
-										className="bg-green-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2"
+										className="bg-green-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2 xl:w-1/4"
 									>
 										COMMANDE EXPEDIEE
 									</button>
@@ -301,7 +301,7 @@ export default function OrderDetails({
 							{/* Modal confirmation de preparation */}
 							{showProcessingConfirm && (
 								<ConfirmModal
-									message="Voulez-vous préprarer cette commande ?"
+									message="Voulez-vous passer cette commande en préparation ?"
 									onConfirm={handleConfirmProcessing}
 									onCancel={() => setShowProcessingConfirm(false)}
 								/>
@@ -319,7 +319,7 @@ export default function OrderDetails({
 							{/* Modal confirmation de commande expédiée */}
 							{showShippedConfirm && (
 								<ConfirmModal
-									message="Voulez-vous rendre cette commande prête ?"
+									message="Voulez-vous rendre cette commande expédiée ?"
 									onConfirm={handleConfirmShipped}
 									onCancel={() => setShowShippedConfirm(false)}
 								/>

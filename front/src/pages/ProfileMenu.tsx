@@ -17,11 +17,14 @@ import UserList from "../components/Form/Admin/UsersList";
 import Select from "../components/Form/Tools/Select";
 import { useAuthStore } from "../store/useAuthStore";
 import Profile from "./Profile";
+import { getOrders } from "../api/Order";
+import type { Order } from "../types/Order";
 
 export default function ProfileMenu() {
 	const [menuSelected, setMenuSelected] = useState("");
 	const { user, isAuthenticated } = useAuthStore();
 	const [unreadCount, setUnreadCount] = useState(0);
+	const [orderPaid, setOrderPaid] = useState(0);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -36,12 +39,32 @@ export default function ProfileMenu() {
 					).length;
 					setUnreadCount(unread);
 				} catch (error) {
-					console.error("Erreur lors de la récupération des messages:", error);
+					console.error("Erreur lors de la récupération des messages :", error);
 				}
 			};
 
-			fetchUnreadMessages();
-			const interval = setInterval(fetchUnreadMessages, 5000);
+			const fetchOrderPaid = async () => {
+				try {
+					const orders = await getOrders();
+					console.log("Commandes récupérées :", orders);
+					const ordersPaid = orders.filter(
+						(order: Order) => order.status === "paid",
+					);
+					setOrderPaid(ordersPaid.length);
+				} catch (error) {
+					console.error(
+						"Erreur lors de la récupération des commandes :",
+						error,
+					);
+				}
+			};
+
+			const fetchAll = async () => {
+				await Promise.all([fetchUnreadMessages(), fetchOrderPaid()]);
+			};
+
+			fetchAll();
+			const interval = setInterval(fetchAll, 5000);
 			return () => clearInterval(interval);
 		}
 	}, [isAuthenticated, navigate]);
@@ -105,6 +128,11 @@ export default function ProfileMenu() {
 						{option === "Voir les messages client" && unreadCount > 0 && (
 							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
 								{unreadCount > 99 ? "99+" : unreadCount}
+							</span>
+						)}
+						{option === "Voir les commandes client" && orderPaid > 0 && (
+							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
+								{orderPaid > 99 ? "99+" : orderPaid}
 							</span>
 						)}
 					</button>

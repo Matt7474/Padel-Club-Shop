@@ -9,7 +9,7 @@ interface MyOrdersProps {
 	order_id: number;
 	reference: string;
 	total_amount: number;
-	status: "paid" | "processing" | "ready" | "shipping" | "cancelled";
+	status: "paid" | "processing" | "ready" | "shipped" | "cancelled";
 	created_at: string;
 	items: OrderItem[];
 }
@@ -20,33 +20,33 @@ const statusMap: Record<
 > = {
 	paid: {
 		label: "Payée",
-		bg: "bg-emerald-50",
-		text: "text-emerald-700",
-		border: "border-emerald-200",
-	},
-	processing: {
-		label: "Préparation",
-		bg: "bg-amber-50",
+		bg: "bg-amber-50", // jaune clair → début du process
 		text: "text-amber-700",
 		border: "border-amber-200",
 	},
+	processing: {
+		label: "Préparation",
+		bg: "bg-orange-50", // orange clair → en cours de préparation
+		text: "text-orange-700",
+		border: "border-orange-200",
+	},
 	ready: {
 		label: "Prête",
-		bg: "bg-blue-50",
+		bg: "bg-blue-50", // bleu clair → prête à être expédiée
 		text: "text-blue-700",
 		border: "border-blue-200",
 	},
+	shipped: {
+		label: "Expédiée",
+		bg: "bg-green-50", // vert clair → finalisée
+		text: "text-green-700",
+		border: "border-green-200",
+	},
 	cancelled: {
 		label: "Annulée",
-		bg: "bg-rose-50",
+		bg: "bg-rose-50", // rouge clair → annulée
 		text: "text-rose-700",
 		border: "border-rose-200",
-	},
-	shipping: {
-		label: "Expédiée",
-		bg: "bg-indigo-50",
-		text: "text-indigo-700",
-		border: "border-indigo-200",
 	},
 };
 

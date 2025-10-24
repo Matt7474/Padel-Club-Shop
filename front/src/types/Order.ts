@@ -23,7 +23,7 @@ export interface Order {
 	created_at: string;
 	total_ttc?: number;
 	tva_rate?: number;
-	status?: string;
+	status: "paid" | "processing" | "ready" | "shipped" | "cancelled";
 	is_delete: boolean;
 	items: OrderItem[];
 }
@@ -37,7 +37,6 @@ export interface OrderItem {
 	size?: string | null;
 	article?: Article;
 	is_delete: boolean;
-	items: OrderItem[];
 }
 
 export interface getMyOrdersProps {

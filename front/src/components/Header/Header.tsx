@@ -2,9 +2,11 @@ import { LogIn, LogOut, ShoppingCart, User, UserStar } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getClientMessages } from "../../api/Contact";
+import { getOrders } from "../../api/Order";
 import { useCartStore } from "../../store/cartStore";
 import { useToastStore } from "../../store/ToastStore ";
 import { useAuthStore } from "../../store/useAuthStore";
+import type { Order } from "../../types/Order";
 import type { Imessages } from "../Form/Admin/ClientsMessages";
 import CartModal from "../Modal/CartModal";
 import MenuModal from "../Modal/MenuModal";
@@ -14,6 +16,7 @@ export default function Header() {
 	const { user, isAuthenticated } = useAuthStore();
 	const addToast = useToastStore((state) => state.addToast);
 	const [unreadMessageCount, setUnreadMessageCount] = useState(0);
+	const [paidOrderCount, setPaidOrderCount] = useState(0);
 	const navigate = useNavigate();
 	const [isQuantity, setIsQuantity] = useState(0);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -44,12 +47,28 @@ export default function Header() {
 			}
 		};
 
-		fetchUnreadMessages();
-		const interval = setInterval(fetchUnreadMessages, 5000);
+		const fetchOrderPaid = async () => {
+			try {
+				const orders = await getOrders();
+				const ordersPaid = orders.filter(
+					(order: Order) => order.status === "paid",
+				);
+				setPaidOrderCount(ordersPaid.length);
+			} catch (error) {
+				console.error("Erreur lors de la récupération des commandes :", error);
+			}
+		};
+
+		const fetchAll = async () => {
+			await Promise.all([fetchUnreadMessages(), fetchOrderPaid()]);
+		};
+
+		fetchAll();
+		const interval = setInterval(fetchAll, 5000);
 		return () => clearInterval(interval);
 	}, []);
 
-	const totalAlertCount = unreadMessageCount + unreadCommandCount;
+	const totalAlertCount = unreadMessageCount + paidOrderCount;
 	console.log("totalAlertCount", totalAlertCount);
 
 	const toggleMenu = () => {
@@ -146,11 +165,6 @@ export default function Header() {
 							className="w-7 xl:w-6 hover:cursor-pointer xl:mt-2 2xl:w-9 2xl:mr-4"
 						>
 							<div className="relative">
-								{/* <img
-									src="/icons/superadmin.svg"
-									alt="icon-superadmin"
-									className="block"
-								/> */}
 								<UserStar
 									className={`w-7 h-7 transition-transform duration-200 text-amber-500`}
 								/>
