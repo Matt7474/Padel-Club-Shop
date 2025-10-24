@@ -97,3 +97,29 @@ export async function getMyOrders(): Promise<getMyOrdersProps[]> {
 		throw error;
 	}
 }
+
+export async function deleteOrder(id: number) {
+	try {
+		const authToken = useAuthStore.getState().token;
+
+		if (!authToken)
+			throw new Error("Token manquant pour récupérer l'utilisateur");
+		if (!id) throw new Error("Commande non identifié");
+
+		const res = await axios.delete(`${API_URL}/order/delete/${id}`, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
+		console.log("COMMANDES RECUES :", res.data.orders);
+		return res.data.orders;
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error("Erreur récupération commandes :", error.message);
+		} else {
+			console.error("Erreur inconnue récupération commandes :", error);
+		}
+		throw error;
+	}
+}

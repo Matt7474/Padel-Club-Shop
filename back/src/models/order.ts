@@ -9,6 +9,7 @@ export class Order extends Model {
 	public total_amount!: number;
 	public status!: "pending" | "paid" | "cancelled" | "shipped";
 
+	public is_deleted!: boolean;
 	public readonly created_at!: Date;
 	public readonly updated_at!: Date;
 }
@@ -53,6 +54,12 @@ Order.init(
 			),
 			defaultValue: "paid",
 			field: "status",
+		},
+		is_deleted: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
+			field: "is_deleted",
 		},
 	},
 	{

@@ -6,6 +6,7 @@ import { Order } from "../models/order";
 import { OrderItem } from "../models/orderItem";
 import { User } from "../models/user";
 import { sendMail } from "../services/mailer";
+import { where } from "sequelize";
 
 export const createOrderAndUpdateStock = async (
 	req: Request,
@@ -362,6 +363,7 @@ export const getAllOrders = async (_req: Request, res: Response) => {
 				"total_amount",
 				"status",
 				"created_at",
+				"is_deleted",
 			],
 		});
 
@@ -370,6 +372,43 @@ export const getAllOrders = async (_req: Request, res: Response) => {
 		console.error(err);
 		res.status(500).json({
 			message: "Erreur serveur lors de la récupération des commandes",
+		});
+	}
+};
+
+export const deleteOrderById = async (req: Request, res: Response) => {
+	console.log("Dans le controller deleteOrderById");
+
+	try {
+		const { id } = req.params;
+		if (!id) {
+			return res
+				.status(400)
+				.json({ message: "ID de commande manquant dans la requête." });
+		}
+
+		const order = await Order.findByPk(Number(id));
+		if (!order) {
+			return res.status(404).json({ error: "Commande non trouvée." });
+		}
+
+		order.is_deleted = true;
+		await order.save();
+		return res.status(200).json({
+			message: `Commande ${id} marquée comme supprimée avec succès.`,
+			deletedOrder: order,
+		});
+	} catch (err: unknown) {
+		console.error("❌ Erreur lors de la suppression :", err);
+
+		if (err instanceof Error) {
+			return res.status(500).json({
+				message: "Erreur serveur lors de la suppression de la commande.",
+				error: err.message,
+			});
+		}
+		return res.status(500).json({
+			message: "Erreur inconnue lors de la suppression de la commande.",
 		});
 	}
 };

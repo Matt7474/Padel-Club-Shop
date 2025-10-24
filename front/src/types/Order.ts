@@ -24,6 +24,7 @@ export interface Order {
 	total_ttc?: number;
 	tva_rate?: number;
 	status?: string;
+	is_delete: boolean;
 	items: OrderItem[];
 }
 
@@ -35,6 +36,7 @@ export interface OrderItem {
 	image_url?: string;
 	size?: string | null;
 	article?: Article;
+	is_delete: boolean;
 	items: OrderItem[];
 }
 

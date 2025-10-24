@@ -1,10 +1,11 @@
 import { Loader2, ShoppingBag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getOrders } from "../../../api/Order";
+import { deleteOrder, getOrders } from "../../../api/Order";
 import type { Order } from "../../../types/Order";
 import { useSortableData } from "../Tools/useSortableData";
 import OrderDetails from "./OrderDetails";
+import { useToastStore } from "../../../store/ToastStore ";
 
 export default function OrderList() {
 	const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -13,6 +14,7 @@ export default function OrderList() {
 	const [, setError] = useState("");
 	const navigate = useNavigate();
 	const { items: sortedOrders, requestSort } = useSortableData(orders);
+	const addToast = useToastStore((state) => state.addToast);
 
 	const fetchOrders = async () => {
 		try {
@@ -33,7 +35,19 @@ export default function OrderList() {
 
 	const handleReturn = () => setSelectedOrder(null);
 	const handleReadyOrder = () => console.log("Commande prête");
-	const handleDeleteOrder = () => console.log("Supprimer commande");
+
+	const handleDeleteOrder = async (id: number) => {
+		try {
+			await deleteOrder(id);
+			console.log("Commande supprimée !");
+			addToast(`La commande à été supprimée`, "bg-green-500");
+			setSelectedOrder(null);
+			fetchOrders();
+		} catch (err) {
+			console.log(err, "La commande n'a pas pu être supprimée");
+			addToast(`La commande n'a pas pu être supprimée`, "bg-red-500");
+		}
+	};
 	const handleNavigate = () => navigate("/");
 
 	const statusImages: Record<string, string> = {
@@ -71,7 +85,7 @@ export default function OrderList() {
 						onClick={handleNavigate}
 						className="bg-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-purple-700 transition-all shadow-lg hover:shadow-xl cursor-pointer"
 					>
-						Découvrir nos produits
+						Retour à la page d'accueil
 					</button>
 				</div>
 			</div>
@@ -151,6 +165,7 @@ export default function OrderList() {
 							</p>
 						</div>
 					</button>
+
 					<div className="absolute bottom-0 left-0 w-full border-b border-gray-200"></div>
 				</div>
 			))}

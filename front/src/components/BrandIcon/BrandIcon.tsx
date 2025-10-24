@@ -44,7 +44,7 @@ export default function BrandIcon() {
 
 	return (
 		<div className="mt-4 -mb-2 xl:mb-4">
-			<div className="flex gap-4 overflow-x-auto pb-2 px-4 ">
+			<div className="flex gap-4 overflow-x-auto justify-center pb-2 px-4 ">
 				{brands.map((brand) => {
 					// Gestion du chemin de l'image
 					let logoSrc = brand.logo;
