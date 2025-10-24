@@ -6,10 +6,10 @@ import {
 	MessagesSquare,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getClientMessages, markMessageAsRead } from "../../../api/Contact";
 import type { UserApiResponse } from "../../../types/User";
 import ClientMessage from "./ClientMessage";
-import { Link } from "react-router-dom";
 
 export interface Imessages {
 	id: number;
@@ -101,7 +101,7 @@ export default function ClientsMessages() {
 
 	if (messages.length === 0)
 		return (
-			<div className="flex justify-center items-center transform translate-y-1/3">
+			<div className="flex justify-center items-center mt-4 xl:mt-0 xl:transform xl:translate-y-1/3">
 				<div className="text-center bg-white rounded-3xl shadow-xl p-12 max-w-md">
 					<div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
 						<MailSearch className="w-10 h-10 text-green-600" />

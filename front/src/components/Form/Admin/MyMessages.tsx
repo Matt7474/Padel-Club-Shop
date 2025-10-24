@@ -11,7 +11,6 @@ export default function MyMessages() {
 
 	const [loading, setLoading] = useState(false);
 	const [messages, setMessages] = useState<Imessages[]>([]);
-
 	const [, setError] = useState("");
 
 	const fetchMessages = async () => {
@@ -47,7 +46,7 @@ export default function MyMessages() {
 
 	if (messages.length === 0)
 		return (
-			<div className="flex justify-center items-center transform translate-y-1/3">
+			<div className="flex justify-center items-center mt-4 xl:mt-0 xl:transform xl:translate-y-1/3">
 				<div className="text-center bg-white rounded-3xl shadow-xl p-12 max-w-md">
 					<div className="w-20 h-20 bg-gradient-to-br from-amber-100 to-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
 						<MailWarning className="w-10 h-10 text-amber-600" />

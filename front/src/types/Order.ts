@@ -24,6 +24,7 @@ export interface Order {
 	total_ttc?: number;
 	tva_rate?: number;
 	status?: string;
+	items: OrderItem[];
 }
 
 export interface OrderItem {
@@ -34,4 +35,13 @@ export interface OrderItem {
 	image_url?: string;
 	size?: string | null;
 	article?: Article;
+	items: OrderItem[];
+}
+
+export interface getMyOrdersProps {
+	order_id: number;
+	reference: string;
+	total_amount: number;
+	status: "paid" | "processing" | "ready" | "shipped" | "cancelled";
+	created_at: string;
 }

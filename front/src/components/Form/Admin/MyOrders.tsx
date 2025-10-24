@@ -84,7 +84,7 @@ export default function MyOrders() {
 
 	if (orders.length === 0)
 		return (
-			<div className="flex justify-center items-center transform translate-y-1/3">
+			<div className="flex justify-center items-center mt-4 xl:mt-0 xl:transform xl:translate-y-1/3">
 				<div className="text-center bg-white rounded-3xl shadow-xl p-12 max-w-md">
 					<div className="w-20 h-20 bg-gradient-to-br from-indigo-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
 						<ShoppingBag className="w-10 h-10 text-indigo-600" />

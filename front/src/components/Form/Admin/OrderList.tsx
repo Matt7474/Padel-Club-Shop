@@ -1,34 +1,93 @@
-import { useState } from "react";
-import data from "../../../../data/dataTest.json";
+import { Loader2, ShoppingBag } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getOrders } from "../../../api/Order";
 import type { Order } from "../../../types/Order";
-import Button from "../Tools/Button";
 import { useSortableData } from "../Tools/useSortableData";
+import OrderDetails from "./OrderDetails";
 
 export default function OrderList() {
-	const orders = data.orders as Order[];
 	const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-	const handleOrder = (order: Order) => setSelectedOrder(order);
-
+	const [loading, setLoading] = useState(false);
+	const [orders, setOrders] = useState<Order[]>([]);
+	const [, setError] = useState("");
+	const navigate = useNavigate();
 	const { items: sortedOrders, requestSort } = useSortableData(orders);
 
+	const fetchOrders = async () => {
+		try {
+			setLoading(true);
+			const ordersData = await getOrders();
+			setOrders(ordersData);
+		} catch (err: unknown) {
+			if (err instanceof Error) setError(err.message);
+			else setError("Erreur inconnue");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchOrders();
+	}, []);
+
+	const handleReturn = () => setSelectedOrder(null);
+	const handleReadyOrder = () => console.log("Commande prête");
+	const handleDeleteOrder = () => console.log("Supprimer commande");
+	const handleNavigate = () => navigate("/");
+
 	const statusImages: Record<string, string> = {
-		pending: "/icons/invoice-waiting.svg",
 		paid: "/icons/invoice-check.svg",
+		processing: "/icons/package.svg",
+		ready: "/icons/package-check.svg",
 		shipped: "/icons/delivery.svg",
 		cancelled: "/icons/invoice-cancelled.svg",
 	};
 
-	const statusFr: Record<string, string> = {
-		paid: "Payée",
-		pending: "En attente",
-		shipped: "Expédiée",
-		cancelled: "Annulée",
-	};
+	if (loading) {
+		return (
+			<div className="flex flex-col items-center justify-center h-64 text-gray-600">
+				<Loader2 className="w-8 h-8 animate-spin text-amber-600 mb-3" />
+				<p className="text-sm font-medium">Chargement des commandes...</p>
+			</div>
+		);
+	}
 
-	const handleReturnClick = () => setSelectedOrder(null);
+	if (!orders.length) {
+		return (
+			<div className="flex justify-center items-center mt-4 xl:mt-0 xl:transform xl:translate-y-1/3">
+				<div className="text-center bg-white rounded-3xl shadow-xl p-12 max-w-md">
+					<div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+						<ShoppingBag className="w-10 h-10 text-purple-600" />
+					</div>
+					<h2 className="text-2xl font-bold text-slate-800 mb-3">
+						Aucune commande clients
+					</h2>
+					<p className="text-slate-500 text-lg mb-6">
+						Aucune commande clients n'a été effectuée pour le moment.
+					</p>
+					<button
+						type="button"
+						onClick={handleNavigate}
+						className="bg-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-purple-700 transition-all shadow-lg hover:shadow-xl cursor-pointer"
+					>
+						Découvrir nos produits
+					</button>
+				</div>
+			</div>
+		);
+	}
 
-	const handleReadyOrder = () => console.log("Commande prête");
-	const handleDeleteOrder = () => console.log("Supprimer commande");
+	if (selectedOrder) {
+		return (
+			<OrderDetails
+				order={selectedOrder}
+				onReturn={handleReturn}
+				onReadyOrder={handleReadyOrder}
+				onDeleteOrder={handleDeleteOrder}
+			/>
+		);
+	}
 
 	return (
 		<div>
@@ -36,165 +95,65 @@ export default function OrderList() {
 				Liste des Commandes
 			</h2>
 
-			{selectedOrder === null && (
-				<div>
-					<div className="grid grid-cols-[3fr_2fr_2fr_2fr] bg-gray-300 mt-4 mb-2 text-sm">
-						<button
-							type="button"
-							onClick={() => requestSort("reference")}
-							className=" cursor-pointer"
-						>
-							N° : REF ↓
-						</button>
-						<button
-							type="button"
-							onClick={() => requestSort("order_lines")}
-							className="text-center cursor-pointer"
-						>
-							NB.ART ↓
-						</button>
-						<button
-							type="button"
-							onClick={() => requestSort("status")}
-							className=" cursor-pointer"
-						>
-							STATUT ↓
-						</button>
-						<button
-							type="button"
-							onClick={() => requestSort("created_at")}
-							className="text-center cursor-pointer"
-						>
-							DATE ↓
-						</button>
-					</div>
+			<div className="grid grid-cols-[3fr_2fr_2fr_2fr] bg-gray-300 mt-4 mb-2 text-sm">
+				<button
+					type="button"
+					onClick={() => requestSort("reference")}
+					className="cursor-pointer"
+				>
+					N° : REF ↓
+				</button>
+				<button
+					type="button"
+					onClick={() => requestSort("items")}
+					className="text-center cursor-pointer"
+				>
+					NB.ART ↓
+				</button>
+				<button
+					type="button"
+					onClick={() => requestSort("status")}
+					className="cursor-pointer"
+				>
+					STATUT ↓
+				</button>
+				<button
+					type="button"
+					onClick={() => requestSort("created_at")}
+					className="text-center cursor-pointer"
+				>
+					DATE ↓
+				</button>
+			</div>
 
-					{sortedOrders.map((order) => (
-						<div key={order.order_id} className="relative">
-							<button
-								type="button"
-								className="px-2 bg-white cursor-pointer w-full"
-								onClick={() => handleOrder(order)}
-							>
-								<div className="grid grid-cols-[3fr_2fr_2fr_2fr] items-center h-12">
-									<p className="pl-1 text-xs">{order.reference}</p>
-									<p className="pl-1 text-xs text-center">
-										{order.order_lines.length}
-									</p>
-									<div className="flex justify-center">
-										<img
-											src={
-												statusImages[
-													order.status as keyof typeof statusImages
-												] || "/icons/default.svg"
-											}
-											alt={order.status}
-											className="w-7"
-										/>
-									</div>
-									<p className="pl-1 text-xs text-center">
-										{new Date(order.created_at).toLocaleDateString()}
-									</p>
-								</div>
-							</button>
-
-							<div className="absolute bottom-0 left-0 w-full border-b border-gray-200"></div>
-						</div>
-					))}
-				</div>
-			)}
-
-			{selectedOrder && (
-				<>
+			{sortedOrders.map((order) => (
+				<div key={order.order_id} className="relative">
 					<button
 						type="button"
-						onClick={handleReturnClick}
-						className="flex my-4 cursor-pointer"
+						className="px-2 bg-white cursor-pointer w-full"
+						onClick={() => setSelectedOrder(order)}
 					>
-						<img
-							src="/icons/arrow.svg"
-							alt="fleche retour"
-							className="w-4 rotate-180"
-						/>
-						Retour
-					</button>
-
-					<div className="xl:flex xl:flex-col xl:w-1/2 mx-auto text-left">
-						<div className="flex justify-between">
-							<p>{selectedOrder.reference}</p>
+						<div className="grid grid-cols-[3fr_2fr_2fr_2fr] items-center h-12">
+							<p className="pl-1 text-xs">{order.reference}</p>
+							<p className="pl-1 text-xs text-center">{order.items.length}</p>
 							<div className="flex justify-center">
-								<p>
-									{statusFr[selectedOrder.status as keyof typeof statusFr] ||
-										"Statut inconnu"}
-								</p>
 								<img
 									src={
-										statusImages[
-											selectedOrder.status as keyof typeof statusImages
-										] || "/icons/default.svg"
+										statusImages[order.status as keyof typeof statusImages] ||
+										"/icons/default.svg"
 									}
-									alt={selectedOrder.status}
-									className="w-7 ml-1 mr-2"
+									alt={order.status}
+									className="w-7"
 								/>
 							</div>
+							<p className="pl-1 text-xs text-center">
+								{new Date(order.created_at).toLocaleDateString()}
+							</p>
 						</div>
-
-						<div className="grid grid-cols-[2fr_4fr_1fr_2fr_2fr] mt-4 mb-2">
-							<p className="text-xs pl-1">IMAGE</p>
-							<p className="text-xs pl-1">DESCRIPTION</p>
-							<p className="text-xs pl-1">QTE</p>
-							<p className="text-xs pl-1">PRIX.HT</p>
-							<p className="text-xs pl-1">PRIX.TTC</p>
-						</div>
-
-						{selectedOrder.order_lines.map((line) => {
-							const article = data.articles.find(
-								(a) => a.article_id === line.article,
-							);
-							return (
-								<div
-									key={line.order_line_id}
-									className="grid grid-cols-[2fr_4fr_1fr_2fr_2fr] gap-2 items-center border-b py-2"
-								>
-									<img
-										src={article?.images?.[0] || "/icons/default.svg"}
-										alt={article?.name || "Article"}
-										className="w-12 h-12 object-cover rounded"
-									/>
-									<p className="font-semibold">{article?.name || "Inconnu"}</p>
-									<p className="text-sm text-gray-600 pl-1">{line.quantity}</p>
-									<p className="text-sm text-gray-800">
-										{article?.price_ttc
-											? (article.price_ttc / 1.2).toFixed(2)
-											: "N/A"}{" "}
-										€
-									</p>
-									<p className="text-sm font-bold text-gray-800">
-										{article?.price_ttc ?? "N/A"} €
-									</p>
-								</div>
-							);
-						})}
-
-						<div className="mt-4">
-							{selectedOrder.status === "paid" && (
-								<Button
-									type="button"
-									onClick={handleReadyOrder}
-									buttonText="COMMANDE PRÊTE ?"
-								/>
-							)}
-							{selectedOrder.status === "cancelled" && (
-								<Button
-									type="button"
-									onClick={handleDeleteOrder}
-									buttonText="ANNULER LA COMMANDE"
-								/>
-							)}
-						</div>
-					</div>
-				</>
-			)}
+					</button>
+					<div className="absolute bottom-0 left-0 w-full border-b border-gray-200"></div>
+				</div>
+			))}
 		</div>
 	);
 }

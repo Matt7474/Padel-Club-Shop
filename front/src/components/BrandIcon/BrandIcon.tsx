@@ -44,7 +44,7 @@ export default function BrandIcon() {
 
 	return (
 		<div className="mt-4 -mb-2 xl:mb-4">
-			<div className="flex gap-4 overflow-x-auto pb-2 px-4 xl:justify-center scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+			<div className="flex gap-4 overflow-x-auto pb-2 px-4 ">
 				{brands.map((brand) => {
 					// Gestion du chemin de l'image
 					let logoSrc = brand.logo;
@@ -61,7 +61,7 @@ export default function BrandIcon() {
 							<img
 								src={logoSrc}
 								alt={brand.name}
-								className="hover:cursor-pointer w-20 h-12 border border-gray-300 rounded-md shadow-md hover:bg-gray-300 xl:hover:-translate-y-2 transition-transform"
+								className="hover:cursor-pointer w-20 h-12 border border-gray-300 rounded-md shadow-md hover:bg-gray-300 "
 							/>
 						</Link>
 					);

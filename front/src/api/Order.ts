@@ -1,6 +1,7 @@
 import axios from "axios";
 import type { CartItem } from "../store/cartStore";
 import { useAuthStore } from "../store/useAuthStore";
+import type { getMyOrdersProps, Order } from "../types/Order";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -41,12 +42,32 @@ export async function createOrderAndUpdateStock(cart: CartItem[]) {
 	}
 }
 
-export interface getMyOrdersProps {
-	order_id: number;
-	reference: string;
-	total_amount: number;
-	status: "pending" | "paid" | "cancelled" | "shipped";
-	created_at: string;
+export async function getOrders(): Promise<Order[]> {
+	try {
+		const authToken = useAuthStore.getState().token;
+
+		if (!authToken)
+			throw new Error("Token manquant pour récupérer les commandes");
+
+		const res = await axios.get(`${API_URL}/order/orders`, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
+
+		console.log("Commandes reçues :", res.data.orders);
+
+		// ✅ Vérifie ici que l'API renvoie bien un tableau d'objets complets (avec order_lines)
+		return res.data.orders as Order[];
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error("Erreur récupération commandes :", error.message);
+		} else {
+			console.error("Erreur inconnue récupération commandes :", error);
+		}
+		throw error;
+	}
 }
 
 export async function getMyOrders(): Promise<getMyOrdersProps[]> {

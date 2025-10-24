@@ -249,11 +249,73 @@ export const getMyOrders = async (req: Request, res: Response) => {
 				{
 					model: OrderItem,
 					as: "items",
-					attributes: [
-						"quantity",
-						"price",
-						"size", // ✅ Ajout de la taille
+					attributes: ["quantity", "price", "size"],
+					include: [
+						{
+							model: Article,
+							as: "article",
+							attributes: [
+								"article_id",
+								"name",
+								"reference",
+								"type",
+								"price_ttc",
+							],
+							include: [
+								{
+									model: ArticleImage,
+									as: "images",
+									attributes: ["url", "is_main"],
+									required: false,
+								},
+							],
+						},
 					],
+				},
+			],
+			order: [
+				["created_at", "DESC"],
+				[
+					{ model: OrderItem, as: "items" },
+					{ model: Article, as: "article" },
+					{ model: ArticleImage, as: "images" },
+					"is_main",
+					"DESC",
+				],
+				[
+					{ model: OrderItem, as: "items" },
+					{ model: Article, as: "article" },
+					{ model: ArticleImage, as: "images" },
+					"image_id",
+					"ASC",
+				],
+			],
+			attributes: [
+				"order_id",
+				"reference",
+				"total_amount",
+				"status",
+				"created_at",
+			],
+		});
+
+		res.status(200).json({ orders });
+	} catch (err: unknown) {
+		console.error(err);
+		res.status(500).json({
+			message: "Erreur serveur lors de la récupération des commandes",
+		});
+	}
+};
+
+export const getAllOrders = async (_req: Request, res: Response) => {
+	try {
+		const orders = await Order.findAll({
+			include: [
+				{
+					model: OrderItem,
+					as: "items",
+					attributes: ["quantity", "price", "size"],
 					include: [
 						{
 							model: Article,

@@ -44,8 +44,14 @@ Order.init(
 			field: "total_amount",
 		},
 		status: {
-			type: DataTypes.ENUM("pending", "paid", "cancelled", "shipped"),
-			defaultValue: "pending",
+			type: DataTypes.ENUM(
+				"paid",
+				"processing",
+				"ready",
+				"shipped",
+				"cancelled",
+			),
+			defaultValue: "paid",
 			field: "status",
 		},
 	},

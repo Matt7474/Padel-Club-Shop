@@ -143,7 +143,7 @@ CREATE TABLE orders (
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     vat_rate NUMERIC(5,2) DEFAULT 20,
     total_amount NUMERIC(10,2) NOT NULL DEFAULT 0,    
-    status TEXT CHECK (status IN ('pending','paid','cancelled','shipped')),
+    status TEXT CHECK (status IN ('paid','processing','ready','shipped', 'cancelled')),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );

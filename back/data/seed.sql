@@ -22,17 +22,33 @@ INSERT INTO users (user_id, last_name, first_name, phone, email, password, role_
 -- BRANDS
 INSERT INTO brands (brand_id, name, logo) VALUES
 
-(1, 'Adidas', '/uploads/1758912918211-572994558.svg'),
-(2, 'Babolat', '/uploads/1758788398194-104430331.svg'),
-(3, 'Black Crown', '/uploads/1758788492175-608532080.svg'),
-(4, 'Bullpadel', '/uploads/1758792413739-727727601.svg'),
-(5, 'Cork', '/uploads/1758790519831-339248359.svg'),
-(6, 'Head', '/uploads/1758790541801-478573725.svg'),
-(7, 'Nox', '/uploads/1758790550263-221428642.svg'),
-(8, 'Oxdog', '/uploads/1758790648944-644975055.svg'),
-(9, 'Starvie', '/uploads/1758790665510-298929789.svg'),
-(10, 'Tecnifibre', '/uploads/1758789033640-302168640.svg'),
-(11, 'Wilson', '/uploads/1758788451323-577782163.svg');
+-- Couleur bleu/gris
+-- (1, 'Adidas', '/uploads/1758912918211-572994558.svg'),
+-- (2, 'Babolat', '/uploads/1758788398194-104430331.svg'),
+-- (3, 'Black Crown', '/uploads/1758788492175-608532080.svg'),
+-- (4, 'Bullpadel', '/uploads/1758792413739-727727601.svg'),
+-- (5, 'Cork', '/uploads/1758790519831-339248359.svg'),
+-- (6, 'Head', '/uploads/1758790541801-478573725.svg'),
+-- (7, 'Nike', '/uploads/1761291393293-968033281.svg'),
+-- (8, 'Nox', '/uploads/1758790550263-221428642.svg'),
+-- (9, 'Oxdog', '/uploads/1758790648944-644975055.svg'),
+-- (10, 'Starvie', '/uploads/1758790665510-298929789.svg'),
+-- (11, 'Tecnifibre', '/uploads/1758789033640-302168640.svg'),
+-- (12, 'Wilson', '/uploads/1758788451323-577782163.svg');
+
+-- Couleur Or
+(1, 'Adidas', '/uploads/1761289473379-640394900.svg'), 
+(2, 'Babolat', '/uploads/1761289438422-305334235.svg'),  
+(3, 'Black Crown', '/uploads/1761289506984-300282076.svg'),  
+(4, 'Bullpadel', '/uploads/1761289531272-756552479.svg'), 
+(5, 'Cork', '/uploads/1761289552847-947393715.svg'),  
+(6, 'Head', '/uploads/1761289582638-373415044.svg'), 
+(7, 'Nike', '/uploads/1761291163225-523139889.svg'),
+(8, 'Nox', '/uploads/1761289606374-554940121.svg'), 
+(9, 'Oxdog', '/uploads/1761289627734-559793755.svg'),  
+(10, 'Starvie', '/uploads/1761289649988-521344962.svg'), 
+(11, 'Tecnifibre', '/uploads/1761289905035-269085577.svg'), 
+(12, 'Wilson', '/uploads/1761289692894-491336664.svg');
 
 
 -- ARTICLES
