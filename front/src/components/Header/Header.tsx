@@ -21,7 +21,6 @@ export default function Header() {
 	const [isQuantity, setIsQuantity] = useState(0);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isCartOpen, setIsCartOpen] = useState(false);
-	const [unreadCommandCount] = useState(0);
 
 	const cart = useCartStore((state) => state.cart);
 	// Somme des quantités dans le panier
