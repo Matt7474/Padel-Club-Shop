@@ -12,6 +12,7 @@ export function transformUserApiToAuthUser(apiUser: UserApiResponse): AuthUser {
 		firstName: apiUser.first_name,
 		lastName: apiUser.last_name,
 		email: apiUser.email,
+		phone: apiUser.phone,
 		role: ROLE_MAP[apiUser.role_id] || "client",
 		addresses: apiUser.addresses,
 	};

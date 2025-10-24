@@ -27,6 +27,7 @@ import RacketForm from "../CreateArticle/RacketForm";
 import ShoesForm from "../CreateArticle/ShoesForm";
 import Toogle from "../Toogle/Toogle";
 import Button from "../Tools/Button";
+import { CloudUpload, Trash2 } from "lucide-react";
 
 type ImageWithId = {
 	id: string;
@@ -667,30 +668,24 @@ export default function CreateArticle({
 					{mode === "edit" &&
 						(article?.is_deleted === false ? (
 							<div className="flex items-center">
-								<p>Archiver l'article ?</p>
+								<p className="font-semibold">Archiver l'article ?</p>
 								<button
 									type="button"
 									onClick={() => handleDelete(article?.article_id)}
+									className="cursor-pointer"
 								>
-									<img
-										src="/icons/trash2.svg"
-										alt="poubelle"
-										className="w-6 cursor-pointer ml-2"
-									/>
+									<Trash2 className="text-red-600 ml-2" />
 								</button>
 							</div>
 						) : (
 							<div className="flex items-center">
-								<p>Restaurer l'article ?</p>
+								<p className="font-semibold">Restaurer l'article ?</p>
 								<button
 									type="button"
 									onClick={() => handleRestoreClick(article?.article_id)}
+									className="cursor-pointer"
 								>
-									<img
-										src="/icons/restore3.svg"
-										alt="restaurer"
-										className="w-8 cursor-pointer ml-2"
-									/>
+									<CloudUpload className="text-green-700 ml-2" />
 								</button>
 							</div>
 						))}

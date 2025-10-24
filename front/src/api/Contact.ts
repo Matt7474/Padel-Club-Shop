@@ -166,3 +166,53 @@ export async function getMyMessages(email: string) {
 		throw new Error("Erreur inconnue");
 	}
 }
+
+export async function deleteMessage(id: number) {
+	try {
+		const authToken = useAuthStore.getState().token;
+		const response = await axios.patch(
+			`${API_URL}/contact/messages/delete/${id}`,
+			{},
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
+			},
+		);
+		return response.data;
+	} catch (error: unknown) {
+		if (axios.isAxiosError(error)) {
+			throw new Error(
+				error.response?.data?.message ||
+					"Erreur lors de la récupération des messages",
+			);
+		}
+		throw new Error("Erreur inconnue");
+	}
+}
+
+export async function restoreMessage(id: number) {
+	try {
+		const authToken = useAuthStore.getState().token;
+		const response = await axios.patch(
+			`${API_URL}/contact/messages/restore/${id}`,
+			{},
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
+			},
+		);
+		return response.data;
+	} catch (error: unknown) {
+		if (axios.isAxiosError(error)) {
+			throw new Error(
+				error.response?.data?.message ||
+					"Erreur lors de la récupération des messages",
+			);
+		}
+		throw new Error("Erreur inconnue");
+	}
+}

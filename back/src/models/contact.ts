@@ -14,6 +14,7 @@ interface ContactAttributes {
 	order_number?: string;
 	is_read: boolean;
 	response?: string;
+	is_deleted?: boolean;
 	responded_at?: Date | null;
 	admin_notes?: string | null;
 	created_at?: Date;
@@ -49,6 +50,7 @@ export class Contact
 	public order_number?: string;
 	public is_read!: boolean;
 	public response?: string;
+	public is_deleted!: boolean;
 	public responded_at?: Date | null;
 	public admin_notes?: string | null;
 
@@ -99,6 +101,12 @@ Contact.init(
 			type: DataTypes.BOOLEAN,
 			allowNull: false,
 			defaultValue: false,
+		},
+		is_deleted: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
+			field: "is_deleted",
 		},
 		response: {
 			type: DataTypes.TEXT,

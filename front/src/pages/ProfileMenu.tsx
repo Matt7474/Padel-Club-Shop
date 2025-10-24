@@ -41,9 +41,7 @@ export default function ProfileMenu() {
 			};
 
 			fetchUnreadMessages();
-
-			// 🔄 Actualisation automatique toutes les 30 secondes
-			const interval = setInterval(fetchUnreadMessages, 15000);
+			const interval = setInterval(fetchUnreadMessages, 5000);
 			return () => clearInterval(interval);
 		}
 	}, [isAuthenticated, navigate]);
@@ -57,7 +55,7 @@ export default function ProfileMenu() {
 		"Ajouter une promotion",
 		"Liste des promotions",
 		"Liste des utilisateurs",
-		"Voir les commandes",
+		"Voir les commandes client",
 		"Voir mon profil",
 		"Mes commandes",
 		"Voir les messages client",
@@ -98,7 +96,7 @@ export default function ProfileMenu() {
 						onClick={() => setMenuSelected(option)}
 						className={`px-4 py-2 border cursor-pointer relative ${
 							menuSelected === option
-								? "bg-orange-500 text-white"
+								? "bg-gradient-to-r from-orange-500/80 to-orange-300/80 text-white"
 								: "bg-gray-100 hover:bg-gray-200"
 						}`}
 					>
@@ -131,7 +129,7 @@ export default function ProfileMenu() {
 				<PromoList setMenuSelected={setMenuSelected} />
 			)}
 			{menuSelected === "Liste des utilisateurs" && <UserList />}
-			{menuSelected === "Voir les commandes" && <OrderList />}
+			{menuSelected === "Voir les commandes client" && <OrderList />}
 			{menuSelected === "Voir mon profil" && <Profile />}
 			{menuSelected === "Mes commandes" && <MyOrders />}
 			{menuSelected === "Voir les messages client" && <ClientsMessages />}

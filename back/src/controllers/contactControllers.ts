@@ -34,6 +34,7 @@ export const createContact = async (req: Request, res: Response) => {
 			subject,
 			message,
 			order_number,
+			is_deleted: false,
 		});
 
 		await sendMail({
@@ -125,6 +126,7 @@ export const getMessages = async (_req: Request, res: Response) => {
 		return res.status(500).json({ message: "Erreur inconnue" });
 	}
 };
+
 export const getMessagesByUserEmail = async (req: Request, res: Response) => {
 	try {
 		const { email } = req.params;
@@ -223,5 +225,51 @@ export const addResponse = async (req: Request, res: Response) => {
 		} else {
 			res.status(500).json({ error: "Erreur serveur inconnue" });
 		}
+	}
+};
+
+export const deleteMessageById = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+
+		if (!id) {
+			return res.status(400).json({ error: "ID du message requis" });
+		}
+
+		const message = await Contact.findByPk(id);
+		if (!message) {
+			return res.status(404).json({ error: "Message non trouvé" });
+		}
+
+		message.is_deleted = true;
+		await message.save();
+
+		return res.json({ message: "Message archivé avec success" });
+	} catch (err) {
+		console.error("❌ Error archiving message:", err);
+		return res.status(500).json({ error: "Internal Server Error" });
+	}
+};
+
+export const restoreMessageById = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params;
+
+		if (!id) {
+			return res.status(400).json({ error: "ID du message requis" });
+		}
+
+		const message = await Contact.findByPk(id);
+		if (!message) {
+			return res.status(404).json({ error: "Message non trouvé" });
+		}
+
+		message.is_deleted = false;
+		await message.save();
+
+		return res.json({ message: "Message archivé avec success" });
+	} catch (err) {
+		console.error("❌ Error archiving message:", err);
+		return res.status(500).json({ error: "Internal Server Error" });
 	}
 };

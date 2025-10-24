@@ -1,6 +1,20 @@
-import { Contact, FileDigit, Mail, Phone, Send } from "lucide-react";
+import {
+	CloudUpload,
+	Contact,
+	FileDigit,
+	Mail,
+	MessagesSquare,
+	Phone,
+	Send,
+	Trash2,
+} from "lucide-react";
 import { useState } from "react";
-import { responseMessage } from "../../../api/Contact";
+import {
+	deleteMessage,
+	responseMessage,
+	restoreMessage,
+} from "../../../api/Contact";
+import { useToastStore } from "../../../store/ToastStore ";
 import type { Imessages } from "./ClientsMessages";
 
 interface ClientMessageProps {
@@ -20,24 +34,54 @@ export default function ClientMessage({
 		partnership: "Partenariat",
 		other: "Autre",
 	};
-	console.log("qui est lauteur du message", message);
-
 	const [response, setResponse] = useState("");
 	const [currentMessage, setCurrentMessage] = useState(message);
+	const addToast = useToastStore((state) => state.addToast);
 
 	const handleSubmit = async () => {
 		if (!response.trim()) return;
 
 		try {
-			const res = await responseMessage(currentMessage.id, response);
+			await responseMessage(currentMessage.id, response);
 			setCurrentMessage((prev) => ({
 				...prev,
 				response: response,
 			}));
 			setResponse("");
-			console.log("Réponse envoyée :", res);
+			addToast(`Votre message à bien été envoyé`, "bg-green-500");
 		} catch (error) {
 			console.error("Erreur lors de l’envoi :", error);
+			addToast(`Votre message n'a pas pu être envoyé`, "bg-red-500");
+		}
+	};
+
+	const handleDelete = async () => {
+		try {
+			await deleteMessage(currentMessage.id);
+			addToast(`Le message à bien été archivé`, "bg-green-500");
+			setCurrentMessage({
+				...currentMessage,
+				is_deleted: true,
+			});
+			onReturn();
+		} catch (error) {
+			console.error("Erreur lors de l’envoi :", error);
+			addToast(`Votre message n'a pas pu être envoyé`, "bg-red-500");
+		}
+	};
+
+	const handleRestore = async () => {
+		try {
+			await restoreMessage(currentMessage.id);
+			setCurrentMessage({
+				...currentMessage,
+				is_deleted: false,
+			});
+			addToast(`Le message à bien été restauré`, "bg-green-500");
+			onReturn();
+		} catch (error) {
+			console.error("Erreur lors de l’envoi :", error);
+			addToast(`Votre message n'a pas pu être restauré`, "bg-red-500");
 		}
 	};
 
@@ -56,12 +100,25 @@ export default function ClientMessage({
 				Retour
 			</button>
 
-			<div className="max-w-3xl mx-auto space-y-6 ">
+			<div className="max-w-3xl mx-auto space-y-6 relative">
 				{/* Fiche Contact */}
 				<div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
 					<p className="text-center text-md text-gray-700 font-semibold italic -mt-2 mb-3">
 						Fiche Contact
 					</p>
+					{message.is_deleted === false ? (
+						<button type="button" onClick={handleDelete}>
+							<div className="absolute top-3.5 right-5 text-red-500 cursor-pointer">
+								<Trash2 />
+							</div>
+						</button>
+					) : (
+						<button type="button" onClick={handleRestore}>
+							<div className="absolute top-3.5 right-5 text-green-600 cursor-pointer">
+								<CloudUpload />
+							</div>
+						</button>
+					)}
 
 					<div className="grid grid-cols-[auto_90px_1fr] items-center gap-3">
 						<div className="bg-amber-100 rounded-full p-3 flex items-center justify-center">
@@ -111,6 +168,20 @@ export default function ClientMessage({
 							>
 								{currentMessage.phone}
 							</a>
+						</div>
+					)}
+
+					{currentMessage.subject && (
+						<div className="grid grid-cols-[auto_90px_1fr] items-center gap-3 mt-3">
+							<div className="bg-amber-100 rounded-full p-3 flex items-center justify-center">
+								<MessagesSquare className="w-5 h-5 text-amber-600" />
+							</div>
+							<p className="font-semibold text-gray-900 text-sm text-right">
+								Sujet :
+							</p>
+							<p className="font-semibold text-gray-900 text-sm">
+								{currentMessage.subject}
+							</p>
 						</div>
 					)}
 

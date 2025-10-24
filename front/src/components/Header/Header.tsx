@@ -1,21 +1,24 @@
+import { LogIn, LogOut, ShoppingCart, User, UserStar } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getClientMessages } from "../../api/Contact";
 import { useCartStore } from "../../store/cartStore";
 import { useToastStore } from "../../store/ToastStore ";
 import { useAuthStore } from "../../store/useAuthStore";
+import type { Imessages } from "../Form/Admin/ClientsMessages";
 import CartModal from "../Modal/CartModal";
 import MenuModal from "../Modal/MenuModal";
 import SearchBar from "../SearchBar/SearchBar";
-import { LogIn, LogOut, ShoppingCart, User, UserStar } from "lucide-react";
 
 export default function Header() {
 	const { user, isAuthenticated } = useAuthStore();
 	const addToast = useToastStore((state) => state.addToast);
-
+	const [unreadMessageCount, setUnreadMessageCount] = useState(0);
 	const navigate = useNavigate();
 	const [isQuantity, setIsQuantity] = useState(0);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isCartOpen, setIsCartOpen] = useState(false);
+	const [unreadCommandCount] = useState(0);
 
 	const cart = useCartStore((state) => state.cart);
 	// Somme des quantités dans le panier
@@ -26,6 +29,28 @@ export default function Header() {
 		);
 		setIsQuantity(totalQuantity);
 	}, [cart]);
+
+	// UseEffect pour afficher le nombre d'alerte
+	useEffect(() => {
+		const fetchUnreadMessages = async () => {
+			try {
+				const response = await getClientMessages();
+				const unread = response.data.filter(
+					(message: Imessages) => message.is_read === false,
+				).length;
+				setUnreadMessageCount(unread);
+			} catch (error) {
+				console.error("Erreur lors de la récupération des messages:", error);
+			}
+		};
+
+		fetchUnreadMessages();
+		const interval = setInterval(fetchUnreadMessages, 5000);
+		return () => clearInterval(interval);
+	}, []);
+
+	const totalAlertCount = unreadMessageCount + unreadCommandCount;
+	console.log("totalAlertCount", totalAlertCount);
 
 	const toggleMenu = () => {
 		setIsMenuOpen((prev) => !prev);
@@ -129,6 +154,11 @@ export default function Header() {
 								<UserStar
 									className={`w-7 h-7 transition-transform duration-200 text-amber-500`}
 								/>
+								{totalAlertCount > 0 && (
+									<div className="w-5 h-5 flex justify-center items-center rounded-full bg-red-500 text-white absolute text-[10px] font-semibold -top-1 -right-2 xl:-top-1 xl:-right-1">
+										{totalAlertCount > 99 ? "99+" : totalAlertCount}
+									</div>
+								)}
 							</div>
 						</Link>
 					)}

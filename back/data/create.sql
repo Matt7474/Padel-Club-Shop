@@ -196,6 +196,7 @@ CREATE TABLE contact_messages (
     order_number VARCHAR(17),
     is_read BOOLEAN DEFAULT FALSE,
     response TEXT,
+    is_deleted BOOLEAN DEFAULT FALSE,
     subject TEXT CHECK (subject IN ('general', 'order', 'product', 'complaint', 'partnership', 'other')) NOT NULL,
     message TEXT NOT NULL,
     status TEXT CHECK (status IN ('new', 'in_progress', 'resolved', 'closed')) DEFAULT 'new',

@@ -6,6 +6,7 @@ const contactRouter = Router();
 
 // Routes de contact
 contactRouter.post("/contact", contactControllers.createContact);
+
 contactRouter.get(
 	"/messages",
 	authenticateToken,
@@ -27,6 +28,18 @@ contactRouter.patch(
 	`/messages/response/:id`,
 	authenticateToken,
 	contactControllers.addResponse,
+);
+
+contactRouter.patch(
+	`/messages/delete/:id`,
+	authenticateToken,
+	contactControllers.deleteMessageById,
+);
+
+contactRouter.patch(
+	`/messages/restore/:id`,
+	authenticateToken,
+	contactControllers.restoreMessageById,
 );
 
 export { contactRouter };

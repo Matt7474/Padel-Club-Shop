@@ -2,6 +2,7 @@ import { CheckCircle, Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
 import { sendContactForm } from "../api/Contact";
 import { useAuthStore } from "../store/useAuthStore";
+import { useToastStore } from "../store/ToastStore ";
 
 interface FormData {
 	user_id?: number | null;
@@ -12,6 +13,7 @@ interface FormData {
 	subject: string;
 	message: string;
 	orderNumber: string;
+	is_deleted: boolean;
 }
 
 interface FormErrors {
@@ -26,7 +28,7 @@ interface FormErrors {
 
 export default function ContactPage() {
 	const user = useAuthStore((state) => state.user);
-	console.log("user", user);
+	const addToast = useToastStore((state) => state.addToast);
 
 	const [formData, setFormData] = useState<FormData>({
 		user_id: user ? user.id : null,
@@ -37,6 +39,7 @@ export default function ContactPage() {
 		subject: "",
 		message: "",
 		orderNumber: "",
+		is_deleted: false,
 	});
 
 	console.log(formData.phone);
@@ -58,16 +61,24 @@ export default function ContactPage() {
 
 	const handleSubmit = async (): Promise<void> => {
 		try {
+			console.log("formData", formData);
 			await sendContactForm(formData);
 			setIsSubmitted(true);
+			addToast(`Votre message à bien été envoyé`, "bg-green-500");
 
 			// Reset du formulaire après 3 secondes
 			setTimeout(() => {
 				setIsSubmitted(false);
+				setFormData((prev) => ({
+					...prev,
+					subject: "",
+					message: "",
+				}));
 			}, 3000);
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				alert(error.message);
+				addToast(`Votre message n'a pas pu être envoyé`, "bg-red-500");
 			}
 		}
 	};
