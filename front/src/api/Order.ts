@@ -123,3 +123,34 @@ export async function deleteOrder(id: number) {
 		throw error;
 	}
 }
+
+export async function updateOrderStatus(id: number, status: string) {
+	const authToken = useAuthStore.getState().token;
+
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
+	if (!id) throw new Error("Commande non identifiée");
+
+	try {
+		const res = await axios.patch(
+			`${API_URL}/order/${id}/status`,
+			{ status },
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
+			},
+		);
+
+		// On retourne la commande mise à jour
+		return res.data.order;
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error("Erreur mise à jour commande :", error.message);
+		} else {
+			console.error("Erreur inconnue mise à jour commande :", error);
+		}
+		throw error;
+	}
+}

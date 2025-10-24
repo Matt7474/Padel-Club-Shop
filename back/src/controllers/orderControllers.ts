@@ -6,7 +6,6 @@ import { Order } from "../models/order";
 import { OrderItem } from "../models/orderItem";
 import { User } from "../models/user";
 import { sendMail } from "../services/mailer";
-import { where } from "sequelize";
 
 export const createOrderAndUpdateStock = async (
 	req: Request,
@@ -409,6 +408,66 @@ export const deleteOrderById = async (req: Request, res: Response) => {
 		}
 		return res.status(500).json({
 			message: "Erreur inconnue lors de la suppression de la commande.",
+		});
+	}
+};
+
+export const updateOrderStatus = async (req: Request, res: Response) => {
+	console.log("➡️  Dans le controller updateOrderStatus");
+
+	try {
+		const { id } = req.params;
+		const { status } = req.body;
+
+		// Vérifie la présence de l'id
+		if (!id) {
+			return res.status(400).json({
+				message: "ID de commande manquant dans la requête.",
+			});
+		}
+
+		// Vérifie la présence du status
+		if (!status) {
+			return res.status(400).json({
+				message: "Nouveau statut manquant dans la requête.",
+			});
+		}
+
+		// Optionnel : tu peux contrôler les statuts autorisés
+		const allowedStatuses = ["paid", "processing", "ready", "shipped"];
+		if (!allowedStatuses.includes(status)) {
+			return res.status(400).json({
+				message: `Statut '${status}' invalide. Valeurs autorisées : ${allowedStatuses.join(", ")}`,
+			});
+		}
+
+		// Recherche la commande
+		const order = await Order.findByPk(Number(id));
+		if (!order) {
+			return res.status(404).json({ message: "Commande non trouvée." });
+		}
+
+		// Mise à jour du statut
+		order.status = status;
+		await order.save();
+
+		return res.status(200).json({
+			message: `Commande ${id} mise à jour avec le statut '${status}'.`,
+			order,
+		});
+	} catch (err: unknown) {
+		console.error("❌ Erreur lors de la mise à jour du statut :", err);
+
+		if (err instanceof Error) {
+			return res.status(500).json({
+				message:
+					"Erreur serveur lors de la mise à jour du statut de la commande.",
+				error: err.message,
+			});
+		}
+		return res.status(500).json({
+			message:
+				"Erreur inconnue lors de la mise à jour du statut de la commande.",
 		});
 	}
 };

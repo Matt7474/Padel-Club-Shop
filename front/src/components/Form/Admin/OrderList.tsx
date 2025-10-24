@@ -1,11 +1,11 @@
 import { Loader2, ShoppingBag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteOrder, getOrders } from "../../../api/Order";
+import { deleteOrder, getOrders, updateOrderStatus } from "../../../api/Order";
+import { useToastStore } from "../../../store/ToastStore ";
 import type { Order } from "../../../types/Order";
 import { useSortableData } from "../Tools/useSortableData";
 import OrderDetails from "./OrderDetails";
-import { useToastStore } from "../../../store/ToastStore ";
 
 export default function OrderList() {
 	const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -34,8 +34,63 @@ export default function OrderList() {
 	}, []);
 
 	const handleReturn = () => setSelectedOrder(null);
-	const handleReadyOrder = () => console.log("Commande prête");
 
+	// passage de la commande de payé -> en préparation
+	const handleConfirmProcessing = async (id: number) => {
+		const status = "processing";
+		try {
+			const updatedOrder = await updateOrderStatus(id, status);
+			console.log(
+				"Commande maintenant en cours de préparation !",
+				updatedOrder,
+			);
+
+			addToast(
+				`La commande est maintenant en cours de préparation !`,
+				"bg-green-500",
+			);
+
+			setSelectedOrder(null);
+			fetchOrders();
+		} catch (err) {
+			console.error(err, "La commande n'a pas changé de status");
+			addToast(`La commande n'a pas changé de status`, "bg-red-500");
+		}
+	};
+
+	// passage de la commande de payé -> en préparation
+	const handleConfirmReady = async (id: number) => {
+		const status = "ready";
+		try {
+			const updatedOrder = await updateOrderStatus(id, status);
+			console.log("Commande maintenant prête !", updatedOrder);
+
+			addToast(`La commande est maintenant prête !`, "bg-green-500");
+			setSelectedOrder(null);
+			fetchOrders();
+		} catch (err) {
+			console.error(err, "La commande n'a pas changé de status");
+			addToast(`La commande n'a pas changé de status`, "bg-red-500");
+		}
+	};
+
+	// passage de la commande de prête -> expédié
+	const handleConfirmShipped = async (id: number) => {
+		const status = "shipped";
+		try {
+			const updatedOrder = await updateOrderStatus(id, status);
+			console.log("Commande expédié !", updatedOrder);
+
+			addToast(`La commande à été expédié !`, "bg-green-500");
+			setSelectedOrder(null);
+			fetchOrders();
+		} catch (err) {
+			console.error(err, "La commande n'a pas changé de status");
+			addToast(`La commande n'a pas changé de status`, "bg-red-500");
+		}
+	};
+
+	// Annulation de la commande
 	const handleDeleteOrder = async (id: number) => {
 		try {
 			await deleteOrder(id);
@@ -97,8 +152,10 @@ export default function OrderList() {
 			<OrderDetails
 				order={selectedOrder}
 				onReturn={handleReturn}
-				onReadyOrder={handleReadyOrder}
 				onDeleteOrder={handleDeleteOrder}
+				onProcessingOrder={handleConfirmProcessing}
+				onReadyOrder={handleConfirmReady}
+				onShippedOrder={handleConfirmShipped}
 			/>
 		);
 	}
@@ -149,7 +206,9 @@ export default function OrderList() {
 					>
 						<div className="grid grid-cols-[3fr_2fr_2fr_2fr] items-center h-12">
 							<p className="pl-1 text-xs">{order.reference}</p>
-							<p className="pl-1 text-xs text-center">{order.items.length}</p>
+							<p className="pl-1 text-xs text-center">
+								{order.items.reduce((sum, item) => sum + item.quantity, 0)}
+							</p>
 							<div className="flex justify-center">
 								<img
 									src={

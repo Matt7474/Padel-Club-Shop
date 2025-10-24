@@ -18,4 +18,10 @@ orderRouter.delete(
 orderRouter.get("/my-orders", authenticateToken, orderControllers.getMyOrders);
 orderRouter.get("/orders", authenticateToken, orderControllers.getAllOrders);
 
+orderRouter.patch(
+	"/:id/status",
+	authenticateToken,
+	orderControllers.updateOrderStatus,
+);
+
 export { orderRouter };

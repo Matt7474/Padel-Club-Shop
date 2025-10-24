@@ -1,20 +1,24 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Order } from "../../../types/Order";
-import { useState } from "react";
 import ConfirmModal from "../../Modal/ConfirmModal";
 
 interface OrderDetailsProps {
 	order: Order;
 	onReturn: () => void;
-	onReadyOrder: () => void;
 	onDeleteOrder: (orderId: number) => void;
+	onProcessingOrder: (orderId: number) => void;
+	onReadyOrder: (orderId: number) => void;
+	onShippedOrder: (orderId: number) => void;
 }
 
 export default function OrderDetails({
 	order,
 	onReturn,
-	onReadyOrder,
 	onDeleteOrder,
+	onProcessingOrder,
+	onReadyOrder,
+	onShippedOrder,
 }: OrderDetailsProps) {
 	const statusImages: Record<string, string> = {
 		paid: "/icons/invoice-check.svg",
@@ -34,7 +38,10 @@ export default function OrderDetails({
 
 	const API_URL = import.meta.env.VITE_API_URL;
 	const navigate = useNavigate();
-	const [showConfirm, setShowConfirm] = useState(false);
+	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+	const [showProcessingConfirm, setShowProcessingConfirm] = useState(false);
+	const [showReadyConfirm, setShowReadyConfirm] = useState(false);
+	const [showShippedConfirm, setShowShippedConfirm] = useState(false);
 
 	const tvaRate = 0.2;
 	const totalQty = order.items.reduce((sum, item) => sum + item.quantity, 0);
@@ -56,7 +63,22 @@ export default function OrderDetails({
 
 	const handleConfirmDelete = () => {
 		onDeleteOrder(order.order_id);
-		setShowConfirm(false);
+		setShowDeleteConfirm(false);
+	};
+
+	const handleConfirmProcessing = () => {
+		onProcessingOrder(order.order_id);
+		setShowProcessingConfirm(false);
+	};
+
+	const handleConfirmReady = () => {
+		onReadyOrder(order.order_id);
+		setShowReadyConfirm(false);
+	};
+
+	const handleConfirmShipped = () => {
+		onShippedOrder(order.order_id);
+		setShowShippedConfirm(false);
 	};
 
 	return (
@@ -208,29 +230,98 @@ export default function OrderDetails({
 						</div>
 
 						<div className="mt-6 pt-4">
+							{/* status payé */}
 							{order.status === "paid" && (
 								<div className="flex justify-around gap-4">
 									<button
 										type="button"
-										onClick={() => setShowConfirm(true)}
-										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md"
+										onClick={() => setShowDeleteConfirm(true)}
+										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2"
 									>
 										ANNULER LA COMMANDE
 									</button>
 									<button
 										type="button"
-										onClick={onReadyOrder}
-										className="bg-green-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md"
+										onClick={() => setShowProcessingConfirm(true)}
+										className="bg-green-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2"
 									>
 										PREPARER LA COMMANDE
 									</button>
 								</div>
 							)}
-							{showConfirm && (
+
+							{/* status en préparation */}
+							{order.status === "processing" && (
+								<div className="flex justify-around gap-4">
+									<button
+										type="button"
+										onClick={() => setShowDeleteConfirm(true)}
+										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2"
+									>
+										ANNULER LA COMMANDE
+									</button>
+									<button
+										type="button"
+										onClick={() => setShowReadyConfirm(true)}
+										className="bg-green-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2"
+									>
+										COMMANDE PRETE
+									</button>
+								</div>
+							)}
+
+							{/* status en prête */}
+							{order.status === "ready" && (
+								<div className="flex justify-around gap-4">
+									<button
+										type="button"
+										onClick={() => setShowDeleteConfirm(true)}
+										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2"
+									>
+										ANNULER LA COMMANDE
+									</button>
+									<button
+										type="button"
+										onClick={() => setShowShippedConfirm(true)}
+										className="bg-green-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2"
+									>
+										COMMANDE EXPEDIEE
+									</button>
+								</div>
+							)}
+							{/* Modal suppression */}
+							{showDeleteConfirm && (
 								<ConfirmModal
 									message="Voulez-vous vraiment annuler cette commande ?"
 									onConfirm={handleConfirmDelete}
-									onCancel={() => setShowConfirm(false)}
+									onCancel={() => setShowDeleteConfirm(false)}
+								/>
+							)}
+
+							{/* Modal confirmation de preparation */}
+							{showProcessingConfirm && (
+								<ConfirmModal
+									message="Voulez-vous préprarer cette commande ?"
+									onConfirm={handleConfirmProcessing}
+									onCancel={() => setShowProcessingConfirm(false)}
+								/>
+							)}
+
+							{/* Modal confirmation de commande prete */}
+							{showReadyConfirm && (
+								<ConfirmModal
+									message="Voulez-vous rendre cette commande prête ?"
+									onConfirm={handleConfirmReady}
+									onCancel={() => setShowReadyConfirm(false)}
+								/>
+							)}
+
+							{/* Modal confirmation de commande expédiée */}
+							{showShippedConfirm && (
+								<ConfirmModal
+									message="Voulez-vous rendre cette commande prête ?"
+									onConfirm={handleConfirmShipped}
+									onCancel={() => setShowShippedConfirm(false)}
 								/>
 							)}
 						</div>

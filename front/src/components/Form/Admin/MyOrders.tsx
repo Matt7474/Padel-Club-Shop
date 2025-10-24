@@ -9,7 +9,7 @@ interface MyOrdersProps {
 	order_id: number;
 	reference: string;
 	total_amount: number;
-	status: "pending" | "paid" | "cancelled" | "shipped";
+	status: "paid" | "processing" | "ready" | "shipping" | "cancelled";
 	created_at: string;
 	items: OrderItem[];
 }
@@ -18,17 +18,23 @@ const statusMap: Record<
 	MyOrdersProps["status"],
 	{ label: string; bg: string; text: string; border: string }
 > = {
-	pending: {
-		label: "En attente",
-		bg: "bg-amber-50",
-		text: "text-amber-700",
-		border: "border-amber-200",
-	},
 	paid: {
 		label: "Payée",
 		bg: "bg-emerald-50",
 		text: "text-emerald-700",
 		border: "border-emerald-200",
+	},
+	processing: {
+		label: "Préparation",
+		bg: "bg-amber-50",
+		text: "text-amber-700",
+		border: "border-amber-200",
+	},
+	ready: {
+		label: "Prête",
+		bg: "bg-blue-50",
+		text: "text-blue-700",
+		border: "border-blue-200",
 	},
 	cancelled: {
 		label: "Annulée",
@@ -36,11 +42,11 @@ const statusMap: Record<
 		text: "text-rose-700",
 		border: "border-rose-200",
 	},
-	shipped: {
+	shipping: {
 		label: "Expédiée",
-		bg: "bg-blue-50",
-		text: "text-blue-700",
-		border: "border-blue-200",
+		bg: "bg-indigo-50",
+		text: "text-indigo-700",
+		border: "border-indigo-200",
 	},
 };
 
