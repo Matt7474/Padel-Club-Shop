@@ -20,6 +20,14 @@ export default function OrderDetails({
 	onReadyOrder,
 	onShippedOrder,
 }: OrderDetailsProps) {
+	const API_URL = import.meta.env.VITE_API_URL;
+	const navigate = useNavigate();
+
+	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+	const [showProcessingConfirm, setShowProcessingConfirm] = useState(false);
+	const [showReadyConfirm, setShowReadyConfirm] = useState(false);
+	const [showShippedConfirm, setShowShippedConfirm] = useState(false);
+
 	const statusImages: Record<string, string> = {
 		paid: "/icons/invoice-check.svg",
 		processing: "/icons/package.svg",
@@ -36,31 +44,29 @@ export default function OrderDetails({
 		cancelled: "Annulée",
 	};
 
-	const API_URL = import.meta.env.VITE_API_URL;
-	const navigate = useNavigate();
-	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-	const [showProcessingConfirm, setShowProcessingConfirm] = useState(false);
-	const [showReadyConfirm, setShowReadyConfirm] = useState(false);
-	const [showShippedConfirm, setShowShippedConfirm] = useState(false);
+	const TVA_RATE = 0.2;
+	const FREE_SHIPPING_THRESHOLD = 69;
+	const SHIPPING_FEE = 6.9;
 
-	const tvaRate = 0.2;
+	// 🧮 Total articles
 	const totalQty = order.items.reduce((sum, item) => sum + item.quantity, 0);
 
-	const priceHT = order.items.reduce((sum, item) => {
-		if (!item.article) return sum;
-		const priceTTC = item.article.price_ttc;
-		const quantity = item.quantity;
-		return sum + (priceTTC / (1 + tvaRate)) * quantity;
-	}, 0);
-	const totalHT = priceHT.toFixed(2);
-
+	// 🧾 Total TTC des articles
 	const totalTTC = order.items.reduce((sum, item) => {
 		if (!item.article) return sum;
-		const priceTTC = item.article.price_ttc;
-		const quantity = item.quantity;
-		return sum + priceTTC * quantity;
+		return sum + item.article.price_ttc * item.quantity;
 	}, 0);
 
+	// 💰 Frais de livraison
+	const shippingCost = totalTTC >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
+
+	// 💵 Total global
+	const total = totalTTC + shippingCost;
+
+	// 🧮 Total HT
+	const totalHT = (totalTTC / (1 + TVA_RATE)).toFixed(2);
+
+	// 👉 Gestion des boutons d’action
 	const handleConfirmDelete = () => {
 		onDeleteOrder(order.order_id);
 		setShowDeleteConfirm(false);
@@ -190,43 +196,90 @@ export default function OrderDetails({
 							);
 						})}
 
-						<div className="grid grid-cols-[2fr_5fr_3fr] xl:grid-cols-[2fr_5fr_2fr_1fr_2fr_2fr] gap-4 pb-2 border-b border-gray-300 text-center mt-8">
-							<p className="text-xs font-semibold text-gray-600 uppercase tracking-wide hidden xl:block"></p>
-							<p className="text-xs font-semibold text-gray-600 uppercase tracking-wide"></p>
-
-							<div className="text-end xl:hidden ">
-								<p className="text-sm font-semibold uppercase tracking-wide ">
+						{/* display Mobile */}
+						<div className="xl:hidden mt-4 grid gap-y-1">
+							<div className="flex justify-end mr-2">
+								<p className="text-sm uppercase w-3/4 text-end">
 									Total article
 								</p>
-								<p className="text-sm font-semibold uppercase tracking-wide mt-1">
-									Total HT
+								<p className="text-sm uppercase w-1/4 text-end">{totalQty}</p>
+							</div>
+							<div className="flex justify-end mr-2">
+								<p className="text-sm uppercase w-3/4 text-end">
+									Sous Total HT
 								</p>
-								<p className="text-sm font-semibold uppercase tracking-wide mt-1">
-									Total TTC
+								<p className="text-sm uppercase w-1/4 text-end">{totalHT} €</p>
+							</div>
+							<div className="flex justify-end mr-2">
+								<p className="text-sm uppercase w-3/4 text-end">
+									SOUS TOTAL TTC
+								</p>
+								<p className="text-sm uppercase w-1/4 text-end">
+									{totalTTC.toFixed(2)} €
 								</p>
 							</div>
-							<p className="text-sm font-semibold uppercase tracking-wide hidden xl:block">
-								Sous Total
-							</p>
-
-							<div className="pr-2 xl:pr-0">
-								<p className="text-sm font-semibold uppercase tracking-wide text-end xl:text-center">
-									{totalQty}
-								</p>
-								<p className="text-sm font-semibold uppercase tracking-wide mt-1 text-end xl:hidden">
-									{totalHT} €
-								</p>
-								<p className="text-sm font-semibold uppercase tracking-wide mt-1 text-end xl:hidden">
-									{totalTTC} €
+							<div className="flex justify-end mr-2">
+								<p className="text-sm uppercase w-3/4 text-end">LIVRAISON</p>
+								<p className="text-sm uppercase w-1/4 text-end">
+									{shippingCost.toFixed(2)} €
 								</p>
 							</div>
+							<div className="flex justify-end mr-2">
+								<p className="text-sm uppercase w-3/4 text-end font-semibold">
+									TOTAL
+								</p>
+								<p className="text-sm uppercase w-1/4 text-end font-semibold">
+									{total.toFixed(2)} €
+								</p>
+							</div>
+						</div>
 
-							<p className="text-sm font-semibold uppercase tracking-wide hidden xl:block">
-								{totalHT} €
-							</p>
-							<p className="text-sm font-semibold uppercase tracking-wide hidden xl:block">
-								{totalTTC} €
-							</p>
+						{/* display Desktop */}
+						<div className="hidden xl:block">
+							<div className="grid xl:grid-cols-[2fr_5fr_2fr_1fr_2fr_2fr] gap-4 pb-2 text-center mt-4">
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="text-sm uppercase">Total article</p>
+								<p>{totalQty}</p>
+							</div>
+
+							<div className="grid xl:grid-cols-[2fr_5fr_2fr_1fr_2fr_2fr] gap-4 pb-2 text-center mt-1">
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="text-sm uppercase">Sous total HT</p>
+								<p>{totalHT} €</p>
+							</div>
+
+							<div className="grid xl:grid-cols-[2fr_5fr_2fr_1fr_2fr_2fr] gap-4 pb-2 text-center mt-1">
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="text-sm uppercase">SOUS TOTAL TTC</p>
+								<p>{totalTTC.toFixed(2)} €</p>
+							</div>
+
+							<div className="grid xl:grid-cols-[2fr_5fr_2fr_1fr_2fr_2fr] gap-4 pb-2 text-center mt-1">
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="text-sm uppercase">Livraison</p>
+								<p>{shippingCost.toFixed(2)} €</p>
+							</div>
+
+							<div className="grid xl:grid-cols-[2fr_5fr_2fr_1fr_2fr_2fr] gap-4 pb-2 text-center mt-1">
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="hidden xl:block"></p>
+								<p className="text-sm uppercase font-bold">TOTAL TTC</p>
+								<p className="font-bold">{total.toFixed(2)} €</p>
+							</div>
 						</div>
 
 						<div className="mt-6 pt-4">
