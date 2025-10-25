@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { CartItem } from "../types/Cart";
 
+// Typage du store
 type CartStore = {
 	cart: CartItem[];
 	addToCart: (item: CartItem) => void;
@@ -16,7 +17,7 @@ export const useCartStore = create<CartStore>()(
 		(set, get) => ({
 			cart: [],
 
-			addToCart: (item) => {
+			addToCart: (item: CartItem) => {
 				set((state) => {
 					const existing = state.cart.find(
 						(p) => p.id === item.id && p.size === item.size,
@@ -36,7 +37,7 @@ export const useCartStore = create<CartStore>()(
 				});
 			},
 
-			removeFromCart: (id, size) => {
+			removeFromCart: (id: string, size?: string) => {
 				set((state) => ({
 					cart: state.cart.filter(
 						(item) => !(item.id === id && item.size === size),
@@ -44,7 +45,7 @@ export const useCartStore = create<CartStore>()(
 				}));
 			},
 
-			updateQuantity: (id, quantity, size) => {
+			updateQuantity: (id: string, quantity: number, size?: string) => {
 				if (quantity <= 0) {
 					get().removeFromCart(id, size);
 					return;
@@ -58,20 +59,16 @@ export const useCartStore = create<CartStore>()(
 
 			getTotalShipping: () => {
 				const cart = get().cart;
-
-				const result = cart.reduce(
-					(acc, item) => {
-						const key = `${item.id}-${item.size ?? "no-size"}`;
-						if (!acc.items.has(key)) {
-							acc.total += item.shipping_cost || 0;
-							acc.items.add(key);
-						}
-						return acc;
-					},
-					{ total: 0, items: new Set<string>() },
-				);
-
-				return result.total;
+				// On utilise un Set pour compter une seule fois les frais par produit+taille
+				const seen = new Set<string>();
+				return cart.reduce((total, item) => {
+					const key = `${item.id}-${item.size ?? "no-size"}`;
+					if (!seen.has(key)) {
+						total += item.shipping_cost ?? 0;
+						seen.add(key);
+					}
+					return total;
+				}, 0);
 			},
 
 			clearCart: () => set({ cart: [] }),
