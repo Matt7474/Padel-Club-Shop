@@ -116,7 +116,7 @@ export default function ArticleForm({
 					</div>
 
 					{/* image du statut */}
-					<div className="w-3/10 mt-4 flex justify-center">
+					<div className="w-2/10 mt-4 flex justify-center">
 						<img
 							src={
 								articleType
@@ -180,7 +180,7 @@ export default function ArticleForm({
 					</div>
 
 					{/* image de la marque */}
-					<div className="w-3/10 mt-4">
+					<div className="w-2/10 mt-4">
 						<img
 							src={
 								articleBrand
@@ -284,7 +284,7 @@ export default function ArticleForm({
 				</div>
 				<div className="flex justify-between gap-4">
 					{/* Prix de l'article */}
-					<div className="-mt-2 relative">
+					<div className="-mt-2 relative w-1/4">
 						<Input
 							htmlFor={"price_ttc"}
 							label={"Prix TTC"}
@@ -298,7 +298,7 @@ export default function ArticleForm({
 
 					{/* Stock de l'article */}
 					{articleType !== "clothing" && articleType !== "shoes" && (
-						<div className="-mt-2">
+						<div className="-mt-2 w-1/5">
 							<Input
 								htmlFor={"quantity"}
 								label={"Quantité"}
@@ -310,44 +310,32 @@ export default function ArticleForm({
 						</div>
 					)}
 
-					{/* Frais d'envoi de l'article */}
 					<div className="-mt-2 relative">
-						<Input
-							htmlFor={"shippingCost"}
-							label={"Frais d'envoi"}
-							type={"number"}
-							value={articleShippingCost}
-							onChange={setArticleShippingCost}
-							width="w-full"
-							suffixe="€"
-						/>
+						<div className="flex gap-4">
+							<Select
+								label="Choisir un statut"
+								value={articleStatus}
+								onChange={handleStatusChange}
+								options={["available", "preorder", "out_of_stock"]}
+								labels={["Disponible", "En commande", "Rupture de stock"]}
+							/>
+							{/* image du statut */}
+							<div className="w-3/7 mt-4">
+								<img
+									src={
+										articleStatus
+											? `/icons/${articleStatus}.svg`
+											: `/brands/no-image.svg`
+									}
+									alt={
+										articleBrand ? `logo ${articleStatus}` : "logo par défaut"
+									}
+									className="w-full h-9.5"
+								/>
+							</div>
+						</div>
 					</div>
-				</div>
-				{/* Statut de l'article */}
-				<div className="flex gap-4">
-					{/* select du statut */}
-					<div className="w-full ">
-						<Select
-							label="Choisir un statut"
-							value={articleStatus}
-							onChange={handleStatusChange}
-							options={["available", "preorder", "out_of_stock"]}
-							labels={["Disponible", "En commande", "Rupture de stock"]}
-						/>
-					</div>
-
-					{/* image du statut */}
-					<div className="w-3/10 mt-4">
-						<img
-							src={
-								articleStatus
-									? `/icons/${articleStatus}.svg`
-									: `/brands/no-image.svg`
-							}
-							alt={articleBrand ? `logo ${articleStatus}` : "logo par défaut"}
-							className="w-25 h-9.5"
-						/>
-					</div>
+					{/* Statut de l'article */}
 				</div>
 			</div>
 			<div className="border-b border-gray-400 xl:border-none mt-4 "></div>
