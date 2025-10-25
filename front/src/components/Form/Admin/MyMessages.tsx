@@ -20,6 +20,7 @@ export default function MyMessages() {
 		try {
 			setLoading(true);
 			const messages = await getMyMessages(user?.email);
+			console.log("useffect messages", messages);
 
 			setMessages(messages.data);
 			console.log("messages.data", messages);

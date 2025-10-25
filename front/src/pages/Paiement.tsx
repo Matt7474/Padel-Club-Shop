@@ -252,6 +252,15 @@ export default function Paiement() {
 	const [isBillingAddress, setIsBillingAddress] = useState(false);
 	const { checkStock } = useStockCheck();
 
+	const totalWithoutShipping = cart.reduce(
+		(acc, item) => acc + item.price * item.quantity,
+		0,
+	);
+
+	const shippingCost = totalWithoutShipping >= 69 ? 0 : 6.9;
+
+	const total = totalWithoutShipping + shippingCost;
+
 	// Vérifie si une adresse de facturation complète existe
 	const hasBillingAddress =
 		user?.addresses?.[1]?.street_number &&
@@ -274,7 +283,6 @@ export default function Paiement() {
 	if (!user.addresses?.length)
 		return <Profile text={"Veuillez saisir votre adresse de livraison"} />;
 
-	const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 	const totalArticles = cart.reduce((acc, item) => acc + item.quantity, 0);
 
 	return (
@@ -443,8 +451,23 @@ export default function Paiement() {
 									<p>Votre panier contient {totalArticles} articles</p>
 								</div>
 
+								<div className="flex justify-between mt-2">
+									<p className="font-semibold text-gray-700">
+										Frais de livraison :
+									</p>
+									<p
+										className={`font-semibold text-gray-700 ${
+											shippingCost === 0 ? "text-green-600" : ""
+										}`}
+									>
+										{shippingCost === 0
+											? "OFFERTE"
+											: `${shippingCost.toFixed(2)} €`}
+									</p>
+								</div>
+
 								{cart.length > 0 && (
-									<div className="pt-4">
+									<div className="pt-2">
 										<div className="flex justify-between items-center">
 											<span className="text-lg font-semibold">Total</span>
 											<span className="text-2xl font-bold text-blue-600">

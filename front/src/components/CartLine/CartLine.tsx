@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import type { CartItem } from "../../store/cartStore";
 import { useCartStore } from "../../store/cartStore";
 import { useToastStore } from "../../store/ToastStore ";
+import type { CartItem } from "../../types/Cart";
 import { useStockCheck } from "../../utils/useStockCheck";
 
 export default function CartLine({

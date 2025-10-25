@@ -1,11 +1,13 @@
 import type { Brand } from "./Article";
 
-export interface CartItem {
+export type CartItem = {
 	id: string;
 	name: string;
-	brand?: Brand;
+	brand: Brand;
 	price: number;
-	image?: string;
+	image: string;
 	quantity: number;
-	size?: string | undefined;
-}
+	type: string;
+	shipping_cost: number;
+	size?: string;
+};

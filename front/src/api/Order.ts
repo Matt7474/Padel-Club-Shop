@@ -1,6 +1,6 @@
 import axios from "axios";
-import type { CartItem } from "../store/cartStore";
 import { useAuthStore } from "../store/useAuthStore";
+import type { CartItem } from "../types/Cart";
 import type { getMyOrdersProps, Order } from "../types/Order";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -56,9 +56,6 @@ export async function getOrders(): Promise<Order[]> {
 			},
 		});
 
-		console.log("Commandes reçues :", res.data.orders);
-
-		// ✅ Vérifie ici que l'API renvoie bien un tableau d'objets complets (avec order_lines)
 		return res.data.orders as Order[];
 	} catch (error: unknown) {
 		if (error instanceof Error) {

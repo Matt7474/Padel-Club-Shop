@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getClientMessages } from "../api/Contact";
+import { getOrders } from "../api/Order";
 import ArticlesList from "../components/Form/Admin/ArticlesList";
 import BrandList from "../components/Form/Admin/BrandList";
 import ClientsMessages, {
@@ -16,15 +17,15 @@ import PromoList from "../components/Form/Admin/PromoList";
 import UserList from "../components/Form/Admin/UsersList";
 import Select from "../components/Form/Tools/Select";
 import { useAuthStore } from "../store/useAuthStore";
-import Profile from "./Profile";
-import { getOrders } from "../api/Order";
 import type { Order } from "../types/Order";
+import Profile from "./Profile";
 
 export default function ProfileMenu() {
 	const [menuSelected, setMenuSelected] = useState("");
 	const { user, isAuthenticated } = useAuthStore();
 	const [unreadCount, setUnreadCount] = useState(0);
 	const [orderPaid, setOrderPaid] = useState(0);
+	// const [unreadPersonnalMessage, setUnreadPersonnalMessage] = useState(0);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -37,6 +38,8 @@ export default function ProfileMenu() {
 					const unread = response.data.filter(
 						(message: Imessages) => message.is_read === false,
 					).length;
+					console.log("fonctionne", response);
+
 					setUnreadCount(unread);
 				} catch (error) {
 					console.error("Erreur lors de la récupération des messages :", error);
@@ -59,8 +62,28 @@ export default function ProfileMenu() {
 				}
 			};
 
+			// const fetchUnReadPersonalMessages = async () => {
+			// 	if (!user) {
+			// 		return;
+			// 	}
+			// 	try {
+			// 		const messages = await getMyMessages(user?.email);
+			// 		const unreadPersonnalMessage = messages.data.filter(
+			// 			(message: Imessages) => message.is_read === false,
+			// 		).length;
+			// 		console.log("fonctionne pas", messages);
+			// 		setUnreadPersonnalMessage(unreadPersonnalMessage.length);
+			// 	} catch (error) {
+			// 		console.error("Erreur lors de la récupération des messages :", error);
+			// 	}
+			// };
+
 			const fetchAll = async () => {
-				await Promise.all([fetchUnreadMessages(), fetchOrderPaid()]);
+				await Promise.all([
+					fetchUnreadMessages(),
+					fetchOrderPaid(),
+					// fetchUnReadPersonalMessages(),
+				]);
 			};
 
 			fetchAll();
@@ -135,6 +158,11 @@ export default function ProfileMenu() {
 								{orderPaid > 99 ? "99+" : orderPaid}
 							</span>
 						)}
+						{/* {option === "Mes messages" && unreadPersonnalMessage > 0 && (
+							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
+								{unreadPersonnalMessage > 99 ? "99+" : unreadPersonnalMessage}
+							</span>
+						)} */}
 					</button>
 				))}
 			</div>

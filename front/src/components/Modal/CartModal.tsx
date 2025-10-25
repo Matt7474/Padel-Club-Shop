@@ -4,6 +4,7 @@ import { useCartStore } from "../../store/cartStore";
 import { useToastStore } from "../../store/ToastStore ";
 import CartLine from "../CartLine/CartLine";
 import ConfirmationModal from "../Modal/ConfirmModal";
+import ProgressBar from "../ProgressBar/ProgressBar";
 
 export default function CartModal({ closeCart }: { closeCart: () => void }) {
 	const navigate = useNavigate();
@@ -12,7 +13,17 @@ export default function CartModal({ closeCart }: { closeCart: () => void }) {
 	const [openConfirmModal, setOpenConfirmModal] = useState(false);
 
 	const totalArticles = cart.reduce((acc, item) => acc + item.quantity, 0);
-	const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+	const totalWithoutShipping = cart.reduce(
+		(acc, item) => acc + item.price * item.quantity,
+		0,
+	);
+
+	const total =
+		totalWithoutShipping > 69
+			? totalWithoutShipping
+			: totalWithoutShipping + 6.9;
+
+	console.log("🧺 Cart content:", cart);
 
 	const showConfirm = () => {
 		if (cart.length > 0) {
@@ -51,7 +62,6 @@ export default function CartModal({ closeCart }: { closeCart: () => void }) {
 					<img src="/icons/cross-red.svg" alt="Fermer" className="w-8 h-8" />
 				</button>
 			</div>
-
 			{/* Liste d'articles */}
 			<div className="flex-1 overflow-y-auto p-4 space-y-4 mt-10 border-t">
 				{cart.length > 0 ? (
@@ -63,12 +73,13 @@ export default function CartModal({ closeCart }: { closeCart: () => void }) {
 				)}
 			</div>
 
+			<div className="ml-4 mb-1">
+				Votre panier contient {totalArticles} article
+				{totalArticles > 1 ? "s" : ""}
+			</div>
 			{/* Footer */}
 			<div className="border-t p-4">
-				<div>
-					Votre panier contient {totalArticles} article
-					{totalArticles > 1 ? "s" : ""}
-				</div>
+				<ProgressBar progress={totalWithoutShipping} />
 				<div className="flex justify-between my-2">
 					<p className="font-semibold text-2xl">TOTAL</p>
 					<p className="font-semibold text-2xl">{total.toFixed(2)} €</p>
@@ -88,7 +99,6 @@ export default function CartModal({ closeCart }: { closeCart: () => void }) {
 					Vider le panier
 				</button>
 			</div>
-
 			{/* Modale de confirmation */}
 			{openConfirmModal && (
 				<ConfirmationModal

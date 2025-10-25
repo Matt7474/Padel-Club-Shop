@@ -1,19 +1,21 @@
 // src/store/cartStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Brand } from "../types/Article";
+// import type { Brand } from "../types/Article";
+import type { CartItem } from "../types/Cart";
 
 // Définition du type pour un article du panier
-export type CartItem = {
-	id: string;
-	name: string;
-	brand: Brand;
-	price: number;
-	image: string;
-	quantity: number;
-	type: string;
-	size?: string | undefined;
-};
+// export type CartItem = {
+// 	shipping_cost: number;
+// 	id: string;
+// 	name: string;
+// 	brand: Brand;
+// 	price: number;
+// 	image: string;
+// 	quantity: number;
+// 	type: string;
+// 	size?: string | undefined;
+// };
 
 // Typage du store
 type CartStore = {
@@ -22,6 +24,7 @@ type CartStore = {
 	removeFromCart: (id: string, size?: string) => void;
 	updateQuantity: (id: string, quantity: number, size?: string) => void;
 	clearCart: () => void;
+	getTotalShipping: () => number;
 };
 
 // Création du store avec persistance (localStorage)
@@ -70,10 +73,28 @@ export const useCartStore = create<CartStore>()(
 				}));
 			},
 
+			getTotalShipping: () => {
+				const cart = get().cart;
+
+				const result = cart.reduce(
+					(acc, item) => {
+						const key = `${item.id}-${item.size ?? "no-size"}`;
+						if (!acc.items.has(key)) {
+							acc.total += item.shipping_cost || 0;
+							acc.items.add(key);
+						}
+						return acc;
+					},
+					{ total: 0, items: new Set<string>() },
+				);
+
+				return result.total;
+			},
+
 			clearCart: () => set({ cart: [] }),
 		}),
 		{
-			name: "cart-storage", // clé dans localStorage
+			name: "cart-storage",
 		},
 	),
 );

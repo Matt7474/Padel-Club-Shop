@@ -22,6 +22,7 @@ export default function PriceArticle({
 	console.log("PriceArticle - stockMessage:", stockMessage);
 	console.log("PriceArticle - qty:", qty);
 	console.log("PriceArticle - isSelected:", isSelected);
+	console.log("PriceArticle - isSelected:", article);
 	const addToast = useToastStore((state) => state.addToast);
 	const addToCart = useCartStore((state) => state.addToCart);
 	const [quantity, setQuantity] = useState(1);
@@ -101,6 +102,8 @@ export default function PriceArticle({
 			selectedSize: selectedSize ?? undefined,
 		});
 
+		console.log(" addToCart", article.shipping_cost);
+
 		if (!isInStock) return;
 		addToCart({
 			id: article.article_id.toString(),
@@ -111,6 +114,7 @@ export default function PriceArticle({
 			type: article.type,
 			quantity: quantity,
 			size: selectedSize ?? undefined,
+			shipping_cost: article.shipping_cost ?? 0, // <- valeur par défaut
 		});
 
 		addToast(
@@ -159,6 +163,9 @@ export default function PriceArticle({
 								<p className="font-bold text-lg">{article.price_ttc} €</p>
 							)}
 						</div>
+						{/* <div className="font-semibold italic text-gray-600">
+							Frais d'envoi : {article.shipping_cost} €
+						</div> */}
 					</div>
 
 					{/* Partie quantité */}

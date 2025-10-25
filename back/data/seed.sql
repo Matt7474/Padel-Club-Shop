@@ -14,8 +14,8 @@ INSERT INTO users (user_id, last_name, first_name, phone, email, password, role_
 
 
 -- ADDRESSES
--- INSERT INTO addresses (address_id, user_id, type, street_number, street_name, complement, zip_code, city, country, is_default) VALUES
--- (1, 1, 'shipping', '50', 'avenue de Delahaye', '', '37802', 'Bruneau', 'France', TRUE),
+INSERT INTO addresses (address_id, user_id, type, street_number, street_name, complement, zip_code, city, country, is_default) VALUES
+(1, 1, 'shipping', '50', 'avenue de Delahaye', '', '37802', 'Bruneau', 'France', TRUE);
 -- (2, 1, 'billing', '15', 'rue des Lilas', 'Appartement 4B', '75012', 'Paris', 'France', FALSE),
 -- (3, 2, 'shipping', '10', 'rue de la Gare', '', '69001', 'Lyon', 'France', TRUE);
 
@@ -92,7 +92,7 @@ INSERT INTO article_ratings (rating_id, article_id, maneuverability, power, comf
 
 -- PROMOTIONS
 INSERT INTO promotions (promo_id, article_id, name, description, discount_type, discount_value, start_date, end_date, status) VALUES
-(1, 1, 'Summer Sale', 'sous reserve de blablabla', 'amount', 15, '2025-06-01', '2025-12-30', 'active');
+(1, 1, 'Summer Sale', 'sous reserve de blablabla', 'amount', 15, '2025-06-01', '2025-10-10', 'active');
 
 -- PROMOTION
 INSERT INTO promotion (promo_id, name, description, start_date, end_date, status) VALUES
