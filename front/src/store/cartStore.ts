@@ -1,23 +1,7 @@
-// src/store/cartStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-// import type { Brand } from "../types/Article";
 import type { CartItem } from "../types/Cart";
 
-// Définition du type pour un article du panier
-// export type CartItem = {
-// 	shipping_cost: number;
-// 	id: string;
-// 	name: string;
-// 	brand: Brand;
-// 	price: number;
-// 	image: string;
-// 	quantity: number;
-// 	type: string;
-// 	size?: string | undefined;
-// };
-
-// Typage du store
 type CartStore = {
 	cart: CartItem[];
 	addToCart: (item: CartItem) => void;
@@ -27,7 +11,6 @@ type CartStore = {
 	getTotalShipping: () => number;
 };
 
-// Création du store avec persistance (localStorage)
 export const useCartStore = create<CartStore>()(
 	persist(
 		(set, get) => ({

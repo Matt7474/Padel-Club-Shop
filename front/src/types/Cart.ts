@@ -8,6 +8,6 @@ export type CartItem = {
 	image: string;
 	quantity: number;
 	type: string;
-	shipping_cost: number;
+	shipping_cost?: number;
 	size?: string;
 };

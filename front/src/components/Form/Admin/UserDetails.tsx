@@ -25,7 +25,7 @@ export default function UserDetails({ user }: UserProps) {
 	const [clickReturn, setClickReturn] = useState<User | null>(null);
 	const [changeUserRole, setChangeUserRole] = useState(false);
 	const [showOrder, setShowOrder] = useState(false);
-	const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+	const [selectedOrder] = useState<Order | null>(null);
 	const [roleSelected, setRoleSelected] = useState("");
 	const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
@@ -178,7 +178,7 @@ export default function UserDetails({ user }: UserProps) {
 		setIsConfirmOpen(false);
 	};
 
-	const handleOrder = (order: Order) => setSelectedOrder(order);
+	// const handleOrder = (order: Order) => setSelectedOrder(order);
 
 	if (clickReturn) return <UsersList />;
 
@@ -390,7 +390,7 @@ export default function UserDetails({ user }: UserProps) {
 														key={order.order_id}
 														type="button"
 														className="p-2 border bg-white border-gray-200 rounded shadow-sm cursor-pointer w-full"
-														onClick={() => handleOrder(order)}
+														// onClick={() => handleOrder(order)}
 													>
 														<div className="text-start">
 															<p>

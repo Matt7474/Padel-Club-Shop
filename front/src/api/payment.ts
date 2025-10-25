@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { CartItem } from "../store/cartStore";
+import type { CartItem } from "../types/Cart";
 
 const API_URL = import.meta.env.VITE_API_URL;
 // Crée la session de paiement Stripe

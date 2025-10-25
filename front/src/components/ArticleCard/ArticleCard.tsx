@@ -99,6 +99,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 			price: displayPrice,
 			image: firstImageUrl,
 			type: article.type,
+			shipping_cost: article.shipping_cost,
 			quantity: 1,
 		});
 

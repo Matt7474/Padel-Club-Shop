@@ -49,8 +49,6 @@ export default function ArticleForm({
 	setArticlePriceTTC,
 	articleQty,
 	setArticleQty,
-	articleShippingCost,
-	setArticleShippingCost,
 	articleStatus,
 	setArticleStatus,
 	noImage,
