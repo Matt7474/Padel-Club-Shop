@@ -209,7 +209,49 @@ export default function OrderList() {
 							<p className="pl-1 text-xs text-center">
 								{order.items.reduce((sum, item) => sum + item.quantity, 0)}
 							</p>
-							<div className="flex justify-center">
+							<div className="flex justify-center  gap-2">
+								{order.status === "processing" && (
+									<div className="hidden xl:block justify-center">
+										<img
+											src={"/icons/invoice-check.svg"}
+											alt={order.status}
+											className="w-7"
+										/>
+									</div>
+								)}
+								{order.status === "ready" && (
+									<div className="hidden xl:flex justify-center gap-2">
+										<img
+											src={"/icons/invoice-check.svg"}
+											alt={order.status}
+											className="w-7"
+										/>
+										<img
+											src={"/icons/package.svg"}
+											alt={order.status}
+											className="w-7"
+										/>
+									</div>
+								)}
+								{order.status === "shipped" && (
+									<div className="hidden xl:flex justify-center gap-2">
+										<img
+											src={"/icons/invoice-check.svg"}
+											alt={order.status}
+											className="w-7"
+										/>
+										<img
+											src={"/icons/package.svg"}
+											alt={order.status}
+											className="w-7"
+										/>
+										<img
+											src={"/icons/package-check.svg"}
+											alt={order.status}
+											className="w-7"
+										/>
+									</div>
+								)}
 								<img
 									src={
 										statusImages[order.status as keyof typeof statusImages] ||
