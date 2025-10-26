@@ -1,27 +1,21 @@
-import React, { useState } from "react";
+/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
+
+import { DollarSign, ShoppingCart, TrendingUp, Users } from "lucide-react";
 import {
-	LineChart,
-	Line,
-	BarChart,
 	Bar,
-	PieChart,
-	Pie,
+	BarChart,
+	CartesianGrid,
 	Cell,
+	Legend,
+	Line,
+	LineChart,
+	Pie,
+	PieChart,
+	ResponsiveContainer,
+	Tooltip,
 	XAxis,
 	YAxis,
-	CartesianGrid,
-	Tooltip,
-	Legend,
-	ResponsiveContainer,
 } from "recharts";
-import {
-	TrendingUp,
-	ShoppingCart,
-	Users,
-	DollarSign,
-	Package,
-	Eye,
-} from "lucide-react";
 
 export default function Dashboard1() {
 	// Données de ventes mensuelles
@@ -89,9 +83,7 @@ export default function Dashboard1() {
 				{/* En-tête */}
 				<div className="mb-8">
 					<h1 className="text-3xl font-bold text-gray-900">Tableau de Bord</h1>
-					<p className="text-gray-600 mt-2">
-						Vue d'ensemble de votre boutique en ligne
-					</p>
+					<p className="text-gray-600 mt-2">Vue d'ensemble de la boutique</p>
 				</div>
 
 				{/* Cartes métriques */}
@@ -161,9 +153,9 @@ export default function Dashboard1() {
 									cx="50%"
 									cy="50%"
 									labelLine={false}
-									label={({ name, percent }) =>
-										`${name} ${(percent * 100).toFixed(0)}%`
-									}
+									// label={({ name, percent }) =>
+									// 	`${name} ${(percent * 100).toFixed(0)}%`
+									// }
 									outerRadius={100}
 									fill="#8884d8"
 									dataKey="value"

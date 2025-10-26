@@ -10,6 +10,7 @@ import ClientsMessages, {
 import CreateArticle from "../components/Form/Admin/CreateArticle";
 import CreateBrand from "../components/Form/Admin/CreateBrand";
 import CreatePromo from "../components/Form/Admin/CreatePromo";
+import Dashboard1 from "../components/Form/Admin/Dashbord1";
 import MyMessages from "../components/Form/Admin/MyMessages";
 import MyOrders from "../components/Form/Admin/MyOrders";
 import OrderList from "../components/Form/Admin/OrderList";
@@ -94,6 +95,7 @@ export default function ProfileMenu() {
 
 	// 🧭 Définition des options disponibles selon le rôle
 	const adminMenus = [
+		"Dashboard",
 		"Ajouter un article",
 		"Liste des articles",
 		"Ajouter une marque",
@@ -142,7 +144,7 @@ export default function ProfileMenu() {
 						onClick={() => setMenuSelected(option)}
 						className={`px-4 py-2 border cursor-pointer relative ${
 							menuSelected === option
-								? "bg-gradient-to-r from-orange-500/80 to-orange-300/80 text-white"
+								? "bg-linear-to-r from-orange-500/80 to-orange-300/80 text-white"
 								: "bg-gray-100 hover:bg-gray-200"
 						}`}
 					>
@@ -190,6 +192,7 @@ export default function ProfileMenu() {
 			{menuSelected === "Mes commandes" && <MyOrders />}
 			{menuSelected === "Voir les messages client" && <ClientsMessages />}
 			{menuSelected === "Mes messages" && <MyMessages />}
+			{menuSelected === "Dashboard" && <Dashboard1 />}{" "}
 		</div>
 	);
 }

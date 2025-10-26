@@ -381,7 +381,7 @@ export default function OrderDetails({
 					</div>
 
 					{/* Bordure gradient qui épouse l'arrondi grâce à overflow-hidden sur le parent */}
-					<div className="h-1 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500"></div>
+					<div className="h-1 bg-linear-to-r from-indigo-500 via-blue-500 to-purple-500"></div>
 				</div>
 			</div>
 		</div>

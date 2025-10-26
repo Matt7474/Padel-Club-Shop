@@ -229,7 +229,7 @@ export default function ArticleForm({
 
 						<label
 							htmlFor="file-upload"
-							className={`border mt-4 h-10 flex max-w-[100%] pt-3 pl-3 z-200 w-full cursor-pointer bg-white ${
+							className={`border mt-4 h-10 flex max-w-full pt-3 pl-3 z-200 w-full cursor-pointer bg-white ${
 								noImage ? "border-red-500" : "border-gray-300"
 							}`}
 						>
