@@ -37,12 +37,6 @@ export default function SalesEvolution() {
 		setSalesData(computeSalesData(orders));
 	}, [orders]);
 
-	console.log("orders", orders);
-	const getMonthKey = (dateStr: string) => {
-		const date = new Date(dateStr);
-		return date.getMonth(); // 0 = Janvier, 1 = Février, ...
-	};
-
 	const generateLastMonths = (numMonths = 6) => {
 		const result: { month: string; sales: number; orders: number }[] = [];
 		const now = new Date();
