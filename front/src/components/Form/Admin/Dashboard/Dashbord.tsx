@@ -14,6 +14,7 @@ import SalesCategories from "./Elements/SalesCategories";
 import { useEffect, useState } from "react";
 import type { Order } from "../../../../types/Order";
 import { getOrders } from "../../../../api/Order";
+import TopSales from "./Elements/TopSales";
 
 export default function Dashboard() {
 	const [orders, setOrders] = useState<Order[]>([]);
@@ -36,15 +37,6 @@ export default function Dashboard() {
 	useEffect(() => {
 		// setSalesData(computeSalesData(orders));
 	}, [orders]);
-
-	// Produits les plus vendus
-	const topProduits = [
-		{ nom: "T-shirt basique", ventes: 156, revenus: 3120 },
-		{ nom: "Jean slim", ventes: 134, revenus: 6700 },
-		{ nom: "Sneakers Classic", ventes: 98, revenus: 7840 },
-		{ nom: "Sac à dos", ventes: 87, revenus: 4350 },
-		{ nom: "Casquette", ventes: 76, revenus: 1520 },
-	];
 
 	// Panier moyen par mois
 	const panierMoyenData = [
@@ -78,10 +70,6 @@ export default function Dashboard() {
 
 				{/* Graphique visiteurs et produits top */}
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-					{/* Trafic du site */}
-
-					{/* Panier moyen et Stocks */}
-
 					{/* Panier moyen */}
 					<div className="bg-white lg:col-span-2 rounded-lg shadow p-6">
 						<div className="flex items-center justify-between mb-4">
@@ -114,29 +102,7 @@ export default function Dashboard() {
 					</div>
 
 					{/* Top produits */}
-					<div className="bg-white rounded-lg shadow p-6">
-						<h2 className="text-xl font-bold text-gray-900 mb-4">
-							Top produits
-						</h2>
-						<div className="space-y-4">
-							{topProduits.map((produit) => (
-								<div
-									key={produit.nom}
-									className="flex items-center justify-between pb-3 border-b last:border-b-0"
-								>
-									<div>
-										<p className="font-semibold text-gray-900">{produit.nom}</p>
-										<p className="text-sm text-gray-600">
-											{produit.ventes} ventes
-										</p>
-									</div>
-									<p className="font-bold text-green-600">
-										{produit.revenus} €
-									</p>
-								</div>
-							))}
-						</div>
-					</div>
+					<TopSales orders={orders} />
 				</div>
 			</div>
 		</div>
