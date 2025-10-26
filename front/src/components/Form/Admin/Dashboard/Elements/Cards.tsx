@@ -1,31 +1,11 @@
 import { DollarSign, Receipt, ShoppingCart, Users2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { getOrders } from "../../../../../api/Order";
 import type { Order } from "../../../../../types/Order";
 
-export default function Cards() {
-	const [orders, setOrders] = useState<Order[]>([]);
+export interface CardsProps {
+	orders: Order[];
+}
 
-	useEffect(() => {
-		const fetchOrders = async (): Promise<void> => {
-			try {
-				const response = await getOrders();
-				setOrders(response as Order[]);
-				console.log("response", response);
-			} catch (error) {
-				console.error("Erreur lors de la récupération des commandes :", error);
-			}
-		};
-
-		const fetchAll = async () => {
-			await Promise.all([fetchOrders()]);
-		};
-
-		fetchAll();
-		const interval = setInterval(fetchAll, 5000);
-		return () => clearInterval(interval);
-	}, []);
-
+export default function Cards({ orders }: CardsProps) {
 	// Calcul du chiffre d'affaire HT
 	const comptableCA = orders.reduce((acc, order) => {
 		const totalTTC = parseFloat(order.total_amount ?? "0");
@@ -106,11 +86,3 @@ export default function Cards() {
 		</div>
 	);
 }
-
-// {
-// 	title: "Taux de conversion",
-// 	values: "2.8%",
-// 	evolution: "+0.4%",
-// 	icon: TrendingUp,
-// 	color: "bg-orange-500",
-// },

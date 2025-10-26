@@ -9,29 +9,17 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-import { getOrders } from "../../../../../api/Order";
 import type { Order } from "../../../../../types/Order";
 
-export default function SalesEvolution() {
-	const [orders, setOrders] = useState<Order[]>([]);
+export interface CardsProps {
+	orders: Order[];
+}
+
+export default function SalesEvolution({ orders }: CardsProps) {
+	// const [orders, setOrders] = useState<Order[]>([]);
 	const [salesData, setSalesData] = useState<
 		{ month: string; sales: number; orders: number }[]
 	>([]);
-
-	useEffect(() => {
-		const fetchOrders = async () => {
-			try {
-				const response = await getOrders();
-				setOrders(response as Order[]);
-			} catch (error) {
-				console.error("Erreur lors de la récupération des commandes :", error);
-			}
-		};
-
-		fetchOrders();
-		const interval = setInterval(fetchOrders, 5000);
-		return () => clearInterval(interval);
-	}, []);
 
 	useEffect(() => {
 		setSalesData(computeSalesData(orders));

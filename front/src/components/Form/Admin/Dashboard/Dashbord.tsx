@@ -11,8 +11,32 @@ import {
 import Cards from "./Elements/Cards";
 import SalesEvolution from "./Elements/SalesEvolution";
 import SalesCategories from "./Elements/SalesCategories";
+import { useEffect, useState } from "react";
+import type { Order } from "../../../../types/Order";
+import { getOrders } from "../../../../api/Order";
 
 export default function Dashboard() {
+	const [orders, setOrders] = useState<Order[]>([]);
+
+	useEffect(() => {
+		const fetchOrders = async () => {
+			try {
+				const response = await getOrders();
+				setOrders(response as Order[]);
+			} catch (error) {
+				console.error("Erreur lors de la récupération des commandes :", error);
+			}
+		};
+
+		fetchOrders();
+		const interval = setInterval(fetchOrders, 30000);
+		return () => clearInterval(interval);
+	}, []);
+
+	useEffect(() => {
+		// setSalesData(computeSalesData(orders));
+	}, [orders]);
+
 	// Produits les plus vendus
 	const topProduits = [
 		{ nom: "T-shirt basique", ventes: 156, revenus: 3120 },
@@ -42,14 +66,14 @@ export default function Dashboard() {
 				</div>
 
 				{/* Header : Cartes métriques */}
-				<Cards />
+				<Cards orders={orders} />
 
 				{/* Graphiques principaux */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
 					{/* Évolution des ventes */}
-					<SalesEvolution />
+					<SalesEvolution orders={orders} />
 					{/* Ventes par caategories */}
-					<SalesCategories />
+					<SalesCategories orders={orders} />
 				</div>
 
 				{/* Graphique visiteurs et produits top */}
