@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "../api/api";
 import type { Brand } from "../types/Article";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -8,12 +9,12 @@ export const createBrand = async (
 ) => {
 	try {
 		if (data instanceof FormData) {
-			const response = await axios.post(`${API_URL}/brands`, data, {
+			const response = await api.post(`${API_URL}/brands`, data, {
 				headers: { "Content-Type": "multipart/form-data" },
 			});
 			return response.data;
 		} else {
-			const response = await axios.post(`${API_URL}/brands`, data, {
+			const response = await api.post(`${API_URL}/brands`, data, {
 				headers: { "Content-Type": "application/json" },
 			});
 			return response.data;
@@ -26,7 +27,7 @@ export const createBrand = async (
 
 export async function getBrands(): Promise<Brand[]> {
 	try {
-		const res = await axios.get(`${API_URL}/brands/`);
+		const res = await api.get(`${API_URL}/brands/`);
 
 		return res.data;
 	} catch (err: unknown) {
@@ -41,7 +42,7 @@ export async function getBrands(): Promise<Brand[]> {
 
 export async function updateBrand(id: number, brand: Partial<Brand>) {
 	try {
-		const res = await axios.patch(`${API_URL}/brands/${id}`, brand);
+		const res = await api.patch(`${API_URL}/brands/${id}`, brand);
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
@@ -55,7 +56,7 @@ export async function updateBrand(id: number, brand: Partial<Brand>) {
 
 export async function deleteBrands(brandId: number): Promise<void> {
 	try {
-		await axios.delete(`${API_URL}/brands/${brandId}`);
+		await api.delete(`${API_URL}/brands/${brandId}`);
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
 			throw new Error(

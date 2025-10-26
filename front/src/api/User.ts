@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "../api/api";
 import { useAuthStore } from "../store/useAuthStore";
 import type { AuthResponse } from "../types/AuthResponse";
 import type { CreateUser, User, UserApiResponse } from "../types/User";
@@ -10,7 +11,7 @@ export async function createUser(newUser: CreateUser): Promise<User> {
 	try {
 		console.log("🚀 Body envoyé au serveur :", newUser);
 
-		const res = await axios.post(`${API_URL}/user/register`, newUser, {
+		const res = await api.post(`${API_URL}/user/register`, newUser, {
 			headers: { "Content-Type": "application/json" },
 		});
 
@@ -41,7 +42,7 @@ export async function loginUser(user: {
 	password: string;
 }): Promise<AuthResponse> {
 	try {
-		const res = await axios.post<AuthResponse>(`${API_URL}/user/login`, user, {
+		const res = await api.post<AuthResponse>(`${API_URL}/user/login`, user, {
 			headers: { "Content-Type": "application/json" },
 		});
 
@@ -74,7 +75,7 @@ export async function getUserById(
 	console.log("getUserById", id);
 
 	try {
-		const res = await axios.get<UserApiResponse>(`${API_URL}/user/${id}`, {
+		const res = await api.get<UserApiResponse>(`${API_URL}/user/${id}`, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${authToken}`,
@@ -103,7 +104,7 @@ export async function getAllUsers(): Promise<UserApiResponse[]> {
 	const token = useAuthStore.getState().token;
 
 	try {
-		const res = await axios.get<UserApiResponse[]>(`${API_URL}/user/`, {
+		const res = await api.get<UserApiResponse[]>(`${API_URL}/user/`, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${token}`,
@@ -135,7 +136,7 @@ export async function updateUser(
 	const token = useAuthStore.getState().token;
 
 	try {
-		const res = await axios.patch<User>(`${API_URL}/user/${id}`, updatedData, {
+		const res = await api.patch<User>(`${API_URL}/user/${id}`, updatedData, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${token}`,
@@ -156,7 +157,7 @@ export async function updateUser(
 export async function updateUserRole(userId: number, roleId: number) {
 	const token = useAuthStore.getState().token;
 	try {
-		const res = await axios.patch(
+		const res = await api.patch(
 			`${API_URL}/user/role/${userId}`,
 			{ roleId },
 			{
@@ -182,7 +183,7 @@ export async function deleteUser(id: number): Promise<void> {
 	const token = useAuthStore.getState().token;
 
 	try {
-		await axios.delete(`${API_URL}/user/${id}`, {
+		await api.delete(`${API_URL}/user/${id}`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},

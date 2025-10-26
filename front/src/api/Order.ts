@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../api/api";
 import { useAuthStore } from "../store/useAuthStore";
 import type { CartItem } from "../types/Cart";
 import type { getMyOrdersProps, Order } from "../types/Order";
@@ -14,7 +14,7 @@ export async function createOrderAndUpdateStock(cart: CartItem[]) {
 			throw new Error("Token manquant pour récupérer l'utilisateur");
 		if (!userId) throw new Error("Utilisateur non identifié");
 
-		const res = await axios.post(
+		const res = await api.post(
 			`${API_URL}/order/create`,
 			{ cart, userId },
 			{
@@ -49,7 +49,7 @@ export async function getOrders(): Promise<Order[]> {
 		if (!authToken)
 			throw new Error("Token manquant pour récupérer les commandes");
 
-		const res = await axios.get(`${API_URL}/order/orders`, {
+		const res = await api.get(`${API_URL}/order/orders`, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${authToken}`,
@@ -76,7 +76,7 @@ export async function getMyOrders(): Promise<getMyOrdersProps[]> {
 			throw new Error("Token manquant pour récupérer l'utilisateur");
 		if (!userId) throw new Error("Utilisateur non identifié");
 
-		const res = await axios.get(`${API_URL}/order/my-orders`, {
+		const res = await api.get(`${API_URL}/order/my-orders`, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${authToken}`,
@@ -103,7 +103,7 @@ export async function deleteOrder(id: number) {
 			throw new Error("Token manquant pour récupérer l'utilisateur");
 		if (!id) throw new Error("Commande non identifié");
 
-		const res = await axios.delete(`${API_URL}/order/delete/${id}`, {
+		const res = await api.delete(`${API_URL}/order/delete/${id}`, {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${authToken}`,
@@ -129,7 +129,7 @@ export async function updateOrderStatus(id: number, status: string) {
 	if (!id) throw new Error("Commande non identifiée");
 
 	try {
-		const res = await axios.patch(
+		const res = await api.patch(
 			`${API_URL}/order/${id}/status`,
 			{ status },
 			{

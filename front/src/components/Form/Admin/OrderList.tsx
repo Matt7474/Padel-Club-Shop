@@ -209,7 +209,7 @@ export default function OrderList() {
 							<p className="pl-1 text-xs text-center">
 								{order.items.reduce((sum, item) => sum + item.quantity, 0)}
 							</p>
-							<div className="flex justify-center  gap-2">
+							<div className="flex justify-center xl:justify-start xl:ml-15  gap-2">
 								{order.status === "processing" && (
 									<div className="hidden xl:block justify-center">
 										<img

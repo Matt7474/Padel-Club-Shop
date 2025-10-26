@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "../api/api";
 import { useAuthStore } from "../store/useAuthStore";
 
 interface ContactFormData {
@@ -28,7 +29,7 @@ export async function sendContactForm(data: ContactFormData) {
 			order_number: data.orderNumber,
 		};
 
-		const response = await axios.post(
+		const response = await api.post(
 			`${API_URL}/contact/contact`,
 			transformedData,
 			{
@@ -79,7 +80,7 @@ export async function markMessageAsRead(id: number) {
 		if (!authToken)
 			throw new Error("Token manquant pour récupérer l'utilisateur");
 
-		const res = await axios.patch(
+		const res = await api.patch(
 			`${API_URL}/contact/messages/markMessageAsRead/${id}`,
 			{},
 			{
@@ -114,7 +115,7 @@ export async function responseMessage(id: number, response: string) {
 		if (!authToken)
 			throw new Error("Token manquant pour récupérer l'utilisateur");
 
-		const res = await axios.patch(
+		const res = await api.patch(
 			`${API_URL}/contact/messages/response/${id}`,
 			{ response },
 			{
@@ -145,7 +146,7 @@ export async function responseMessage(id: number, response: string) {
 export async function getMyMessages(email: string) {
 	try {
 		const authToken = useAuthStore.getState().token;
-		const response = await axios.get(
+		const response = await api.get(
 			`${API_URL}/contact/messages/${encodeURIComponent(email)}`,
 
 			{
@@ -170,7 +171,7 @@ export async function getMyMessages(email: string) {
 export async function deleteMessage(id: number) {
 	try {
 		const authToken = useAuthStore.getState().token;
-		const response = await axios.patch(
+		const response = await api.patch(
 			`${API_URL}/contact/messages/delete/${id}`,
 			{},
 			{
@@ -195,7 +196,7 @@ export async function deleteMessage(id: number) {
 export async function restoreMessage(id: number) {
 	try {
 		const authToken = useAuthStore.getState().token;
-		const response = await axios.patch(
+		const response = await api.patch(
 			`${API_URL}/contact/messages/restore/${id}`,
 			{},
 			{

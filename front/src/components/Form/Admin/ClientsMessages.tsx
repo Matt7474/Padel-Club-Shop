@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { getClientMessages, markMessageAsRead } from "../../../api/Contact";
 import type { UserApiResponse } from "../../../types/User";
 import ClientMessage from "./ClientMessage";
+import { useAuthStore } from "../../../store/useAuthStore";
 
 export interface Imessages {
 	id: number;
@@ -29,6 +30,7 @@ export interface Imessages {
 }
 
 export default function ClientsMessages() {
+	const { isAuthenticated } = useAuthStore();
 	const [loading, setLoading] = useState(false);
 	const [messages, setMessages] = useState<Imessages[]>([]);
 	const [selectedMessage, setSelectedMessage] = useState<Imessages | null>(
@@ -40,6 +42,7 @@ export default function ClientsMessages() {
 
 	useEffect(() => {
 		const fetchMessages = async () => {
+			if (!isAuthenticated) return;
 			try {
 				setLoading(true);
 				const messages = await getClientMessages();
@@ -51,10 +54,11 @@ export default function ClientsMessages() {
 				setLoading(false);
 			}
 		};
+
 		fetchMessages();
 		const interval = setInterval(fetchMessages, 30000);
 		return () => clearInterval(interval);
-	}, []);
+	}, [isAuthenticated]);
 
 	const subjectMap: Record<string, string> = {
 		general: "Question générale",

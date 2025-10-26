@@ -35,8 +35,8 @@ export const authenticateToken = (
 			// console.error("❌ Token invalide :", err.message);
 			// console.error("🔸 Route concernée :", req.method, req.originalUrl);
 			// console.error("🔸 Token reçu :", token);
-			return res.status(403).json({ message: "Token invalide" });
+			return res.status(401).json({ message: "Token invalide ou expiré" });
 		}
-		return res.status(403).json({ message: "Token invalide" });
+		return res.status(401).json({ message: "Token invalide ou expiré" });
 	}
 };

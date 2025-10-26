@@ -1,11 +1,12 @@
 import axios from "axios";
+import api from "../api/api";
 import type { Promo } from "../types/Promotions";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export async function getPromotion(): Promise<Promo[]> {
 	try {
-		const res = await axios.get(`${API_URL}/promotions/promotion`);
+		const res = await api.get(`${API_URL}/promotions/promotion`);
 
 		return res.data;
 	} catch (err: unknown) {
@@ -25,7 +26,7 @@ export async function createPromo(promo: {
 	end_date: string;
 }): Promise<Promo> {
 	try {
-		const res = await axios.post(`${API_URL}/promotions/promotion`, promo);
+		const res = await api.post(`${API_URL}/promotions/promotion`, promo);
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
@@ -49,7 +50,7 @@ export async function updatePromo(
 	console.log(promoId);
 
 	try {
-		const res = await axios.patch(
+		const res = await api.patch(
 			`${API_URL}/promotions/promotion/${promoId}`,
 			promo,
 		);
@@ -66,7 +67,7 @@ export async function updatePromo(
 
 export async function deletePromoById(id: number) {
 	try {
-		const res = await axios.delete(`${API_URL}/promotions/promotion/${id}`);
+		const res = await api.delete(`${API_URL}/promotions/promotion/${id}`);
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {

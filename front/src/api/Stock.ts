@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../api/api";
 import { useAuthStore } from "../store/useAuthStore";
 import type { CartItem } from "../types/Cart";
 
@@ -12,7 +12,7 @@ export async function verifyStockBeforePayment(cart: CartItem[]) {
 			throw new Error("Token manquant pour récupérer l'utilisateur");
 		}
 
-		const res = await axios.post(
+		const res = await api.post(
 			`${API_URL}/stock/check-before-payment`,
 			{ cart },
 			{
@@ -45,7 +45,7 @@ export async function updateStockAfterPayment(cart: CartItem[]) {
 			throw new Error("Token manquant pour récupérer l'utilisateur");
 		}
 
-		const res = await axios.post(
+		const res = await api.post(
 			`${API_URL}/stock/update-after-payment`,
 			{ cart },
 			{

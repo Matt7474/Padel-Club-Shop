@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "../api/api";
 import type Article from "../types/Article";
 import type {
 	NewArticle,
@@ -13,7 +14,7 @@ export async function addArticle(article: NewArticle): Promise<Article> {
 	try {
 		console.log("🚀 Body envoyé au serveur :", article);
 
-		const res = await axios.post(`${API_URL}/articles`, article, {
+		const res = await api.post(`${API_URL}/articles`, article, {
 			headers: { "Content-Type": "application/json" },
 		});
 
@@ -32,7 +33,7 @@ export async function getArticles(): Promise<Article[]> {
 	const API_URL = import.meta.env.VITE_API_URL;
 	try {
 		// const token = getAuthToken();
-		const res = await axios.get(`${API_URL}/articles/`);
+		const res = await api.get(`${API_URL}/articles/`);
 
 		return res.data;
 	} catch (err: unknown) {
@@ -47,7 +48,7 @@ export async function getArticles(): Promise<Article[]> {
 
 export async function getArticleById(id: number): Promise<Article> {
 	try {
-		const res = await axios.get(`${API_URL}/articles/id/${id}`);
+		const res = await api.get(`${API_URL}/articles/id/${id}`);
 		console.log("id", id);
 
 		return res.data;
@@ -63,7 +64,7 @@ export async function getArticleById(id: number): Promise<Article> {
 
 export async function getArticleByName(name: string): Promise<Article> {
 	try {
-		const res = await axios.get(`${API_URL}/articles/name/${name}`);
+		const res = await api.get(`${API_URL}/articles/name/${name}`);
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
@@ -79,7 +80,7 @@ export async function getArticlesType(type?: string): Promise<Article[]> {
 	try {
 		const url = `${API_URL}/articles/type/${type}`;
 
-		const res = await axios.get(url);
+		const res = await api.get(url);
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
@@ -95,7 +96,7 @@ export async function deleteArticleById(id: number): Promise<Article> {
 	try {
 		console.log("deleteArticleById", id);
 
-		const res = await axios.patch(`${API_URL}/articles/archive/${id}`);
+		const res = await api.patch(`${API_URL}/articles/archive/${id}`);
 
 		return res.data;
 	} catch (err: unknown) {
@@ -110,7 +111,7 @@ export async function deleteArticleById(id: number): Promise<Article> {
 
 export async function restoreArticleById(id: number): Promise<Article> {
 	try {
-		const res = await axios.patch(`${API_URL}/articles/restore/${id}`);
+		const res = await api.patch(`${API_URL}/articles/restore/${id}`);
 
 		return res.data;
 	} catch (err: unknown) {
@@ -127,7 +128,7 @@ export async function getArticlesDeleted(): Promise<Article[]> {
 	const API_URL = import.meta.env.VITE_API_URL;
 	try {
 		// const token = getAuthToken();
-		const res = await axios.get(`${API_URL}/articles/deleted`);
+		const res = await api.get(`${API_URL}/articles/deleted`);
 
 		return res.data;
 	} catch (err: unknown) {
@@ -146,15 +147,11 @@ export async function updateArticle(
 ) {
 	try {
 		console.log("📤 Données envoyées :", updatedData);
-		const response = await axios.patch(
-			`${API_URL}/articles/${id}`,
-			updatedData,
-			{
-				headers: {
-					"Content-Type": "application/json",
-				},
+		const response = await api.patch(`${API_URL}/articles/${id}`, updatedData, {
+			headers: {
+				"Content-Type": "application/json",
 			},
-		);
+		});
 
 		return response.data;
 	} catch (err: unknown) {
@@ -181,7 +178,7 @@ export async function uploadArticleImages(
 			formData.append("images", img.file);
 		});
 
-		const res = await axios.post(
+		const res = await api.post(
 			`${API_URL}/articles/${articleId}/images`,
 			formData,
 			{
@@ -206,7 +203,7 @@ export async function uploadArticleImages(
 // Créer les notes pour une raquette
 export async function addTechRatings(articleId: number, ratings: TechRatings) {
 	try {
-		const res = await axios.post(
+		const res = await api.post(
 			`${API_URL}/articles/${articleId}/ratings`,
 			ratings,
 			{
@@ -233,7 +230,7 @@ export async function updateTechRatings(
 	ratings: TechRatings,
 ) {
 	try {
-		const res = await axios.patch(
+		const res = await api.patch(
 			`${API_URL}/articles/${articleId}/ratings`,
 			ratings,
 			{
@@ -261,7 +258,7 @@ export async function attachPromoToArticle(
 	promo: NewPromotion,
 ): Promise<Promotion> {
 	try {
-		const res = await axios.post(
+		const res = await api.post(
 			`${API_URL}/promotions/article/${articleId}`,
 			promo,
 			{
@@ -289,7 +286,7 @@ export async function updatePromo(
 	articleId: number,
 ): Promise<Promotion> {
 	try {
-		const res = await axios.patch(
+		const res = await api.patch(
 			`${API_URL}/promotions/article/${articleId}/${promoId}`,
 			promo,
 			{
@@ -316,12 +313,9 @@ export async function detachPromoFromArticle(
 	promoId: number,
 ): Promise<void> {
 	try {
-		await axios.delete(
-			`${API_URL}/promotions/article/${articleId}/${promoId}`,
-			{
-				headers: { "Content-Type": "application/json" },
-			},
-		);
+		await api.delete(`${API_URL}/promotions/article/${articleId}/${promoId}`, {
+			headers: { "Content-Type": "application/json" },
+		});
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
 			console.error(
