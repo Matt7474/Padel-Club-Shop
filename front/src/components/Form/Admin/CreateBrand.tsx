@@ -193,7 +193,7 @@ export default function CreateBrand() {
 							/>
 							<label
 								htmlFor="file-upload"
-								className="border mt-4 h-10 flex max-w-[100%] pt-3 pl-3 w-full cursor-pointer"
+								className="border mt-4 h-10 flex max-w-full pt-3 pl-3 w-full cursor-pointer"
 							>
 								<p className="absolute text-gray-500 text-xs top-4 left-1">
 									Sélectionnez une image

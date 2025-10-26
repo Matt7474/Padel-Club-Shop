@@ -49,7 +49,7 @@ export default function MyMessages() {
 		return (
 			<div className="flex justify-center items-center mt-4 xl:mt-0 xl:transform xl:translate-y-1/3">
 				<div className="text-center bg-white rounded-3xl shadow-xl p-12 max-w-md">
-					<div className="w-20 h-20 bg-gradient-to-br from-amber-100 to-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
+					<div className="w-20 h-20 bg-linear-to-br from-amber-100 to-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
 						<MailWarning className="w-10 h-10 text-amber-600" />
 					</div>
 					<h2 className="text-2xl font-bold text-slate-800 mb-3">
@@ -60,7 +60,7 @@ export default function MyMessages() {
 					</p>
 					<Link
 						to={"/"}
-						className="bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-amber-600 hover:to-yellow-600 transition-all shadow-lg hover:shadow-xl cursor-pointer"
+						className="bg-linear-to-r from-amber-500 to-yellow-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-amber-600 hover:to-yellow-600 transition-all shadow-lg hover:shadow-xl cursor-pointer"
 					>
 						Retour à la page d'accueil
 					</Link>

@@ -92,7 +92,7 @@ export default function MyOrders() {
 		return (
 			<div className="flex justify-center items-center mt-4 xl:mt-0 xl:transform xl:translate-y-1/3">
 				<div className="text-center bg-white rounded-3xl shadow-xl p-12 max-w-md">
-					<div className="w-20 h-20 bg-gradient-to-br from-indigo-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+					<div className="w-20 h-20 bg-linear-to-br from-indigo-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
 						<ShoppingBag className="w-10 h-10 text-indigo-600" />
 					</div>
 					<h2 className="text-2xl font-bold text-slate-800 mb-3">
@@ -104,7 +104,7 @@ export default function MyOrders() {
 					<button
 						type="button"
 						onClick={handleNavigate}
-						className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl cursor-pointer"
+						className="bg-linear-to-r from-indigo-600 to-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-indigo-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl cursor-pointer"
 					>
 						Découvrir nos produits
 					</button>
@@ -157,7 +157,7 @@ export default function MyOrders() {
 															</p>
 														</div>
 														<div className="flex items-center gap-3 text-slate-600">
-															<div className="w-10 h-10 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+															<div className="w-10 h-10 bg-linear-to-br from-emerald-100 to-teal-100 rounded-lg flex items-center justify-center shrink-0">
 																<CreditCard className="w-5 h-5 text-emerald-600" />
 															</div>
 															<div>
@@ -248,7 +248,7 @@ export default function MyOrders() {
 
 														<div className="flex justify-between mt-1">
 															<div className="flex items-center gap-3 text-slate-600 mt-3">
-																<div className="w-10 h-10 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+																<div className="w-10 h-10 bg-linear-to-br from-emerald-100 to-teal-100 rounded-lg flex items-center justify-center shrink-0">
 																	<CreditCard className="w-5 h-5 text-emerald-600" />
 																</div>
 																<div>
@@ -356,7 +356,7 @@ export default function MyOrders() {
 									</div>
 								</div>
 
-								<div className="h-1 bg-gradient-to-r from-indigo-500 via-blue-500 to-purple-500"></div>
+								<div className="h-1 bg-linear-to-r from-indigo-500 via-blue-500 to-purple-500"></div>
 							</div>
 						);
 					})}
