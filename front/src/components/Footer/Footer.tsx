@@ -54,6 +54,11 @@ export default function Footer() {
 								Conditions générales de ventes
 							</p>
 						</Link>
+						<Link to="/livraison">
+							<p className="text-md hover:underline cursor-pointer">
+								Livraison
+							</p>
+						</Link>
 					</div>
 				</div>
 

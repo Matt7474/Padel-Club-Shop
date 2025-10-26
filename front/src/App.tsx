@@ -21,12 +21,13 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ProfileMenu from "./pages/ProfileMenu";
 import Register from "./pages/Register";
 import TermsOfSale from "./pages/TermsOfSale";
+import Shipping from "./pages/Shipping";
 
 function App() {
 	return (
 		<BrowserRouter>
 			<div className="flex flex-col xl:items-center justify-center min-h-screen bg-gray-50">
-				<div className="w-full 2xl:w-3/5 3xl:!w-1/2 flex-1">
+				<div className="w-full 2xl:w-3/5 3xl:w-1/2 flex-1">
 					<ScrollToTop />
 					<Header />
 					<Navbar />
@@ -57,6 +58,7 @@ function App() {
 								path="/conditions-generales-de-vente"
 								element={<TermsOfSale />}
 							/>
+							<Route path="/livraison" element={<Shipping />} />
 							<Route path="/a-propos-de-nous" element={<AboutUs />} />
 							<Route path="/contact" element={<Contact />} />
 						</Routes>

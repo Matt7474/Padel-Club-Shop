@@ -20,12 +20,14 @@ import Select from "../components/Form/Tools/Select";
 import { useAuthStore } from "../store/useAuthStore";
 import type { Order } from "../types/Order";
 import Profile from "./Profile";
+import { getArticles } from "../api/Article";
 
 export default function ProfileMenu() {
 	const [menuSelected, setMenuSelected] = useState("");
 	const { user, isAuthenticated } = useAuthStore();
 	const [unreadCount, setUnreadCount] = useState(0);
 	const [orderPaid, setOrderPaid] = useState(0);
+	const [lowStockCount, setLowStockCount] = useState(0);
 	// const [unreadPersonnalMessage, setUnreadPersonnalMessage] = useState(0);
 	const navigate = useNavigate();
 
@@ -63,26 +65,37 @@ export default function ProfileMenu() {
 				}
 			};
 
-			// const fetchUnReadPersonalMessages = async () => {
-			// 	if (!user) {
-			// 		return;
-			// 	}
-			// 	try {
-			// 		const messages = await getMyMessages(user?.email);
-			// 		const unreadPersonnalMessage = messages.data.filter(
-			// 			(message: Imessages) => message.is_read === false,
-			// 		).length;
-			// 		console.log("fonctionne pas", messages);
-			// 		setUnreadPersonnalMessage(unreadPersonnalMessage.length);
-			// 	} catch (error) {
-			// 		console.error("Erreur lors de la récupération des messages :", error);
-			// 	}
-			// };
+			const fetchLowStockArticles = async () => {
+				try {
+					const articles = await getArticles();
+					let lowStock = 0;
+
+					for (const article of articles) {
+						let totalStock = 0;
+
+						if (typeof article.stock_quantity === "number") {
+							totalStock = article.stock_quantity;
+						} else if (typeof article.stock_quantity === "object") {
+							totalStock = Object.values(article.stock_quantity || {}).reduce(
+								(acc: number, val) => acc + (val ?? 0),
+								0,
+							);
+						}
+
+						if (totalStock < 5) lowStock++;
+					}
+
+					setLowStockCount(lowStock);
+				} catch (error) {
+					console.error("Erreur lors de la récupération des stocks :", error);
+				}
+			};
 
 			const fetchAll = async () => {
 				await Promise.all([
 					fetchUnreadMessages(),
 					fetchOrderPaid(),
+					fetchLowStockArticles(),
 					// fetchUnReadPersonalMessages(),
 				]);
 			};
@@ -93,7 +106,7 @@ export default function ProfileMenu() {
 		}
 	}, [isAuthenticated, navigate]);
 
-	// 🧭 Définition des options disponibles selon le rôle
+	// Définition des options disponibles selon le rôle
 	const adminMenus = [
 		"Dashboard",
 		"Ajouter un article",
@@ -149,6 +162,7 @@ export default function ProfileMenu() {
 						}`}
 					>
 						{option}
+
 						{/* Pastille de notification */}
 						{option === "Voir les messages client" && unreadCount > 0 && (
 							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
@@ -158,6 +172,11 @@ export default function ProfileMenu() {
 						{option === "Voir les commandes client" && orderPaid > 0 && (
 							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
 								{orderPaid > 99 ? "99+" : orderPaid}
+							</span>
+						)}
+						{option === "Liste des articles" && lowStockCount > 0 && (
+							<span className="absolute top-2 right-2 bg-yellow-400 text-black text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
+								!
 							</span>
 						)}
 						{/* {option === "Mes messages" && unreadPersonnalMessage > 0 && (
