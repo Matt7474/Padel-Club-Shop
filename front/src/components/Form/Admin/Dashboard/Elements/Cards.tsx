@@ -1,11 +1,11 @@
 import { DollarSign, Receipt, ShoppingCart, Users2 } from "lucide-react";
 import type { Order } from "../../../../../types/Order";
 
-export interface CardsProps {
+export interface OrdersProps {
 	orders: Order[];
 }
 
-export default function Cards({ orders }: CardsProps) {
+export default function Cards({ orders }: OrdersProps) {
 	// Calcul du chiffre d'affaire HT
 	const comptableCA = orders.reduce((acc, order) => {
 		const totalTTC = parseFloat(order.total_amount ?? "0");
@@ -62,7 +62,7 @@ export default function Cards({ orders }: CardsProps) {
 	];
 
 	return (
-		<div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mb-8">
+		<div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mb-6">
 			{metriques.map((metrique) => {
 				const Icon = metrique.icon;
 				return (

@@ -8,9 +8,9 @@ import {
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getClientMessages, markMessageAsRead } from "../../../api/Contact";
+import { useAuthStore } from "../../../store/useAuthStore";
 import type { UserApiResponse } from "../../../types/User";
 import ClientMessage from "./ClientMessage";
-import { useAuthStore } from "../../../store/useAuthStore";
 
 export interface Imessages {
 	id: number;

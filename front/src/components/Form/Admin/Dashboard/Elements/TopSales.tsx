@@ -1,10 +1,10 @@
 import type { Order } from "../../../../../types/Order";
 
-export interface CardsProps {
+export interface OrdersProps {
 	orders: Order[];
 }
 
-export default function TopSales({ orders }: CardsProps) {
+export default function TopSales({ orders }: OrdersProps) {
 	const API_URL = import.meta.env.VITE_API_URL;
 	// Calculer les ventes par article
 	const articleMap: Record<
@@ -59,7 +59,9 @@ export default function TopSales({ orders }: CardsProps) {
 								<p className="text-sm text-gray-600">{article.sales} ventes</p>
 							</div>
 						</div>
-						<p className="font-bold text-green-600">{article.gains} €</p>
+						<p className="font-bold text-green-600">
+							{article.gains.toFixed(2)} €
+						</p>
 					</div>
 				))}
 			</div>

@@ -8,11 +8,11 @@ import {
 } from "recharts";
 import type { Order } from "../../../../../types/Order";
 
-export interface SalesCategoriesProps {
+export interface OrdersProps {
 	orders: Order[];
 }
 
-export default function SalesCategories({ orders }: SalesCategoriesProps) {
+export default function SalesCategories({ orders }: OrdersProps) {
 	// Définition des catégories avec couleur
 	const categories = [
 		{ type: "clothing", color: "#3b82f6" },

@@ -11,11 +11,11 @@ import {
 } from "recharts";
 import type { Order } from "../../../../../types/Order";
 
-export interface CardsProps {
+export interface OrdersProps {
 	orders: Order[];
 }
 
-export default function SalesEvolution({ orders }: CardsProps) {
+export default function SalesEvolution({ orders }: OrdersProps) {
 	// const [orders, setOrders] = useState<Order[]>([]);
 	const [salesData, setSalesData] = useState<
 		{ month: string; sales: number; orders: number }[]
