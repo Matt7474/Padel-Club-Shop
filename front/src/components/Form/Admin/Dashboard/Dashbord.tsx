@@ -1,5 +1,3 @@
-/** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
-
 import {
 	Bar,
 	BarChart,
@@ -108,8 +106,8 @@ export default function Dashboard() {
 									fill="#8884d8"
 									dataKey="value"
 								>
-									{categoriesData.map((entry, index) => (
-										<Cell key={`cell-${index}`} fill={entry.color} />
+									{categoriesData.map((entry) => (
+										<Cell key={`cell-${entry.name}`} fill={entry.color} />
 									))}
 								</Pie>
 								<Tooltip />
@@ -143,9 +141,9 @@ export default function Dashboard() {
 							Top produits
 						</h2>
 						<div className="space-y-4">
-							{topProduits.map((produit, index) => (
+							{topProduits.map((produit) => (
 								<div
-									key={index}
+									key={produit.nom}
 									className="flex items-center justify-between pb-3 border-b last:border-b-0"
 								>
 									<div>
