@@ -13,7 +13,7 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-import Cards from "./Cards";
+import Cards from "./Elements/Cards";
 
 export default function Dashboard() {
 	// Données de ventes mensuelles

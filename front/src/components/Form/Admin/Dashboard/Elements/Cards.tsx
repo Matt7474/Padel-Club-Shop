@@ -1,7 +1,7 @@
 import { DollarSign, Receipt, ShoppingCart, Users2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getOrders } from "../../../../api/Order";
-import type { Order } from "../../../../types/Order";
+import { getOrders } from "../../../../../api/Order";
+import type { Order } from "../../../../../types/Order";
 
 export default function Cards() {
 	const [orders, setOrders] = useState<Order[]>([]);
