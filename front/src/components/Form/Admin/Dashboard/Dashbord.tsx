@@ -1,11 +1,8 @@
 import {
 	CartesianGrid,
-	Cell,
 	Legend,
 	Line,
 	LineChart,
-	Pie,
-	PieChart,
 	ResponsiveContainer,
 	Tooltip,
 	XAxis,
@@ -13,16 +10,9 @@ import {
 } from "recharts";
 import Cards from "./Elements/Cards";
 import SalesEvolution from "./Elements/SalesEvolution";
+import SalesCategories from "./Elements/SalesCategories";
 
 export default function Dashboard() {
-	// Répartition des catégories
-	const categoriesData = [
-		{ name: "Vêtements", value: 42, color: "#3b82f6" },
-		{ name: "Accessoires", value: 28, color: "#8b5cf6" },
-		{ name: "Chaussures", value: 18, color: "#ec4899" },
-		{ name: "Autres", value: 12, color: "#f59e0b" },
-	];
-
 	// Produits les plus vendus
 	const topProduits = [
 		{ nom: "T-shirt basique", ventes: 156, revenus: 3120 },
@@ -58,54 +48,13 @@ export default function Dashboard() {
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
 					{/* Évolution des ventes */}
 					<SalesEvolution />
-
-					{/* Répartition par catégorie */}
-					<div className="bg-white rounded-lg shadow p-6">
-						<h2 className="text-xl font-bold text-gray-900 mb-4">
-							Ventes par catégorie
-						</h2>
-						<ResponsiveContainer width="100%" height={300}>
-							<PieChart>
-								<Pie
-									data={categoriesData}
-									cx="50%"
-									cy="50%"
-									labelLine={false}
-									// label={({ name, percent }) =>
-									// 	`${name} ${(percent * 100).toFixed(0)}%`
-									// }
-									outerRadius={100}
-									fill="#8884d8"
-									dataKey="value"
-								>
-									{categoriesData.map((entry) => (
-										<Cell key={`cell-${entry.name}`} fill={entry.color} />
-									))}
-								</Pie>
-								<Tooltip />
-							</PieChart>
-						</ResponsiveContainer>
-					</div>
+					{/* Ventes par caategories */}
+					<SalesCategories />
 				</div>
 
 				{/* Graphique visiteurs et produits top */}
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 					{/* Trafic du site */}
-					{/* <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
-						<h2 className="text-xl font-bold text-gray-900 mb-4">
-							Trafic du site
-						</h2>
-						<ResponsiveContainer width="100%" height={300}>
-							<BarChart data={ventesData}>
-								<CartesianGrid strokeDasharray="3 3" />
-								<XAxis dataKey="mois" />
-								<YAxis />
-								<Tooltip />
-								<Legend />
-								<Bar dataKey="visiteurs" fill="#3b82f6" name="Visiteurs" />
-							</BarChart>
-						</ResponsiveContainer>
-					</div> */}
 
 					{/* Panier moyen et Stocks */}
 
