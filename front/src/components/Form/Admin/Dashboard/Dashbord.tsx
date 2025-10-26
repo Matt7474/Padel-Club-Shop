@@ -1,6 +1,5 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: <explanation> */
 
-import { DollarSign, ShoppingCart, TrendingUp, Users } from "lucide-react";
 import {
 	Bar,
 	BarChart,
@@ -16,8 +15,9 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
+import Cards from "./Cards";
 
-export default function Dashboard1() {
+export default function Dashboard() {
 	// Données de ventes mensuelles
 	const ventesData = [
 		{ mois: "Jan", ventes: 4200, commandes: 87, visiteurs: 3420 },
@@ -45,38 +45,6 @@ export default function Dashboard1() {
 		{ nom: "Casquette", ventes: 76, revenus: 1520 },
 	];
 
-	// Métriques clés
-	const metriques = [
-		{
-			titre: "Chiffre d'affaires",
-			valeur: "32 400 €",
-			evolution: "+12.5%",
-			icon: DollarSign,
-			color: "bg-green-500",
-		},
-		{
-			titre: "Commandes",
-			valeur: "662",
-			evolution: "+8.3%",
-			icon: ShoppingCart,
-			color: "bg-blue-500",
-		},
-		{
-			titre: "Nouveaux clients",
-			valeur: "284",
-			evolution: "+15.2%",
-			icon: Users,
-			color: "bg-purple-500",
-		},
-		{
-			titre: "Taux de conversion",
-			valeur: "2.8%",
-			evolution: "+0.4%",
-			icon: TrendingUp,
-			color: "bg-orange-500",
-		},
-	];
-
 	return (
 		<div className="min-h-screen bg-gray-50 p-6">
 			<div className="max-w-7xl mx-auto">
@@ -86,28 +54,8 @@ export default function Dashboard1() {
 					<p className="text-gray-600 mt-2">Vue d'ensemble de la boutique</p>
 				</div>
 
-				{/* Cartes métriques */}
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-					{metriques.map((metrique, index) => {
-						const Icon = metrique.icon;
-						return (
-							<div key={index} className="bg-white rounded-lg shadow p-6">
-								<div className="flex items-center justify-between mb-4">
-									<div className={`${metrique.color} p-3 rounded-lg`}>
-										<Icon className="w-6 h-6 text-white" />
-									</div>
-									<span className="text-green-600 text-sm font-semibold">
-										{metrique.evolution}
-									</span>
-								</div>
-								<h3 className="text-gray-600 text-sm mb-1">{metrique.titre}</h3>
-								<p className="text-2xl font-bold text-gray-900">
-									{metrique.valeur}
-								</p>
-							</div>
-						);
-					})}
-				</div>
+				{/* Header : Cartes métriques */}
+				<Cards />
 
 				{/* Graphiques principaux */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -213,15 +161,6 @@ export default function Dashboard1() {
 							))}
 						</div>
 					</div>
-				</div>
-
-				{/* Note pour adaptation */}
-				<div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
-					<p className="text-sm text-blue-800">
-						<strong>💡 Adaptation à votre BDD :</strong> Remplacez les données
-						statiques par des appels API vers votre backend. Utilisez useState
-						et useEffect pour charger les données depuis votre base.
-					</p>
 				</div>
 			</div>
 		</div>

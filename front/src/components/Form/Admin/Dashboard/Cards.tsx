@@ -1,0 +1,116 @@
+import { DollarSign, Receipt, ShoppingCart, Users2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getOrders } from "../../../../api/Order";
+import type { Order } from "../../../../types/Order";
+
+export default function Cards() {
+	const [orders, setOrders] = useState<Order[]>([]);
+
+	useEffect(() => {
+		const fetchOrders = async (): Promise<void> => {
+			try {
+				const response = await getOrders();
+				setOrders(response as Order[]);
+				console.log("response", response);
+			} catch (error) {
+				console.error("Erreur lors de la récupération des commandes :", error);
+			}
+		};
+
+		const fetchAll = async () => {
+			await Promise.all([fetchOrders()]);
+		};
+
+		fetchAll();
+		const interval = setInterval(fetchAll, 5000);
+		return () => clearInterval(interval);
+	}, []);
+
+	// Calcul du chiffre d'affaire HT
+	const comptableCA = orders.reduce((acc, order) => {
+		const totalTTC = parseFloat(order.total_amount ?? "0");
+		const totalHT = totalTTC / 1.2;
+		return acc + totalHT;
+	}, 0);
+
+	// Calcul du chiffre d'affaire HT + Frais de livraison
+	const operationalCA = orders.reduce((acc, order) => {
+		const totalTTC = parseFloat(order.total_amount ?? "0");
+		// On détermine s'il y a eu des frais de livraison
+		const shippingCost = totalTTC < 69 ? 6.9 : 0;
+		const totalHT = totalTTC / 1.2;
+		return acc + shippingCost + totalHT;
+	}, 0);
+
+	// Calcul du nombre de clients
+	const uniqueClients = new Set(orders.map((order) => order.user_id));
+	const totalClients = uniqueClients.size;
+
+	const metriques = [
+		{
+			title: "Chiffre d'affaires comptable",
+			subTitle: "(Total HT)",
+			values: `${comptableCA.toFixed(2)} €`,
+			evolution: "+12.5%",
+			icon: DollarSign,
+			color: "bg-green-500",
+		},
+		{
+			title: "Chiffre d'affaires opérationnel",
+			subTitle: "(Total HT + Livraison)",
+			values: `${operationalCA.toFixed(2)} €`,
+			evolution: "+12.5%",
+			icon: Receipt,
+			color: "bg-amber-500",
+		},
+		{
+			title: "Commandes",
+			subTitle: "",
+			values: `${orders.length}`,
+			evolution: "+8.3%",
+			icon: ShoppingCart,
+			color: "bg-blue-500",
+		},
+		{
+			title: "Nombre de clients",
+			subTitle: "",
+			values: totalClients.toString(),
+			evolution: "+15.2%",
+			icon: Users2,
+			color: "bg-purple-500",
+		},
+	];
+
+	return (
+		<div className="grid grid-cols-1 xl:grid-cols-4 gap-6 mb-8">
+			{metriques.map((metrique) => {
+				const Icon = metrique.icon;
+				return (
+					<div key={metrique.title} className="bg-white rounded-lg shadow p-6">
+						<div className="flex items-center justify-between mb-4">
+							<div className={`${metrique.color} p-3 rounded-lg`}>
+								<Icon className="w-6 h-6 text-white" />
+							</div>
+						</div>
+
+						<h3 className="text-gray-600 text-sm mb-1">{metrique.title}</h3>
+						<p className="text-gray-500 italic text-xs -mt-1 mb-1 h-4">
+							{metrique.subTitle || ""}
+						</p>
+						<p className="text-2xl font-bold text-gray-900">
+							{metrique.values}
+						</p>
+					</div>
+				);
+			})}
+		</div>
+	);
+}
+
+// {
+// 	title: "Taux de conversion",
+// 	values: "2.8%",
+// 	evolution: "+0.4%",
+// 	icon: TrendingUp,
+// 	color: "bg-orange-500",
+// },

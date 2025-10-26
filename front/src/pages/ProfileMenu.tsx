@@ -10,7 +10,7 @@ import ClientsMessages, {
 import CreateArticle from "../components/Form/Admin/CreateArticle";
 import CreateBrand from "../components/Form/Admin/CreateBrand";
 import CreatePromo from "../components/Form/Admin/CreatePromo";
-import Dashboard1 from "../components/Form/Admin/Dashbord1";
+import Dashboard1 from "../components/Form/Admin/Dashboard/Dashbord";
 import MyMessages from "../components/Form/Admin/MyMessages";
 import MyOrders from "../components/Form/Admin/MyOrders";
 import OrderList from "../components/Form/Admin/OrderList";

@@ -361,6 +361,7 @@ export const getAllOrders = async (_req: Request, res: Response) => {
 				"reference",
 				"total_amount",
 				"status",
+				"user_id",
 				"created_at",
 				"is_deleted",
 			],

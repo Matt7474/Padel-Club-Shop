@@ -15,6 +15,7 @@ export interface Payment {
 
 // La commande complète
 export interface Order {
+	total_amount: string;
 	order_id: number;
 	reference: string;
 	user_id: number;
