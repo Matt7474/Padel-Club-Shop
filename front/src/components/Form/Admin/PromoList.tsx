@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getPromotion } from "../../../api/Promotion";
 import type { Promo } from "../../../types/Promotions";
+import Loader from "../Tools/Loader";
 import { useSortableData } from "../Tools/useSortableData";
 import CreatePromo from "./CreatePromo";
 
@@ -11,32 +12,38 @@ interface PromoListProps {
 export default function PromoList({ setMenuSelected }: PromoListProps) {
 	const [promotions, setPromotions] = useState<Promo[]>([]);
 	const [selectedPromo, setSelectedPromo] = useState<Promo | null>(null);
+	const [loading, setLoading] = useState(false);
 
 	// Fonction pour charger les promotions
-	const loadPromotions = () => {
-		getPromotion()
-			.then((data) => {
-				const today = new Date();
+	const loadPromotions = async () => {
+		try {
+			setLoading(true);
+			const data = await getPromotion();
 
-				// Calcul du statut réel selon les dates
-				const promos = data.map((p: Promo) => {
-					const start = new Date(p.start_date);
-					const end = new Date(p.end_date);
+			const today = new Date();
 
-					let realStatus: "active" | "upcoming" | "expired" = "upcoming";
-					if (today >= start && today <= end) realStatus = "active";
-					else if (today > end) realStatus = "expired";
+			// Calcul du statut réel selon les dates
+			const promos = data.map((p: Promo) => {
+				const start = new Date(p.start_date);
+				const end = new Date(p.end_date);
 
-					return {
-						...p,
-						status: realStatus,
-						promo: p.name || "Sans nom",
-					};
-				});
+				let realStatus: "active" | "upcoming" | "expired" = "upcoming";
+				if (today >= start && today <= end) realStatus = "active";
+				else if (today > end) realStatus = "expired";
 
-				setPromotions(promos);
-			})
-			.catch((err) => console.error("Erreur API Promotions:", err));
+				return {
+					...p,
+					status: realStatus,
+					promo: p.name || "Sans nom",
+				};
+			});
+
+			setPromotions(promos);
+		} catch (err) {
+			console.error("Erreur API Promotions :", err);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	useEffect(() => {
@@ -76,6 +83,10 @@ export default function PromoList({ setMenuSelected }: PromoListProps) {
 				onCancel={handleCancelEdit}
 			/>
 		);
+	}
+
+	if (loading) {
+		return <Loader text={"des promotions"} />;
 	}
 
 	return (

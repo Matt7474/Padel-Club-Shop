@@ -1,8 +1,9 @@
-import { CheckCheck, Loader2, MailWarning } from "lucide-react";
+import { CheckCheck, MailWarning } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getMyMessages } from "../../../api/Contact";
 import { useAuthStore } from "../../../store/useAuthStore";
+import Loader from "../Tools/Loader";
 import type { Imessages } from "./ClientsMessages";
 
 export default function MyMessages() {
@@ -37,12 +38,7 @@ export default function MyMessages() {
 	}, []);
 
 	if (loading) {
-		return (
-			<div className="flex flex-col items-center justify-center h-64 text-gray-600">
-				<Loader2 className="w-8 h-8 animate-spin text-amber-600 mb-3" />
-				<p className="text-sm font-medium">Chargement des messages...</p>
-			</div>
-		);
+		return <Loader text={"de vos messages"} />;
 	}
 
 	if (messages.length === 0)

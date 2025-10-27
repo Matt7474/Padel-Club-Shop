@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getArticles } from "../api/Article";
 import { getClientMessages } from "../api/Contact";
 import { getOrders } from "../api/Order";
 import ArticlesList from "../components/Form/Admin/ArticlesList";
@@ -10,7 +11,7 @@ import ClientsMessages, {
 import CreateArticle from "../components/Form/Admin/CreateArticle";
 import CreateBrand from "../components/Form/Admin/CreateBrand";
 import CreatePromo from "../components/Form/Admin/CreatePromo";
-import Dashboard1 from "../components/Form/Admin/Dashboard/Dashbord";
+import Dashboard from "../components/Form/Admin/Dashboard/Dashbord";
 import MyMessages from "../components/Form/Admin/MyMessages";
 import MyOrders from "../components/Form/Admin/MyOrders";
 import OrderList from "../components/Form/Admin/OrderList";
@@ -20,7 +21,6 @@ import Select from "../components/Form/Tools/Select";
 import { useAuthStore } from "../store/useAuthStore";
 import type { Order } from "../types/Order";
 import Profile from "./Profile";
-import { getArticles } from "../api/Article";
 
 export default function ProfileMenu() {
 	const [menuSelected, setMenuSelected] = useState("");
@@ -41,8 +41,6 @@ export default function ProfileMenu() {
 					const unread = response.data.filter(
 						(message: Imessages) => message.is_read === false,
 					).length;
-					console.log("fonctionne", response);
-
 					setUnreadCount(unread);
 				} catch (error) {
 					console.error("Erreur lors de la récupération des messages :", error);
@@ -52,7 +50,6 @@ export default function ProfileMenu() {
 			const fetchOrderPaid = async () => {
 				try {
 					const orders = await getOrders();
-					console.log("Commandes récupérées :", orders);
 					const ordersPaid = orders.filter(
 						(order: Order) => order.status === "paid",
 					);
@@ -211,7 +208,7 @@ export default function ProfileMenu() {
 			{menuSelected === "Mes commandes" && <MyOrders />}
 			{menuSelected === "Voir les messages client" && <ClientsMessages />}
 			{menuSelected === "Mes messages" && <MyMessages />}
-			{menuSelected === "Dashboard" && <Dashboard1 />}{" "}
+			{menuSelected === "Dashboard" && <Dashboard />}{" "}
 		</div>
 	);
 }

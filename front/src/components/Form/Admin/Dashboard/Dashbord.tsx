@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getOrders } from "../../../../api/Order";
 import type { Order } from "../../../../types/Order";
+import Loader from "../../Tools/Loader";
 import AverageCart from "./Elements/AverageCart";
 import Cards from "./Elements/Cards";
 import SalesCategories from "./Elements/SalesCategories";
@@ -9,14 +10,18 @@ import TopSales from "./Elements/TopSales";
 
 export default function Dashboard() {
 	const [orders, setOrders] = useState<Order[]>([]);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchOrders = async () => {
 			try {
+				setLoading(true);
 				const response = await getOrders();
 				setOrders(response as Order[]);
 			} catch (error) {
 				console.error("Erreur lors de la récupération des commandes :", error);
+			} finally {
+				setLoading(false);
 			}
 		};
 
@@ -25,9 +30,11 @@ export default function Dashboard() {
 		return () => clearInterval(interval);
 	}, []);
 
-	useEffect(() => {
-		// setSalesData(computeSalesData(orders));
-	}, [orders]);
+	useEffect(() => {}, [orders]);
+
+	if (loading) {
+		return <Loader text={"des données"} />;
+	}
 
 	return (
 		<div className="min-h-screen bg-gray-50 p-6">

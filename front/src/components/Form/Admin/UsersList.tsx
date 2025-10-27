@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { getAllUsers } from "../../../api/User";
 import type { User, UserApiResponse } from "../../../types/User";
+import Loader from "../Tools/Loader";
 import { useSortableData } from "../Tools/useSortableData";
 import UserDetails from "./UserDetails";
 
 export default function UsersList() {
 	const [users, setUsers] = useState<User[]>([]);
-	const [loading, setLoading] = useState<boolean>(true);
+	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -15,8 +16,8 @@ export default function UsersList() {
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
+				setLoading(true);
 				const data: UserApiResponse[] = await getAllUsers();
-
 				const mappedUsers: User[] = data.map((apiUser) => ({
 					userId: apiUser.user_id,
 					lastName: apiUser.last_name,
@@ -44,10 +45,13 @@ export default function UsersList() {
 
 	const handleUserClick = (user: User) => setSelectedUser(user);
 
-	if (loading) return <p>Chargement...</p>;
 	if (error) return <p>Erreur : {error}</p>;
 	if (selectedUser) {
 		return <UserDetails user={selectedUser} />;
+	}
+
+	if (loading) {
+		return <Loader text={"de la liste des utilisateurs	"} />;
 	}
 
 	return (

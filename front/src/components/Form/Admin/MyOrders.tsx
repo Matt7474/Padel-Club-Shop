@@ -1,9 +1,10 @@
-import { CreditCard, Loader2, ShoppingBag } from "lucide-react";
+import { CreditCard, ShoppingBag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMyOrders } from "../../../api/Order";
 import { useAuthStore } from "../../../store/useAuthStore";
 import type { OrderItem } from "../../../types/Order";
+import Loader from "../Tools/Loader";
 
 interface MyOrdersProps {
 	order_id: number;
@@ -80,12 +81,7 @@ export default function MyOrders() {
 	};
 
 	if (loading) {
-		return (
-			<div className="flex flex-col items-center justify-center h-64 text-gray-600">
-				<Loader2 className="w-8 h-8 animate-spin text-amber-600 mb-3" />
-				<p className="text-sm font-medium">Chargement de vos commandes...</p>
-			</div>
-		);
+		return <Loader text={"de vos commandes"} />;
 	}
 
 	if (orders.length === 0)

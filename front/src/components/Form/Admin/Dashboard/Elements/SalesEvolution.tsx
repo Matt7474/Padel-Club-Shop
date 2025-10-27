@@ -104,14 +104,14 @@ export default function SalesEvolution({ orders }: OrdersProps) {
 								dataKey="sales"
 								stroke="#3b82f6"
 								strokeWidth={2}
-								name="sales (€)"
+								name="Ventes (€)"
 							/>
 							<Line
 								type="monotone"
 								dataKey="orders"
 								stroke="#8b5cf6"
 								strokeWidth={2}
-								name="orders"
+								name="Commandes"
 							/>
 						</LineChart>
 					</ResponsiveContainer>

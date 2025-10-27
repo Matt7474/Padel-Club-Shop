@@ -6,6 +6,7 @@ import type Article from "../../../types/Article";
 import type { Brand } from "../../../types/Article";
 import ConfirmModal from "../../Modal/ConfirmModal";
 import InfoModal from "../../Modal/InfoModal";
+import Loader from "../Tools/Loader";
 import { useSortableData } from "../Tools/useSortableData";
 
 export default function BrandList() {
@@ -26,6 +27,7 @@ export default function BrandList() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
+				setLoading(true);
 				const data = await getBrands();
 				const articlesData = await getArticles();
 
@@ -111,8 +113,10 @@ export default function BrandList() {
 		setBrandToDelete(null);
 	};
 
-	// UI
-	if (loading) return <p>Chargement des marques...</p>;
+	if (loading) {
+		return <Loader text={"des marques"} />;
+	}
+
 	if (error) return <p className="text-red-500">{error}</p>;
 
 	return (

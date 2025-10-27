@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { deleteUser, getUserById, updateUser } from "../api/User";
 import Toogle from "../components/Form/Toogle/Toogle";
 import Input from "../components/Form/Tools/Input";
+import Loader from "../components/Form/Tools/Loader";
 import Adress from "../components/Form/User/Adress";
 import ConfirmModal from "../components/Modal/ConfirmModal";
 import { useToastStore } from "../store/ToastStore ";
@@ -120,7 +121,9 @@ export default function Profile({ text }: ProfileProps) {
 		fetchUser();
 	}, [user?.id]);
 
-	if (loading) return <p>Chargement...</p>;
+	if (loading) {
+		return <Loader text={"de vos données"} />;
+	}
 
 	const handleChange = () => {
 		setIsEditing(true);

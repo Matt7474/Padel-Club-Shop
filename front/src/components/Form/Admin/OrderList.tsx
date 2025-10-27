@@ -1,9 +1,10 @@
-import { Loader2, ShoppingBag } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteOrder, getOrders, updateOrderStatus } from "../../../api/Order";
 import { useToastStore } from "../../../store/ToastStore ";
 import type { Order } from "../../../types/Order";
+import Loader from "../Tools/Loader";
 import { useSortableData } from "../Tools/useSortableData";
 import OrderDetails from "./OrderDetails";
 
@@ -114,12 +115,7 @@ export default function OrderList() {
 	};
 
 	if (loading) {
-		return (
-			<div className="flex flex-col items-center justify-center h-64 text-gray-600">
-				<Loader2 className="w-8 h-8 animate-spin text-amber-600 mb-3" />
-				<p className="text-sm font-medium">Chargement des commandes...</p>
-			</div>
-		);
+		return <Loader text={"des commandes client"} />;
 	}
 
 	if (!orders.length) {

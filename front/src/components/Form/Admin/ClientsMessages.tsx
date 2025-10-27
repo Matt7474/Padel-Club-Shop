@@ -1,15 +1,10 @@
-import {
-	Contact,
-	Loader2,
-	MailSearch,
-	MailWarning,
-	MessagesSquare,
-} from "lucide-react";
+import { Contact, MailSearch, MailWarning, MessagesSquare } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getClientMessages, markMessageAsRead } from "../../../api/Contact";
 import { useAuthStore } from "../../../store/useAuthStore";
 import type { UserApiResponse } from "../../../types/User";
+import Loader from "../Tools/Loader";
 import ClientMessage from "./ClientMessage";
 
 export interface Imessages {
@@ -84,14 +79,7 @@ export default function ClientsMessages() {
 	});
 
 	if (loading) {
-		return (
-			<div className="flex flex-col items-center justify-center h-64 text-gray-600">
-				<Loader2 className="w-8 h-8 animate-spin text-amber-600 mb-3" />
-				<p className="text-sm font-medium">
-					Chargement des messages clients...
-				</p>
-			</div>
-		);
+		return <Loader text={"des messages client"} />;
 	}
 
 	if (selectedMessage) {
@@ -145,8 +133,8 @@ export default function ClientsMessages() {
 					</div>
 				</div>
 
+				{/* ✅ Même code pour les deux cas, seul le contenu de filteredMessages change */}
 				<div className="mt-4 space-y-6">
-					{/* 🔥 Utiliser filteredMessages au lieu de messages */}
 					{filteredMessages.length === 0 ? (
 						<div className="text-center py-8 text-gray-500">
 							<p className="text-lg">
@@ -157,7 +145,7 @@ export default function ClientsMessages() {
 						filteredMessages.map((message) => (
 							<button
 								type="button"
-								key={message.id} // 🔥 Utiliser message.id au lieu de message.email
+								key={message.id}
 								className="w-full cursor-pointer"
 								onClick={() => handleClick(message)}
 							>

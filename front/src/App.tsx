@@ -20,8 +20,8 @@ import Paiement from "./pages/Paiement";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ProfileMenu from "./pages/ProfileMenu";
 import Register from "./pages/Register";
-import TermsOfSale from "./pages/TermsOfSale";
 import Shipping from "./pages/Shipping";
+import TermsOfSale from "./pages/TermsOfSale";
 
 function App() {
 	return (

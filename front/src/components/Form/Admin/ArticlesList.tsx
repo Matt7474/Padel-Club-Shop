@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getArticles, getArticlesDeleted } from "../../../api/Article";
 import type Article from "../../../types/Article";
+import Loader from "../Tools/Loader";
 import { useSortableData } from "../Tools/useSortableData";
 import CreateArticle from "./CreateArticle";
 
@@ -13,7 +14,7 @@ type ArticleSortable = Article & {
 
 export default function ArticlesList() {
 	const API_URL = import.meta.env.VITE_API_URL;
-
+	const [loading, setLoading] = useState(false);
 	const [articles, setArticles] = useState<Article[]>([]);
 	const [deletedArticles, setDeletedArticles] = useState<Article[]>([]);
 	const [isChecked, setIsChecked] = useState(false);
@@ -21,9 +22,19 @@ export default function ArticlesList() {
 
 	// Articles normaux
 	useEffect(() => {
-		getArticles()
-			.then((data) => setArticles(data))
-			.catch((err) => console.error("Erreur API Articles:", err));
+		const fetchArticles = async () => {
+			try {
+				setLoading(true);
+				const data = await getArticles();
+				setArticles(data);
+			} catch (error) {
+				console.error("Erreur lors de la récupération des articles :", error);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchArticles();
 	}, []);
 
 	// Articles supprimés
@@ -114,6 +125,10 @@ export default function ArticlesList() {
 		if (quantity <= 15) return "bg-orange-100 hover:bg-orange-200";
 		return "bg-transparent hover:bg-gray-100";
 	};
+
+	if (loading) {
+		return <Loader text={"des articles"} />;
+	}
 
 	if (selectedArticle) {
 		return (
