@@ -259,7 +259,7 @@ export default function Profile({ text }: ProfileProps) {
 
 	return (
 		<div className="xl:bg-[url('/icons/backgroundH.avif')] xl:h-180 xl:pt-10 xl:relative">
-			<div className="xl:w-2/3 xl:mx-auto xl:bg-white/80 xl:p-5 xl:h-[40rem] xl:overflow-y-auto xl:relative xl:z-10">
+			<div className="xl:w-2/3 xl:mx-auto xl:bg-white/80 xl:p-5 xl:h-160 xl:overflow-y-auto xl:relative xl:z-10">
 				<h2 className="p-3 bg-gray-500/80 font-semibold text-lg mt-7 xl:mt-0 flex justify-between">
 					Mon profil
 					<button
