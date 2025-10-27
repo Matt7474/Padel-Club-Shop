@@ -142,7 +142,7 @@ export default function ContactPage() {
 							</div>
 						</div>
 
-						<div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl shadow-lg p-6 text-white">
+						<div className="bg-linear-to-br from-amber-500 to-amber-600 rounded-2xl shadow-lg p-6 text-white">
 							<h3 className="font-semibold mb-2">Horaires d'ouverture</h3>
 							<div className="space-y-1 text-sm">
 								<div className="flex justify-between">

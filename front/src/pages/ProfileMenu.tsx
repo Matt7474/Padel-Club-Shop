@@ -106,21 +106,21 @@ export default function ProfileMenu() {
 	// Définition des options disponibles selon le rôle
 	const adminMenus = [
 		"Dashboard",
-		"Ajouter un article",
-		"Liste des articles",
 		"Ajouter une marque",
-		"Liste des marques",
 		"Ajouter une promotion",
+		"Ajouter un article",
+		"Liste des marques",
 		"Liste des promotions",
+		"Liste des articles",
 		"Liste des utilisateurs",
-		"Voir les commandes client",
-		"Voir mon profil",
+		"Liste des commandes client",
+		"Liste des messages client",
+		"Mon profil",
 		"Mes commandes",
-		"Voir les messages client",
 		"Mes messages",
 	];
 
-	const clientMenus = ["Voir mon profil", "Mes commandes", "Mes messages"];
+	const clientMenus = ["Mon profil", "Mes commandes", "Mes messages"];
 
 	const menuOptions =
 		user?.role === "admin" || user?.role === "super admin"
@@ -161,12 +161,12 @@ export default function ProfileMenu() {
 						{option}
 
 						{/* Pastille de notification */}
-						{option === "Voir les messages client" && unreadCount > 0 && (
+						{option === "Liste des messages client" && unreadCount > 0 && (
 							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
 								{unreadCount > 99 ? "99+" : unreadCount}
 							</span>
 						)}
-						{option === "Voir les commandes client" && orderPaid > 0 && (
+						{option === "Liste des commandes client" && orderPaid > 0 && (
 							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
 								{orderPaid > 99 ? "99+" : orderPaid}
 							</span>
@@ -203,10 +203,10 @@ export default function ProfileMenu() {
 				<PromoList setMenuSelected={setMenuSelected} />
 			)}
 			{menuSelected === "Liste des utilisateurs" && <UserList />}
-			{menuSelected === "Voir les commandes client" && <OrderList />}
-			{menuSelected === "Voir mon profil" && <Profile />}
+			{menuSelected === "Liste des commandes client" && <OrderList />}
+			{menuSelected === "Mon profil" && <Profile />}
 			{menuSelected === "Mes commandes" && <MyOrders />}
-			{menuSelected === "Voir les messages client" && <ClientsMessages />}
+			{menuSelected === "Liste des messages client" && <ClientsMessages />}
 			{menuSelected === "Mes messages" && <MyMessages />}
 			{menuSelected === "Dashboard" && <Dashboard />}{" "}
 		</div>
