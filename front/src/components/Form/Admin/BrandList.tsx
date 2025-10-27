@@ -166,16 +166,22 @@ export default function BrandList() {
 
 								{/* Bouton supprimer */}
 								<div className="flex items-center justify-center border-r h-10">
-									<button
-										type="button"
-										onClick={() => handleDelete(brand.brand_id!)}
-									>
-										<img
-											src="/icons/trash.svg"
-											alt="poubelle"
-											className="w-6 h-6 cursor-pointer"
-										/>
-									</button>
+									{brand.brand_id && (
+										<button
+											type="button"
+											onClick={() => {
+												if (brand.brand_id !== undefined) {
+													handleDelete(brand.brand_id);
+												}
+											}}
+										>
+											<img
+												src="/icons/trash.svg"
+												alt="poubelle"
+												className="w-6 h-6 cursor-pointer"
+											/>
+										</button>
+									)}
 								</div>
 							</div>
 							<div className="w-full border-b border-gray-200"></div>
