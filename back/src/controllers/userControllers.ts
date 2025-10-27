@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
 import type { Request, Response } from "express";
 import { Address } from "../models/adress";
 import { User } from "../models/user";
@@ -105,7 +104,7 @@ export const updateUser = async (req: Request, res: Response) => {
 
 				// Chercher si l'adresse existe déjà (par type)
 				const existingAddress = existingAddresses.find(
-					(addr: any) => addr.type === addressData.type,
+					(addr: Address) => addr.type === addressData.type,
 				);
 
 				if (existingAddress) {
@@ -132,18 +131,18 @@ export const updateUser = async (req: Request, res: Response) => {
 						city: addressData.city,
 						country: addressData.country,
 						complement: addressData.complement,
-						user_id: user.user_id, // 🔥 Utilise user.user_id au lieu de id
+						user_id: user.user_id,
 					});
 				}
 			}
 
 			// Supprimer l'adresse de facturation si elle n'est plus dans addresses
 			const billingInRequest = addresses.some(
-				(addr: any) => addr.type === "billing",
+				(addr: Address) => addr.type === "billing",
 			);
 			if (!billingInRequest) {
 				const existingBilling = existingAddresses.find(
-					(addr: any) => addr.type === "billing",
+					(addr: Address) => addr.type === "billing",
 				);
 				if (existingBilling) {
 					console.log("🗑️ Suppression adresse billing");
