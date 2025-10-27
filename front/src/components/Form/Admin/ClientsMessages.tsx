@@ -34,6 +34,7 @@ export default function ClientsMessages() {
 	const [, setError] = useState("");
 	const [, setUnreadMessages] = useState(0);
 	const [isChecked, setIsChecked] = useState(false);
+	const [reloadTrigger, setReloadTrigger] = useState(false);
 
 	useEffect(() => {
 		const fetchMessages = async () => {
@@ -53,7 +54,7 @@ export default function ClientsMessages() {
 		fetchMessages();
 		const interval = setInterval(fetchMessages, 30000);
 		return () => clearInterval(interval);
-	}, [isAuthenticated]);
+	}, [isAuthenticated, reloadTrigger]);
 
 	const subjectMap: Record<string, string> = {
 		general: "Question générale",
@@ -85,7 +86,10 @@ export default function ClientsMessages() {
 	if (selectedMessage) {
 		return (
 			<ClientMessage
-				onReturn={() => setSelectedMessage(null)}
+				onReturn={() => {
+					setSelectedMessage(null);
+					setReloadTrigger((prev) => !prev);
+				}}
 				message={selectedMessage}
 			/>
 		);
