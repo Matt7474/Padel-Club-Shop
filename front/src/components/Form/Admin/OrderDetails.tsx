@@ -48,25 +48,25 @@ export default function OrderDetails({
 	const FREE_SHIPPING_THRESHOLD = 69;
 	const SHIPPING_FEE = 6.9;
 
-	// 🧮 Total articles
+	// Total articles
 	const totalQty = order.items.reduce((sum, item) => sum + item.quantity, 0);
 
-	// 🧾 Total TTC des articles
+	// Total TTC des articles
 	const totalTTC = order.items.reduce((sum, item) => {
 		if (!item.article) return sum;
 		return sum + item.article.price_ttc * item.quantity;
 	}, 0);
 
-	// 💰 Frais de livraison
+	// Frais de livraison
 	const shippingCost = totalTTC >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
 
-	// 💵 Total global
+	// Total global
 	const total = totalTTC + shippingCost;
 
-	// 🧮 Total HT
+	// Total HT
 	const totalHT = (totalTTC / (1 + TVA_RATE)).toFixed(2);
 
-	// 👉 Gestion des boutons d’action
+	// Gestion des boutons d’action
 	const handleConfirmDelete = () => {
 		onDeleteOrder(order.order_id);
 		setShowDeleteConfirm(false);
@@ -381,6 +381,10 @@ export default function OrderDetails({
 					</div>
 
 					{/* Bordure gradient qui épouse l'arrondi grâce à overflow-hidden sur le parent */}
+					<div className="h-1 bg-linear-to-r from-indigo-500 via-blue-500 to-purple-500"></div>
+				</div>
+				<div className="bg-white rounded-2xl border border-gray-200 overflow-hidden mt-6">
+					Information client
 					<div className="h-1 bg-linear-to-r from-indigo-500 via-blue-500 to-purple-500"></div>
 				</div>
 			</div>

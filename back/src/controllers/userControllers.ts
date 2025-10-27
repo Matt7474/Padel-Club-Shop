@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
 import type { Request, Response } from "express";
 import { Address } from "../models/adress";
 import { User } from "../models/user";
@@ -7,6 +8,12 @@ export const getAllUsers = async (_req: Request, res: Response) => {
 		const users = await User.findAll({
 			// attributes: { exclude: ["password"] },
 			order: [["created_at", "DESC"]],
+			include: [
+				{
+					model: Address,
+					as: "addresses",
+				},
+			],
 		});
 
 		if (!users || users.length === 0) {

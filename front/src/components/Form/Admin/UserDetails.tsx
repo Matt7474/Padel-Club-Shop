@@ -1,5 +1,5 @@
-import { useState } from "react";
-import data from "../../../../data/dataTest.json";
+import { useEffect, useState } from "react";
+import { getOrders } from "../../../api/Order";
 import { updateUserRole } from "../../../api/User";
 import { useToastStore } from "../../../store/ToastStore ";
 import { useAuthStore } from "../../../store/useAuthStore";
@@ -9,7 +9,7 @@ import ConfirmModal from "../../Modal/ConfirmModal";
 import Toogle from "../Toogle/Toogle";
 import Button from "../Tools/Button";
 import Select from "../Tools/Select";
-import OrderDetails from "./ClientOrderDetails";
+import OrderDetails from "./OrderDetails";
 import UsersList from "./UsersList";
 
 interface UserProps {
@@ -18,18 +18,45 @@ interface UserProps {
 }
 
 export default function UserDetails({ user }: UserProps) {
+	// Stores
 	const addToast = useToastStore((state) => state.addToast);
 	const currentLoggedUser = useAuthStore((state) => state.user);
 
+	// États
 	const [currentUser, setCurrentUser] = useState<User>(user);
 	const [clickReturn, setClickReturn] = useState<User | null>(null);
 	const [changeUserRole, setChangeUserRole] = useState(false);
 	const [showOrder, setShowOrder] = useState(false);
-	const [selectedOrder] = useState<Order | null>(null);
+	const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 	const [roleSelected, setRoleSelected] = useState("");
 	const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+	const [userOrders, setUserOrders] = useState<Order[]>([]);
+	const [isLoadingOrders, setIsLoadingOrders] = useState(false);
 
-	const userOrders = data.orders.filter((o) => o.user_id === user.userId);
+	// Récupération des commandes
+	useEffect(() => {
+		const fetchUserOrders = async () => {
+			setIsLoadingOrders(true);
+			try {
+				const orders = await getOrders();
+				const filteredOrders = orders.filter(
+					(order: Order) => order.user_id === user.userId,
+				);
+				setUserOrders(filteredOrders);
+			} catch (error) {
+				console.error("Erreur lors de la récupération des commandes:", error);
+				addToast("Erreur lors du chargement des commandes", "bg-red-500");
+			} finally {
+				setIsLoadingOrders(false);
+			}
+		};
+
+		fetchUserOrders();
+	}, [user.userId, addToast]);
+
+	console.log("userOrders", userOrders);
+
+	// Variables dérivées
 	const hasOrders = userOrders.length > 0;
 	const userRole =
 		currentUser.role === 1
@@ -38,59 +65,35 @@ export default function UserDetails({ user }: UserProps) {
 				? "Admin"
 				: "Client";
 
-	// Fonction utilitaire pour convertir le role en number
+	// Utilitaires
 	const getRoleAsNumber = (role: string | number | undefined): number => {
-		if (role === undefined) return 3; // Par défaut client si undefined
+		if (role === undefined) return 3;
 		if (typeof role === "number") return role;
 		const roleLower = role.toLowerCase();
 		if (roleLower === "super admin") return 1;
 		if (roleLower === "admin") return 2;
-		return 3; // client
+		return 3;
 	};
 
-	// Fonction pour vérifier si l'utilisateur connecté peut modifier ce rôle
 	const canModifyRole = (): boolean => {
-		// Si pas d'utilisateur connecté, pas de modification possible
-		if (!currentLoggedUser) {
-			return false;
-		}
-
+		if (!currentLoggedUser) return false;
 		const currentUserRoleId = getRoleAsNumber(currentLoggedUser.role);
-
-		// Règle 3: Personne ne peut modifier son propre rôle
-		if (currentLoggedUser.id === user.userId) {
-			return false;
-		}
-
-		// Règle 1: Seul un Super Admin peut modifier le rôle d'un Super Admin
-		if (user.role === 1 && currentUserRoleId !== 1) {
-			return false;
-		}
-
+		if (currentLoggedUser.id === user.userId) return false;
+		if (user.role === 1 && currentUserRoleId !== 1) return false;
 		return true;
 	};
 
-	// Fonction pour filtrer les options de rôle disponibles
 	const getAvailableRoles = (): string[] => {
 		const allRoles = ["Client", "Admin", "Super Admin"];
-
-		// Si pas d'utilisateur connecté, pas d'options
-		if (!currentLoggedUser) {
-			return [];
-		}
-
+		if (!currentLoggedUser) return [];
 		const currentUserRoleId = getRoleAsNumber(currentLoggedUser.role);
-
-		// Règle 2: Un Admin ne peut pas attribuer le rôle Super Admin
 		if (currentUserRoleId === 2) {
 			return allRoles.filter((role) => role !== "Super Admin");
 		}
-
 		return allRoles;
 	};
 
-	const menuOptions = getAvailableRoles();
-
+	// Handlers
 	const handleClick = (user: User) => setClickReturn(user);
 
 	const handleToggleChange = (value: boolean) => {
@@ -104,12 +107,9 @@ export default function UserDetails({ user }: UserProps) {
 		setChangeUserRole(value);
 	};
 
-	const handleChangeRole = () => {
-		setIsConfirmOpen(true);
-	};
+	const handleChangeRole = () => setIsConfirmOpen(true);
 
 	const handleConfirmChange = async () => {
-		// Vérification de sécurité supplémentaire
 		if (!currentLoggedUser || !canModifyRole()) {
 			addToast(
 				"Vous n'avez pas les permissions pour cette action",
@@ -128,7 +128,6 @@ export default function UserDetails({ user }: UserProps) {
 		const roleId = roleMap[roleSelected.toLowerCase()];
 		const currentUserRoleId = getRoleAsNumber(currentLoggedUser.role);
 
-		// Règle 2: Vérification supplémentaire - Un Admin ne peut pas attribuer Super Admin
 		if (currentUserRoleId === 2 && roleId === 1) {
 			addToast(
 				"Vous ne pouvez pas attribuer le rôle Super Admin",
@@ -138,7 +137,6 @@ export default function UserDetails({ user }: UserProps) {
 			return;
 		}
 
-		// Règle 3: Vérification supplémentaire - Pas de modification de son propre rôle
 		if (currentLoggedUser.id === user.userId) {
 			addToast("Vous ne pouvez pas modifier votre propre rôle", "bg-red-500");
 			setIsConfirmOpen(false);
@@ -147,16 +145,12 @@ export default function UserDetails({ user }: UserProps) {
 
 		if (!user?.userId) {
 			addToast("Erreur : utilisateur introuvable", "bg-red-500");
+			setIsConfirmOpen(false);
 			return;
 		}
 
 		try {
-			console.log(
-				`${user.firstName} ${user.lastName} est maintenant ${roleSelected} (ID: ${roleId})`,
-			);
-
-			await updateUserRole(user?.userId, roleId);
-
+			await updateUserRole(user.userId, roleId);
 			setCurrentUser((prev) => ({ ...prev, role: roleId }));
 			addToast(
 				`${user.firstName} ${user.lastName} est maintenant ${roleSelected}`,
@@ -168,24 +162,34 @@ export default function UserDetails({ user }: UserProps) {
 				"Une erreur est survenue lors du changement de rôle",
 				"bg-red-500",
 			);
+		} finally {
+			setIsConfirmOpen(false);
+			setChangeUserRole(false);
 		}
-
-		setIsConfirmOpen(false);
-		setChangeUserRole(false);
 	};
 
-	const handleCancelChange = () => {
-		setIsConfirmOpen(false);
+	const handleCancelChange = () => setIsConfirmOpen(false);
+
+	const handleSelectOrder = (order: Order) => {
+		setSelectedOrder(order);
 	};
 
-	// const handleOrder = (order: Order) => setSelectedOrder(order);
-
+	// Render conditionnel
 	if (clickReturn) return <UsersList />;
+
+	const menuOptions = getAvailableRoles();
 
 	return (
 		<div>
 			{selectedOrder ? (
-				<OrderDetails order={selectedOrder} user={user} />
+				<OrderDetails
+					order={selectedOrder}
+					onReturn={() => setSelectedOrder(null)}
+					onDeleteOrder={() => {}}
+					onProcessingOrder={() => {}}
+					onReadyOrder={() => {}}
+					onShippedOrder={() => {}}
+				/>
 			) : (
 				<div>
 					{/* Bouton retour */}
@@ -201,15 +205,15 @@ export default function UserDetails({ user }: UserProps) {
 						/>
 						Retour
 					</button>
-					<div className="xl:flex xl:flex-col xl:w-2/5 mx-auto text-left">
+					<div className="xl:flex xl:flex-col xl:w-2/5 mx-auto text-left border rounded-2xl p-3 bg-white">
 						{/* Informations de base de l'utilisateur */}
 						<div className="mt-4 pl-1 xl:pl-0 relative ">
 							{userRole === "Super Admin" && (
 								<div className="absolute top-0 right-2">
 									<img
 										src="/icons/superadmin.svg"
-										alt="logo-cravate"
-										className="w-8"
+										alt="logo-superAdmin"
+										className="w-7"
 									/>
 								</div>
 							)}
@@ -218,7 +222,7 @@ export default function UserDetails({ user }: UserProps) {
 									<img
 										src="/icons/tie.svg"
 										alt="logo-cravate"
-										className="w-8"
+										className="w-7"
 									/>
 								</div>
 							)}
@@ -226,8 +230,8 @@ export default function UserDetails({ user }: UserProps) {
 								<div className="absolute top-0 right-2">
 									<img
 										src="/icons/profile.svg"
-										alt="logo-cravate"
-										className="w-8"
+										alt="logo-utilisateur"
+										className="w-7"
 									/>
 								</div>
 							)}
@@ -384,30 +388,99 @@ export default function UserDetails({ user }: UserProps) {
 											/>
 										</div>
 										<div className="border bg-gray-100 mt-1 px-2 pb-2 h-76 overflow-y-auto">
-											<div className="mt-2 space-y-2">
-												{userOrders.map((order) => (
-													<button
-														key={order.order_id}
-														type="button"
-														className="p-2 border bg-white border-gray-200 rounded shadow-sm cursor-pointer w-full"
-														// onClick={() => handleOrder(order)}
-													>
-														<div className="text-start">
-															<p>
-																<strong>Référence :</strong> {order.reference}
-															</p>
-															<p>
-																<strong>Nombre d'articles :</strong>{" "}
-																{order.order_lines.length}
-															</p>
-															<p>
-																<strong>Paiement :</strong>{" "}
-																{order.payment?.payment_method || "N/A"}
-															</p>
-														</div>
-													</button>
-												))}
-											</div>
+											{isLoadingOrders ? (
+												<div className="text-center py-4">
+													<p>Chargement des commandes...</p>
+												</div>
+											) : userOrders.length === 0 ? (
+												<div className="text-center py-4 text-gray-500">
+													<p>Aucune commande trouvée</p>
+												</div>
+											) : (
+												<div className="mt-2 space-y-2">
+													{userOrders.map((order) => {
+														const statusConfig = {
+															paid: {
+																label: "Payée",
+																color: "text-blue-600",
+																icon: "/icons/invoice-check.svg",
+															},
+															processing: {
+																label: "En traitement",
+																color: "text-orange-600",
+																icon: "/icons/package.svg",
+															},
+															ready: {
+																label: "Prête",
+																color: "text-purple-600",
+																icon: "/icons/package-check.svg",
+															},
+															shipped: {
+																label: "Expédiée",
+																color: "text-green-600",
+																icon: "/icons/delivery.svg",
+															},
+															cancelled: {
+																label: "Annulée",
+																color: "text-red-600",
+																icon: "/icons/invoice-cancelled.svg",
+															},
+														};
+
+														const totalArticles =
+															order.items?.reduce(
+																(total, item) => total + item.quantity,
+																0,
+															) || 0;
+														const currentStatus = statusConfig[
+															order.status as keyof typeof statusConfig
+														] || {
+															label: order.status || "N/A",
+															color: "text-gray-600",
+															icon: "/icons/package.svg",
+														};
+
+														return (
+															<button
+																key={order.order_id}
+																type="button"
+																className="p-2 border bg-white border-gray-200 rounded shadow-sm cursor-pointer w-full hover:bg-gray-50 transition-colors"
+																onClick={() => handleSelectOrder(order)}
+															>
+																<div className="text-start">
+																	<p>
+																		<strong>Référence :</strong>{" "}
+																		{order.reference}
+																	</p>
+																	<p>
+																		<strong>Nombre d'articles :</strong>{" "}
+																		{totalArticles}
+																	</p>
+																	<p>
+																		<strong>Montant total :</strong>{" "}
+																		{order.total_amount
+																			? `${order.total_amount} €`
+																			: "N/A"}
+																	</p>
+																	<div className="flex items-center gap-2 mt-1">
+																		<strong>Statut :</strong>
+																		<img
+																			src={currentStatus.icon}
+																			alt={currentStatus.label}
+																			className="w-5 h-5"
+																		/>
+																		<span
+																			className={`font-semibold ${currentStatus.color}`}
+																		>
+																			{currentStatus.label}
+																		</span>
+																	</div>
+																</div>
+															</button>
+														);
+													})}
+												</div>
+											)}
 										</div>
 									</div>
 								)}

@@ -17,6 +17,7 @@ export interface Imessages {
 	subject?: string;
 	message?: string;
 	response?: string;
+	responded_at?: string;
 	created_at?: string;
 	order_number?: string;
 	is_read?: boolean;

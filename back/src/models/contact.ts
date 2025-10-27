@@ -119,6 +119,7 @@ Contact.init(
 		responded_at: {
 			type: DataTypes.DATE,
 			allowNull: true,
+			defaultValue: DataTypes.NOW,
 		},
 		admin_notes: {
 			type: DataTypes.TEXT,

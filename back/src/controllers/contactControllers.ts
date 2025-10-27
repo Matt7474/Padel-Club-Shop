@@ -202,7 +202,10 @@ export const addResponse = async (req: Request, res: Response) => {
 		}
 
 		const [updatedRows, [updatedMessage]] = await Contact.update(
-			{ response },
+			{
+				response,
+				responded_at: new Date(),
+			},
 			{
 				where: { id: Number(id) },
 				returning: true,

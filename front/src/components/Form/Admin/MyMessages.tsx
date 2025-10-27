@@ -73,51 +73,47 @@ export default function MyMessages() {
 
 				<div className="max-w-3xl mx-auto space-y-6 ">
 					{/* Message client */}
-					<div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow mt-6">
-						<div className="flex justify-between">
-							<p className="font-semibold text-gray-900 mb-2 flex">Message :</p>
+					<div className="flex justify-center text-sm italic text-gray-700 mt-4 ">
+						Le{" "}
+						{messages[0].created_at
+							? new Date(messages[0].created_at).toLocaleDateString("fr-FR", {
+									day: "2-digit",
+									month: "long",
+									year: "numeric",
+								})
+							: "-"}
+					</div>
+					<div className="flex justify-end -mt-4">
+						<div className="bg-amber-100 rounded-2xl shadow-lg p-3 w-4/5 max-w-md hover:shadow-xl transition-shadow">
 							<div className="flex flex-col">
-								<p className="text-gray-500 italic flex">
-									Le{" "}
-									{messages[0].created_at
-										? new Date(messages[0].created_at).toLocaleDateString(
-												"fr-FR",
-												{
-													day: "2-digit",
-													month: "long",
-													year: "numeric",
-												},
-											)
-										: "-"}
-								</p>
+								<p>{messages[0].message}</p>
+
 								{messages[0].is_read && (
-									<div className="flex justify-end">
-										<p className="text-end italic text-gray-500">Lu</p>
-										<CheckCheck className="w-5 text-green-700 ml-2" />
+									<div className="flex justify-end items-center mt-2 space-x-2">
+										<p className="italic text-gray-500">Lu</p>
+										<CheckCheck className="w-5 h-5 text-green-700" />
 									</div>
 								)}
 							</div>
 						</div>
-						<p className="mt-2">{messages[0].message}</p>
 					</div>
 
 					{/* Réponse admin */}
+					<div className="flex justify-center text-sm italic text-gray-700 mt-4 ">
+						Le{" "}
+						{messages[0].responded_at
+							? new Date(messages[0].responded_at).toLocaleDateString("fr-FR", {
+									day: "2-digit",
+									month: "long",
+									year: "numeric",
+								})
+							: "-"}
+					</div>
 					{messages[0].response && (
-						<div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-							<div className="flex justify-between">
-								<p className="font-semibold text-gray-900 mb-2 flex">
-									Réponse :
-								</p>
-								<p className="text-gray-500 italic flex">
-									Le{" "}
-									{new Date().toLocaleDateString("fr-FR", {
-										day: "2-digit",
-										month: "long",
-										year: "numeric",
-									})}
-								</p>
+						<div className="flex justify-start -mt-4">
+							<div className="bg-green-100 text-gray-900 rounded-2xl shadow-lg p-3 w-4/5 max-w-md hover:shadow-xl transition-shadow">
+								<p>{messages[0].response}</p>
 							</div>
-							<p className="mt-2">{messages[0].response}</p>
 						</div>
 					)}
 				</div>
