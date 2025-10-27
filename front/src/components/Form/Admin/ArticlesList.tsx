@@ -242,6 +242,17 @@ export default function ArticlesList() {
 				</div>
 			</div>
 
+			{/* Legende couleur */}
+			<div className="flex gap-10 mb-4 justify-around xl:justify-start xl:ml-1">
+				<div className="flex gap-3">
+					<div className="bg-orange-200 w-8 h-2.5 mt-1 " />
+					<p className="text-xs">&lt; 16 restant</p>
+				</div>
+				<div className="flex gap-3">
+					<div className="bg-red-200 w-8 h-2.5 mt-1 " />
+					<p className="text-xs">&lt; 6 restant</p>
+				</div>
+			</div>
 			{/* Liste d’articles */}
 			{sortedArticles.map((article) => {
 				const quantity =
