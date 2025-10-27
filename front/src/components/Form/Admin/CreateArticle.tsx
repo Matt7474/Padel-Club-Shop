@@ -28,6 +28,7 @@ import RacketForm from "../CreateArticle/RacketForm";
 import ShoesForm from "../CreateArticle/ShoesForm";
 import Toogle from "../Toogle/Toogle";
 import Button from "../Tools/Button";
+import BackButton from "../Tools/BackButton";
 
 type ImageWithId = {
 	id: string;
@@ -646,20 +647,7 @@ export default function CreateArticle({
 	return (
 		<>
 			<div>
-				{mode === "edit" && (
-					<button
-						type="button"
-						onClick={onReturn}
-						className="flex mt-4 cursor-pointer"
-					>
-						<img
-							src="/icons/arrow.svg"
-							alt="fleche retour"
-							className="w-4 rotate-180"
-						/>
-						Retour
-					</button>
-				)}
+				{mode === "edit" && <BackButton onClick={onReturn} />}
 
 				<div className="flex justify-between bg-gray-500/80 p-3 mt-7 xl:mt-4 h10">
 					<h2 className="font-semibold text-lg xl:mt-0 flex justify-between">

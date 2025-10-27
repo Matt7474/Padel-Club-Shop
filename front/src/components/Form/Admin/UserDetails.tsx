@@ -12,6 +12,7 @@ import Button from "../Tools/Button";
 import Select from "../Tools/Select";
 import OrderDetails from "./OrderDetails";
 import UsersList from "./UsersList";
+import BackButton from "../Tools/BackButton";
 
 interface UserDetailsProps {
 	user: User;
@@ -219,19 +220,8 @@ export default function UserDetails({ user }: UserDetailsProps) {
 				/>
 			) : (
 				<div>
-					{/* Bouton retour */}
-					<button
-						type="button"
-						onClick={() => handleClick(user)}
-						className="flex mt-4 cursor-pointer "
-					>
-						<img
-							src="/icons/arrow.svg"
-							alt="fleche retour"
-							className="w-4 rotate-180"
-						/>
-						Retour
-					</button>
+					<BackButton onClick={() => handleClick(user)} />
+
 					<div className="xl:flex xl:flex-col xl:w-2/5 mx-auto text-left border rounded-2xl p-3 bg-white">
 						{/* Informations de base de l'utilisateur */}
 						<div className="mt-4 pl-1 xl:pl-0 relative ">

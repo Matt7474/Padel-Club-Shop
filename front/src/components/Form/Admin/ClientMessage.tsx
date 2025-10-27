@@ -16,6 +16,7 @@ import {
 } from "../../../api/Contact";
 import { useToastStore } from "../../../store/ToastStore ";
 import type { Imessages } from "./ClientsMessages";
+import BackButton from "../Tools/BackButton";
 
 interface ClientMessageProps {
 	message: Imessages;
@@ -87,18 +88,7 @@ export default function ClientMessage({
 
 	return (
 		<div className="bg-gray-50 mt-4">
-			<button
-				type="button"
-				onClick={onReturn}
-				className="flex mt-0 mb-4 cursor-pointer"
-			>
-				<img
-					src="/icons/arrow.svg"
-					alt="fleche retour"
-					className="w-4 rotate-180"
-				/>
-				Retour
-			</button>
+			<BackButton onClick={onReturn} />
 
 			<div className="max-w-3xl mx-auto space-y-6 relative">
 				{/* Fiche Contact */}

@@ -5,6 +5,7 @@ import type { Order } from "../../../types/Order";
 import type { UserApiResponse } from "../../../types/User";
 import ConfirmModal from "../../Modal/ConfirmModal";
 import Loader from "../Tools/Loader";
+import BackButton from "../Tools/BackButton";
 
 interface OrderDetailsProps {
 	order: Order;
@@ -23,7 +24,6 @@ export default function OrderDetails({
 	onProcessingOrder,
 	onReadyOrder,
 	onShippedOrder,
-	fromUserDetails = false,
 }: OrderDetailsProps) {
 	const API_URL = import.meta.env.VITE_API_URL;
 	const navigate = useNavigate();
@@ -120,18 +120,7 @@ export default function OrderDetails({
 
 	return (
 		<div>
-			<button
-				type="button"
-				onClick={onReturn}
-				className="flex items-center gap-2 mb-0 text-gray-700 hover:text-gray-900 transition-colors font-medium cursor-pointer mt-4 xl:mt-0"
-			>
-				<img
-					src="/icons/arrow.svg"
-					alt="fleche retour"
-					className="w-4 rotate-180"
-				/>
-				{fromUserDetails ? "Retour à l'utilisateur" : "Retour à la liste"}
-			</button>
+			<BackButton onClick={onReturn} />
 
 			<div className="mx-auto px-3 py-6">
 				<div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">

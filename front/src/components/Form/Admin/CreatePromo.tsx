@@ -10,6 +10,7 @@ import ConfirmModal from "../../Modal/ConfirmModal";
 import Button from "../Tools/Button";
 import Input from "../Tools/Input";
 import TextArea from "../Tools/TextArea";
+import BackButton from "../Tools/BackButton";
 
 interface CreatePromoProps {
 	mode?: "create" | "edit";
@@ -151,20 +152,9 @@ export default function CreatePromo({
 					</button>
 				)}
 			</h2>
-			{mode === "edit" && (
-				<button
-					type="button"
-					onClick={onCancel}
-					className="flex mt-4 cursor-pointer"
-				>
-					<img
-						src="/icons/arrow.svg"
-						alt="fleche retour"
-						className="w-4 rotate-180"
-					/>
-					Retour
-				</button>
-			)}
+			<div className="mt-2">
+				{mode === "edit" && <BackButton onClick={onCancel} />}
+			</div>
 			<div className="xl:w-1/3 xl:flex xl:flex-col xl:place-self-center gap-4 xl:gap-0">
 				<form onSubmit={handleSubmit}>
 					<Input
