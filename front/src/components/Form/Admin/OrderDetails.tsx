@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getAllUsers } from "../../../api/User";
 import type { Order } from "../../../types/Order";
+import type { UserApiResponse } from "../../../types/User";
 import ConfirmModal from "../../Modal/ConfirmModal";
+import Loader from "../Tools/Loader";
 
 interface OrderDetailsProps {
 	order: Order;
 	onReturn: () => void;
-	onDeleteOrder: (orderId: number) => void;
-	onProcessingOrder: (orderId: number) => void;
-	onReadyOrder: (orderId: number) => void;
-	onShippedOrder: (orderId: number) => void;
+	onDeleteOrder?: (orderId: number) => void;
+	onProcessingOrder?: (orderId: number) => void;
+	onReadyOrder?: (orderId: number) => void;
+	onShippedOrder?: (orderId: number) => void;
+	fromUserDetails?: boolean;
 }
 
 export default function OrderDetails({
@@ -19,6 +23,7 @@ export default function OrderDetails({
 	onProcessingOrder,
 	onReadyOrder,
 	onShippedOrder,
+	fromUserDetails = false,
 }: OrderDetailsProps) {
 	const API_URL = import.meta.env.VITE_API_URL;
 	const navigate = useNavigate();
@@ -27,6 +32,28 @@ export default function OrderDetails({
 	const [showProcessingConfirm, setShowProcessingConfirm] = useState(false);
 	const [showReadyConfirm, setShowReadyConfirm] = useState(false);
 	const [showShippedConfirm, setShowShippedConfirm] = useState(false);
+	const [, setError] = useState("");
+	const [users, setUsers] = useState<UserApiResponse[]>([]);
+	const [loading, setLoading] = useState(false);
+
+	const fetchUsers = async () => {
+		try {
+			setLoading(true);
+			const usersData = await getAllUsers();
+			setUsers(usersData);
+		} catch (err: unknown) {
+			if (err instanceof Error) setError(err.message);
+			else setError("Erreur inconnue");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchUsers();
+	}, []);
+
+	const orderUser = users.find((user) => user.user_id === order.user_id);
 
 	const statusImages: Record<string, string> = {
 		paid: "/icons/invoice-check.svg",
@@ -68,24 +95,28 @@ export default function OrderDetails({
 
 	// Gestion des boutons d’action
 	const handleConfirmDelete = () => {
-		onDeleteOrder(order.order_id);
+		onDeleteOrder?.(order.order_id);
 		setShowDeleteConfirm(false);
 	};
 
 	const handleConfirmProcessing = () => {
-		onProcessingOrder(order.order_id);
+		onProcessingOrder?.(order.order_id);
 		setShowProcessingConfirm(false);
 	};
 
 	const handleConfirmReady = () => {
-		onReadyOrder(order.order_id);
+		onReadyOrder?.(order.order_id);
 		setShowReadyConfirm(false);
 	};
 
 	const handleConfirmShipped = () => {
-		onShippedOrder(order.order_id);
+		onShippedOrder?.(order.order_id);
 		setShowShippedConfirm(false);
 	};
+
+	if (loading) {
+		<Loader text={"des informations"} />;
+	}
 
 	return (
 		<div>
@@ -99,7 +130,7 @@ export default function OrderDetails({
 					alt="fleche retour"
 					className="w-4 rotate-180"
 				/>
-				Retour
+				{fromUserDetails ? "Retour à l'utilisateur" : "Retour à la liste"}
 			</button>
 
 			<div className="mx-auto px-3 py-6">
@@ -384,7 +415,135 @@ export default function OrderDetails({
 					<div className="h-1 bg-linear-to-r from-indigo-500 via-blue-500 to-purple-500"></div>
 				</div>
 				<div className="bg-white rounded-2xl border border-gray-200 overflow-hidden mt-6">
-					Information client
+					<div className="p-4">
+						<h3 className="text-lg font-semibold text-gray-800 mb-4">
+							Informations client
+						</h3>
+
+						{orderUser ? (
+							<>
+								{/* Desktop */}
+								<div className="hidden xl:grid xl:grid-cols-5 gap-20 text-sm text-gray-700">
+									<div className=" flex flex-col justify-between">
+										<div className="flex justify-between">
+											<p>{orderUser.last_name}</p>
+										</div>
+										<div className="flex justify-between">
+											<p>{orderUser.first_name}</p>
+										</div>
+
+										<div className="flex justify-between">
+											<p>{orderUser.email}</p>
+										</div>
+
+										<div className="flex justify-between">
+											<p>{orderUser.phone}</p>
+										</div>
+
+										<div className="flex justify-between">
+											<p>
+												{orderUser.addresses?.[0].street_number ??
+													"Non renseignée"}
+											</p>
+										</div>
+									</div>
+
+									<div>
+										<p className="font-medium">Adresse :</p>
+
+										<div className="flex justify-between">
+											<p>
+												{orderUser.addresses[0].street_number}{" "}
+												{orderUser.addresses[0].street_name}
+											</p>
+										</div>
+
+										<div className="flex justify-between">
+											<p>{orderUser.addresses[0].zip_code}</p>
+										</div>
+
+										<div className="flex justify-between">
+											<p>{orderUser.addresses[0].city}</p>
+										</div>
+
+										<div className="flex justify-between">
+											<p>
+												{orderUser.addresses?.[0].country ?? "Non renseignée"}
+											</p>
+										</div>
+									</div>
+									<div>
+										<p className="font-medium">Complément d'information :</p>
+										{orderUser.addresses?.[0].complement ?? "Non renseignée"}
+									</div>
+								</div>
+
+								{/* Mobile */}
+								<div className="xl:hidden grid gap-y-2 text-sm text-gray-700">
+									<div className="flex justify-between">
+										<p className="font-medium">Nom & Prénom</p>
+										<span>
+											{orderUser.first_name} {orderUser.last_name}
+										</span>
+									</div>
+									<div className="flex justify-between">
+										<span className="font-medium">Email</span>
+										<span>{orderUser.email}</span>
+									</div>
+									<div className="flex justify-between">
+										<span className="font-medium">Téléphone</span>
+										<span>{orderUser.phone}</span>
+									</div>
+									<div className="mt-2">
+										<div className="border-t  border-gray-200 "></div>
+										<div className="font-medium mt-2">Adresse</div>
+										<div className="mt-2">
+											<div>
+												<span>
+													{orderUser.addresses?.[0].street_number ??
+														"Non renseignée"}
+												</span>
+												<span className="ml-2">
+													{orderUser.addresses?.[0].street_name ??
+														"Non renseignée"}
+												</span>
+											</div>
+											<div>
+												<span>
+													{orderUser.addresses?.[0].zip_code ??
+														"Non renseignée"}
+												</span>
+												<span className="ml-2">
+													{orderUser.addresses?.[0].city ?? "Non renseignée"}
+												</span>
+											</div>
+											<div>
+												<span>
+													{orderUser.addresses?.[0].country ?? "Non renseignée"}
+												</span>
+											</div>
+											<div>
+												<div className="font-medium mt-4">
+													Informations complémentaires
+												</div>
+												<div className="mt-2">
+													<span>
+														{orderUser.addresses?.[0].complement ??
+															"Non renseignée"}
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</>
+						) : (
+							<p className="text-gray-500 text-sm italic">
+								Aucun utilisateur associé à cette commande.
+							</p>
+						)}
+					</div>
+
 					<div className="h-1 bg-linear-to-r from-indigo-500 via-blue-500 to-purple-500"></div>
 				</div>
 			</div>

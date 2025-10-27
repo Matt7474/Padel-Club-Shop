@@ -1,21 +1,23 @@
 import { ShoppingBag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteOrder, getOrders, updateOrderStatus } from "../../../api/Order";
-import { useToastStore } from "../../../store/ToastStore ";
+import { getOrders } from "../../../api/Order";
 import type { Order } from "../../../types/Order";
+import type { User } from "../../../types/User";
+import { useOrderActions } from "../../../utils/useOrderActions";
 import Loader from "../Tools/Loader";
 import { useSortableData } from "../Tools/useSortableData";
 import OrderDetails from "./OrderDetails";
+import UserDetails from "./UserDetails";
 
 export default function OrderList() {
 	const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+	const [selectedUser, setSelectedUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [orders, setOrders] = useState<Order[]>([]);
 	const [, setError] = useState("");
 	const navigate = useNavigate();
 	const { items: sortedOrders, requestSort } = useSortableData(orders);
-	const addToast = useToastStore((state) => state.addToast);
 
 	const fetchOrders = async () => {
 		try {
@@ -32,78 +34,17 @@ export default function OrderList() {
 
 	useEffect(() => {
 		fetchOrders();
+		const interval = setInterval(fetchOrders, 30000);
+		return () => clearInterval(interval);
 	}, []);
 
-	const handleReturn = () => setSelectedOrder(null);
+	const {
+		handleProcessingOrder,
+		handleReadyOrder,
+		handleShippedOrder,
+		handleDeleteOrder,
+	} = useOrderActions({ fetchOrders, setSelectedOrder });
 
-	// passage de la commande de payé -> en préparation
-	const handleConfirmProcessing = async (id: number) => {
-		const status = "processing";
-		try {
-			const updatedOrder = await updateOrderStatus(id, status);
-			console.log(
-				"Commande maintenant en cours de préparation !",
-				updatedOrder,
-			);
-
-			addToast(
-				`La commande est maintenant en cours de préparation !`,
-				"bg-green-500",
-			);
-
-			setSelectedOrder(null);
-			fetchOrders();
-		} catch (err) {
-			console.error(err, "La commande n'a pas changé de status");
-			addToast(`La commande n'a pas changé de status`, "bg-red-500");
-		}
-	};
-
-	// passage de la commande de payé -> en préparation
-	const handleConfirmReady = async (id: number) => {
-		const status = "ready";
-		try {
-			const updatedOrder = await updateOrderStatus(id, status);
-			console.log("Commande maintenant prête !", updatedOrder);
-
-			addToast(`La commande est maintenant prête !`, "bg-green-500");
-			setSelectedOrder(null);
-			fetchOrders();
-		} catch (err) {
-			console.error(err, "La commande n'a pas changé de status");
-			addToast(`La commande n'a pas changé de status`, "bg-red-500");
-		}
-	};
-
-	// passage de la commande de prête -> expédié
-	const handleConfirmShipped = async (id: number) => {
-		const status = "shipped";
-		try {
-			const updatedOrder = await updateOrderStatus(id, status);
-			console.log("Commande expédié !", updatedOrder);
-
-			addToast(`La commande à été expédié !`, "bg-green-500");
-			setSelectedOrder(null);
-			fetchOrders();
-		} catch (err) {
-			console.error(err, "La commande n'a pas changé de status");
-			addToast(`La commande n'a pas changé de status`, "bg-red-500");
-		}
-	};
-
-	// Annulation de la commande
-	const handleDeleteOrder = async (id: number) => {
-		try {
-			await deleteOrder(id);
-			console.log("Commande supprimée !");
-			addToast(`La commande à été supprimée`, "bg-green-500");
-			setSelectedOrder(null);
-			fetchOrders();
-		} catch (err) {
-			console.log(err, "La commande n'a pas pu être supprimée");
-			addToast(`La commande n'a pas pu être supprimée`, "bg-red-500");
-		}
-	};
 	const handleNavigate = () => navigate("/");
 
 	const statusImages: Record<string, string> = {
@@ -143,15 +84,29 @@ export default function OrderList() {
 		);
 	}
 
+	if (selectedUser) {
+		return (
+			<UserDetails
+				user={selectedUser}
+				orders={orders.filter((order) => order.user_id === selectedUser.userId)}
+				onReturn={() => setSelectedUser(null)}
+				onDeleteOrder={handleDeleteOrder}
+				onProcessingOrder={handleProcessingOrder}
+				onReadyOrder={handleReadyOrder}
+				onShippedOrder={handleShippedOrder}
+			/>
+		);
+	}
+
 	if (selectedOrder) {
 		return (
 			<OrderDetails
 				order={selectedOrder}
-				onReturn={handleReturn}
+				onReturn={() => setSelectedOrder(null)}
 				onDeleteOrder={handleDeleteOrder}
-				onProcessingOrder={handleConfirmProcessing}
-				onReadyOrder={handleConfirmReady}
-				onShippedOrder={handleConfirmShipped}
+				onProcessingOrder={handleProcessingOrder}
+				onReadyOrder={handleReadyOrder}
+				onShippedOrder={handleShippedOrder}
 			/>
 		);
 	}

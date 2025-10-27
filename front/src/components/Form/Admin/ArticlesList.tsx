@@ -7,9 +7,9 @@ import CreateArticle from "./CreateArticle";
 
 // Type unique pour le tri
 type ArticleSortable = Article & {
-	brandName?: string; // pour trier par marque
-	promoActive?: number; // pour trier par promo active
-	promoStatusLabel?: string; // pour trier par statut de promo
+	brandName?: string;
+	promoActive?: number;
+	promoStatusLabel?: string;
 };
 
 export default function ArticlesList() {
@@ -35,6 +35,8 @@ export default function ArticlesList() {
 		};
 
 		fetchArticles();
+		const interval = setInterval(fetchArticles, 30000);
+		return () => clearInterval(interval);
 	}, []);
 
 	// Articles supprimés

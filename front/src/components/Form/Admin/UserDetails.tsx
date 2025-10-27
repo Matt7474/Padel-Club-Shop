@@ -5,6 +5,7 @@ import { useToastStore } from "../../../store/ToastStore ";
 import { useAuthStore } from "../../../store/useAuthStore";
 import type { Order } from "../../../types/Order";
 import type { User } from "../../../types/User";
+import { useOrderActions } from "../../../utils/useOrderActions";
 import ConfirmModal from "../../Modal/ConfirmModal";
 import Toogle from "../Toogle/Toogle";
 import Button from "../Tools/Button";
@@ -12,12 +13,17 @@ import Select from "../Tools/Select";
 import OrderDetails from "./OrderDetails";
 import UsersList from "./UsersList";
 
-interface UserProps {
+interface UserDetailsProps {
 	user: User;
-	orders?: { user_id: number; order_id: number }[];
+	orders?: Order[];
+	onReturn?: () => void;
+	onDeleteOrder?: (orderId: number) => void;
+	onProcessingOrder?: (orderId: number) => void;
+	onReadyOrder?: (orderId: number) => void;
+	onShippedOrder?: (orderId: number) => void;
 }
 
-export default function UserDetails({ user }: UserProps) {
+export default function UserDetails({ user }: UserDetailsProps) {
 	// Stores
 	const addToast = useToastStore((state) => state.addToast);
 	const currentLoggedUser = useAuthStore((state) => state.user);
@@ -34,25 +40,32 @@ export default function UserDetails({ user }: UserProps) {
 	const [isLoadingOrders, setIsLoadingOrders] = useState(false);
 
 	// Récupération des commandes
-	useEffect(() => {
-		const fetchUserOrders = async () => {
-			setIsLoadingOrders(true);
-			try {
-				const orders = await getOrders();
-				const filteredOrders = orders.filter(
-					(order: Order) => order.user_id === user.userId,
-				);
-				setUserOrders(filteredOrders);
-			} catch (error) {
-				console.error("Erreur lors de la récupération des commandes:", error);
-				addToast("Erreur lors du chargement des commandes", "bg-red-500");
-			} finally {
-				setIsLoadingOrders(false);
-			}
-		};
+	const fetchUserOrders = async () => {
+		setIsLoadingOrders(true);
+		try {
+			const orders = await getOrders();
+			const filteredOrders = orders.filter(
+				(order: Order) => order.user_id === user.userId,
+			);
+			setUserOrders(filteredOrders);
+		} catch (error) {
+			console.error("Erreur lors de la récupération des commandes:", error);
+			addToast("Erreur lors du chargement des commandes", "bg-red-500");
+		} finally {
+			setIsLoadingOrders(false);
+		}
+	};
 
+	useEffect(() => {
 		fetchUserOrders();
-	}, [user.userId, addToast]);
+	}, [user.userId]);
+
+	const {
+		handleProcessingOrder,
+		handleReadyOrder,
+		handleShippedOrder,
+		handleDeleteOrder,
+	} = useOrderActions({ fetchOrders: fetchUserOrders, setSelectedOrder });
 
 	console.log("userOrders", userOrders);
 
@@ -178,6 +191,20 @@ export default function UserDetails({ user }: UserProps) {
 	if (clickReturn) return <UsersList />;
 
 	const menuOptions = getAvailableRoles();
+
+	if (selectedOrder) {
+		return (
+			<OrderDetails
+				order={selectedOrder}
+				onReturn={() => setSelectedOrder(null)}
+				onDeleteOrder={handleDeleteOrder}
+				onProcessingOrder={handleProcessingOrder}
+				onReadyOrder={handleReadyOrder}
+				onShippedOrder={handleShippedOrder}
+				fromUserDetails
+			/>
+		);
+	}
 
 	return (
 		<div>

@@ -41,6 +41,8 @@ export default function UsersList() {
 		};
 
 		fetchUsers();
+		const interval = setInterval(fetchUsers, 30000);
+		return () => clearInterval(interval);
 	}, []);
 
 	const handleUserClick = (user: User) => setSelectedUser(user);
