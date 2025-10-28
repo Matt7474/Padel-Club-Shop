@@ -4,22 +4,11 @@ import { Link } from "react-router-dom";
 import { getMyMessages, sendContactForm } from "../../../api/Contact";
 import { useToastStore } from "../../../store/ToastStore ";
 import { useAuthStore } from "../../../store/useAuthStore";
+import type { FormData } from "../../../types/Messages";
 import Button from "../Tools/Button";
 import Loader from "../Tools/Loader";
 import TextArea from "../Tools/TextArea";
 import type { Imessages } from "./ClientsMessages";
-
-interface FormData {
-	user_id?: number | null;
-	firstName: string;
-	lastName: string;
-	email: string;
-	phone: string;
-	subject: string;
-	message: string;
-	orderNumber: string;
-	is_deleted: boolean;
-}
 
 export default function MyMessages() {
 	const addToast = useToastStore((state) => state.addToast);
@@ -28,7 +17,7 @@ export default function MyMessages() {
 	const [messages, setMessages] = useState<Imessages[]>([]);
 	const [, setError] = useState("");
 	const [newMessage, setNewMessage] = useState("");
-	const messagesContainerRef = useRef<HTMLDivElement | null>(null); // 🔹 conteneur scrollable
+	const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
 	const fetchMessages = async () => {
 		if (!user) return;

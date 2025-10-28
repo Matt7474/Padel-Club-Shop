@@ -1,8 +1,16 @@
 import { MailWarning } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { getClientMessages, markMessageAsRead } from "../../../api/Contact";
+import {
+	getClientMessages,
+	markMessageAsRead,
+	responseMessage,
+} from "../../../api/Contact";
+import { useToastStore } from "../../../store/ToastStore ";
 import { useAuthStore } from "../../../store/useAuthStore";
+import type { FormData } from "../../../types/Messages";
+import Button from "../Tools/Button";
 import Loader from "../Tools/Loader";
+import TextArea from "../Tools/TextArea";
 
 export interface Imessages {
 	id: number;
@@ -29,6 +37,8 @@ export interface Imessages {
 
 export default function ClientsMessages() {
 	const { isAuthenticated } = useAuthStore();
+	const addToast = useToastStore((state) => state.addToast);
+	const [newMessage, setNewMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [messages, setMessages] = useState<Imessages[]>([]);
 	const [selectedUser, setSelectedUser] = useState<Imessages["user"] | null>(
@@ -57,7 +67,7 @@ export default function ClientsMessages() {
 
 	useEffect(() => {
 		fetchMessages();
-		const interval = setInterval(fetchMessages, 30000);
+		const interval = setInterval(fetchMessages, 300000);
 		return () => clearInterval(interval);
 	}, [isAuthenticated]);
 
@@ -91,10 +101,80 @@ export default function ClientsMessages() {
 
 	const handleClickUser = async (user: Imessages["user"]) => {
 		setSelectedUser(user);
+		console.log("selectedUser", selectedUser);
+
 		const userMessages = messages.filter((m) => m.user_id === user.id);
 		const unreadMessages = userMessages.filter((m) => !m.is_read);
 		for (const msg of unreadMessages) {
 			await markMessageAsRead(msg.id);
+		}
+	};
+
+	const [, setFormData] = useState<FormData>({
+		user_id: null,
+		firstName: "",
+		lastName: "",
+		email: "",
+		phone: "",
+		subject: "other",
+		message: "",
+		orderNumber: "",
+		is_deleted: false,
+	});
+
+	useEffect(() => {
+		if (selectedUser) {
+			setFormData({
+				user_id: selectedUser.id,
+				firstName: selectedUser.first_name,
+				lastName: selectedUser.last_name,
+				email: selectedUser.email,
+				phone: "",
+				subject: "other",
+				message: "",
+				orderNumber: "",
+				is_deleted: false,
+			});
+		}
+	}, [selectedUser]);
+
+	const handleSubmit = async (): Promise<void> => {
+		if (!selectedUser) {
+			addToast("Veuillez sélectionner un utilisateur", "bg-red-500");
+			return;
+		}
+
+		// Trouver le dernier message du client
+		const lastMessage = messages
+			.filter((m) => m.user_id === selectedUser.id)
+			.sort(
+				(a, b) =>
+					(b.created_at ? new Date(b.created_at).getTime() : 0) -
+					(a.created_at ? new Date(a.created_at).getTime() : 0),
+			)[0];
+
+		if (!lastMessage) {
+			addToast("Aucun message trouvé pour cet utilisateur", "bg-red-500");
+			return;
+		}
+
+		if (!newMessage.trim()) {
+			addToast("La réponse ne peut pas être vide", "bg-red-500");
+			return;
+		}
+
+		try {
+			await responseMessage(lastMessage.id, newMessage);
+			addToast(`Réponse envoyée avec succès`, "bg-green-500");
+			setNewMessage("");
+			await fetchMessages();
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				console.error("Erreur envoi réponse :", error.message);
+				addToast(`Erreur : ${error.message}`, "bg-red-500");
+			} else {
+				addToast("Erreur inconnue lors de l'envoi", "bg-red-500");
+			}
 		}
 	};
 
@@ -127,9 +207,9 @@ export default function ClientsMessages() {
 			<h2 className="p-3 bg-gray-500/80 font-semibold text-lg mt-7 xl:mt-0 flex justify-between">
 				Liste des messages client
 			</h2>
-			<div className="mx-auto mt-7 xl:grid xl:grid-cols-5 xl:mx-50 gap-6">
+			<div className="mx-auto mt-7 xl:grid xl:grid-cols-7 xl:mx-50 gap-6">
 				{/* Colonne gauche : liste utilisateurs */}
-				<div className="bg-white p-6 rounded-3xl shadow-xl col-span-2 max-h-130 xl:h-1300 overflow-y-auto scroll-smooth">
+				<div className="bg-white p-6 rounded-3xl shadow-xl col-span-2 max-h-140 overflow-y-auto scroll-smooth">
 					<h2 className="font-semibold text-lg mb-4">Utilisateurs</h2>
 					{usersWithMessages.length === 0 ? (
 						<p className="text-gray-500 text-sm">Aucun utilisateur</p>
@@ -157,11 +237,15 @@ export default function ClientsMessages() {
 					)}
 				</div>
 
-				{/* Colonne droite : messages */}
+				{/* Colonne milieu : messages */}
+
 				<div
 					ref={messagesContainerRef}
-					className="bg-white space-y-6 p-6 rounded-3xl shadow-xl col-span-3 max-h-130 xl:max-h-200 overflow-y-auto scroll-smooth"
+					className="bg-white mt-8 xl:mt-0 space-y-6 p-6 rounded-3xl shadow-xl col-span-3 h-140 overflow-y-auto scroll-smooth"
 				>
+					<h2 className="font-semibold text-lg mb-4 bg-white ">
+						Messages de {selectedUser?.last_name} {selectedUser?.first_name}
+					</h2>
 					{selectedUser ? (
 						messagesForSelectedUser.length === 0 ? (
 							<p className="text-center text-gray-500 mt-10">
@@ -232,6 +316,27 @@ export default function ClientsMessages() {
 							Sélectionnez un utilisateur pour voir ses messages
 						</p>
 					)}
+				</div>
+
+				{/* Colonne droite : reponse */}
+				<div className="bg-white p-6 rounded-3xl shadow-xl mt-7 xl:mt-0 h-70 col-span-2">
+					<TextArea
+						label={"Votre message"}
+						placeholder={""}
+						length={newMessage.length}
+						height={"h-40"}
+						value={newMessage}
+						onChange={setNewMessage}
+						maxLength={500}
+					/>
+
+					<div className="-mt-3">
+						<Button
+							type={"button"}
+							onClick={handleSubmit}
+							buttonText={"ENVOYER"}
+						/>
+					</div>
 				</div>
 			</div>
 		</div>

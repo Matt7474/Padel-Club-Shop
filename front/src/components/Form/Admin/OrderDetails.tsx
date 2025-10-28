@@ -4,8 +4,8 @@ import { getAllUsers } from "../../../api/User";
 import type { Order } from "../../../types/Order";
 import type { UserApiResponse } from "../../../types/User";
 import ConfirmModal from "../../Modal/ConfirmModal";
-import Loader from "../Tools/Loader";
 import BackButton from "../Tools/BackButton";
+import Loader from "../Tools/Loader";
 
 interface OrderDetailsProps {
 	order: Order;

@@ -128,7 +128,7 @@ export default function ProfileMenu() {
 			: clientMenus;
 
 	return (
-		<div className="relative">
+		<div className="relative min-h-220 max-h-350">
 			{/* Titre du menu */}
 			<h2 className="p-3 bg-orange-500/80 font-semibold text-lg mt-7 xl:mt-0 xl:mb-4 flex justify-between">
 				{user?.role === "admin" || user?.role === "super admin"

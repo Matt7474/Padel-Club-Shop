@@ -15,8 +15,8 @@ import {
 	restoreMessage,
 } from "../../../api/Contact";
 import { useToastStore } from "../../../store/ToastStore ";
-import type { Imessages } from "./ClientsMessages";
 import BackButton from "../Tools/BackButton";
+import type { Imessages } from "./ClientsMessages";
 
 interface ClientMessageProps {
 	message: Imessages;

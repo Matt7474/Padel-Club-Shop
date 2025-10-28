@@ -8,11 +8,11 @@ import type { User } from "../../../types/User";
 import { useOrderActions } from "../../../utils/useOrderActions";
 import ConfirmModal from "../../Modal/ConfirmModal";
 import Toogle from "../Toogle/Toogle";
+import BackButton from "../Tools/BackButton";
 import Button from "../Tools/Button";
 import Select from "../Tools/Select";
 import OrderDetails from "./OrderDetails";
 import UsersList from "./UsersList";
-import BackButton from "../Tools/BackButton";
 
 interface UserDetailsProps {
 	user: User;
