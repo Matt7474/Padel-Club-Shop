@@ -3,9 +3,6 @@ import { Promotions } from "../models/promotions";
 
 // Création d'une promotion pour un article
 export const createPromos = async (req: Request, res: Response) => {
-	console.log(
-		"looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooog",
-	);
 	try {
 		const { articleId } = req.params;
 		const {

@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import type { UserPayload } from "../types/express";
 
 export const authenticateToken = (
 	req: Request,
@@ -8,10 +9,6 @@ export const authenticateToken = (
 ) => {
 	const authHeader = req.headers.authorization;
 	const token = authHeader?.split(" ")[1];
-
-	// 🕵️ LOGS DÉTAILLÉS
-	// console.log("🔹 Requête :", req.method, req.originalUrl);
-	// console.log("🔹 Authorization header :", authHeader);
 
 	if (!token) {
 		console.warn("⚠️ Aucune Authorization header reçue !");
@@ -27,14 +24,11 @@ export const authenticateToken = (
 	}
 
 	try {
-		const payload = jwt.verify(token, secret) as jwt.JwtPayload;
-		(req as Request & { user?: jwt.JwtPayload }).user = payload;
+		const payload = jwt.verify(token, secret) as UserPayload;
+		req.user = payload;
 		next();
 	} catch (err: unknown) {
 		if (err instanceof Error) {
-			// console.error("❌ Token invalide :", err.message);
-			// console.error("🔸 Route concernée :", req.method, req.originalUrl);
-			// console.error("🔸 Token reçu :", token);
 			return res.status(401).json({ message: "Token invalide ou expiré" });
 		}
 		return res.status(401).json({ message: "Token invalide ou expiré" });
