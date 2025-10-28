@@ -1,13 +1,14 @@
 import { LogIn, LogOut, ShoppingCart, User, UserStar } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getClientMessages } from "../../api/Contact";
+import { getMessagesForm } from "../../api/Contact";
 import { getOrders } from "../../api/Order";
 import { useCartStore } from "../../store/cartStore";
 import { useToastStore } from "../../store/ToastStore ";
 import { useAuthStore } from "../../store/useAuthStore";
 import type { Order } from "../../types/Order";
-import type { Imessages } from "../Form/Admin/ClientsMessages";
+
+import type { IClientMessageForm } from "../Form/Admin/ClientsMessagesForm";
 import CartModal from "../Modal/CartModal";
 import MenuModal from "../Modal/MenuModal";
 import SearchBar from "../SearchBar/SearchBar";
@@ -36,9 +37,9 @@ export default function Header() {
 	useEffect(() => {
 		const fetchUnreadMessages = async () => {
 			try {
-				const response = await getClientMessages();
+				const response = await getMessagesForm();
 				const unread = response.data.filter(
-					(message: Imessages) => message.is_read === false,
+					(message: IClientMessageForm) => message.is_read === false,
 				).length;
 				setUnreadMessageCount(unread);
 			} catch (error) {

@@ -194,17 +194,17 @@ CREATE TABLE contact_messages (
     last_name TEXT NOT NULL,
     email TEXT NOT NULL,
     phone VARCHAR(20),
-    order_number VARCHAR(17),
-    is_read BOOLEAN DEFAULT FALSE,
-    response TEXT,
-    is_deleted BOOLEAN DEFAULT FALSE,
     subject TEXT CHECK (subject IN ('general', 'order', 'product', 'complaint', 'partnership', 'other')) NOT NULL,
+    order_number VARCHAR(17),
     message TEXT NOT NULL,
+    response TEXT NULL,
     status TEXT CHECK (status IN ('new', 'in_progress', 'resolved', 'closed')) DEFAULT 'new',
-    responded_at TIMESTAMP NULL,
-    admin_notes TEXT,
+    is_read BOOLEAN DEFAULT FALSE,
+    is_deleted BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
+
+
 
 COMMIT;

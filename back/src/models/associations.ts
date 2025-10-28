@@ -3,7 +3,8 @@ import { Article } from "./article";
 import { ArticleImage } from "./articleImage";
 import { ArticleRatings } from "./articleRatings";
 import { Brand } from "./brand";
-import { Contact } from "./contact";
+import ContactMessage from "./contactMessage";
+
 import { Order } from "./order";
 import { OrderItem } from "./orderItem";
 import { Promotions } from "./promotions";
@@ -47,10 +48,9 @@ Article.hasMany(OrderItem, { as: "orderItems", foreignKey: "article_id" });
 OrderItem.belongsTo(Article, { as: "article", foreignKey: "article_id" });
 
 // User -> Contact
-User.hasMany(Contact, { as: "contacts", foreignKey: "user_id" });
-Contact.belongsTo(User, {
+User.hasMany(ContactMessage, { as: "contacts", foreignKey: "user_id" });
+ContactMessage.belongsTo(User, {
 	foreignKey: "email",
 	targetKey: "email",
 	as: "user",
-	// constraints: false,
 });

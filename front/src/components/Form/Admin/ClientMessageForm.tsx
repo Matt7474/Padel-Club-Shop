@@ -7,6 +7,8 @@ import {
 	Phone,
 	Send,
 	Trash2,
+	UserRoundCheck,
+	UserRoundX,
 } from "lucide-react";
 import { useState } from "react";
 import {
@@ -16,14 +18,14 @@ import {
 } from "../../../api/Contact";
 import { useToastStore } from "../../../store/ToastStore ";
 import BackButton from "../Tools/BackButton";
-import type { Imessages } from "./ClientsMessages";
+import type { IClientMessageForm } from "./ClientsMessagesForm";
 
 interface ClientMessageProps {
-	message: Imessages;
+	message: IClientMessageForm;
 	onReturn: () => void;
 }
 
-export default function ClientMessage({
+export default function ClientMessageForm({
 	message,
 	onReturn,
 }: ClientMessageProps) {
@@ -93,7 +95,18 @@ export default function ClientMessage({
 			<div className="max-w-3xl mx-auto space-y-6 relative">
 				{/* Fiche Contact */}
 				<div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-					<p className="text-center text-md text-gray-700 font-semibold italic -mt-2 mb-3">
+					{!currentMessage.user ? (
+						<div className="flex gap-4 text-green-600">
+							<UserRoundCheck />
+							<p>Utilisateur inscrit</p>
+						</div>
+					) : (
+						<div className="flex gap-4 text-red-600">
+							<UserRoundX />
+							<p>Utilisateur non inscrit</p>
+						</div>
+					)}
+					<p className="text-center text-md text-gray-700 font-semibold italic -mt-6 mb-3">
 						Fiche Contact
 					</p>
 					{message.is_deleted === false ? (
@@ -212,7 +225,7 @@ export default function ClientMessage({
 				</div>
 
 				{/* Réponse admin */}
-				{!currentMessage.user ? (
+				{/* {!currentMessage.user ? (
 					<div className="bg-red-50 border-l-4 border-red-400 text-red-700 p-6 rounded-2xl shadow-lg max-w-3xl mx-auto">
 						<p className="font-semibold mb-2">Attention :</p>
 						<p>
@@ -241,8 +254,8 @@ export default function ClientMessage({
 								</a>
 							)}
 						</div>
-					</div>
-				) : currentMessage.response ? (
+					</div> */}
+				{currentMessage.response ? (
 					<div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
 						<div className="flex justify-between">
 							<p className="font-semibold text-gray-900 mb-2 flex">Réponse :</p>

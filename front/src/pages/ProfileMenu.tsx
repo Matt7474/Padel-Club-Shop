@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getArticles } from "../api/Article";
-import { getClientMessages } from "../api/Contact";
 import { getOrders } from "../api/Order";
 import ArticlesList from "../components/Form/Admin/ArticlesList";
 import BrandList from "../components/Form/Admin/BrandList";
-import ClientsMessages, {
-	type Imessages,
-} from "../components/Form/Admin/ClientsMessages";
+// import ClientsMessages from "../components/Form/Admin/ClientsMessages";
 import CreateArticle from "../components/Form/Admin/CreateArticle";
 import CreateBrand from "../components/Form/Admin/CreateBrand";
 import CreatePromo from "../components/Form/Admin/CreatePromo";
 import Dashboard from "../components/Form/Admin/Dashboard/Dashbord";
-import MyMessages from "../components/Form/Admin/MyMessages";
+// import MyMessages from "../components/Form/Admin/MyMessages";
 import MyOrders from "../components/Form/Admin/MyOrders";
 import OrderList from "../components/Form/Admin/OrderList";
 import PromoList from "../components/Form/Admin/PromoList";
@@ -21,6 +18,10 @@ import Select from "../components/Form/Tools/Select";
 import { useAuthStore } from "../store/useAuthStore";
 import type { Order } from "../types/Order";
 import Profile from "./Profile";
+import MessagesForm, {
+	type IClientMessageForm,
+} from "../components/Form/Admin/ClientsMessagesForm";
+import { getMessagesForm } from "../api/Contact";
 
 export default function ProfileMenu() {
 	const [menuSelected, setMenuSelected] = useState("");
@@ -37,9 +38,9 @@ export default function ProfileMenu() {
 		} else {
 			const fetchUnreadMessages = async () => {
 				try {
-					const response = await getClientMessages();
+					const response = await getMessagesForm();
 					const unread = response.data.filter(
-						(message: Imessages) => message.is_read === false,
+						(message: IClientMessageForm) => message.is_read === false,
 					).length;
 					setUnreadCount(unread);
 				} catch (error) {
@@ -115,6 +116,7 @@ export default function ProfileMenu() {
 		"Liste des utilisateurs",
 		"Liste des commandes client",
 		"Liste des messages client",
+		"Liste des messages formulaire",
 		"Mon profil",
 		"Mes commandes",
 		"Mes messages",
@@ -146,7 +148,7 @@ export default function ProfileMenu() {
 				/>
 			</div>
 			{/* Menu latéral desktop */}
-			<div className="hidden xl:flex flex-col w-70 absolute -left-74 top-17 cursor-pointer">
+			<div className="hidden xl:flex flex-col w-70 absolute -left-74 top-17 cursor-pointer ">
 				{menuOptions.map((option) => (
 					<button
 						type="button"
@@ -185,6 +187,11 @@ export default function ProfileMenu() {
 				))}
 			</div>
 			{/* Contenu selon le menu sélectionné */}
+			{menuSelected === "Dashboard" && <Dashboard />}{" "}
+			{menuSelected === "Ajouter une marque" && <CreateBrand />}
+			{menuSelected === "Ajouter une promotion" && (
+				<CreatePromo setMenuSelected={setMenuSelected} />
+			)}
 			{menuSelected === "Ajouter un article" && (
 				<CreateArticle
 					title="Création d'un article"
@@ -193,22 +200,18 @@ export default function ProfileMenu() {
 					onReturn={() => setMenuSelected("Liste des articles")}
 				/>
 			)}
-			{menuSelected === "Liste des articles" && <ArticlesList />}
-			{menuSelected === "Ajouter une marque" && <CreateBrand />}
 			{menuSelected === "Liste des marques" && <BrandList />}
-			{menuSelected === "Ajouter une promotion" && (
-				<CreatePromo setMenuSelected={setMenuSelected} />
-			)}
 			{menuSelected === "Liste des promotions" && (
 				<PromoList setMenuSelected={setMenuSelected} />
 			)}
+			{menuSelected === "Liste des articles" && <ArticlesList />}
 			{menuSelected === "Liste des utilisateurs" && <UserList />}
 			{menuSelected === "Liste des commandes client" && <OrderList />}
+			{/* {menuSelected === "Liste des messages client" && <ClientsMessages />} */}
+			{menuSelected === "Liste des messages formulaire" && <MessagesForm />}
 			{menuSelected === "Mon profil" && <Profile />}
 			{menuSelected === "Mes commandes" && <MyOrders />}
-			{menuSelected === "Liste des messages client" && <ClientsMessages />}
-			{menuSelected === "Mes messages" && <MyMessages />}
-			{menuSelected === "Dashboard" && <Dashboard />}{" "}
+			{/* {menuSelected === "Mes messages" && <MyMessages />} */}
 		</div>
 	);
 }

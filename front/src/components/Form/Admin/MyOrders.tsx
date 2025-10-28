@@ -121,7 +121,7 @@ export default function MyOrders() {
 					</h3>
 				</div>
 
-				<div className="space-y-5">
+				<div className="space-y-5 max-h-130 xl:max-h-200 overflow-y-auto scroll-smooth xl:mx-50">
 					{orders.map((order) => {
 						const status = statusMap[order.status];
 						return (

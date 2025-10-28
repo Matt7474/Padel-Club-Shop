@@ -132,7 +132,7 @@ export default function Register() {
 								htmlFor="lastName"
 								label="Nom"
 								type="text"
-								value={lastName}
+								value={lastName.toUpperCase()}
 								onChange={setLastName}
 							/>
 							<Input
