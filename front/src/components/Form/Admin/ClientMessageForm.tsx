@@ -95,35 +95,52 @@ export default function ClientMessageForm({
 			<div className="max-w-3xl mx-auto space-y-6 relative">
 				{/* Fiche Contact */}
 				<div className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-					{!currentMessage.user ? (
-						<div className="flex gap-4 text-green-600">
-							<UserRoundCheck />
-							<p>Utilisateur inscrit</p>
-						</div>
-					) : (
-						<div className="flex gap-4 text-red-600">
-							<UserRoundX />
-							<p>Utilisateur non inscrit</p>
-						</div>
-					)}
-					<p className="text-center text-md text-gray-700 font-semibold italic -mt-6 mb-3">
-						Fiche Contact
-					</p>
-					{message.is_deleted === false ? (
-						<button type="button" onClick={handleDelete}>
-							<div className="absolute top-3.5 right-5 text-red-500 cursor-pointer">
-								<Trash2 />
+					<div className="flex items-center justify-between w-full">
+						{/* --- Gauche --- */}
+						{!currentMessage.user ? (
+							<div className="flex flex-col xl:flex-row items-center text-green-600 xl:gap-2">
+								<UserRoundCheck />
+								<div className="text-center flex flex-col xl:flex-row xl:items-center xl:gap-1">
+									<p>Utilisateur</p>
+									<p>inscrit</p>
+								</div>
 							</div>
-						</button>
-					) : (
-						<button type="button" onClick={handleRestore}>
-							<div className="absolute top-3.5 right-5 text-green-600 cursor-pointer">
-								<CloudUpload />
+						) : (
+							<div className="flex flex-col xl:flex-row items-center text-red-600 xl:gap-2">
+								<UserRoundX />
+								<div className="text-center flex flex-col xl:flex-row xl:items-center xl:gap-1">
+									<p>Utilisateur</p>
+									<p>non inscrit</p>
+								</div>
 							</div>
-						</button>
-					)}
+						)}
 
-					<div className="grid grid-cols-[auto_90px_1fr] items-center gap-3">
+						{/* --- Centre --- */}
+						<p className="text-md text-gray-700 font-semibold italic text-center">
+							Fiche Contact
+						</p>
+
+						{/* --- Droite --- */}
+						{message.is_deleted === false ? (
+							<button
+								type="button"
+								onClick={handleDelete}
+								className="text-red-500 hover:text-red-700 cursor-pointer -mt-12 xl:mt-0"
+							>
+								<Trash2 />
+							</button>
+						) : (
+							<button
+								type="button"
+								onClick={handleRestore}
+								className="text-green-600 hover:text-green-800 cursor-pointer -mt-12 xl:mt-0"
+							>
+								<CloudUpload />
+							</button>
+						)}
+					</div>
+
+					<div className="grid grid-cols-[auto_90px_1fr] items-center gap-3 mt-4 xl:mt-8">
 						<div className="bg-amber-100 rounded-full p-3 flex items-center justify-center">
 							<Contact className="w-5 h-5 text-amber-600" />
 						</div>

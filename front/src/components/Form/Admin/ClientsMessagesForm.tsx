@@ -1,4 +1,10 @@
-import { Contact, MailSearch, MailWarning, MessagesSquare } from "lucide-react";
+import {
+	Check,
+	Contact,
+	MailSearch,
+	MailWarning,
+	MessagesSquare,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getMessagesForm, markMessageAsRead } from "../../../api/Contact";
@@ -160,16 +166,18 @@ export default function MessagesForm() {
 									<div className="flex flex-col space-y-2">
 										{/* Contact */}
 										<div className="flex relative">
-											<div className="grid grid-cols-[auto_60px_1fr] items-center gap-3">
-												<div className="bg-amber-100 rounded-full p-2 flex items-center justify-center">
-													<Contact className="w-3 h-3 text-amber-600" />
+											<div className="flex justify-betwee">
+												<div className="grid grid-cols-[auto_60px_1fr] items-center gap-3">
+													<div className="bg-amber-100 rounded-full p-2 flex items-center justify-center">
+														<Contact className="w-3 h-3 text-amber-600" />
+													</div>
+													<p className="font-semibold text-gray-900 text-sm text-right">
+														Contact :
+													</p>
+													<p className="font-semibold text-gray-900 text-sm -ml-1 text-start">
+														{message.last_name} {message.first_name}
+													</p>
 												</div>
-												<p className="font-semibold text-gray-900 text-sm text-right">
-													Contact :
-												</p>
-												<p className="font-semibold text-gray-900 text-sm -ml-1 text-start">
-													{message.last_name} {message.first_name}
-												</p>
 											</div>
 											<div className="font-semibold italic text-gray-500 text-xs absolute right-0 -top-3">
 												{message.created_at
@@ -185,6 +193,14 @@ export default function MessagesForm() {
 												{message.is_read === false && (
 													<div className="mt-5 ml-6">
 														<MailWarning className="text-red-500 animate-bounce" />
+													</div>
+												)}
+												{message.response && (
+													<div className="flex gap-1 justify-end ">
+														<p className="text-xs italic mt-1 text-gray-500">
+															répondu
+														</p>
+														<Check className="text-green-600 w-4 mt-0.5" />
 													</div>
 												)}
 											</div>
