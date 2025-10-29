@@ -1,3 +1,4 @@
+import argon2 from "argon2";
 import type { Request, Response } from "express";
 import { Address } from "../models/adress";
 import { User } from "../models/user";
@@ -58,18 +59,8 @@ export const getUserById = async (req: Request, res: Response) => {
 };
 
 export const updateUser = async (req: Request, res: Response) => {
-	console.log("➡️ Dans updateUser");
 	const { id } = req.params;
-	const { first_name, last_name, email, phone, addresses } = req.body;
-
-	console.log("📦 Données reçues:", {
-		id,
-		first_name,
-		last_name,
-		email,
-		phone,
-		addresses,
-	});
+	const { first_name, last_name, email, phone, addresses, password } = req.body;
 
 	try {
 		const user = await User.findByPk(id, {
@@ -80,8 +71,9 @@ export const updateUser = async (req: Request, res: Response) => {
 			return res.status(404).json({ message: "Utilisateur non trouvé." });
 		}
 
-		console.log("👤 Utilisateur trouvé:", user.user_id);
-		console.log("🏠 Adresses existantes:", user.addresses);
+		const hashedPassword: string | undefined = password
+			? await argon2.hash(password)
+			: undefined;
 
 		// 🧩 Mise à jour des champs utilisateur
 		await user.update({
@@ -89,9 +81,8 @@ export const updateUser = async (req: Request, res: Response) => {
 			last_name: last_name ?? user.last_name,
 			email: email ?? user.email,
 			phone: phone ?? user.phone,
+			...(hashedPassword && { password: hashedPassword }),
 		});
-
-		console.log("✅ Utilisateur mis à jour");
 
 		// 🏠 Gestion des adresses (shipping + billing)
 		if (addresses && addresses.length > 0) {

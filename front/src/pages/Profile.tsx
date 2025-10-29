@@ -21,6 +21,13 @@ export default function Profile({ text }: ProfileProps) {
 	const [isEditing, setIsEditing] = useState(false);
 	const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
+	const [password, setPassword] = useState("");
+	const [showPassword, setShowPassword] = useState(false);
+	const [newPassword, setNewPassword] = useState("");
+	const [showNewPassword, setShowNewPassword] = useState(false);
+	const [confirmNewPassword, setConfirmNewPassword] = useState("");
+	const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+
 	// State utilisateur
 	const [profile, setProfile] = useState({
 		lastName: "",
@@ -129,17 +136,93 @@ export default function Profile({ text }: ProfileProps) {
 		setIsEditing(true);
 	};
 
+	// const handleChangeSubmit = async (e: React.FormEvent) => {
+	// 	e.preventDefault();
+	// 	if (!user?.id) return;
+
+	// 	try {
+	// 		const updatedUser = {
+	// 			last_name: profile.lastName,
+	// 			first_name: profile.firstName,
+	// 			email: profile.email,
+	// 			phone: profile.phone.replace(/\D/g, ""),
+	// 			password: profile.password || undefined,
+	// 			addresses: [
+	// 				{
+	// 					type: "shipping" as const,
+	// 					street_number: shippingAddress.streetNumber,
+	// 					street_name: shippingAddress.streetName,
+	// 					zip_code: shippingAddress.zipCode,
+	// 					city: shippingAddress.city,
+	// 					country: shippingAddress.country,
+	// 					complement: shippingAddress.additionalInfo,
+	// 				},
+	// 				...(isBillingDifferent
+	// 					? [
+	// 							{
+	// 								type: "billing" as const,
+	// 								street_number: billingAddress.streetNumber,
+	// 								street_name: billingAddress.streetName,
+	// 								zip_code: billingAddress.zipCode,
+	// 								city: billingAddress.city,
+	// 								country: billingAddress.country,
+	// 								complement: billingAddress.additionalInfo,
+	// 							},
+	// 						]
+	// 					: []),
+	// 			],
+	// 		};
+
+	// 		await updateUser(user.id, updatedUser);
+	// 		const response: UserApiResponse = await getUserById(user.id);
+	// 		const transformedUser = transformUserApiToAuthUser(response);
+	// 		const { updateUser: updateStoreUser } = useAuthStore.getState();
+	// 		updateStoreUser(transformedUser);
+
+	// 		setIsEditing(false);
+	// 		addToast("Votre profil a bien été mis à jour", "bg-green-500");
+	// 	} catch (error) {
+	// 		console.error("❌ Erreur lors de la mise à jour :", error);
+	// 		addToast("Une erreur est survenue lors de la mise à jour", "bg-red-500");
+	// 	}
+	// };
+
 	const handleChangeSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!user?.id) return;
 
 		try {
+			// --- Validation du mot de passe ---
+			if (password || newPassword || confirmNewPassword) {
+				if (!password) {
+					addToast("Veuillez entrer votre mot de passe actuel", "bg-red-500");
+					return;
+				}
+
+				if (!newPassword || !confirmNewPassword) {
+					addToast(
+						"Veuillez remplir les deux champs de nouveau mot de passe",
+						"bg-red-500",
+					);
+					return;
+				}
+
+				if (newPassword !== confirmNewPassword) {
+					addToast(
+						"Les nouveaux mots de passe ne correspondent pas",
+						"bg-red-500",
+					);
+					return;
+				}
+			}
+
+			// --- Données à envoyer ---
 			const updatedUser = {
 				last_name: profile.lastName,
 				first_name: profile.firstName,
 				email: profile.email,
 				phone: profile.phone.replace(/\D/g, ""),
-				password: profile.password || undefined,
+				...(newPassword && { password: newPassword }), // seulement si changé
 				addresses: [
 					{
 						type: "shipping" as const,
@@ -172,7 +255,12 @@ export default function Profile({ text }: ProfileProps) {
 			const { updateUser: updateStoreUser } = useAuthStore.getState();
 			updateStoreUser(transformedUser);
 
+			// Reset
+			setProfile({ ...profile, password: "" });
+			setNewPassword("");
+			setConfirmNewPassword("");
 			setIsEditing(false);
+
 			addToast("Votre profil a bien été mis à jour", "bg-green-500");
 		} catch (error) {
 			console.error("❌ Erreur lors de la mise à jour :", error);
@@ -318,6 +406,145 @@ export default function Profile({ text }: ProfileProps) {
 									pattern="^(\d{2}\.){4}\d{2}$"
 									disabled={!isEditing}
 								/>
+
+								{/* Gestion des mots de passe */}
+								{isEditing && (
+									<div className="mt-4">
+										<div className="relative">
+											<Input
+												htmlFor="Password"
+												label="Mot de passe actuel"
+												type={showPassword ? "text" : "password"}
+												value={password}
+												onChange={(val) => setPassword(val)}
+												pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
+												disabled={!isEditing}
+											/>
+											<button
+												type="button"
+												onClick={() => setShowPassword(!showPassword)}
+												className="absolute top-[20%] right-2 p-1 cursor-pointer"
+											>
+												<img
+													src={
+														showPassword ? "/icons/hide.svg" : "/icons/show.svg"
+													}
+													alt={
+														showPassword
+															? "Cacher le mot de passe"
+															: "Afficher le mot de passe"
+													}
+													className="w-5 h-5"
+												/>
+											</button>
+										</div>
+										<div className="relative">
+											<Input
+												htmlFor="newPassword"
+												label="Nouveau mot de passe"
+												type={showNewPassword ? "text" : "password"}
+												value={newPassword}
+												onChange={(val) => setNewPassword(val)}
+												pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
+												disabled={!isEditing}
+											/>
+											<button
+												type="button"
+												onClick={() => setShowNewPassword(!showNewPassword)}
+												className="absolute top-[20%] right-2 p-1 cursor-pointer"
+											>
+												<img
+													src={
+														showNewPassword
+															? "/icons/hide.svg"
+															: "/icons/show.svg"
+													}
+													alt={
+														showNewPassword
+															? "Cacher le mot de passe"
+															: "Afficher le mot de passe"
+													}
+													className="w-5 h-5"
+												/>
+											</button>
+										</div>
+
+										{/* Indicateurs */}
+										<div className="mt-2 text-xs">
+											<span
+												className={
+													newPassword.length >= 8
+														? "text-green-600"
+														: "text-red-600"
+												}
+											>
+												{newPassword.length >= 8 ? "✔" : "✘"} Au moins 8
+												caractères
+											</span>
+											<br />
+											<span
+												className={
+													/[A-Z]/.test(newPassword)
+														? "text-green-600"
+														: "text-red-600"
+												}
+											>
+												{/[A-Z]/.test(newPassword) ? "✔" : "✘"} Une majuscule
+											</span>
+											<br />
+											<span
+												className={
+													/\d/.test(newPassword)
+														? "text-green-600"
+														: "text-red-600"
+												}
+											>
+												{/\d/.test(newPassword) ? "✔" : "✘"} Un chiffre
+											</span>
+										</div>
+
+										<div className="relative mt-2">
+											<Input
+												htmlFor="confirmNewPassword"
+												label="Confirmation du nouveau mot de passe"
+												type={showConfirmNewPassword ? "text" : "password"}
+												value={confirmNewPassword}
+												onChange={(val) => setConfirmNewPassword(val)}
+												disabled={!isEditing}
+											/>
+											<button
+												type="button"
+												onClick={() =>
+													setShowConfirmNewPassword(!showConfirmNewPassword)
+												}
+												className="absolute top-[20%] right-2 p-1 cursor-pointer"
+											>
+												<img
+													src={
+														showConfirmNewPassword
+															? "/icons/hide.svg"
+															: "/icons/show.svg"
+													}
+													alt={
+														showConfirmNewPassword
+															? "Cacher le mot de passe"
+															: "Afficher le mot de passe"
+													}
+													className="w-5 h-5"
+												/>
+											</button>
+
+											{/* Message si non identique */}
+											{newPassword &&
+												confirmNewPassword &&
+												newPassword !== confirmNewPassword && (
+													<span className="text-red-600 text-sm absolute mt-1 pl-0.5">
+														Les mots de passe ne sont pas identiques.
+													</span>
+												)}
+										</div>
+									</div>
+								)}
 							</div>
 						</div>
 
