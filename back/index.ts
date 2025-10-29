@@ -3,12 +3,13 @@ const envFile =
 	process.env.NODE_ENV === "production" ? ".env.production" : ".env.dev";
 dotenv.config({ path: envFile });
 
+import "./src/models/associations";
+
 import path from "node:path";
 import cors from "cors";
 import http from "node:http";
 import express from "express";
 import bodyParser from "body-parser";
-
 import { initWebSocketServer } from "./src/wsServer";
 import { sequelize } from "./src/database/db";
 import { router } from "./src/router";

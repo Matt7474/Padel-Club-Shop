@@ -1,10 +1,6 @@
 import { CheckCheck, Send, Users as UserIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import {
-	getUserMessages,
-	sendAdminMessage,
-	sendUserMessage,
-} from "../../../api/Message";
+import { getUserMessages } from "../../../api/Message";
 import { getAllUsers } from "../../../api/User";
 import { useToastStore } from "../../../store/ToastStore ";
 import { useAuthStore } from "../../../store/useAuthStore";
@@ -24,8 +20,99 @@ export default function ClientsMessages() {
 	const [isSending, setIsSending] = useState(false);
 
 	const messagesEndRef = useRef<HTMLDivElement | null>(null);
+	const ws = useRef<WebSocket | null>(null);
+	const selectedUserRef = useRef<UserType | null>(null);
 
-	// --- Fetch all users ---
+	// ✅ Garder selectedUser à jour dans une ref
+	useEffect(() => {
+		selectedUserRef.current = selectedUser;
+	}, [selectedUser]);
+
+	// ✅ WebSocket Connection (sans dépendance sur selectedUser)
+	useEffect(() => {
+		if (!user?.id) return;
+
+		ws.current = new WebSocket("ws://localhost:3000");
+
+		ws.current.onopen = () => {
+			console.log("✅ Admin WebSocket connected");
+			ws.current?.send(
+				JSON.stringify({
+					type: "connect",
+					userId: user.id,
+				}),
+			);
+		};
+
+		ws.current.onmessage = (event) => {
+			try {
+				const message = JSON.parse(event.data);
+				console.log("📥 [ADMIN] Message reçu via WebSocket:", message);
+
+				// ✅ Vérifie le type
+				if (message.type !== "message") return;
+
+				const msg = message.data;
+				if (!msg) {
+					console.warn("⚠️ Message vide ou mal formé:", message);
+					return;
+				}
+
+				const currentSelectedUser = selectedUserRef.current;
+
+				console.log("📨 Message détaillé reçu:", {
+					sender_id: msg.sender_id,
+					receiver_id: msg.receiver_id,
+					current_user_id: user.id,
+					selected_user_id: currentSelectedUser?.id,
+				});
+
+				// ✅ Vérifie si le message concerne la conversation actuellement ouverte
+				const isForCurrentConversation =
+					currentSelectedUser &&
+					// message reçu du client vers l'admin
+					((msg.sender_id === currentSelectedUser.id &&
+						msg.receiver_id === user.id) ||
+						// message émis par l'admin vers le client
+						(msg.sender_id === user.id &&
+							msg.receiver_id === currentSelectedUser.id));
+
+				if (!isForCurrentConversation) {
+					console.log("📭 Message non lié à la conversation en cours, ignoré.");
+					return;
+				}
+
+				// ✅ Évite les doublons (basé sur id)
+				setMessages((prevMessages) => {
+					if (prevMessages.some((m) => m.id === msg.id)) {
+						console.log("⚠️ Message déjà présent, ignoré:", msg.id);
+						return prevMessages;
+					}
+					console.log("💬 Nouveau message ajouté:", msg);
+					return [...prevMessages, msg];
+				});
+			} catch (err) {
+				console.error(
+					"❌ Erreur lors du traitement du message WebSocket:",
+					err,
+				);
+			}
+		};
+
+		ws.current.onerror = (error) => {
+			console.error("❌ WebSocket error:", error);
+			addToast("Erreur de connexion WebSocket", "bg-red-500");
+		};
+
+		ws.current.onclose = () => {
+			console.log("❎ Admin WebSocket closed");
+		};
+
+		return () => {
+			ws.current?.close();
+		};
+	}, [user?.id]);
+
 	const fetchUsers = async () => {
 		try {
 			const res: UserApiResponse[] = await getAllUsers();
@@ -44,7 +131,6 @@ export default function ClientsMessages() {
 		}
 	};
 
-	// --- Fetch messages for selected user ---
 	const fetchMessages = async (userId: number) => {
 		try {
 			setLoading(true);
@@ -63,6 +149,7 @@ export default function ClientsMessages() {
 		await fetchMessages(u.id);
 	};
 
+	// ✅ Envoi via WebSocket
 	const handleSendMessage = async () => {
 		if (!newMessage.trim()) {
 			addToast("Le message ne peut pas être vide", "bg-red-500");
@@ -74,29 +161,22 @@ export default function ClientsMessages() {
 			return;
 		}
 
+		if (!ws.current || ws.current.readyState !== WebSocket.OPEN) {
+			addToast("WebSocket déconnecté", "bg-red-500");
+			return;
+		}
+
 		try {
 			setIsSending(true);
 
-			const isAdmin = user.role === "super admin" || user.role === "admin";
-			let sentMessage: Message | null = null;
-
-			if (isAdmin) {
-				sentMessage = await sendAdminMessage({
-					admin_id: user.id,
-					user_id: selectedUser.id,
+			ws.current.send(
+				JSON.stringify({
+					type: "message",
+					senderId: user.id,
+					receiverId: selectedUser.id,
 					content: newMessage,
-				});
-			} else {
-				const msgs = await sendUserMessage({
-					sender_id: user.id,
-					content: newMessage,
-				});
-				sentMessage = msgs[0];
-			}
-
-			if (sentMessage) {
-				setMessages((prev) => [...prev, sentMessage]);
-			}
+				}),
+			);
 
 			setNewMessage("");
 			addToast("Message envoyé", "bg-green-500");
@@ -111,7 +191,7 @@ export default function ClientsMessages() {
 		}
 	};
 
-	// --- Scroll to bottom when messages change ---
+	// Scroll en bas
 	useEffect(() => {
 		const chatZone = document.getElementById("chat-scroll-zone");
 		if (chatZone) {
@@ -123,7 +203,7 @@ export default function ClientsMessages() {
 		if (isAuthenticated) fetchUsers();
 	}, [isAuthenticated]);
 
-	if (loading) return <Loader text="des messages client" />;
+	if (loading && !selectedUser) return <Loader text="des messages client" />;
 
 	return (
 		<div className=" bg-gray-50 py-8 overflow-hidden">

@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
-import ContactMessage from "../models/contactMessage";
+
 import { User } from "../models/user";
 import { sendMail } from "../services/mailer";
+import { ContactMessage } from "../models/contactMessage";
 
 export const createContactMessage = async (req: Request, res: Response) => {
 	try {

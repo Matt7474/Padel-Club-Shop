@@ -5,7 +5,7 @@ import type {
 	ContactMessageCreationAttributes,
 } from "../types/ContactMessage";
 
-class ContactMessage
+export class ContactMessage
 	extends Model<ContactMessageAttributes, ContactMessageCreationAttributes>
 	implements ContactMessageAttributes
 {
@@ -115,5 +115,3 @@ ContactMessage.init(
 		updatedAt: "updated_at",
 	},
 );
-
-export default ContactMessage;

@@ -1,6 +1,6 @@
 import { CheckCheck, Send, User as UserIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { getUserMessages, sendUserMessage } from "../../../api/Message";
+import { getUserMessages } from "../../../api/Message";
 import { useToastStore } from "../../../store/ToastStore ";
 import { useAuthStore } from "../../../store/useAuthStore";
 import type { Message } from "../../../types/Conversation";
@@ -17,10 +17,45 @@ export default function MyMessages() {
 
 	const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
+	const ws = useRef<WebSocket | null>(null);
+
+	useEffect(() => {
+		if (!user?.id) return;
+
+		// Connexion WebSocket
+		ws.current = new WebSocket("ws://localhost:3000"); // ou wss:// en prod
+
+		ws.current.onopen = () => {
+			console.log("✅ WebSocket connected");
+			ws.current?.send(JSON.stringify({ type: "connect", userId: user.id }));
+		};
+
+		ws.current.onmessage = (event) => {
+			const message = JSON.parse(event.data);
+			if (message.type === "message") {
+				setMessages((prev) => [...prev, message.data]);
+			}
+		};
+
+		ws.current.onclose = () => {
+			console.log("❎ WebSocket closed");
+		};
+
+		return () => {
+			ws.current?.close();
+		};
+	}, [user?.id]);
+
 	// Scroll vers le bas
 	const scrollToBottom = () => {
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	};
+
+	useEffect(() => {
+		if (isAuthenticated && user?.id) {
+			fetchMessages(); // ✅ Charge l'historique via HTTP
+		}
+	}, [isAuthenticated, user?.id]);
 
 	// Récupération des messages du client connecté
 	const fetchMessages = async () => {
@@ -48,15 +83,24 @@ export default function MyMessages() {
 			return;
 		}
 
+		if (!ws.current || ws.current.readyState !== WebSocket.OPEN) {
+			addToast("WebSocket déconnecté", "bg-red-500");
+			return;
+		}
+
 		try {
 			setIsSending(true);
 
-			const msgs: Message[] = await sendUserMessage({
-				sender_id: user.id,
-				content: newMessage,
-			});
+			// ✅ Envoyer via WebSocket (pas via HTTP)
+			ws.current.send(
+				JSON.stringify({
+					type: "message",
+					senderId: user.id,
+					receiverId: null, // null = message au support
+					content: newMessage,
+				}),
+			);
 
-			setMessages((prev) => [...prev, ...msgs]);
 			setNewMessage("");
 			addToast("Message envoyé", "bg-green-500");
 		} catch (err: unknown) {

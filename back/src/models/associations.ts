@@ -3,7 +3,7 @@ import { Article } from "./article";
 import { ArticleImage } from "./articleImage";
 import { ArticleRatings } from "./articleRatings";
 import { Brand } from "./brand";
-import ContactMessage from "./contactMessage";
+import { ContactMessage } from "./contactMessage";
 import { Message } from "./message";
 import { Order } from "./order";
 import { OrderItem } from "./orderItem";
