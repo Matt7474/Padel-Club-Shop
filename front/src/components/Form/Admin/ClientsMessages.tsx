@@ -6,6 +6,7 @@ import { useToastStore } from "../../../store/ToastStore ";
 import { useAuthStore } from "../../../store/useAuthStore";
 import type { Message, User as UserType } from "../../../types/Conversation";
 import type { UserApiResponse } from "../../../types/User";
+import FooterMessage from "../Tools/FooterMessage";
 import Loader from "../Tools/Loader";
 
 export default function ClientsMessages() {
@@ -191,6 +192,13 @@ export default function ClientsMessages() {
 		}
 	};
 
+	const handleKeyPress = (e: React.KeyboardEvent) => {
+		if (e.key === "Enter" && !e.shiftKey) {
+			e.preventDefault();
+			handleSendMessage();
+		}
+	};
+
 	// Scroll en bas
 	useEffect(() => {
 		const chatZone = document.getElementById("chat-scroll-zone");
@@ -209,9 +217,9 @@ export default function ClientsMessages() {
 		<div className=" bg-gray-50 py-8 overflow-hidden">
 			<div className="max-w-7xl mx-auto px-4">
 				{/* En-tête principal */}
-				<div className="bg-linear-to-br from-pink-500 to-purple-600 rounded-3xl shadow-xl mb-8 p-6 flex items-center justify-between">
+				<div className="bg-linear-to-br from-pink-500 to-purple-600 rounded-3xl shadow-xl mb-8  p-3 xl:p-6 flex items-center justify-between">
 					<div className="flex items-center gap-4">
-						<div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg">
+						<div className="w-14 aspect-square  bg-white rounded-full flex items-center justify-center shadow-lg">
 							<UserIcon className="w-7 h-7 text-pink-600" />
 						</div>
 						<div>
@@ -225,9 +233,9 @@ export default function ClientsMessages() {
 					</div>
 				</div>
 
-				<div className="grid xl:grid-cols-4 gap-6">
+				<div className="flex flex-col xl:grid xl:grid-cols-4 gap-6">
 					{/* Liste des utilisateurs */}
-					<div className="bg-white border-2 h-140 border-gray-200 rounded-l-3xl shadow-lg col-span-1 flex flex-col overflow-hidden">
+					<div className="bg-white border-2 h-100 xl:h-140 border-gray-200 rounded-3xl xl:rounded-l-3xl shadow-lg col-span-1 flex flex-col overflow-hidden">
 						{/* En-tête fixe */}
 						<div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
 							<h2 className="font-semibold text-lg text-gray-700 flex items-center gap-2">
@@ -249,7 +257,7 @@ export default function ClientsMessages() {
 											: "bg-gray-50 hover:bg-pink-50"
 									}`}
 								>
-									<p className="font-medium text-gray-700">
+									<p className="font-medium text-gray-700 text-sm">
 										{u.first_name} {u.last_name}
 									</p>
 									<p className="text-sm text-gray-500">{u.email}</p>
@@ -259,7 +267,7 @@ export default function ClientsMessages() {
 					</div>
 
 					{/* Fil de messages */}
-					<div className="bg-white border-2 h-140 border-gray-200 rounded-r-3xl shadow-lg col-span-3 flex flex-col overflow-hidden">
+					<div className="bg-white border-2 h-140 border-gray-200 rounded-3xl xl:rounded-r-3xl shadow-lg col-span-3 flex flex-col overflow-hidden">
 						<div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
 							<h2 className="font-semibold text-lg text-gray-700">
 								Conversation avec{" "}
@@ -374,7 +382,7 @@ export default function ClientsMessages() {
 																	: "bg-white text-gray-800 rounded-tl-sm border border-gray-200"
 															}`}
 															style={{
-																maxWidth: "70%",
+																// maxWidth: "70%",
 																wordBreak: "break-word",
 															}}
 														>
@@ -413,32 +421,13 @@ export default function ClientsMessages() {
 
 						{/* Zone de saisie */}
 						{selectedUser && (
-							<div className="bg-gray-50 border-t border-gray-200 px-6 py-4">
-								<div className="flex gap-3 items-start">
-									<div className="flex-1 relative">
-										<textarea
-											value={newMessage}
-											onChange={(e) => setNewMessage(e.target.value)}
-											placeholder="Écrivez votre message..."
-											maxLength={500}
-											rows={3}
-											className="w-full px-4 py-3 pr-16 rounded-2xl border-2 border-gray-200 focus:border-pink-400 focus:outline-none resize-none transition-all"
-										/>
-										<span className="absolute bottom-3 right-3 text-xs text-gray-400">
-											{newMessage.length}/500
-										</span>
-									</div>
-									<button
-										type="button"
-										onClick={handleSendMessage}
-										disabled={!newMessage.trim() || isSending}
-										className="h-10 px-6 bg-linear-to-br cursor-pointer from-pink-500 to-purple-600 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2"
-									>
-										<Send className="w-5 h-5" />
-										<span>Envoyer</span>
-									</button>
-								</div>
-							</div>
+							<FooterMessage
+								newMessage={newMessage}
+								setNewMessage={setNewMessage}
+								handleSendMessage={handleSendMessage}
+								handleKeyPress={handleKeyPress}
+								isSending={isSending}
+							/>
 						)}
 					</div>
 

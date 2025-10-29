@@ -4,6 +4,7 @@ import { getUserMessages } from "../../../api/Message";
 import { useToastStore } from "../../../store/ToastStore ";
 import { useAuthStore } from "../../../store/useAuthStore";
 import type { Message } from "../../../types/Conversation";
+import FooterMessage from "../Tools/FooterMessage";
 import Loader from "../Tools/Loader";
 
 export default function MyMessages() {
@@ -256,7 +257,7 @@ export default function MyMessages() {
 																		: "bg-white text-gray-800 rounded-tl-sm border border-gray-200"
 																}`}
 																style={{
-																	maxWidth: "70%",
+																	// maxWidth: "70%",
 																	wordBreak: "break-word",
 																}}
 															>
@@ -298,37 +299,13 @@ export default function MyMessages() {
 					</div>
 
 					{/* Zone de saisie */}
-					<div className="bg-gray-50 border-t border-gray-200 px-6 py-4">
-						<div className="flex gap-3 items-start">
-							<div className="flex-1 relative">
-								<textarea
-									value={newMessage}
-									onChange={(e) => setNewMessage(e.target.value)}
-									onKeyPress={handleKeyPress}
-									placeholder="Écrivez votre message..."
-									maxLength={500}
-									rows={3}
-									className="w-full px-4 py-3 pr-16 rounded-2xl border-2 border-gray-200 focus:border-pink-400 focus:outline-none resize-none transition-all"
-								/>
-								<span className="absolute bottom-3 right-3 text-xs text-gray-400">
-									{newMessage.length}/500
-								</span>
-							</div>
-							<button
-								type="button"
-								onClick={handleSendMessage}
-								disabled={!newMessage.trim() || isSending}
-								className="h-10 px-6 bg-linear-to-br from-pink-500 to-purple-600 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none flex items-center gap-2"
-							>
-								<Send className="w-5 h-5" />
-								<span>Envoyer</span>
-							</button>
-						</div>
-						<p className="text-xs text-gray-400 mt-2 text-center">
-							Appuyez sur Entrée pour envoyer, Maj + Entrée pour une nouvelle
-							ligne
-						</p>
-					</div>
+					<FooterMessage
+						newMessage={newMessage}
+						setNewMessage={setNewMessage}
+						handleSendMessage={handleSendMessage}
+						handleKeyPress={handleKeyPress}
+						isSending={isSending}
+					/>
 				</div>
 			</div>
 		</div>
