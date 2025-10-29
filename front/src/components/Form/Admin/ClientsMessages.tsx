@@ -352,7 +352,7 @@ export default function ClientsMessages() {
 										type="button"
 										onClick={handleSendMessage}
 										disabled={!newMessage.trim() || isSending}
-										className="h-10 px-6 bg-linear-to-br from-pink-500 to-purple-600 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2"
+										className="h-10 px-6 bg-linear-to-br cursor-pointer from-pink-500 to-purple-600 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-2"
 									>
 										<Send className="w-5 h-5" />
 										<span>Envoyer</span>
