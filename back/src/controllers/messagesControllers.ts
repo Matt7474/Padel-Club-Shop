@@ -42,6 +42,17 @@ export const getUserMessages = async (req: Request, res: Response) => {
 				},
 			],
 		});
+
+		await Message.update(
+			{ is_read: true },
+			{
+				where: {
+					receiver_id: userId,
+					is_read: false,
+				},
+			},
+		);
+
 		return res.status(200).json(messages);
 	} catch (err: unknown) {
 		return res.status(500).json({

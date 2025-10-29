@@ -257,9 +257,16 @@ export default function ClientsMessages() {
 											: "bg-gray-50 hover:bg-pink-50"
 									}`}
 								>
-									<p className="font-medium text-gray-700 text-sm">
-										{u.first_name} {u.last_name}
-									</p>
+									<div className="flex justify-between">
+										<p className="font-medium text-gray-700 text-sm">
+											{u.first_name} {u.last_name}
+										</p>
+										{/* {messages[0].is_read === false && (
+											<div>
+												<MailWarning className="text-red-500 w-5" />
+											</div>
+										)} */}
+									</div>
 									<p className="text-sm text-gray-500">{u.email}</p>
 								</button>
 							))}
