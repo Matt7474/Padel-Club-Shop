@@ -1,11 +1,11 @@
 import axios from "axios";
+import { useAuthStore } from "../store/useAuthStore";
 import type {
 	Conversation,
 	Message,
 	NewConversationPayload,
 	NewMessagePayload,
 } from "../types/Conversation";
-import { useAuthStore } from "../store/useAuthStore";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -78,7 +78,16 @@ export async function createNewConversation(
 			isGroup: payload.isGroup,
 			userIds: payload.userIds,
 		};
-		const response = await api.post(`${API_URL}/conversation`, transformedData);
+		const response = await api.post(
+			`${API_URL}/conversation/conversations`,
+			transformedData,
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
+			},
+		);
 		return response.data;
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {

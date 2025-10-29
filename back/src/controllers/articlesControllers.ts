@@ -18,7 +18,6 @@ export async function getAllArticles(_req: Request, res: Response) {
 			],
 		});
 		res.json(articles);
-		console.log(articles);
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ error: "Internal Server Error" });
@@ -28,8 +27,6 @@ export async function getAllArticles(_req: Request, res: Response) {
 export async function getOneArticle(req: Request, res: Response) {
 	try {
 		const { id } = req.params;
-		console.log("hello");
-
 		const article = await Article.findOne({
 			where: { article_id: id },
 			include: [
@@ -73,9 +70,6 @@ export async function getOneArticleByName(req: Request, res: Response) {
 		if (!article) {
 			return res.status(404).json({ error: "Article not found" });
 		}
-
-		console.log(article);
-
 		res.json(article);
 	} catch (err) {
 		console.error(err);
@@ -86,10 +80,8 @@ export async function getOneArticleByName(req: Request, res: Response) {
 export async function getArticlesByType(req: Request, res: Response) {
 	try {
 		const { type } = req.params;
-
 		const whereClause: WhereOptions<Article> = { is_deleted: false };
 		if (type) whereClause.type = type;
-
 		const articles = await Article.findAll({
 			where: whereClause,
 			include: [
@@ -286,7 +278,6 @@ export const updateTechRatings = async (req: Request, res: Response) => {
 export async function updateArticle(req: Request, res: Response) {
 	try {
 		const { id } = req.params;
-
 		const article = await Article.findByPk(id);
 		if (!article) {
 			return res.status(404).json({ error: "Article not found" });
@@ -304,7 +295,6 @@ export async function updateArticle(req: Request, res: Response) {
 export async function archiveArticle(req: Request, res: Response) {
 	try {
 		const { id } = req.params;
-		console.log("controller archive", id);
 		const article = await Article.findByPk(id);
 		if (!article) {
 			return res.status(404).json({ error: "Article not found" });
@@ -323,7 +313,6 @@ export async function archiveArticle(req: Request, res: Response) {
 export async function restoreArticle(req: Request, res: Response) {
 	try {
 		const { id } = req.params;
-		console.log("controller restore", id);
 		const article = await Article.findByPk(id);
 
 		if (!article) {
@@ -352,7 +341,6 @@ export async function getAllArticlesDeleted(_req: Request, res: Response) {
 			],
 		});
 		res.json(articles);
-		console.log(articles);
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ error: "Internal Server Error" });

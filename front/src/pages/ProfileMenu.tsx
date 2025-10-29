@@ -5,10 +5,10 @@ import { getMessagesForm } from "../api/Contact";
 import { getOrders } from "../api/Order";
 import ArticlesList from "../components/Form/Admin/ArticlesList";
 import BrandList from "../components/Form/Admin/BrandList";
+import ClientsMessages from "../components/Form/Admin/ClientsMessages";
 import MessagesForm, {
 	type IClientMessageForm,
 } from "../components/Form/Admin/ClientsMessagesForm";
-import ClientsMessages from "../components/Form/Admin/ClientsMessages";
 import CreateArticle from "../components/Form/Admin/CreateArticle";
 import CreateBrand from "../components/Form/Admin/CreateBrand";
 import CreatePromo from "../components/Form/Admin/CreatePromo";
@@ -22,6 +22,7 @@ import Select from "../components/Form/Tools/Select";
 import { useAuthStore } from "../store/useAuthStore";
 import type { Order } from "../types/Order";
 import Profile from "./Profile";
+import MyMessages from "../components/Form/Admin/MyMessages";
 
 export default function ProfileMenu() {
 	const [menuSelected, setMenuSelected] = useState("");
@@ -211,7 +212,7 @@ export default function ProfileMenu() {
 			{menuSelected === "Liste des messages formulaire" && <MessagesForm />}
 			{menuSelected === "Mon profil" && <Profile />}
 			{menuSelected === "Mes commandes" && <MyOrders />}
-			{/* {menuSelected === "Mes messages" && <MyMessages />} */}
+			{menuSelected === "Mes messages" && <MyMessages />}
 		</div>
 	);
 }

@@ -4,8 +4,6 @@ import { ArticleImage } from "./articleImage";
 import { ArticleRatings } from "./articleRatings";
 import { Brand } from "./brand";
 import ContactMessage from "./contactMessage";
-import { Conversation } from "./conversation";
-import { ConversationUser } from "./conversationUser";
 import { Message } from "./message";
 import { Order } from "./order";
 import { OrderItem } from "./orderItem";
@@ -57,27 +55,16 @@ ContactMessage.belongsTo(User, {
 	as: "user",
 });
 
-// conversation -> message
-Conversation.hasMany(Message, {
-	foreignKey: "conversation_id",
-	as: "messages",
-});
-Message.belongsTo(Conversation, {
-	foreignKey: "conversation_id",
-	as: "conversation",
+// Message -> User
+Message.belongsTo(User, {
+	as: "sender",
+	foreignKey: "sender_id",
+	targetKey: "user_id",
 });
 
-// conversation -> user
-Conversation.belongsToMany(User, {
-	through: ConversationUser,
-	foreignKey: "conversation_id",
-	otherKey: "user_id",
-	as: "users",
-});
-
-User.belongsToMany(Conversation, {
-	through: ConversationUser,
-	foreignKey: "user_id",
-	otherKey: "conversation_id",
-	as: "conversations",
+// Message -> User
+Message.belongsTo(User, {
+	as: "receiver",
+	foreignKey: "receiver_id",
+	targetKey: "user_id",
 });

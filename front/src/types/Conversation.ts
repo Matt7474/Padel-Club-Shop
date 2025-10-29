@@ -29,10 +29,17 @@ export interface Conversation {
 export interface NewConversationPayload {
 	title?: string;
 	isGroup: boolean;
+	sender_id: number;
+	receiver_id: number;
 	userIds: number[];
 }
 
 export interface NewMessagePayload {
 	conversationId: number;
+	content: string;
+}
+
+export interface DirectMessagePayload {
+	receiver_id: number;
 	content: string;
 }

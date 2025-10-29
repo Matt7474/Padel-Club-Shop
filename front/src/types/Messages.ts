@@ -32,3 +32,13 @@ export interface FormData {
 	orderNumber: string;
 	is_deleted: boolean;
 }
+
+export interface Message {
+	id: number;
+	sender_id: number;
+	receiver_id?: number | null;
+	content: string;
+	is_read: boolean;
+	created_at: Date;
+	updated_at: Date;
+}
