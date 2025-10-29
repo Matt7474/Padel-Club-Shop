@@ -1,5 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../database/db";
+import type { Address } from "./adress";
 
 export class User extends Model {
 	public user_id!: number;
@@ -13,13 +14,18 @@ export class User extends Model {
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 
-	public addresses?: any[];
+	public addresses?: Address[];
 	public id!: number;
 }
 
 User.init(
 	{
-		user_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+		user_id: {
+			type: DataTypes.INTEGER,
+			primaryKey: true,
+			autoIncrement: true,
+			field: "user_id",
+		},
 		last_name: { type: DataTypes.TEXT, allowNull: false },
 		first_name: { type: DataTypes.TEXT, allowNull: false },
 		phone: DataTypes.TEXT,

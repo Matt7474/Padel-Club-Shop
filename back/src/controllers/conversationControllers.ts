@@ -15,8 +15,10 @@ export const getAllConversations = async (req: Request, res: Response) => {
 				{
 					model: User,
 					as: "users",
+					attributes: ["user_id", "first_name", "last_name", "email"],
 					through: { attributes: [] },
-					attributes: ["id", "first_name", "last_name", "email"],
+					where: { user_id: userId }, // correctement sur user_id
+					required: true,
 				},
 				{
 					model: Message,
@@ -24,9 +26,7 @@ export const getAllConversations = async (req: Request, res: Response) => {
 					order: [["created_at", "ASC"]],
 				},
 			],
-			where: { "$users.id$": userId },
 		});
-
 		res.json(conversations);
 	} catch (error) {
 		console.error(error);

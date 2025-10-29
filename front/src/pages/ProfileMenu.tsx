@@ -99,7 +99,7 @@ export default function ProfileMenu() {
 			};
 
 			fetchAll();
-			const interval = setInterval(fetchAll, 5000);
+			const interval = setInterval(fetchAll, 50000);
 			return () => clearInterval(interval);
 		}
 	}, [isAuthenticated, navigate]);

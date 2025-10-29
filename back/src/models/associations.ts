@@ -71,14 +71,13 @@ Message.belongsTo(Conversation, {
 Conversation.belongsToMany(User, {
 	through: ConversationUser,
 	foreignKey: "conversation_id",
+	otherKey: "user_id",
 	as: "users",
 });
+
 User.belongsToMany(Conversation, {
 	through: ConversationUser,
 	foreignKey: "user_id",
+	otherKey: "conversation_id",
 	as: "conversations",
 });
-
-// user -> message
-User.hasMany(Message, { foreignKey: "sender_id", as: "sentMessages" });
-Message.belongsTo(User, { foreignKey: "sender_id", as: "sender" });
