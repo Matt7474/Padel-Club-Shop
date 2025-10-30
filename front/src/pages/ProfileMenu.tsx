@@ -14,6 +14,7 @@ import CreateBrand from "../components/Form/Admin/CreateBrand";
 import CreatePromo from "../components/Form/Admin/CreatePromo";
 import Dashboard from "../components/Form/Admin/Dashboard/Dashbord";
 // import MyMessages from "../components/Form/Admin/MyMessages";
+import MyMessages from "../components/Form/Admin/MyMessages";
 import MyOrders from "../components/Form/Admin/MyOrders";
 import OrderList from "../components/Form/Admin/OrderList";
 import PromoList from "../components/Form/Admin/PromoList";
@@ -22,7 +23,6 @@ import Select from "../components/Form/Tools/Select";
 import { useAuthStore } from "../store/useAuthStore";
 import type { Order } from "../types/Order";
 import Profile from "./Profile";
-import MyMessages from "../components/Form/Admin/MyMessages";
 
 export default function ProfileMenu() {
 	const [menuSelected, setMenuSelected] = useState("");

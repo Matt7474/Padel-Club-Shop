@@ -71,3 +71,9 @@ export interface CreateUser {
 		additional_info: string;
 	} | null;
 }
+
+export interface requestPasswordProps {
+	email: string;
+	password: string;
+	token: string;
+}

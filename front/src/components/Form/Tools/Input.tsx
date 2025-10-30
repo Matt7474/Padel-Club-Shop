@@ -13,7 +13,8 @@ interface inputProps {
 	onBlur?: () => void;
 	readOnly?: boolean;
 	disabled?: boolean;
-	className?: string; // ajouté pour pouvoir passer des classes depuis le parent
+	className?: string;
+	placeholder?: string;
 }
 
 export default function Input({
@@ -32,6 +33,7 @@ export default function Input({
 	readOnly = false,
 	disabled = false,
 	className = "",
+	placeholder,
 }: inputProps) {
 	// Bloque l'appel onChange si readOnly ou disabled
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,6 +68,7 @@ export default function Input({
 				readOnly={type === "date" ? true : readOnly}
 				aria-readonly={readOnly}
 				disabled={disabled}
+				placeholder={placeholder}
 			/>
 			{suffixe && (
 				<span className="absolute text-md top-0 pt-4 right-2 pl-2 border-l">

@@ -63,6 +63,60 @@ export async function loginUser(user: {
 	}
 }
 
+// 1. Requete pour le changement de mot de passe
+export async function requestResetPassword(payload: { email: string }) {
+	try {
+		const res = await api.post(
+			`${API_URL}/user/request-reset-password`,
+			payload,
+			{
+				headers: { "Content-Type": "application/json" },
+			},
+		);
+		return res.data;
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			const backendMessage = err.response?.data?.error;
+			const message = backendMessage || err.message || "Erreur inconnue";
+			throw new Error(message);
+		} else {
+			throw new Error("Erreur inattendue côté client");
+		}
+	}
+}
+// 2. Requete pour le changement de mot de passe
+interface requestPasswordProps {
+	email: string;
+	password: string;
+	token: string;
+}
+export async function requestPassword({
+	email,
+	password,
+	token,
+}: requestPasswordProps) {
+	try {
+		const res = await api.post(
+			`${API_URL}/user/reset-password`,
+			{ email, password, token },
+			{
+				headers: {
+					"Content-Type": "application/json",
+				},
+			},
+		);
+		return res.data;
+	} catch (err: unknown) {
+		if (axios.isAxiosError(err)) {
+			const backendMessage = err.response?.data?.message;
+			const message = backendMessage || err.message || "Erreur inconnue";
+			throw new Error(message);
+		} else {
+			throw new Error("Erreur inattendue côté client");
+		}
+	}
+}
+
 // getUserById
 export async function getUserById(
 	id: number,

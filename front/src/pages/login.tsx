@@ -20,6 +20,10 @@ export default function Login() {
 		3: "client",
 	};
 
+	const handleResetPassword = () => {
+		navigate("/request-reset-password");
+	};
+
 	const loginSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
@@ -99,6 +103,7 @@ export default function Login() {
 											<button
 												type="button"
 												className="underline cursor-pointer"
+												onClick={handleResetPassword}
 											>
 												Cliquez ici pour le récupérer
 											</button>

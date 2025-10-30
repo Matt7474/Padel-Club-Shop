@@ -1,6 +1,7 @@
 import argon2 from "argon2";
 import type { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 import { UniqueConstraintError } from "sequelize";
 import { Address } from "../models/adress";
 import { Role } from "../models/role";
@@ -154,3 +155,123 @@ export async function loginUser(req: Request, res: Response) {
 			.json({ error: "Erreur interne lors de la connexion" });
 	}
 }
+
+export const requestResetPassword = async (req: Request, res: Response) => {
+	try {
+		const { email } = req.body as { email: string };
+		if (!email) {
+			return res.status(400).json({ message: "Email requis." });
+		}
+
+		const user = await User.findOne({ where: { email } });
+
+		if (!user) {
+			return res.status(200).json({
+				message:
+					"Si cet email existe, un lien de réinitialisation a été envoyé.",
+			});
+		}
+
+		const jwtSecret = process.env.JWT_SECRET;
+		if (!jwtSecret) {
+			throw new Error("JWT_SECRET manquant dans les variables d'environnement");
+		}
+
+		const token = jwt.sign({ email: user.email }, jwtSecret, {
+			expiresIn: "1h",
+		});
+
+		// ✅ Ajouter l'email dans l'URL
+		const resetLink = `${process.env.FRONTEND_URL}/reset-password?email=${encodeURIComponent(user.email)}&token=${token}`;
+
+		await sendResetPasswordEmail(user.email, resetLink);
+
+		res.status(200).json({
+			message: "Si cet email existe, un lien de réinitialisation a été envoyé.",
+		});
+	} catch (error: unknown) {
+		console.error("❌ Erreur requestResetPassword:", error);
+		if (error instanceof Error) {
+			res.status(500).json({ message: error.message });
+		} else {
+			res.status(500).json({
+				message: "Erreur serveur lors de la demande de réinitialisation.",
+			});
+		}
+	}
+};
+
+export const sendResetPasswordEmail = async (
+	email: string,
+	resetLink: string,
+) => {
+	const transporter = nodemailer.createTransport({
+		host: process.env.EMAIL_HOST,
+		port: Number(process.env.EMAIL_PORT) || 465,
+		secure: process.env.EMAIL_SECURE === "true",
+		auth: {
+			user: process.env.EMAIL_USER,
+			pass: process.env.EMAIL_PASS,
+		},
+	});
+
+	await transporter.sendMail({
+		from: `"Padel Club Shop Support" <${process.env.EMAIL_USER}>`,
+		to: email,
+		subject: "Réinitialisation de votre mot de passe",
+		html: `
+      <p>Bonjour,</p>
+      <p>Pour réinitialiser votre mot de passe, cliquez ici :</p>
+      <a href="${resetLink}">Réinitialiser mon mot de passe</a>
+      <p>Ce lien expirera dans une heure.</p>
+      <p>Si vous n'avez pas demandé cette réinitialisation, ignorez ce mail.</p>
+    `,
+	});
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+	try {
+		const { token, password } = req.body as {
+			token: string;
+			password: string;
+		};
+
+		if (!token || !password) {
+			return res.status(400).json({ message: "Données manquantes." });
+		}
+
+		const jwtSecret = process.env.JWT_SECRET;
+		if (!jwtSecret) {
+			return res
+				.status(500)
+				.json({ message: "Configuration serveur manquante." });
+		}
+
+		let decoded: { email: string };
+		try {
+			decoded = jwt.verify(token, jwtSecret) as { email: string };
+		} catch {
+			return res.status(400).json({ message: "Lien invalide ou expiré." });
+		}
+
+		const user = await User.findOne({ where: { email: decoded.email } });
+		if (!user) {
+			return res.status(400).json({ message: "Utilisateur introuvable." });
+		}
+
+		const hashedPassword = await argon2.hash(password);
+
+		await user.update({ password: hashedPassword });
+
+		res.status(200).json({
+			message: "Mot de passe mis à jour avec succès.",
+		});
+	} catch (error: unknown) {
+		console.error("❌ Erreur resetPassword:", error);
+		if (error instanceof Error) {
+			res.status(500).json({ message: error.message });
+		} else {
+			res.status(500).json({ message: "Erreur serveur inattendue." });
+		}
+	}
+};

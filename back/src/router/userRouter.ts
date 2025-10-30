@@ -9,6 +9,13 @@ const userRouter = Router();
 userRouter.post("/register", authControllers.registerUser);
 userRouter.post("/login", authControllers.loginUser);
 
+// Routes modification du mot de passe
+userRouter.post(
+	"/request-reset-password",
+	authControllers.requestResetPassword,
+);
+userRouter.post("/reset-password", authControllers.resetPassword);
+
 // Routes utilisateurs
 userRouter.get("/:id", authenticateToken, userControllers.getUserById);
 userRouter.get("/", userControllers.getAllUsers);

@@ -20,8 +20,10 @@ import Paiement from "./pages/Paiement";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ProfileMenu from "./pages/ProfileMenu";
 import Register from "./pages/Register";
+import RequestResetPassword from "./pages/RequestResetPassword";
 import Shipping from "./pages/Shipping";
 import TermsOfSale from "./pages/TermsOfSale";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
 	return (
@@ -61,6 +63,14 @@ function App() {
 							<Route path="/livraison" element={<Shipping />} />
 							<Route path="/a-propos-de-nous" element={<AboutUs />} />
 							<Route path="/contact" element={<Contact />} />
+
+							<Route path="/reset-password" element={<ResetPassword />} />
+							{/* <Route path="/ggg" element={<Ggg />} /> */}
+
+							<Route
+								path="/request-reset-password"
+								element={<RequestResetPassword />}
+							/>
 						</Routes>
 					</div>
 				</div>
