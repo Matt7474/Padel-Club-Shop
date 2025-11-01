@@ -32,9 +32,9 @@ export interface Order {
 export interface OrderItem {
 	article_id: number;
 	name: string;
-	price: number;
+	price: number; // prix payé TTC
+	original_price?: number; // prix catalogue ou prix avant promo
 	quantity: number;
-	image_url?: string;
 	size?: string | null;
 	article?: Article;
 	is_delete: boolean;

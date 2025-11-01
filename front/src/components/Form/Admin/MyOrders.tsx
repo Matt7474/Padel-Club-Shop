@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getMyOrders } from "../../../api/Order";
 import { useAuthStore } from "../../../store/useAuthStore";
 import type { OrderItem } from "../../../types/Order";
+import { generateInvoice } from "../../../utils/generateInvoice";
 import Loader from "../Tools/Loader";
 
 interface MyOrdersProps {
@@ -72,8 +73,34 @@ export default function MyOrders() {
 		fetchOrders();
 	}, []);
 
-	const handleOrderClick = () => {
-		console.log("handleOrderClick");
+	console.log("orders", orders);
+
+	const handleOrderClick = (order: MyOrdersProps) => {
+		console.log("Génération de la facture pour:", order);
+
+		// Préparer les données pour la facture avec toutes les vérifications
+		const invoiceData = {
+			order_id: order.order_id,
+			reference: order.reference || `CMD-${order.order_id}`,
+			total_amount: order.total_amount || 0,
+			created_at: order.created_at || new Date().toISOString(),
+			items: order.items || [],
+			user: {
+				firstName: user?.firstName || "",
+				lastName: user?.lastName || "",
+				email: user?.email || "",
+				addresses: user?.addresses || [],
+			},
+		};
+
+		try {
+			// Générer la facture
+			generateInvoice(invoiceData);
+			console.log("Facture générée avec succès");
+		} catch (error) {
+			console.error("Erreur lors de la génération de la facture:", error);
+			alert("Une erreur est survenue lors de la génération de la facture.");
+		}
 	};
 
 	const handleNavigate = () => {
@@ -198,7 +225,10 @@ export default function MyOrders() {
 														<p className="text-md font-bold italic text-slate-800">
 															{order.reference}
 														</p>
-														<button type="button" onClick={handleOrderClick}>
+														<button
+															type="button"
+															onClick={() => handleOrderClick(order)}
+														>
 															<p className="underline text-blue-700 font-semibold cursor-pointer">
 																Facture
 															</p>
@@ -232,7 +262,7 @@ export default function MyOrders() {
 																</p>
 																<button
 																	type="button"
-																	onClick={handleOrderClick}
+																	onClick={() => handleOrderClick(order)}
 																	className="text-end"
 																>
 																	<p className="underline text-blue-700 font-semibold cursor-pointer -mt-1">

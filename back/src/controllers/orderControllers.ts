@@ -46,6 +46,7 @@ export const createOrderAndUpdateStock = async (
 						"name",
 						"stock_quantity",
 						"tech_characteristics",
+						"price_ttc",
 					],
 					transaction: t,
 					lock: t.LOCK.UPDATE, // Verrouillage pour éviter les conditions de concurrence
