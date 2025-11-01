@@ -5,9 +5,21 @@ import { authenticateToken } from "../middlewares/authenticateToken";
 const messagesRouter = Router();
 
 messagesRouter.get(
+	"/all",
+	authenticateToken,
+	messagesControllers.getAllUserMessages,
+);
+
+messagesRouter.get(
 	"/:userId",
 	authenticateToken,
 	messagesControllers.getUserMessages,
+);
+
+messagesRouter.patch(
+	"/mark-read/:id",
+	authenticateToken,
+	messagesControllers.markMessagesAsRead,
 );
 
 messagesRouter.post(

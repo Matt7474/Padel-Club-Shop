@@ -5,10 +5,7 @@ export const contactFormSchema = Joi.object({
 	first_name: Joi.string().min(1).max(100).required(),
 	last_name: Joi.string().min(1).max(100).required(),
 	email: Joi.string().email().required(),
-	phone: Joi.string()
-		.pattern(/^[0-9+() -]*$/)
-		.optional()
-		.allow(null, ""),
+	phone: Joi.string().optional().allow(null, ""),
 	subject: Joi.string().min(1).max(200).required(),
 	order_number: Joi.string().max(20).optional().allow(null, ""),
 	message: Joi.string().min(1).max(5000).required(),

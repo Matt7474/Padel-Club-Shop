@@ -1,19 +1,12 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getArticles } from "../api/Article";
-import { getMessagesForm } from "../api/Contact";
-import { getOrders } from "../api/Order";
+import { useState } from "react";
 import ArticlesList from "../components/Form/Admin/ArticlesList";
 import BrandList from "../components/Form/Admin/BrandList";
 import ClientsMessages from "../components/Form/Admin/ClientsMessages";
-import MessagesForm, {
-	type IClientMessageForm,
-} from "../components/Form/Admin/ClientsMessagesForm";
+import MessagesForm from "../components/Form/Admin/ClientsMessagesForm";
 import CreateArticle from "../components/Form/Admin/CreateArticle";
 import CreateBrand from "../components/Form/Admin/CreateBrand";
 import CreatePromo from "../components/Form/Admin/CreatePromo";
 import Dashboard from "../components/Form/Admin/Dashboard/Dashbord";
-// import MyMessages from "../components/Form/Admin/MyMessages";
 import MyMessages from "../components/Form/Admin/MyMessages";
 import MyOrders from "../components/Form/Admin/MyOrders";
 import OrderList from "../components/Form/Admin/OrderList";
@@ -21,89 +14,20 @@ import PromoList from "../components/Form/Admin/PromoList";
 import UserList from "../components/Form/Admin/UsersList";
 import Select from "../components/Form/Tools/Select";
 import { useAuthStore } from "../store/useAuthStore";
-import type { Order } from "../types/Order";
+import { useNotificationStore } from "../store/useNotificationStore";
 import Profile from "./Profile";
 
 export default function ProfileMenu() {
+	const {
+		lowStockCount,
+		orderPaid,
+		unreadMessageCount,
+		unreadFormCount,
+		messages,
+	} = useNotificationStore();
 	const [menuSelected, setMenuSelected] = useState("");
-	const { user, isAuthenticated } = useAuthStore();
-	const [unreadCount, setUnreadCount] = useState(0);
-	const [orderPaid, setOrderPaid] = useState(0);
-	const [lowStockCount, setLowStockCount] = useState(0);
-	// const [unreadPersonnalMessage, setUnreadPersonnalMessage] = useState(0);
-	const navigate = useNavigate();
-
-	useEffect(() => {
-		if (!isAuthenticated) {
-			navigate("/");
-		} else {
-			const fetchUnreadMessages = async () => {
-				try {
-					const response = await getMessagesForm();
-					const unread = response.data.filter(
-						(message: IClientMessageForm) => message.is_read === false,
-					).length;
-					setUnreadCount(unread);
-				} catch (error) {
-					console.error("Erreur lors de la récupération des messages :", error);
-				}
-			};
-
-			const fetchOrderPaid = async () => {
-				try {
-					const orders = await getOrders();
-					const ordersPaid = orders.filter(
-						(order: Order) => order.status === "paid",
-					);
-					setOrderPaid(ordersPaid.length);
-				} catch (error) {
-					console.error(
-						"Erreur lors de la récupération des commandes :",
-						error,
-					);
-				}
-			};
-
-			const fetchLowStockArticles = async () => {
-				try {
-					const articles = await getArticles();
-					let lowStock = 0;
-
-					for (const article of articles) {
-						let totalStock = 0;
-
-						if (typeof article.stock_quantity === "number") {
-							totalStock = article.stock_quantity;
-						} else if (typeof article.stock_quantity === "object") {
-							totalStock = Object.values(article.stock_quantity || {}).reduce(
-								(acc: number, val) => acc + (val ?? 0),
-								0,
-							);
-						}
-
-						if (totalStock < 5) lowStock++;
-					}
-
-					setLowStockCount(lowStock);
-				} catch (error) {
-					console.error("Erreur lors de la récupération des stocks :", error);
-				}
-			};
-
-			const fetchAll = async () => {
-				await Promise.all([
-					fetchUnreadMessages(),
-					fetchOrderPaid(),
-					fetchLowStockArticles(),
-					// fetchUnReadPersonalMessages(),
-				]);
-			};
-
-			fetchAll();
-			const interval = setInterval(fetchAll, 50000);
-			return () => clearInterval(interval);
-		}
-	}, [isAuthenticated, navigate]);
+	const { user } = useAuthStore();
+	const [unreadMessage] = useState(0);
 
 	// Définition des options disponibles selon le rôle
 	const adminMenus = [
@@ -120,7 +44,6 @@ export default function ProfileMenu() {
 		"Liste des messages formulaire",
 		"Mon profil",
 		"Mes commandes",
-		"Mes messages",
 	];
 
 	const clientMenus = ["Mon profil", "Mes commandes", "Mes messages"];
@@ -164,9 +87,9 @@ export default function ProfileMenu() {
 						{option}
 
 						{/* Pastille de notification */}
-						{option === "Liste des messages client" && unreadCount > 0 && (
-							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
-								{unreadCount > 99 ? "99+" : unreadCount}
+						{option === "Liste des articles" && lowStockCount > 0 && (
+							<span className="absolute top-2 right-2 bg-yellow-400 text-black text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
+								!
 							</span>
 						)}
 						{option === "Liste des commandes client" && orderPaid > 0 && (
@@ -174,16 +97,23 @@ export default function ProfileMenu() {
 								{orderPaid > 99 ? "99+" : orderPaid}
 							</span>
 						)}
-						{option === "Liste des articles" && lowStockCount > 0 && (
-							<span className="absolute top-2 right-2 bg-yellow-400 text-black text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
-								!
+						{option === "Liste des messages client" && unreadMessage > 0 && (
+							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
+								{unreadMessage > 99 ? "99+" : unreadMessage}
 							</span>
 						)}
-						{/* {option === "Mes messages" && unreadPersonnalMessage > 0 && (
-							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
-								{unreadPersonnalMessage > 99 ? "99+" : unreadPersonnalMessage}
-							</span>
-						)} */}
+						{option === "Liste des messages formulaire" &&
+							unreadFormCount > 0 && (
+								<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
+									{unreadFormCount > 99 ? "99+" : unreadFormCount}
+								</span>
+							)}
+						{option === "Liste des messages client" &&
+							unreadMessageCount > 0 && (
+								<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
+									{unreadMessageCount > 99 ? "99+" : unreadMessageCount}
+								</span>
+							)}
 					</button>
 				))}
 			</div>
@@ -208,7 +138,9 @@ export default function ProfileMenu() {
 			{menuSelected === "Liste des articles" && <ArticlesList />}
 			{menuSelected === "Liste des utilisateurs" && <UserList />}
 			{menuSelected === "Liste des commandes client" && <OrderList />}
-			{menuSelected === "Liste des messages client" && <ClientsMessages />}
+			{menuSelected === "Liste des messages client" && (
+				<ClientsMessages messagesP={messages} />
+			)}
 			{menuSelected === "Liste des messages formulaire" && <MessagesForm />}
 			{menuSelected === "Mon profil" && <Profile />}
 			{menuSelected === "Mes commandes" && <MyOrders />}

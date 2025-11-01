@@ -5,6 +5,7 @@ import Footer from "./components/Footer/Footer";
 import CreateArticle from "./components/Form/Admin/CreateArticle";
 import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
+import NotificationProvider from "./components/NotificationProvider/NotificationProvider";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import ToastContainer from "./components/ToastContainer/ToastContainer";
 import ArticlesWrapper from "./components/Wrapper/ArticlesWrapper";
@@ -21,9 +22,9 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ProfileMenu from "./pages/ProfileMenu";
 import Register from "./pages/Register";
 import RequestResetPassword from "./pages/RequestResetPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Shipping from "./pages/Shipping";
 import TermsOfSale from "./pages/TermsOfSale";
-import ResetPassword from "./pages/ResetPassword";
 
 function App() {
 	return (
@@ -31,6 +32,7 @@ function App() {
 			<div className="flex flex-col xl:items-center justify-center min-h-screen bg-gray-50">
 				<div className="w-full 2xl:w-3/5 3xl:w-1/2 flex-1">
 					<ScrollToTop />
+					<NotificationProvider />
 					<Header />
 					<Navbar />
 					<BrandIcon />

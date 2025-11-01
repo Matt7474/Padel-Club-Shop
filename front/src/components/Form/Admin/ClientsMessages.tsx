@@ -1,15 +1,25 @@
 import { CheckCheck, Send, Users as UserIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { getUserMessages } from "../../../api/Message";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { getUserMessages, markMessagesAsRead } from "../../../api/Message";
 import { getAllUsers } from "../../../api/User";
 import { useToastStore } from "../../../store/ToastStore ";
 import { useAuthStore } from "../../../store/useAuthStore";
-import type { Message, User as UserType } from "../../../types/Conversation";
+import type { Message, User as UserType } from "../../../types/Messages";
 import type { UserApiResponse } from "../../../types/User";
 import FooterMessage from "../Tools/FooterMessage";
 import Loader from "../Tools/Loader";
 
-export default function ClientsMessages() {
+interface ClientsMessagesProps {
+	messagesP: Message[];
+	onMessagesRead?: () => void;
+}
+
+export default function ClientsMessages({
+	messagesP,
+	onMessagesRead,
+}: ClientsMessagesProps) {
+	console.log("messages", messagesP);
+
 	const { isAuthenticated, user } = useAuthStore();
 	const addToast = useToastStore((state) => state.addToast);
 
@@ -23,6 +33,17 @@ export default function ClientsMessages() {
 	const messagesEndRef = useRef<HTMLDivElement | null>(null);
 	const ws = useRef<WebSocket | null>(null);
 	const selectedUserRef = useRef<UserType | null>(null);
+
+	const unreadByUser = useMemo(() => {
+		const map = new Map<number, number>();
+		messagesP.forEach((msg) => {
+			if (!msg.is_read && msg.sender_id && msg.sender_id !== user?.id) {
+				const count = map.get(msg.sender_id) || 0;
+				map.set(msg.sender_id, count + 1);
+			}
+		});
+		return map;
+	}, [messagesP, user?.id]);
 
 	// ✅ Garder selectedUser à jour dans une ref
 	useEffect(() => {
@@ -156,6 +177,18 @@ export default function ClientsMessages() {
 		setSelectedUser(u);
 		setNewMessage("");
 		await fetchMessages(u.id);
+
+		try {
+			await markMessagesAsRead(u.id);
+			setMessages((prevMessages) =>
+				prevMessages.map((msg) =>
+					msg.sender_id === u.id ? { ...msg, is_read: true } : msg,
+				),
+			);
+			onMessagesRead?.();
+		} catch (err) {
+			console.error("Erreur lors du marquage des messages comme lus:", err);
+		}
 	};
 
 	// ✅ Envoi via WebSocket
@@ -254,30 +287,41 @@ export default function ClientsMessages() {
 
 						{/* Liste scrollable */}
 						<div className="flex-1 overflow-y-auto px-6 py-4">
-							{users.map((u) => (
-								<button
-									key={u.id}
-									type="button"
-									onClick={() => handleSelectUser(u)}
-									className={`block w-full text-left p-3 rounded-xl mb-2 transition-all ${
-										selectedUser?.id === u.id
-											? "bg-linear-to-br from-pink-100 to-purple-100 border border-pink-300 shadow-md"
-											: "bg-gray-50 hover:bg-pink-50"
-									}`}
-								>
-									<div className="flex justify-between">
-										<p className="font-medium text-gray-700 text-sm">
-											{u.first_name} {u.last_name}
-										</p>
-										{/* {messages[0].is_read === false && (
-											<div>
-												<MailWarning className="text-red-500 w-5" />
+							{users
+								.filter((u) => u.role !== 1 && u.role !== 2)
+								.map((u) => {
+									const unreadCount = unreadByUser.get(u.id) || 0;
+
+									return (
+										<button
+											key={u.id}
+											type="button"
+											onClick={() => handleSelectUser(u)}
+											className={`block w-full text-left p-3 rounded-xl mb-2 transition-all ${
+												selectedUser?.id === u.id
+													? "bg-linear-to-br from-pink-100 to-purple-100 border border-pink-300 shadow-md"
+													: "bg-gray-50 hover:bg-pink-50"
+											}`}
+										>
+											<div className="flex justify-between items-center">
+												<div className="flex-1">
+													<p className="font-medium text-gray-700 text-sm">
+														{u.last_name} {u.first_name}
+													</p>
+													<p className="text-sm text-gray-500">{u.email}</p>
+												</div>
+
+												{unreadCount > 0 && (
+													<div className="shrink-0 ml-2">
+														<div className="bg-red-500 text-white text-xs font-bold rounded-full min-w-5 h-5 px-1.5 flex items-center justify-center shadow-md">
+															{unreadCount}
+														</div>
+													</div>
+												)}
 											</div>
-										)} */}
-									</div>
-									<p className="text-sm text-gray-500">{u.email}</p>
-								</button>
-							))}
+										</button>
+									);
+								})}
 						</div>
 					</div>
 
@@ -288,7 +332,7 @@ export default function ClientsMessages() {
 								Conversation avec{" "}
 								<span className="text-pink-600">
 									{selectedUser
-										? `${selectedUser.first_name} ${selectedUser.last_name}`
+										? `${selectedUser.last_name} ${selectedUser.first_name} `
 										: "—"}
 								</span>
 							</h2>

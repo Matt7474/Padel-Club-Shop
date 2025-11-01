@@ -1,27 +1,28 @@
 import { LogIn, LogOut, ShoppingCart, User, UserStar } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getMessagesForm } from "../../api/Contact";
-import { getOrders } from "../../api/Order";
 import { useCartStore } from "../../store/cartStore";
 import { useToastStore } from "../../store/ToastStore ";
 import { useAuthStore } from "../../store/useAuthStore";
-import type { Order } from "../../types/Order";
-
-import type { IClientMessageForm } from "../Form/Admin/ClientsMessagesForm";
+import { useNotificationStore } from "../../store/useNotificationStore";
 import CartModal from "../Modal/CartModal";
 import MenuModal from "../Modal/MenuModal";
 import SearchBar from "../SearchBar/SearchBar";
 
 export default function Header() {
+	const { lowStockCount, orderPaid, unreadMessageCount, unreadFormCount } =
+		useNotificationStore();
+
 	const { user, isAuthenticated } = useAuthStore();
 	const addToast = useToastStore((state) => state.addToast);
-	const [unreadMessageCount, setUnreadMessageCount] = useState(0);
-	const [paidOrderCount, setPaidOrderCount] = useState(0);
+
+	const [paidOrderCount] = useState(0);
 	const navigate = useNavigate();
 	const [isQuantity, setIsQuantity] = useState(0);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isCartOpen, setIsCartOpen] = useState(false);
+
+	const [unreadMessage] = useState(0);
 
 	const cart = useCartStore((state) => state.cart);
 	// Somme des quantités dans le panier
@@ -33,42 +34,105 @@ export default function Header() {
 		setIsQuantity(totalQuantity);
 	}, [cart]);
 
-	// UseEffect pour afficher le nombre d'alerte
-	useEffect(() => {
-		const fetchUnreadMessages = async () => {
-			try {
-				const response = await getMessagesForm();
-				const unread = response.data.filter(
-					(message: IClientMessageForm) => message.is_read === false,
-				).length;
-				setUnreadMessageCount(unread);
-			} catch (error) {
-				console.error("Erreur lors de la récupération des messages:", error);
-			}
-		};
+	// useEffect(() => {
+	// 	if (!isAuthenticated) {
+	// 		navigate("/");
+	// 	} else {
+	// 		const fetchLowStockArticles = async () => {
+	// 			try {
+	// 				const articles = await getArticles();
+	// 				let lowStock = 0;
 
-		const fetchOrderPaid = async () => {
-			try {
-				const orders = await getOrders();
-				const ordersPaid = orders.filter(
-					(order: Order) => order.status === "paid",
-				);
-				setPaidOrderCount(ordersPaid.length);
-			} catch (error) {
-				console.error("Erreur lors de la récupération des commandes :", error);
-			}
-		};
+	// 				for (const article of articles) {
+	// 					let totalStock = 0;
 
-		const fetchAll = async () => {
-			await Promise.all([fetchUnreadMessages(), fetchOrderPaid()]);
-		};
+	// 					if (typeof article.stock_quantity === "number") {
+	// 						totalStock = article.stock_quantity;
+	// 					} else if (typeof article.stock_quantity === "object") {
+	// 						totalStock = Object.values(article.stock_quantity || {}).reduce(
+	// 							(acc: number, val) => acc + (val ?? 0),
+	// 							0,
+	// 						);
+	// 					}
 
-		fetchAll();
-		const interval = setInterval(fetchAll, 5000);
-		return () => clearInterval(interval);
-	}, []);
+	// 					if (totalStock < 5) lowStock++;
+	// 				}
 
-	const totalAlertCount = unreadMessageCount + paidOrderCount;
+	// 				setLowStockCount(lowStock);
+	// 			} catch (error) {
+	// 				console.error("Erreur lors de la récupération des stocks :", error);
+	// 			}
+	// 		};
+
+	// 		const fetchOrderPaid = async () => {
+	// 			try {
+	// 				const orders = await getOrders();
+	// 				const ordersPaid = orders.filter(
+	// 					(order: Order) => order.status === "paid",
+	// 				);
+	// 				setOrderPaid(ordersPaid.length);
+	// 			} catch (error) {
+	// 				console.error(
+	// 					"Erreur lors de la récupération des commandes :",
+	// 					error,
+	// 				);
+	// 			}
+	// 		};
+
+	// 		const fetchAllUnreadMessages = async () => {
+	// 			try {
+	// 				const messagesFromApi = await getAllUserMessages();
+
+	// 				const messagesParsed: Message[] = messagesFromApi.map((m) => ({
+	// 					...m,
+	// 					created_at: new Date(m.created_at),
+	// 					updated_at: new Date(m.updated_at),
+	// 				}));
+
+	// 				const unreadCount = messagesParsed.filter((m) => !m.is_read).length;
+
+	// 				setMessages(messagesParsed);
+	// 				setUnreadMessageCount(unreadCount);
+	// 			} catch (error) {
+	// 				console.error("Erreur lors de la récupération des messages :", error);
+	// 			}
+	// 		};
+	// 		const fetchUnreadFormMessages = async () => {
+	// 			try {
+	// 				const response = await getMessagesForm();
+	// 				const unread = response.data.filter(
+	// 					(message: IClientMessageForm) => message.is_read === false,
+	// 				).length;
+	// 				setUnreadFormCount(unread);
+	// 			} catch (error) {
+	// 				console.error("Erreur lors de la récupération des messages :", error);
+	// 			}
+	// 		};
+
+	// 		const fetchAll = async () => {
+	// 			await Promise.all([
+	// 				fetchAllUnreadMessages(),
+	// 				fetchUnreadFormMessages(),
+	// 				fetchOrderPaid(),
+	// 				fetchLowStockArticles(),
+	// 				fetchOrderPaid(),
+	// 				// fetchUnReadPersonalMessages(),
+	// 			]);
+	// 		};
+
+	// 		fetchAll();
+	// 		const interval = setInterval(fetchAll, 10000);
+	// 		return () => clearInterval(interval);
+	// 	}
+	// }, [isAuthenticated, navigate]);
+
+	const totalAlertCount =
+		unreadMessageCount +
+		paidOrderCount +
+		lowStockCount +
+		unreadFormCount +
+		orderPaid +
+		unreadMessage;
 	console.log("totalAlertCount", totalAlertCount);
 
 	const toggleMenu = () => {

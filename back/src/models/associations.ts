@@ -68,3 +68,11 @@ Message.belongsTo(User, {
 	foreignKey: "receiver_id",
 	targetKey: "user_id",
 });
+
+User.hasMany(ContactMessage, { as: "contactMessages", foreignKey: "user_id" });
+
+ContactMessage.belongsTo(User, {
+	as: "contactUser", // <-- changer l'alias
+	foreignKey: "user_id",
+	targetKey: "user_id",
+});

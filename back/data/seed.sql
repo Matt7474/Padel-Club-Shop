@@ -8,7 +8,7 @@ INSERT INTO roles (role_id, label) VALUES
 
 -- USERS
 INSERT INTO users (user_id, last_name, first_name, phone, email, password, role_id) VALUES
-(1, 'Dimier', 'Matthieu', '06.31.54.89.49', 'dimier.matt@example.com', '$argon2id$v=19$m=65536,t=3,p=4$pB8YSq9atfPP+MANKgZJMw$NZQpoodO9GpTHZka7rvGkynhpRaMaRK+wZPkdSJjaHU', 1); -- Pa$$w0rd!
+(1, 'DIMIER', 'Matthieu', '06.31.54.89.49', 'dimier.matt@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$pB8YSq9atfPP+MANKgZJMw$NZQpoodO9GpTHZka7rvGkynhpRaMaRK+wZPkdSJjaHU', 1); -- Pa$$w0rd!
 -- (2, 'Dupont', 'Alice', '0602000000', 'alice.dupont@example.com', 'hashedpassword2', 2),
 -- (3, 'Martin', 'Paul', '0603000000', 'paul.martin@example.com', 'hashedpassword3', 1);
 
@@ -91,8 +91,8 @@ INSERT INTO article_ratings (rating_id, article_id, maneuverability, power, comf
 -- (2, 2, 2, 'Good racket for intermediate players.', 4);
 
 -- PROMOTIONS
-INSERT INTO promotions (promo_id, article_id, name, description, discount_type, discount_value, start_date, end_date, status) VALUES
-(1, 1, 'Summer Sale', 'sous reserve de blablabla', 'amount', 15, '2025-06-01', '2025-10-10', 'active');
+-- INSERT INTO promotions (promo_id, article_id, name, description, discount_type, discount_value, start_date, end_date, status) VALUES
+-- (1, 1, 'Summer Sale', 'sous reserve de blablabla', 'amount', 15, '2025-06-01', '2025-10-10', 'active');
 
 -- PROMOTION
 INSERT INTO promotion (promo_id, name, description, start_date, end_date, status) VALUES
