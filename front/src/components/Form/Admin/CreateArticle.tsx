@@ -64,6 +64,10 @@ export default function CreateArticle({
 }: CreateArticlePropos) {
 	const today = new Date();
 	const addToast = useToastStore((state) => state.addToast);
+
+	const [errorMessage, setErrorMessage] = useState(false);
+	const [messageOfError, setMessageOfError] = useState("");
+
 	const [showConfirm, setShowConfirm] = useState(false);
 	const [articleToDelete, setArticleToDelete] = useState<number | null>(null);
 	const [showRestoreConfirm, setShowRestoreConfirm] = useState(false);
@@ -580,9 +584,14 @@ export default function CreateArticle({
 					"bg-green-500",
 				);
 			}
-		} catch (err) {
-			console.error(err);
-			alert("Erreur lors de la sauvegarde de l'article");
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				setErrorMessage(true);
+				setMessageOfError(error.message);
+				console.error("❌ Erreur front :", error.message);
+			} else {
+				console.error("❌ Erreur inconnue :", error);
+			}
 		}
 	};
 
@@ -875,6 +884,11 @@ export default function CreateArticle({
 								)}
 							</div>
 						</div>
+						{errorMessage && (
+							<div className="text-sm text-red-500 mt-4 text-center">
+								{messageOfError}
+							</div>
+						)}
 						<div className="xl:flex xl:justify-center xl:w-1/3 mx-auto">
 							<Button type="submit" buttonText={`${buttonText}`} />
 						</div>

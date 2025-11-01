@@ -254,6 +254,12 @@ export default function ArticlesList() {
 					<div className="bg-red-200 w-8 h-2.5 mt-1 " />
 					<p className="text-xs">&lt; 6 restant</p>
 				</div>
+				<div className="flex gap-3">
+					<span className="bg-yellow-400 text-black text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center -mt-1">
+						!
+					</span>
+					<p className="text-xs">Produit épuisé</p>
+				</div>
 			</div>
 			{/* Liste d’articles */}
 			{sortedArticles.map((article) => {
@@ -297,7 +303,7 @@ export default function ArticlesList() {
 								<p className="border-r px-1 h-8 flex items-center justify-center text-xs truncate">
 									{quantity}
 								</p>
-								<p className="border-r px-1 h-8 items-center justify-center text-xs truncate hidden xl:block">
+								<p className="border-r px-1 h-8 items-center justify-center text-xs truncate hidden xl:flex">
 									{article.brand?.name}
 								</p>
 								<p className="border-r px-1 h-8 flex items-center justify-center text-xs truncate">

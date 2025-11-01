@@ -280,7 +280,7 @@ export default function ArticleForm({
 						))}
 					</div>
 				</div>
-				<div className="flex justify-between gap-4">
+				<div className="flex justify-between gap-4 xl:mr-1">
 					{/* Prix de l'article */}
 					<div className="-mt-2 relative w-1/4">
 						<Input
