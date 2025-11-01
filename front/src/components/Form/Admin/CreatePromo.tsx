@@ -27,7 +27,10 @@ export default function CreatePromo({
 }: CreatePromoProps) {
 	const today = new Date();
 	const addToast = useToastStore((state) => state.addToast);
-	const [errorMessage, setErrorMessage] = useState("");
+	// const [errorMessage, setErrorMessage] = useState("");
+	const [errorMessage, setErrorMessage] = useState(false);
+	const [messageOfError, setMessageOfError] = useState("");
+
 	const [confirm, setConfirm] = useState(false);
 
 	const [promoName, setPromoName] = useState("");
@@ -66,7 +69,7 @@ export default function CreatePromo({
 		setSuccess(null);
 
 		if (promoStartDate > promoEndDate) {
-			setErrorMessage(
+			setMessageOfError(
 				"La date de fin ne peut pas être inférieure à la date de début.",
 			);
 			setLoading(false);
@@ -111,8 +114,14 @@ export default function CreatePromo({
 					"bg-green-500",
 				);
 			}
-		} catch (error) {
-			console.error("Erreur lors de la sauvegarde de la promotion :", error);
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				setErrorMessage(true);
+				setMessageOfError(error.message);
+				console.error("❌ Erreur front :", error.message);
+			} else {
+				console.error("❌ Erreur inconnue :", error);
+			}
 		} finally {
 			setLoading(false);
 		}
@@ -222,7 +231,7 @@ export default function CreatePromo({
 
 					{errorMessage && (
 						<div className="text-red-500 text-sm mt-4 -mb-4 text-center">
-							{errorMessage}
+							{messageOfError}
 						</div>
 					)}
 					<Button
