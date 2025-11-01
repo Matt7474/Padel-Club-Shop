@@ -112,11 +112,9 @@ export const getUserMessages = async (req: Request, res: Response) => {
 
 // ---------------- Marquer les messages comme lus ----------------
 export const markMessagesAsRead = async (req: Request, res: Response) => {
-	console.log("in");
-
 	try {
 		const { id } = req.params;
-		const senderId = Number(id); // ← Renommé pour clarté
+		const senderId = Number(id);
 
 		console.log("senderId reçu:", senderId);
 
@@ -125,7 +123,7 @@ export const markMessagesAsRead = async (req: Request, res: Response) => {
 		}
 
 		const messagesToUpdate = await Message.findAll({
-			where: { sender_id: senderId, is_read: false }, // ← Changé
+			where: { sender_id: senderId, is_read: false },
 		});
 
 		console.log("Messages à mettre à jour :", messagesToUpdate.length);
@@ -142,15 +140,11 @@ export const markMessagesAsRead = async (req: Request, res: Response) => {
 			{ is_read: true },
 			{
 				where: {
-					sender_id: senderId, // ← Changé
+					sender_id: senderId,
 					is_read: false,
 				},
 			},
 		);
-
-		console.log("updatedCount:", updatedCount);
-		console.log("out");
-
 		return res.status(200).json({
 			message: `${updatedCount} message(s) marqué(s) comme lu(s)`,
 			count: updatedCount,
@@ -167,11 +161,9 @@ export const markMessagesReceiverAsRead = async (
 	req: Request,
 	res: Response,
 ) => {
-	console.log("in");
-
 	try {
 		const { id } = req.params;
-		const receiverId = Number(id); // ← Renommé pour clarté
+		const receiverId = Number(id);
 
 		console.log("receiverId reçu:", receiverId);
 
@@ -180,7 +172,7 @@ export const markMessagesReceiverAsRead = async (
 		}
 
 		const messagesToUpdate = await Message.findAll({
-			where: { receiver_id: receiverId, is_read: false }, // ← Changé
+			where: { receiver_id: receiverId, is_read: false },
 		});
 
 		console.log("Messages à mettre à jour :", messagesToUpdate.length);
@@ -197,14 +189,11 @@ export const markMessagesReceiverAsRead = async (
 			{ is_read: true },
 			{
 				where: {
-					receiver_id: receiverId, // ← Changé
+					receiver_id: receiverId,
 					is_read: false,
 				},
 			},
 		);
-
-		console.log("updatedCount:", updatedCount);
-		console.log("out");
 
 		return res.status(200).json({
 			message: `${updatedCount} message(s) marqué(s) comme lu(s)`,

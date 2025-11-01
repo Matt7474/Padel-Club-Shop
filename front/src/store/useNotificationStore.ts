@@ -1,4 +1,3 @@
-// src/store/notificationStore.ts
 import { create } from "zustand";
 import { getArticles } from "../api/Article";
 import { getMessagesForm } from "../api/Contact";

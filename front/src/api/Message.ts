@@ -71,7 +71,7 @@ export const markMessagesReceiverAsRead = async (userId: number) => {
 	try {
 		const response = await axios.patch(
 			`${API_URL}/message/mark-read-r/${userId}`,
-			{}, // corps vide
+			{},
 			{
 				headers: {
 					"Content-Type": "application/json",
