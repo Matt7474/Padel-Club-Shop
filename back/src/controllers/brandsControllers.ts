@@ -1,24 +1,30 @@
 import type { Request, Response } from "express";
 import { Brand } from "../models/brand";
+import { brandsFormSchema } from "../schemas/brandsFormSchema";
+import { sanitizeInput } from "../utils/sanitize";
 
 export async function createBrand(req: Request, res: Response) {
 	try {
-		let brandName: string | undefined;
+		const { error, value } = brandsFormSchema.validate(req.body, {
+			abortEarly: false,
+		});
+		if (error) {
+			const messages = error.details.map((d) => d.message);
+			return res.status(400).json({ errors: messages });
+		}
+
+		let brandName = value.brandName;
 		let imagePath: string | undefined;
 
 		if (req.file) {
-			brandName = req.body.brandName;
 			imagePath = `/uploads/${req.file.filename}`;
-		} else if (req.body.image_url) {
-			brandName = req.body.brandName;
-			imagePath = req.body.image_url;
+		} else if (value.image_url) {
+			imagePath = value.image_url;
 		} else {
 			return res.status(400).json({ error: "Aucune image fournie" });
 		}
 
-		if (!brandName) {
-			return res.status(400).json({ error: "Nom de marque obligatoire" });
-		}
+		brandName = sanitizeInput(brandName);
 
 		const brand = await Brand.create({
 			name: brandName,
@@ -26,7 +32,7 @@ export async function createBrand(req: Request, res: Response) {
 		});
 
 		res.status(201).json(brand);
-	} catch (err) {
+	} catch (err: unknown) {
 		console.error(err);
 		res.status(500).json({ error: "Internal Server Error" });
 	}

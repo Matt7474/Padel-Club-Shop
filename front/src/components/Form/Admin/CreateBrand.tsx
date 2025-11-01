@@ -9,6 +9,8 @@ export default function CreateBrand() {
 	const addToast = useToastStore((state) => state.addToast);
 
 	const [errorMessage, setErrorMessage] = useState(false);
+	const [messageOfError, setMessageOfError] = useState("");
+
 	const [newBrand, setNewBrand] = useState("");
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 	const [imagePreview, setImagePreview] = useState<string>(""); // src affiché dans <img>
@@ -110,10 +112,14 @@ export default function CreateBrand() {
 
 			setImagePreview(url);
 			setError(null);
-		} catch (_err) {
-			setError(
-				"Impossible de charger l'image — URL invalide ou hotlinking bloqué.",
-			);
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				setErrorMessage(true);
+				setMessageOfError(error.message);
+				console.error("❌ Erreur front :", error.message);
+			} else {
+				console.error("❌ Erreur inconnue :", error);
+			}
 		}
 	};
 
@@ -148,6 +154,9 @@ export default function CreateBrand() {
 				const payload = { brandName: newBrand, image_url: imagePreview };
 				const result = await createBrand(payload);
 				console.log("Marque créée avec URL distante :", result);
+				window.dispatchEvent(new Event("brandCreate"));
+				addToast(`La marque ${newBrand} à créé avec succès`, "bg-green-500");
+				setErrorMessage(false);
 			} else {
 				console.log("Aucune image sélectionnée");
 				return;
@@ -159,9 +168,14 @@ export default function CreateBrand() {
 			setImagePreview("");
 			setAddURL("");
 			setIsDataUrl(false);
-		} catch (err) {
-			console.error("Erreur submit :", err);
-			setErrorMessage(true);
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				setErrorMessage(true);
+				setMessageOfError(error.message);
+				console.error("❌ Erreur front :", error.message);
+			} else {
+				console.error("❌ Erreur inconnue :", error);
+			}
 		}
 	};
 
@@ -271,9 +285,9 @@ export default function CreateBrand() {
 					</div>
 
 					{errorMessage && (
-						<span className="text-sm text-red-500 pl-0.5">
-							Création impossible, une marque porte deja ce nom
-						</span>
+						<div className="text-sm text-red-500 mt-4 text-center">
+							{messageOfError}
+						</div>
 					)}
 					<div className="-mt-4">
 						<Button type={"submit"} buttonText="AJOUTER LA MARQUE" />
