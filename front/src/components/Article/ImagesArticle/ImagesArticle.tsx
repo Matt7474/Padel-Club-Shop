@@ -4,23 +4,35 @@ import ZoomImage from "../../Wrapper/ZoomImage";
 
 export default function ImagesArticle({ article }: { article: Article }) {
 	const BASE_URL = import.meta.env.VITE_API_URL;
+	const now = new Date();
 
 	const defaultImage = "/icons/default.svg";
 	const [selectedImage, setSelectedImage] = useState(
 		article.images[0]?.url ? BASE_URL + article.images[0].url : defaultImage,
 	);
 
+	const createdAt = article.created_at ? new Date(article.created_at) : null;
+	const isNew =
+		createdAt !== null &&
+		(now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24) < 30;
+
 	return (
 		<>
 			{/* LAYOUT MOBILE */}
 			<div className="xl:hidden">
-				<div className="xl:flex-row-reverse xl:flex xl:flex-col-2">
+				<div className="xl:flex-row-reverse xl:flex xl:flex-col-2 relative overflow-hidden">
 					{/* Partie grande image */}
 					<img
 						src={selectedImage}
 						alt={article.name}
 						className="border border-gray-300 rounded-sm w-full aspect-square"
 					/>
+					{isNew && (
+						<div className="absolute top-6 -left-9 h-8 w-40 bg-red-500 text-white text-base flex justify-center items-center font-semibold rotate-315 after:content-[''] after:absolute after:inset-0.5 after:border-[1.5px] after:border-dashed after:border-white after:rounded-[2px]">
+							{" "}
+							NOUVEAU
+						</div>
+					)}
 
 					{/* Partie petites images avec scroll horizontal */}
 					<div className="flex gap-2 mt-2 overflow-x-auto scrollbar-hide pb-2">
@@ -28,7 +40,7 @@ export default function ImagesArticle({ article }: { article: Article }) {
 							<button
 								type="button"
 								key={img.image_id}
-								className={`flex-shrink-0 border rounded-sm cursor-pointer transition-all duration-200 ${
+								className={`shrink-0 border rounded-sm cursor-pointer transition-all duration-200 ${
 									BASE_URL + img.url === selectedImage
 										? "border-blue-500 ring-2 ring-blue-200"
 										: "border-gray-300 hover:border-gray-400"
@@ -58,7 +70,7 @@ export default function ImagesArticle({ article }: { article: Article }) {
 							<button
 								type="button"
 								key={img.image_id}
-								className={`flex-shrink-0 border rounded-sm cursor-pointer transition-all duration-200 ${
+								className={`shrink-0 border rounded-sm cursor-pointer transition-all duration-200 ${
 									BASE_URL + img.url === selectedImage
 										? "border-blue-500 ring-2 ring-blue-200"
 										: "border-gray-300 hover:border-gray-400"
@@ -76,7 +88,7 @@ export default function ImagesArticle({ article }: { article: Article }) {
 				</div>
 
 				{/* Grande image à droite */}
-				<div className="xl:w-full">
+				<div className="xl:w-full relative overflow-hidden">
 					<ZoomImage
 						src={selectedImage}
 						alt={article.name}
@@ -84,6 +96,12 @@ export default function ImagesArticle({ article }: { article: Article }) {
 						size={180}
 						shape="circle"
 					/>
+					{isNew && (
+						<div className="absolute top-6 -left-9 h-10 w-40 bg-red-500 text-white text-lg flex justify-center items-center font-semibold rotate-315 after:content-[''] after:absolute after:inset-0.5 after:border-[1.5px] after:border-dashed after:border-white after:rounded-[2px]">
+							{" "}
+							NOUVEAU
+						</div>
+					)}
 				</div>
 			</div>
 		</>

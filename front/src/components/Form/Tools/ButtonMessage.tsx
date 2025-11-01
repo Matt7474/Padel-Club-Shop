@@ -18,7 +18,7 @@ export default function ButtonMessage({
 			type="button"
 			onClick={onClick}
 			disabled={disabled}
-			className={`h-10 px-6 bg-linear-to-br from-pink-500 to-purple-600 
+			className={`h-10 px-6 w-full xl:w-40 bg-linear-to-br from-pink-500 to-purple-600 
 				hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed 
 				cursor-pointer text-white font-semibold rounded-lg transition-all 
 				shadow-lg hover:shadow-xl transform hover:scale-105 

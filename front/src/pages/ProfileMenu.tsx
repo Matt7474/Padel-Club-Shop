@@ -75,7 +75,7 @@ export default function ProfileMenu() {
 				/>
 			</div>
 			{/* Menu latéral desktop */}
-			<div className="hidden xl:flex flex-col w-70 absolute -left-74 top-17 cursor-pointer ">
+			<div className="hidden xl:flex flex-col w-77 absolute -left-81 top-17 cursor-pointer ">
 				{menuOptions.map((option) => (
 					<button
 						type="button"

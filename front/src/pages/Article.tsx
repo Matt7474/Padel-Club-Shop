@@ -179,6 +179,7 @@ export default function Article() {
 			<div className="hidden xl:flex xl:flex-col xl:gap-8 xl:justify-between mt-6">
 				<div className="hidden xl:flex xl:gap-8 xl:justify-between">
 					<ImagesArticle article={article} />
+
 					<div className="xl:w-1/2 xl:flex xl:flex-col">
 						<div className="xl:flex xl:flex-col xl:h-full xl:justify-between">
 							<div>

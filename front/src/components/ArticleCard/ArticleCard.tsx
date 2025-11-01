@@ -112,6 +112,13 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 		setInfoModal((prev) => prev.filter((t) => t.id !== id));
 	};
 
+	const createdAt = article.created_at ? new Date(article.created_at) : null;
+	const isNew =
+		createdAt !== null &&
+		(now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24) < 30;
+
+	console.log("articles", article);
+
 	return (
 		<>
 			<Link
@@ -122,7 +129,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 			>
 				<div className="flex h-42">
 					{/* Colonne image */}
-					<div className="w-1/3 border-r flex items-center justify-center p-2">
+					<div className="w-1/3 border-r flex items-center justify-center p-2 relative overflow-hidden">
 						<img
 							src={imageUrl}
 							alt={article.name}
@@ -131,6 +138,11 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 								e.currentTarget.src = "/icons/default.svg";
 							}}
 						/>
+						{isNew && (
+							<div className="absolute h-6 w-32 bg-red-500 text-white text-[13px] flex justify-center items-center font-semibold rotate-315 top-4 -left-9 after:content-[''] after:absolute after:inset-0.5 after:border-[1.5px] after:border-dashed after:border-white after:rounded-[2px]">
+								NOUVEAU
+							</div>
+						)}
 					</div>
 
 					{/* Colonne texte */}

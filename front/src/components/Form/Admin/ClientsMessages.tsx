@@ -303,7 +303,7 @@ export default function ClientsMessages({
 										>
 											<div className="flex justify-between items-center">
 												<div className="flex-1">
-													<p className="font-medium text-gray-700 text-sm">
+													<p className="font-medium text-gray-700 text-xs xl:text-sm">
 														{u.last_name} {u.first_name}
 													</p>
 													<p className="text-sm text-gray-500">{u.email}</p>
@@ -337,7 +337,7 @@ export default function ClientsMessages({
 						</div>
 
 						<div
-							className="flex-1 overflow-y-auto px-8 py-6 space-y-4"
+							className="flex-1 overflow-y-auto px-4 xl:px-8 py-6 space-y-2 xl:space-y-3"
 							id="chat-scroll-zone"
 						>
 							{!selectedUser ? (
@@ -397,7 +397,7 @@ export default function ClientsMessages({
 
 											{/* --- Message --- */}
 											<div
-												className={`flex ${isAdminMessage ? "justify-end" : "justify-start"}`}
+												className={`flex  ${isAdminMessage ? "justify-end" : "justify-start"}`}
 											>
 												<div
 													className={`flex gap-3 max-w-xl ${
@@ -406,13 +406,13 @@ export default function ClientsMessages({
 												>
 													{/* Avatar */}
 													<div
-														className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md ${
+														className={`shrink-0 w-7 xl:w-10 h-7 xl:h-10 rounded-full flex items-center justify-center shadow-md ${
 															isAdminMessage
 																? "bg-linear-to-br from-green-400 to-green-600"
 																: "bg-linear-to-br from-pink-400 to-purple-600"
 														}`}
 													>
-														<span className="text-white font-bold text-sm">
+														<span className="text-white font-bold text-xs xl:text-sm">
 															{isAdminMessage
 																? "A"
 																: selectedUser?.first_name[0]}
@@ -421,7 +421,7 @@ export default function ClientsMessages({
 
 													{/* Bulle + nom */}
 													<div
-														className={`flex flex-col ${
+														className={`flex flex-col  ${
 															isAdminMessage ? "items-end" : "items-start"
 														}`}
 													>
@@ -433,7 +433,7 @@ export default function ClientsMessages({
 														)}
 
 														<div
-															className={`relative px-5 py-3 rounded-2xl shadow-md  wrap-break-word ${
+															className={`relative px-3 xl:px-5 py-1 xl:py-3 rounded-2xl shadow-md  wrap-break-word  ${
 																isAdminMessage
 																	? "bg-linear-to-bl from-green-500 to-green-600 text-white rounded-tr-sm"
 																	: "bg-white text-gray-800 rounded-tl-sm border border-gray-200"
@@ -443,13 +443,13 @@ export default function ClientsMessages({
 																wordBreak: "break-word",
 															}}
 														>
-															<p className="wrap-break-word whitespace-pre-wrap">
+															<p className="wrap-break-word whitespace-pre-wrap text-sm xl:text-base ">
 																{msg.content}
 															</p>
 														</div>
 
 														<div
-															className={`flex items-center gap-2 mt-1 px-2 ${
+															className={`flex items-center gap-2 mt-1 px-2  ${
 																isAdminMessage ? "flex-row-reverse" : "flex-row"
 															}`}
 														>

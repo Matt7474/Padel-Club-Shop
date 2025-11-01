@@ -91,6 +91,7 @@ export default interface Article {
 	ratings?: TechRatings;
 	promotions?: Promotion[];
 	reviews?: Review[];
+	created_at?: Date;
 }
 // ---------- Marque ----------
 export interface Brand {
