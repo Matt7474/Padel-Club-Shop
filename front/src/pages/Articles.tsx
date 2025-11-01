@@ -141,7 +141,7 @@ export default function Articles({
 							<ArticleCard key={article.article_id} article={article} />
 						))
 					) : (
-						<p>Aucun article trouvé.</p>
+						<p className="mt-4">Aucun article trouvé.</p>
 					)}
 				</div>
 			</div>

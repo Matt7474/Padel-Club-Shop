@@ -36,7 +36,7 @@ export default function Brand({ brand }: ArticlesProps) {
 
 	if (loading) return <div>Chargement...</div>;
 	if (articles.length === 0)
-		return <div>Aucun article trouvé pour cette marque.</div>;
+		return <div className="mt-4">Aucun article trouvé pour cette marque.</div>;
 
 	return (
 		<>

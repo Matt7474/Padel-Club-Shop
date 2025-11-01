@@ -42,7 +42,7 @@ export default function Homepage() {
 					{/* SACS */}
 					<Link
 						to={"/articles/bag"}
-						className="relative group bg-[#93F7A8] aspect-square 2xl:aspect-[2/1] rounded-2xl flex items-center justify-center 2xl:row-start-1 2xl:row-end-2 2xl:col-start-3 2xl:col-end-5  border hover:cursor-pointer overflow-hidden"
+						className="relative group bg-[#93F7A8] aspect-square 2xl:aspect-2/1 rounded-2xl flex items-center justify-center 2xl:row-start-1 2xl:row-end-2 2xl:col-start-3 2xl:col-end-5  border hover:cursor-pointer overflow-hidden"
 					>
 						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
 						<img
@@ -106,7 +106,7 @@ export default function Homepage() {
 					{/* PROMOTIONS */}
 					<Link
 						to={"/articles/promotion"}
-						className="relative col-span-2 xl:col-auto aspect-auto  h-42 xl:h-auto group bg-[#D8DCFF] 2xl:aspect-[2/1] rounded-2xl flex items-center justify-center  2xl:row-start-3 2xl:row-end-4 2xl:col-start-2 2xl:col-end-4  border hover:cursor-pointer overflow-hidden"
+						className="relative col-span-2 xl:col-auto aspect-auto  h-42 xl:h-auto group bg-[#D8DCFF] 2xl:aspect-2/1 rounded-2xl flex items-center justify-center  2xl:row-start-3 2xl:row-end-4 2xl:col-start-2 2xl:col-end-4  border hover:cursor-pointer overflow-hidden"
 					>
 						<div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity"></div>
 						<img
