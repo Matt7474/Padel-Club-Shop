@@ -134,7 +134,7 @@ export const createOrderAndUpdateStock = async (
 						order_id: newOrder.order_id,
 						article_id: item.id,
 						quantity: item.quantity,
-						price: item.price,
+						price: item.price ?? article.price_ttc, // <-- ici on prend le prix promo si fourni
 						size: selectedSize ?? null,
 					},
 					{ transaction: t },

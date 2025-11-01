@@ -5,6 +5,7 @@ export interface OrderLine {
 	order_line_id: number;
 	article: number;
 	quantity: number;
+	price: number;
 }
 
 // Le paiement

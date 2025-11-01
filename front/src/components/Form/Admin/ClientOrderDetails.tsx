@@ -21,13 +21,18 @@ export default function ClientOrderDetails({
 		articlesData.find((a) => a.article_id === id);
 
 	// Calcul des totaux TTC/HT/TVA
-	const totalTTC = order.order_lines.reduce((sum, line) => {
-		const article = getArticleById(line.article);
-		console.log("getArticleById", article);
+	// const totalTTC = order.order_lines.reduce((sum, line) => {
+	// 	const article = getArticleById(line.article);
+	// 	console.log("getArticleById", article);
 
-		if (!article || typeof line.quantity !== "number") return sum;
-		return sum + article.price_ttc * line.quantity;
-	}, 0);
+	// 	if (!article || typeof line.quantity !== "number") return sum;
+	// 	return sum + article.price_ttc * line.quantity;
+	// }, 0);
+
+	const totalTTC = order.order_lines.reduce(
+		(sum, line) => sum + line.price * line.quantity,
+		0,
+	);
 
 	const tvaRate = typeof order.tva_rate === "number" ? order.tva_rate : 20;
 	const totalHT = (totalTTC / (1 + tvaRate / 100)).toFixed(2);
@@ -187,13 +192,14 @@ export default function ClientOrderDetails({
 							<p className="text-xs pl-1 overflow-hidden ">PRIX.TTC</p>
 						</div>
 						{order.order_lines.map((line) => {
-							const article = getArticleById(line.article);
+							const article = getArticleById(line.article); // article_id
 
 							return (
 								<div
 									key={line.order_line_id}
-									className="grid grid-cols-[2fr_4fr_1fr_2fr_2fr]  gap-2 items-center border-b py-2"
+									className="grid grid-cols-[2fr_4fr_1fr_2fr_2fr] gap-2 items-center border-b py-2"
 								>
+									{/* IMAGE */}
 									<div>
 										<img
 											src={article?.images[0] || "/icons/default.svg"}
@@ -202,32 +208,37 @@ export default function ClientOrderDetails({
 										/>
 									</div>
 
+									{/* DESCRIPTION */}
 									<div>
 										<p className="font-semibold">
 											{article?.name || "Inconnu"}
 										</p>
 									</div>
+
+									{/* QUANTITÉ */}
 									<div>
 										<p className="text-sm text-gray-600 pl-1">
 											{line.quantity}
 										</p>
 									</div>
+
+									{/* PRIX HT */}
 									<div>
 										<p className="text-sm text-gray-800">
-											{article?.price_ttc
-												? (article.price_ttc / 1.2).toFixed(2)
-												: "N/A"}{" "}
-											€
+											{(line.price / 1.2).toFixed(2)} €
 										</p>
 									</div>
+
+									{/* PRIX TTC */}
 									<div>
 										<p className="text-sm font-bold text-gray-800">
-											{article?.price_ttc ?? "N/A"} €
+											{line.price.toFixed(2)} €
 										</p>
 									</div>
 								</div>
 							);
 						})}
+
 						<div>
 							<div className="text-md leading-tight text-end mt-4">
 								<p>TOTAL HT : {totalHT} €</p>

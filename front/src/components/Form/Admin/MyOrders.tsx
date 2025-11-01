@@ -73,8 +73,6 @@ export default function MyOrders() {
 		fetchOrders();
 	}, []);
 
-	console.log("orders", orders);
-
 	const handleOrderClick = (order: MyOrdersProps) => {
 		console.log("Génération de la facture pour:", order);
 

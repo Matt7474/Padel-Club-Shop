@@ -79,10 +79,14 @@ export default function OrderDetails({
 	const totalQty = order.items.reduce((sum, item) => sum + item.quantity, 0);
 
 	// Total TTC des articles
-	const totalTTC = order.items.reduce((sum, item) => {
-		if (!item.article) return sum;
-		return sum + item.article.price_ttc * item.quantity;
-	}, 0);
+	// const totalTTC = order.items.reduce((sum, item) => {
+	// 	if (!item.article) return sum;
+	// 	return sum + item.article.price_ttc * item.quantity;
+	// }, 0);
+	const totalTTC = order.items.reduce(
+		(sum, item) => sum + item.price * item.quantity,
+		0,
+	);
 
 	// Frais de livraison
 	const shippingCost = totalTTC >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
@@ -204,13 +208,10 @@ export default function OrderDetails({
 									</p>
 									<p className="text-sm text-gray-600">{quantity}</p>
 									<p className="text-sm text-gray-700 hidden xl:block">
-										{article.price_ttc
-											? (article.price_ttc / 1.2).toFixed(2)
-											: "N/A"}{" "}
-										€
+										{item.price ? (item.price / 1.2).toFixed(2) : "N/A"} €
 									</p>
 									<p className="text-sm font-semibold text-gray-900 hidden xl:block">
-										{article.price_ttc ?? "N/A"} €
+										{item.price ?? "N/A"} €
 									</p>
 								</div>
 							);
