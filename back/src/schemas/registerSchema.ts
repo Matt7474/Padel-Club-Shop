@@ -86,7 +86,7 @@ export const registerSchema = Joi.object({
 	first_name: Joi.string()
 		.min(2)
 		.max(30)
-		.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ'’-]+$/u)
+		.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ'’ -]+$/u)
 		.required()
 		.messages({
 			"string.pattern.base":
@@ -98,7 +98,7 @@ export const registerSchema = Joi.object({
 	last_name: Joi.string()
 		.min(2)
 		.max(30)
-		.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ'’-]+$/u)
+		.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ'’ -]+$/u)
 		.required()
 		.messages({
 			"string.pattern.base":

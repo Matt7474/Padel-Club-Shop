@@ -142,7 +142,17 @@ export default function Register() {
 								label="Prénom"
 								type="text"
 								value={firstName}
-								onChange={setFirstName}
+								onChange={(value: string) => {
+									const formatted = value
+										.split(" ")
+										.map(
+											(word) =>
+												word.charAt(0).toUpperCase() +
+												word.slice(1).toLowerCase(),
+										)
+										.join(" ");
+									setFirstName(formatted);
+								}}
 							/>
 							<Input
 								htmlFor="phone"

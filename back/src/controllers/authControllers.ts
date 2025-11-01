@@ -31,6 +31,7 @@ export async function registerUser(req: Request, res: Response) {
 		console.log("Validation passed:", value);
 
 		// 2️⃣ Nettoyage des champs string
+
 		const first_name = sanitizeInput(value.first_name);
 		const last_name = sanitizeInput(value.last_name);
 		const email = sanitizeInput(value.email).toLowerCase();
@@ -64,10 +65,15 @@ export async function registerUser(req: Request, res: Response) {
 		console.log("Password hashed");
 
 		// 6️⃣ Créer l'utilisateur
+		const formattedLastName = last_name.toUpperCase();
+		const formattedFirstName = first_name
+			.split(" ")
+			.map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+			.join(" ");
 		console.log("Creating user...");
 		const user = await User.create({
-			first_name,
-			last_name,
+			last_name: formattedLastName,
+			first_name: formattedFirstName,
 			email,
 			phone,
 			password: hashedPassword,
