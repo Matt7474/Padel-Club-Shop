@@ -162,6 +162,62 @@ export const markMessagesAsRead = async (req: Request, res: Response) => {
 		});
 	}
 };
+
+export const markMessagesReceiverAsRead = async (
+	req: Request,
+	res: Response,
+) => {
+	console.log("in");
+
+	try {
+		const { id } = req.params;
+		const receiverId = Number(id); // ← Renommé pour clarté
+
+		console.log("receiverId reçu:", receiverId);
+
+		if (Number.isNaN(receiverId)) {
+			return res.status(400).json({ message: "ID invalide" });
+		}
+
+		const messagesToUpdate = await Message.findAll({
+			where: { receiver_id: receiverId, is_read: false }, // ← Changé
+		});
+
+		console.log("Messages à mettre à jour :", messagesToUpdate.length);
+		console.log(
+			"Messages details:",
+			messagesToUpdate.map((m) => ({
+				id: m.id,
+				receiver_id: m.receiver_id,
+				is_read: m.is_read,
+			})),
+		);
+
+		const [updatedCount] = await Message.update(
+			{ is_read: true },
+			{
+				where: {
+					receiver_id: receiverId, // ← Changé
+					is_read: false,
+				},
+			},
+		);
+
+		console.log("updatedCount:", updatedCount);
+		console.log("out");
+
+		return res.status(200).json({
+			message: `${updatedCount} message(s) marqué(s) comme lu(s)`,
+			count: updatedCount,
+		});
+	} catch (err: unknown) {
+		console.error("Erreur:", err);
+		return res.status(500).json({
+			message: err instanceof Error ? err.message : "Erreur inconnue",
+		});
+	}
+};
+
 // ---------------- Envoyer un message utilisateur → admin ----------------
 export const sendUserMessage = async (req: Request, res: Response) => {
 	try {

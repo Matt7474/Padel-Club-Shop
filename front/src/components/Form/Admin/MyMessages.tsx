@@ -1,30 +1,28 @@
 import { CheckCheck, Send, User as UserIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { getUserMessages } from "../../../api/Message";
+import { markMessagesReceiverAsRead } from "../../../api/Message";
 import { useToastStore } from "../../../store/ToastStore ";
 import { useAuthStore } from "../../../store/useAuthStore";
-import type { Message } from "../../../types/Messages";
+import { useNotificationStore } from "../../../store/useNotificationStore";
 import FooterMessage from "../Tools/FooterMessage";
 import Loader from "../Tools/Loader";
 
 export default function MyMessages() {
 	const { isAuthenticated, user } = useAuthStore();
 	const addToast = useToastStore((state) => state.addToast);
+	const { messages, addMessage, fetchNotifications } = useNotificationStore();
 
 	const [loading, setLoading] = useState(false);
-	const [messages, setMessages] = useState<Message[]>([]);
 	const [newMessage, setNewMessage] = useState("");
 	const [isSending, setIsSending] = useState(false);
-
-	const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
 	const ws = useRef<WebSocket | null>(null);
+	const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
+	// Connexion WebSocket
 	useEffect(() => {
 		if (!user?.id) return;
 
-		// Connexion WebSocket
-		ws.current = new WebSocket("ws://localhost:3000"); // ou wss:// en prod
+		ws.current = new WebSocket("ws://localhost:3000");
 
 		ws.current.onopen = () => {
 			console.log("✅ WebSocket connected");
@@ -34,44 +32,40 @@ export default function MyMessages() {
 		ws.current.onmessage = (event) => {
 			const message = JSON.parse(event.data);
 			if (message.type === "message") {
-				setMessages((prev) => [...prev, message.data]);
+				addMessage(message.data);
 			}
 		};
 
-		ws.current.onclose = () => {
-			console.log("❎ WebSocket closed");
-		};
+		ws.current.onclose = () => console.log("❎ WebSocket closed");
 
-		return () => {
-			ws.current?.close();
-		};
-	}, [user?.id]);
+		return () => ws.current?.close();
+	}, [user?.id, addMessage]);
 
-	// Scroll vers le bas
-	const scrollToBottom = () => {
-		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-	};
-
+	// Charger les messages initiaux
 	useEffect(() => {
 		if (isAuthenticated && user?.id) {
-			fetchMessages(); // ✅ Charge l'historique via HTTP
-		}
-	}, [isAuthenticated, user?.id]);
-
-	// Récupération des messages du client connecté
-	const fetchMessages = async () => {
-		if (!user?.id) return;
-
-		try {
 			setLoading(true);
-			const msgs = await getUserMessages(user.id);
-			setMessages(msgs);
-		} catch (_err: unknown) {
-			addToast("Erreur lors du chargement des messages", "bg-red-500");
-		} finally {
-			setLoading(false);
+			fetchNotifications().finally(() => setLoading(false));
 		}
-	};
+	}, [isAuthenticated, user?.id, fetchNotifications]);
+
+	// Marquer tous les messages comme lus
+	useEffect(() => {
+		if (!user) return;
+		markMessagesReceiverAsRead(user.id);
+	}, [user]);
+
+	// Scroll automatique vers le bas
+	useEffect(() => {
+		if (messagesContainerRef.current) {
+			setTimeout(() => {
+				messagesContainerRef.current?.scrollTo({
+					top: messagesContainerRef.current.scrollHeight,
+					behavior: "smooth",
+				});
+			}, 50);
+		}
+	}, [messages]);
 
 	const handleSendMessage = async () => {
 		if (!newMessage.trim()) {
@@ -91,17 +85,14 @@ export default function MyMessages() {
 
 		try {
 			setIsSending(true);
-
-			// ✅ Envoyer via WebSocket (pas via HTTP)
 			ws.current.send(
 				JSON.stringify({
 					type: "message",
 					senderId: user.id,
-					receiverId: null, // null = message au support
+					receiverId: null,
 					content: newMessage,
 				}),
 			);
-
 			setNewMessage("");
 			addToast("Message envoyé", "bg-green-500");
 		} catch (err: unknown) {
@@ -122,22 +113,11 @@ export default function MyMessages() {
 		}
 	};
 
-	useEffect(() => {
-		scrollToBottom();
-	}, [messages]);
-
-	useEffect(() => {
-		if (isAuthenticated && user?.id) {
-			fetchMessages();
-		}
-	}, [isAuthenticated, user?.id]);
-
 	if (loading) return <Loader text="de vos messages" />;
 
 	return (
 		<div className="h-180 bg-gray-50 py-8">
 			<div className="max-w-4xl mx-auto px-4">
-				{/* Carte principale avec marges */}
 				<div className="bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-gray-300">
 					{/* Header */}
 					<div className="bg-linear-to-br from-pink-500 to-purple-600 px-6 py-4">
@@ -154,148 +134,136 @@ export default function MyMessages() {
 						</div>
 					</div>
 
-					{/* Zone de messages avec marques latérales */}
-					<div className="relative">
-						{/* Marques décoratives gauche */}
-						<div className="absolute left-0 top-0 bottom-0 w-2 opacity-50" />
-
-						{/* Marques décoratives droite */}
-						<div className="absolute right-0 top-0 bottom-0 w-2  opacity-50" />
-
-						{/* Messages */}
-						<div className="h-96 overflow-y-auto px-8 py-6">
-							{messages.length === 0 ? (
-								<div className="flex flex-col items-center justify-center h-full text-center">
-									<div className="w-20 h-20 bg-linear-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center mb-4">
-										<Send className="w-10 h-10 text-pink-500" />
-									</div>
-									<h3 className="text-xl font-semibold text-gray-700 mb-2">
-										Aucun message
-									</h3>
-									<p className="text-gray-500">
-										Envoyez votre premier message à notre équipe support
-									</p>
+					{/* Zone de messages */}
+					<div
+						ref={messagesContainerRef}
+						className="h-96 overflow-y-auto px-8 py-6"
+					>
+						{messages.length === 0 ? (
+							<div className="flex flex-col items-center justify-center h-full text-center">
+								<div className="w-20 h-20 bg-linear-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center mb-4">
+									<Send className="w-10 h-10 text-pink-500" />
 								</div>
-							) : (
-								<div className="space-y-4">
-									{messages.map((msg, index) => {
-										const isMyMessage = msg.sender_id === user?.id;
+								<h3 className="text-xl font-semibold text-gray-700 mb-2">
+									Aucun message
+								</h3>
+								<p className="text-gray-500">
+									Envoyez votre premier message à notre équipe support
+								</p>
+							</div>
+						) : (
+							<div className="space-y-4">
+								{messages.map((msg, index) => {
+									const isMyMessage = msg.sender_id === user?.id;
 
-										// 🔹 Formatage des dates
-										const currentDate = new Date(
-											msg.created_at,
-										).toLocaleDateString("fr-FR", {
-											weekday: "long",
-											day: "2-digit",
-											month: "long",
-											year: "numeric",
-										});
-										const prevDate =
-											index > 0
-												? new Date(
-														messages[index - 1].created_at,
-													).toLocaleDateString("fr-FR", {
-														weekday: "long",
-														day: "2-digit",
-														month: "long",
-														year: "numeric",
-													})
-												: null;
+									const currentDate = new Date(
+										msg.created_at,
+									).toLocaleDateString("fr-FR", {
+										weekday: "long",
+										day: "2-digit",
+										month: "long",
+										year: "numeric",
+									});
+									const prevDate =
+										index > 0
+											? new Date(
+													messages[index - 1].created_at,
+												).toLocaleDateString("fr-FR", {
+													weekday: "long",
+													day: "2-digit",
+													month: "long",
+													year: "numeric",
+												})
+											: null;
 
-										const showDateSeparator = currentDate !== prevDate;
+									const showDateSeparator = currentDate !== prevDate;
 
-										return (
-											<div key={msg.id}>
-												{/* --- Séparateur de date --- */}
-												{showDateSeparator && (
-													<div className="flex justify-center my-4">
-														<div className="bg-gray-100 text-gray-600 text-sm px-4 py-1 rounded-full shadow-sm border border-gray-200">
-															{currentDate.charAt(0).toUpperCase() +
-																currentDate.slice(1)}
-														</div>
+									return (
+										<div key={msg.id}>
+											{/* Séparateur de date */}
+											{showDateSeparator && (
+												<div className="flex justify-center my-4">
+													<div className="bg-gray-100 text-gray-600 text-sm px-4 py-1 rounded-full shadow-sm border border-gray-200">
+														{currentDate.charAt(0).toUpperCase() +
+															currentDate.slice(1)}
 													</div>
-												)}
+												</div>
+											)}
 
-												{/* --- Message --- */}
+											{/* Message */}
+											<div
+												className={`flex ${isMyMessage ? "justify-end" : "justify-start"} animate-fadeIn`}
+											>
 												<div
-													className={`flex ${isMyMessage ? "justify-end" : "justify-start"} animate-fadeIn`}
+													className={`flex gap-3 max-w-xl ${isMyMessage ? "flex-row-reverse" : "flex-row"}`}
 												>
+													{/* Avatar */}
 													<div
-														className={`flex gap-3 max-w-xl ${isMyMessage ? "flex-row-reverse" : "flex-row"}`}
+														className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md ${
+															isMyMessage
+																? "bg-linear-to-br from-green-400 to-green-600"
+																: "bg-linear-to-br from-pink-400 to-purple-600"
+														}`}
 													>
-														{/* Avatar */}
+														<span className="text-white font-bold text-sm">
+															{isMyMessage
+																? user?.firstName?.charAt(0).toUpperCase()
+																: "S"}
+														</span>
+													</div>
+
+													{/* Bulle + nom */}
+													<div
+														className={`flex flex-col ${isMyMessage ? "items-end" : "items-start"}`}
+													>
+														{/* Nom de l'expéditeur */}
+														{!isMyMessage && (
+															<span className="text-xs font-semibold text-gray-600 mb-1 px-2">
+																Support client
+															</span>
+														)}
+
+														{/* Bulle du message */}
 														<div
-															className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md ${
+															className={`relative px-5 py-3 rounded-2xl shadow-md ${
 																isMyMessage
-																	? "bg-linear-to-br from-green-400 to-green-600"
-																	: "bg-linear-to-br from-pink-400 to-purple-600"
+																	? "bg-linear-to-bl from-green-500 to-green-600 text-white rounded-tr-sm"
+																	: "bg-white text-gray-800 rounded-tl-sm border border-gray-200"
+															}`}
+															style={{ wordBreak: "break-word" }}
+														>
+															<p className="whitespace-pre-wrap">
+																{msg.content}
+															</p>
+														</div>
+
+														{/* Métadonnées */}
+														<div
+															className={`flex items-center gap-2 mt-1 px-2 ${
+																isMyMessage ? "flex-row-reverse" : "flex-row"
 															}`}
 														>
-															<span className="text-white font-bold text-sm">
-																{isMyMessage
-																	? user?.firstName?.charAt(0).toUpperCase()
-																	: "S"}
-															</span>
-														</div>
-
-														{/* Bulle + nom */}
-														<div
-															className={`flex flex-col ${isMyMessage ? "items-end" : "items-start"}`}
-														>
-															{/* Nom de l'expéditeur */}
-															{!isMyMessage && (
-																<span className="text-xs font-semibold text-gray-600 mb-1 px-2">
-																	Support client
-																</span>
-															)}
-
-															{/* Bulle du message */}
-															<div
-																className={`relative px-5 py-3 rounded-2xl shadow-md wrap-break-word ${
-																	isMyMessage
-																		? "bg-linear-to-bl from-green-500 to-green-600 text-white rounded-tr-sm"
-																		: "bg-white text-gray-800 rounded-tl-sm border border-gray-200"
-																}`}
-																style={{
-																	// maxWidth: "70%",
-																	wordBreak: "break-word",
-																}}
-															>
-																<p className="whitespace-pre-wrap">
-																	{msg.content}
-																</p>
-															</div>
-
-															{/* Métadonnées */}
-															<div
-																className={`flex items-center gap-2 mt-1 px-2 ${
-																	isMyMessage ? "flex-row-reverse" : "flex-row"
-																}`}
-															>
-																<span className="text-xs text-gray-400">
-																	{new Date(msg.created_at).toLocaleTimeString(
-																		"fr-FR",
-																		{
-																			hour: "2-digit",
-																			minute: "2-digit",
-																		},
-																	)}
-																</span>
-																{msg.is_read && isMyMessage && (
-																	<CheckCheck className="w-4 h-4 text-green-600" />
+															<span className="text-xs text-gray-400">
+																{new Date(msg.created_at).toLocaleTimeString(
+																	"fr-FR",
+																	{
+																		hour: "2-digit",
+																		minute: "2-digit",
+																	},
 																)}
-															</div>
+															</span>
+															{msg.is_read && isMyMessage && (
+																<CheckCheck className="w-4 h-4 text-green-600" />
+															)}
 														</div>
 													</div>
 												</div>
 											</div>
-										);
-									})}
-
-									<div ref={messagesEndRef} />
-								</div>
-							)}
-						</div>
+										</div>
+									);
+								})}
+							</div>
+						)}
 					</div>
 
 					{/* Zone de saisie */}

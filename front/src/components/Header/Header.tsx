@@ -10,8 +10,13 @@ import MenuModal from "../Modal/MenuModal";
 import SearchBar from "../SearchBar/SearchBar";
 
 export default function Header() {
-	const { lowStockCount, orderPaid, unreadMessageCount, unreadFormCount } =
-		useNotificationStore();
+	const {
+		lowStockCount,
+		orderPaid,
+		messages,
+		unreadMessageCount,
+		unreadFormCount,
+	} = useNotificationStore();
 
 	const { user, isAuthenticated } = useAuthStore();
 	const addToast = useToastStore((state) => state.addToast);
@@ -23,6 +28,9 @@ export default function Header() {
 	const [isCartOpen, setIsCartOpen] = useState(false);
 
 	const [unreadMessage] = useState(0);
+
+	const personalMessages = messages.filter((m) => m.receiver_id === user?.id);
+	const unreadPersonalCount = personalMessages.filter((m) => !m.is_read).length;
 
 	const cart = useCartStore((state) => state.cart);
 	// Somme des quantités dans le panier
@@ -128,11 +136,14 @@ export default function Header() {
 
 	const totalAlertCount =
 		unreadMessageCount +
+		unreadPersonalCount +
 		paidOrderCount +
 		lowStockCount +
 		unreadFormCount +
 		orderPaid +
 		unreadMessage;
+
+	console.log("unreadPersonalCount", unreadPersonalCount);
 
 	const toggleMenu = () => {
 		setIsMenuOpen((prev) => !prev);
@@ -245,9 +256,16 @@ export default function Header() {
 							to="/profile"
 							className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-9 2xl:mr-4"
 						>
-							<UserStar
-								className={`w-7 h-7 transition-transform duration-200 text-gray-800`}
-							/>
+							<div className="relative">
+								<UserStar
+									className={`w-7 h-7 transition-transform duration-200 text-gray-800`}
+								/>
+								{totalAlertCount > 0 && (
+									<div className="w-5 h-5 flex justify-center items-center rounded-full bg-red-500 text-white absolute text-[10px] font-semibold -top-2 -right-2 xl:-right-1">
+										{totalAlertCount > 99 ? "99+" : totalAlertCount}
+									</div>
+								)}
+							</div>
 						</Link>
 					)}
 
@@ -256,9 +274,16 @@ export default function Header() {
 							to="/profile"
 							className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"
 						>
-							<User
-								className={`w-7 h-7 transition-transform duration-200 text-gray-800`}
-							/>
+							<div className="relative">
+								<User
+									className={`w-7 h-7 transition-transform duration-200 text-gray-800`}
+								/>
+								{unreadPersonalCount > 0 && (
+									<div className="w-5 h-5 flex justify-center items-center rounded-full bg-red-500 text-white absolute text-[10px] font-semibold -top-2 -right-2 xl:-right-1">
+										{unreadPersonalCount > 99 ? "99+" : unreadPersonalCount}
+									</div>
+								)}
+							</div>
 						</Link>
 					)}
 

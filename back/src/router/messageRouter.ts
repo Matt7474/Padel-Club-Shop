@@ -21,6 +21,11 @@ messagesRouter.patch(
 	authenticateToken,
 	messagesControllers.markMessagesAsRead,
 );
+messagesRouter.patch(
+	"/mark-read-r/:id",
+	authenticateToken,
+	messagesControllers.markMessagesReceiverAsRead,
+);
 
 messagesRouter.post(
 	"/user",

@@ -36,7 +36,7 @@ export default function MenuModal({ closeMenu }: menuModalsProps) {
 
 			{/* Contenu du menu - positionné séparément */}
 			<div
-				className="flex flex-col border border-gray-500 rounded-lg pl-3 text-xl absolute left-3 right-3 shadow-xl px-3 top-1/10 bg-white z-20"
+				className="flex flex-col border border-gray-500 rounded-lg pl-3 text-xl absolute left-3 right-3 shadow-xl px-3 top-1/10 bg-white z-51"
 				tabIndex={-1}
 				role="dialog"
 				aria-label="Menu de navigation"

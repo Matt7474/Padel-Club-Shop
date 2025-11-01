@@ -62,6 +62,35 @@ export const markMessagesAsRead = async (userId: number) => {
 	}
 };
 
+// ---------------- Passage de "is_read" receiver a true ----------------
+export const markMessagesReceiverAsRead = async (userId: number) => {
+	const authToken = useAuthStore.getState().token;
+	if (!authToken)
+		throw new Error("Token manquant pour marquer les messages comme lus");
+
+	try {
+		const response = await axios.patch(
+			`${API_URL}/message/mark-read-r/${userId}`,
+			{}, // corps vide
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
+			},
+		);
+		return response.data;
+	} catch (error: unknown) {
+		if (axios.isAxiosError(error)) {
+			throw new Error(
+				error.response?.data?.message ||
+					"Erreur lors du marquage des messages comme lus",
+			);
+		}
+		throw new Error("Erreur inconnue");
+	}
+};
+
 // ---------------- Messages d'un utilisateur ----------------
 export async function getUserMessages(userId: number): Promise<Message[]> {
 	const authToken = useAuthStore.getState().token;

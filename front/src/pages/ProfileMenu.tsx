@@ -53,6 +53,9 @@ export default function ProfileMenu() {
 			? adminMenus
 			: clientMenus;
 
+	const personalMessages = messages.filter((m) => m.receiver_id === user?.id);
+	const unreadPersonalCount = personalMessages.filter((m) => !m.is_read).length;
+
 	return (
 		<div className="relative min-h-220 max-h-350">
 			{/* Titre du menu */}
@@ -114,6 +117,12 @@ export default function ProfileMenu() {
 									{unreadMessageCount > 99 ? "99+" : unreadMessageCount}
 								</span>
 							)}
+
+						{option === "Mes messages" && unreadPersonalCount > 0 && (
+							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
+								{unreadPersonalCount > 99 ? "99+" : unreadPersonalCount}
+							</span>
+						)}
 					</button>
 				))}
 			</div>

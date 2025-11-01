@@ -14,6 +14,8 @@ interface NotificationState {
 	orderPaid: number;
 	messages: Message[];
 	fetchNotifications: () => Promise<void>;
+	addMessage: (msg: Message) => void;
+	markMessagesAsRead: () => void;
 }
 
 export const useNotificationStore = create<NotificationState>((set) => ({
@@ -22,6 +24,7 @@ export const useNotificationStore = create<NotificationState>((set) => ({
 	lowStockCount: 0,
 	orderPaid: 0,
 	messages: [],
+
 	fetchNotifications: async () => {
 		try {
 			const [articles, orders, messagesFromApi, formMessagesRes] =
@@ -32,11 +35,9 @@ export const useNotificationStore = create<NotificationState>((set) => ({
 					getMessagesForm(),
 				]);
 
-			// Low stock
 			let lowStock = 0;
 			for (const article of articles) {
 				let totalStock = 0;
-
 				if (typeof article.stock_quantity === "number") {
 					totalStock = article.stock_quantity;
 				} else if (
@@ -44,19 +45,16 @@ export const useNotificationStore = create<NotificationState>((set) => ({
 					article.stock_quantity
 				) {
 					totalStock = Object.values(article.stock_quantity)
-						.map((val) => val ?? 0) // remplace undefined par 0
+						.map((val) => val ?? 0)
 						.reduce((acc, val) => acc + val, 0);
 				}
-
 				if (totalStock < 5) lowStock++;
 			}
 
-			// Paid orders
 			const ordersPaid = orders.filter(
 				(o: Order) => o.status === "paid",
 			).length;
 
-			// Messages
 			const messagesParsed: Message[] = messagesFromApi.map((m) => ({
 				...m,
 				created_at: new Date(m.created_at),
@@ -64,7 +62,6 @@ export const useNotificationStore = create<NotificationState>((set) => ({
 			}));
 			const unreadMessages = messagesParsed.filter((m) => !m.is_read).length;
 
-			// Form messages
 			const unreadForm = formMessagesRes.data.filter(
 				(m: IClientMessageForm) => m.is_read === false,
 			).length;
@@ -80,4 +77,16 @@ export const useNotificationStore = create<NotificationState>((set) => ({
 			console.error("Erreur fetch notifications:", err);
 		}
 	},
+
+	addMessage: (msg) =>
+		set((state) => ({
+			messages: [...state.messages, msg],
+			unreadMessageCount: state.unreadMessageCount + (msg.is_read ? 0 : 1),
+		})),
+
+	markMessagesAsRead: () =>
+		set((state) => ({
+			messages: state.messages.map((m) => ({ ...m, is_read: true })),
+			unreadMessageCount: 0,
+		})),
 }));
