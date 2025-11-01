@@ -58,6 +58,14 @@ export default function ClientsMessages() {
 					console.warn("⚠️ Message vide ou mal formé:", message);
 					return;
 				}
+				setMessages((prevMessages) => {
+					if (prevMessages.some((m) => m.id === msg.id)) {
+						console.log("⚠️ Message déjà présent, ignoré:", msg.id);
+						return prevMessages;
+					}
+					console.log("💬 Nouveau message ajouté:", msg);
+					return [...prevMessages, msg];
+				});
 
 				const currentSelectedUser = selectedUserRef.current;
 

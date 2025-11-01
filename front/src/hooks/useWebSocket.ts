@@ -31,7 +31,22 @@ export function useWebSocket(userId: number) {
 
 		ws.current.onmessage = (event) => {
 			const message: WSMessage = JSON.parse(event.data);
-			setMessages((prev) => [...prev, message]);
+
+			setMessages((prev) => {
+				// ❌ ignore si déjà présent
+				if (
+					message.data?.conversationId &&
+					prev.some(
+						(m) =>
+							m.data?.conversationId === message.data?.conversationId &&
+							m.data?.content === message.data?.content &&
+							m.data?.senderId === message.data?.senderId,
+					)
+				) {
+					return prev;
+				}
+				return [...prev, message];
+			});
 		};
 
 		ws.current.onclose = () => console.log("WebSocket déconnecté");
