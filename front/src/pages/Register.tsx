@@ -10,6 +10,7 @@ export default function Register() {
 	const navigate = useNavigate();
 	const addToast = useToastStore((state) => state.addToast);
 	const [errorMessage, setErrorMessage] = useState(false);
+	const [messageOfError, setMessageOfError] = useState("");
 
 	const [lastName, setLastName] = useState("");
 	const [firstName, setFirstName] = useState("");
@@ -106,6 +107,7 @@ export default function Register() {
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				setErrorMessage(true);
+				setMessageOfError(error.message);
 				console.error("❌ Erreur front :", error.message);
 			} else {
 				console.error("❌ Erreur inconnue :", error);
@@ -306,7 +308,7 @@ export default function Register() {
 					<div className="xl:w-1/2 xl:mx-auto">
 						{errorMessage && (
 							<div className="text-sm text-red-500 mt-4 -mb-9 text-center">
-								L'adresse email existe déja
+								{messageOfError}
 							</div>
 						)}
 						<button

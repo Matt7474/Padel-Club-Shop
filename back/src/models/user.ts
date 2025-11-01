@@ -29,7 +29,14 @@ User.init(
 		last_name: { type: DataTypes.TEXT, allowNull: false },
 		first_name: { type: DataTypes.TEXT, allowNull: false },
 		phone: DataTypes.TEXT,
-		email: { type: DataTypes.TEXT, allowNull: false, unique: true },
+		email: {
+			type: DataTypes.STRING,
+			allowNull: false,
+			unique: true,
+			validate: {
+				isEmail: true,
+			},
+		},
 		password: { type: DataTypes.TEXT, allowNull: false },
 		role_id: {
 			type: DataTypes.INTEGER,

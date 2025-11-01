@@ -6,93 +6,125 @@ import { UniqueConstraintError } from "sequelize";
 import { Address } from "../models/adress";
 import { Role } from "../models/role";
 import { User } from "../models/user";
+import { registerSchema } from "../schemas/registerSchema";
+import type { AddressInput } from "../types/UserType";
+import { sanitizeInput } from "../utils/sanitize";
 
 const JWT_SECRET = process.env.JWT_SECRET || "secret_key_dev";
 
+// controller register avec joi & sanit ok
 export async function registerUser(req: Request, res: Response) {
-	const {
-		last_name,
-		first_name,
-		phone,
-		email,
-		password,
-		shipping_address,
-		billing_address,
-	} = req.body;
+	console.log("🔥 registerUserDebug called");
 
 	try {
-		// 1️⃣ Vérifier le rôle par défaut
+		// 1️⃣ Validation Joi
+		console.log("Validating input...");
+		const { error, value } = registerSchema.validate(req.body, {
+			abortEarly: false,
+		});
+
+		if (error) {
+			const messages = error.details.map((d) => d.message);
+			console.log("Validation errors:", messages);
+			return res.status(400).json({ error: messages });
+		}
+		console.log("Validation passed:", value);
+
+		// 2️⃣ Nettoyage des champs string
+		const first_name = sanitizeInput(value.first_name);
+		const last_name = sanitizeInput(value.last_name);
+		const email = sanitizeInput(value.email).toLowerCase();
+		const phone = value.phone ? sanitizeInput(value.phone) : null;
+
+		console.log({ first_name, last_name, email, phone });
+
+		// 3️⃣ Vérifier si email existe déjà
+		console.log("Checking if email exists...");
+		const existingUser = await User.findOne({ where: { email } });
+		if (existingUser) {
+			console.log("Email already exists:", email);
+			return res
+				.status(400)
+				.json({ error: "Cette adresse e-mail est déjà enregistrée." });
+		}
+		console.log("Email is free");
+
+		// 4️⃣ Récupérer le rôle client
+		console.log("Fetching role 'client'...");
 		const role = await Role.findOne({ where: { label: "client" } });
-		if (!role)
+		if (!role) {
+			console.log("Role 'client' not found");
 			return res.status(500).json({ error: "Rôle 'client' introuvable" });
+		}
+		console.log("Role found:", role.label);
 
-		// 2️⃣ Hasher le mot de passe avant création
-		const hashedPassword = await argon2.hash(password);
+		// 5️⃣ Hasher le mot de passe
+		console.log("Hashing password...");
+		const hashedPassword = await argon2.hash(value.password);
+		console.log("Password hashed");
 
-		// 3️⃣ Créer l'utilisateur
+		// 6️⃣ Créer l'utilisateur
+		console.log("Creating user...");
 		const user = await User.create({
-			last_name,
 			first_name,
-			phone,
+			last_name,
 			email,
+			phone,
 			password: hashedPassword,
 			role_id: 3,
 		});
+		console.log("User created:", user.user_id);
 
-		// 4️⃣ Créer les adresses associées
-		if (shipping_address) {
-			await Address.create({
+		// 7️⃣ Créer les adresses
+		const createAddress = async (
+			addr: AddressInput,
+			type: "shipping" | "billing",
+		) => {
+			if (!addr) return;
+			console.log(`Creating ${type} address...`, addr);
+			const _address = await Address.create({
 				user_id: user.user_id,
-				type: "shipping",
-				street_number: shipping_address.street_number,
-				street_name: shipping_address.street_name,
-				complement: shipping_address.additional_info,
-				zip_code: shipping_address.zipcode,
-				city: shipping_address.city,
-				country: shipping_address.country,
-				is_default: true,
+				type,
+				street_number: sanitizeInput(addr.street_number),
+				street_name: sanitizeInput(addr.street_name),
+				complement: addr.additional_info
+					? sanitizeInput(addr.additional_info)
+					: null,
+				zip_code: sanitizeInput(addr.zipcode),
+				city: sanitizeInput(addr.city),
+				country: sanitizeInput(addr.country),
+				is_default: type === "shipping",
 			});
-		}
+		};
 
-		if (billing_address) {
-			await Address.create({
-				user_id: user.user_id,
-				type: "billing",
-				street_number: billing_address.street_number,
-				street_name: billing_address.street_name,
-				complement: billing_address.additional_info,
-				zip_code: billing_address.zipcode,
-				city: billing_address.city,
-				country: billing_address.country,
-			});
-		}
+		await createAddress(value.shipping_address, "shipping");
+		await createAddress(value.billing_address, "billing");
 
-		// 5️⃣ Générer un token JWT pour l'utilisateur
+		// 8️⃣ Générer le token JWT
+		console.log("Generating JWT...");
 		const token = jwt.sign(
-			{
-				id: user.user_id,
-				email: user.email,
-				role: role.label,
-			},
+			{ id: user.user_id, email: user.email, role: role.label },
 			JWT_SECRET,
-			{ expiresIn: "24h" },
+			{
+				expiresIn: "24h",
+			},
 		);
+		console.log("JWT generated");
 
 		return res.status(201).json({
 			message: "Utilisateur créé avec succès",
 			user: {
 				id: user.user_id,
-				last_name,
 				first_name,
+				last_name,
 				email,
 				role: role.label,
 			},
 			token,
 		});
 	} catch (error) {
-		console.error("❌ Erreur création utilisateur :", error);
+		console.error("❌ Error creating user:", error);
 
-		// 6️⃣ Gestion spécifique du doublon email
 		if (error instanceof UniqueConstraintError) {
 			return res
 				.status(400)
@@ -104,6 +136,103 @@ export async function registerUser(req: Request, res: Response) {
 			.json({ error: "Erreur lors de la création du compte." });
 	}
 }
+
+// controller register sans joi & sanit ok
+// export async function registerUser(req: Request, res: Response) {
+// 	const {
+// 		last_name,
+// 		first_name,
+// 		phone,
+// 		email,
+// 		password,
+// 		shipping_address,
+// 		billing_address,
+// 	} = req.body;
+
+// 	try {
+// 		// 1️⃣ Vérifier le rôle par défaut
+// 		const role = await Role.findOne({ where: { label: "client" } });
+// 		if (!role)
+// 			return res.status(500).json({ error: "Rôle 'client' introuvable" });
+
+// 		// 2️⃣ Hasher le mot de passe avant création
+// 		const hashedPassword = await argon2.hash(password);
+
+// 		// 3️⃣ Créer l'utilisateur
+// 		const user = await User.create({
+// 			last_name,
+// 			first_name,
+// 			phone,
+// 			email,
+// 			password: hashedPassword,
+// 			role_id: 3,
+// 		});
+
+// 		// 4️⃣ Créer les adresses associées
+// 		if (shipping_address) {
+// 			await Address.create({
+// 				user_id: user.user_id,
+// 				type: "shipping",
+// 				street_number: shipping_address.street_number,
+// 				street_name: shipping_address.street_name,
+// 				complement: shipping_address.additional_info,
+// 				zip_code: shipping_address.zipcode,
+// 				city: shipping_address.city,
+// 				country: shipping_address.country,
+// 				is_default: true,
+// 			});
+// 		}
+
+// 		if (billing_address) {
+// 			await Address.create({
+// 				user_id: user.user_id,
+// 				type: "billing",
+// 				street_number: billing_address.street_number,
+// 				street_name: billing_address.street_name,
+// 				complement: billing_address.additional_info,
+// 				zip_code: billing_address.zipcode,
+// 				city: billing_address.city,
+// 				country: billing_address.country,
+// 			});
+// 		}
+
+// 		// 5️⃣ Générer un token JWT pour l'utilisateur
+// 		const token = jwt.sign(
+// 			{
+// 				id: user.user_id,
+// 				email: user.email,
+// 				role: role.label,
+// 			},
+// 			JWT_SECRET,
+// 			{ expiresIn: "24h" },
+// 		);
+
+// 		return res.status(201).json({
+// 			message: "Utilisateur créé avec succès",
+// 			user: {
+// 				id: user.user_id,
+// 				last_name,
+// 				first_name,
+// 				email,
+// 				role: role.label,
+// 			},
+// 			token,
+// 		});
+// 	} catch (error) {
+// 		console.error("❌ Erreur création utilisateur :", error);
+
+// 		// 6️⃣ Gestion spécifique du doublon email
+// 		if (error instanceof UniqueConstraintError) {
+// 			return res
+// 				.status(400)
+// 				.json({ error: "Cette adresse e-mail est déjà enregistrée." });
+// 		}
+
+// 		return res
+// 			.status(500)
+// 			.json({ error: "Erreur lors de la création du compte." });
+// 	}
+// }
 
 export async function loginUser(req: Request, res: Response) {
 	const { email, password } = req.body;
