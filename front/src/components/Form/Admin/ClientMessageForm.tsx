@@ -13,12 +13,13 @@ import {
 import { useState } from "react";
 import {
 	deleteMessage,
+	markMessageAsRead,
 	responseMessage,
 	restoreMessage,
 } from "../../../api/Contact";
 import { useToastStore } from "../../../store/ToastStore ";
+import type { IClientMessageForm } from "../../../types/Messages";
 import BackButton from "../Tools/BackButton";
-import type { IClientMessageForm } from "./ClientsMessagesForm";
 
 interface ClientMessageProps {
 	message: IClientMessageForm;
@@ -51,6 +52,9 @@ export default function ClientMessageForm({
 				response: response,
 			}));
 			setResponse("");
+			if (!message.is_read) {
+				await markMessageAsRead(message.id);
+			}
 			addToast(`Votre message à bien été envoyé`, "bg-green-500");
 		} catch (error) {
 			console.error("Erreur lors de l’envoi :", error);

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { getUserMessages } from "../../../api/Message";
 import { useToastStore } from "../../../store/ToastStore ";
 import { useAuthStore } from "../../../store/useAuthStore";
-import type { Message } from "../../../types/Conversation";
+import type { Message } from "../../../types/Messages";
 import FooterMessage from "../Tools/FooterMessage";
 import Loader from "../Tools/Loader";
 

@@ -18,8 +18,6 @@ export default function ClientsMessages({
 	messagesP,
 	onMessagesRead,
 }: ClientsMessagesProps) {
-	console.log("messages", messagesP);
-
 	const { isAuthenticated, user } = useAuthStore();
 	const addToast = useToastStore((state) => state.addToast);
 

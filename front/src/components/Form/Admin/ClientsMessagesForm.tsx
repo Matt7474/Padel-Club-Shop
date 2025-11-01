@@ -7,32 +7,11 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getMessagesForm, markMessageAsRead } from "../../../api/Contact";
+import { getMessagesForm } from "../../../api/Contact";
 import { useAuthStore } from "../../../store/useAuthStore";
+import type { IClientMessageForm } from "../../../types/Messages";
 import Loader from "../Tools/Loader";
 import ClientMessageForm from "./ClientMessageForm";
-
-export interface IClientMessageForm {
-	id: number;
-	user_id?: number;
-	first_name?: string;
-	last_name?: string;
-	email?: string;
-	phone?: string;
-	subject?: string;
-	message?: string;
-	response?: string;
-	created_at?: string;
-	order_number?: string;
-	is_read?: boolean;
-	is_deleted?: boolean;
-	user: {
-		id: number;
-		first_name: string;
-		last_name: string;
-		email: string;
-	};
-}
 
 export default function MessagesForm() {
 	const { isAuthenticated } = useAuthStore();
@@ -75,9 +54,6 @@ export default function MessagesForm() {
 	};
 
 	const handleClick = async (message: IClientMessageForm) => {
-		if (!message.is_read) {
-			await markMessageAsRead(message.id);
-		}
 		setSelectedMessage(message);
 	};
 

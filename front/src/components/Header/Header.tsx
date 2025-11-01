@@ -133,7 +133,6 @@ export default function Header() {
 		unreadFormCount +
 		orderPaid +
 		unreadMessage;
-	console.log("totalAlertCount", totalAlertCount);
 
 	const toggleMenu = () => {
 		setIsMenuOpen((prev) => !prev);

@@ -4,8 +4,7 @@ import { getArticles } from "../api/Article";
 import { getMessagesForm } from "../api/Contact";
 import { getAllUserMessages } from "../api/Message";
 import { getOrders } from "../api/Order";
-import type { IClientMessageForm } from "../components/Form/Admin/ClientsMessagesForm";
-import type { Message } from "../types/Messages";
+import type { IClientMessageForm, Message } from "../types/Messages";
 import type { Order } from "../types/Order";
 
 interface NotificationState {
