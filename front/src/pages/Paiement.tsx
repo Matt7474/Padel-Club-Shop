@@ -111,8 +111,10 @@ function CheckoutForm({
 			}
 
 			if (result.paymentIntent?.status === "succeeded") {
+				const paymentIntentId = result.paymentIntent.id;
+
 				// 3️⃣ Créer la commande côté backend
-				const orderRes = await createOrderAndUpdateStock(cart);
+				const orderRes = await createOrderAndUpdateStock(cart, paymentIntentId);
 				const orderReference = orderRes.order.reference;
 				console.log("orderReference", orderReference);
 				setReference(`${orderReference}`);
@@ -525,7 +527,7 @@ export default function Paiement() {
 								{/* Prochaines étapes */}
 								<div className="space-y-4 mb-6">
 									<div className="flex items-start gap-3 text-left">
-										<div className="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-gray-700">
+										<div className="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center shrink-0 font-semibold text-gray-700">
 											1
 										</div>
 										<div>
@@ -537,7 +539,7 @@ export default function Paiement() {
 									</div>
 
 									<div className="flex items-start gap-3 text-left">
-										<div className="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-gray-700">
+										<div className="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center shrink-0 font-semibold text-gray-700">
 											2
 										</div>
 										<div>
@@ -549,7 +551,7 @@ export default function Paiement() {
 									</div>
 
 									<div className="flex items-start gap-3 text-left">
-										<div className="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-gray-700">
+										<div className="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center shrink-0 font-semibold text-gray-700">
 											3
 										</div>
 										<div>

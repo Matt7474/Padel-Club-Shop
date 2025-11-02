@@ -23,10 +23,14 @@ export interface Order {
 	order_lines: OrderLine[];
 	payment: Payment;
 	created_at: string;
+	updated_at: string;
 	total_ttc?: number;
 	tva_rate?: number;
-	status: "paid" | "processing" | "ready" | "shipped" | "cancelled";
+	status: "paid" | "processing" | "ready" | "shipped" | "cancelled" | "refund";
 	is_delete: boolean;
+	payment_intent_id: string;
+	refund_id: string;
+	refunded_at: Date;
 	items: OrderItem[];
 }
 

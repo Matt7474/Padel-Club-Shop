@@ -17,7 +17,12 @@ export default function Dashboard() {
 			try {
 				setLoading(true);
 				const response = await getOrders();
-				setOrders(response as Order[]);
+
+				const filteredOrders = (response as Order[]).filter(
+					(order) => order.status !== "cancelled" && order.status !== "refund",
+				);
+
+				setOrders(filteredOrders);
 			} catch (error) {
 				console.error("Erreur lors de la récupération des commandes :", error);
 			} finally {
@@ -35,6 +40,8 @@ export default function Dashboard() {
 	if (loading) {
 		return <Loader text={"des données"} />;
 	}
+
+	console.log("orders dashboard", orders);
 
 	return (
 		<div className="flex-1 overflow-y-auto bg-gray-50 p-6">

@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { refundOrder } from "../../../api/Order";
 import { getAllUsers } from "../../../api/User";
+import { useToastStore } from "../../../store/ToastStore ";
 import type { Order } from "../../../types/Order";
 import type { UserApiResponse } from "../../../types/User";
 import ConfirmModal from "../../Modal/ConfirmModal";
 import BackButton from "../Tools/BackButton";
+import Button from "../Tools/Button";
 import Loader from "../Tools/Loader";
 
 interface OrderDetailsProps {
@@ -15,6 +18,10 @@ interface OrderDetailsProps {
 	onReadyOrder?: (orderId: number) => void;
 	onShippedOrder?: (orderId: number) => void;
 	fromUserDetails?: boolean;
+	fetchOrders?: () => void;
+	onCancelProcessing?: (orderId: number) => void;
+	onCancelReady?: (orderId: number) => void;
+	onCancelOrder?: (orderId: number) => void;
 }
 
 export default function OrderDetails({
@@ -24,17 +31,44 @@ export default function OrderDetails({
 	onProcessingOrder,
 	onReadyOrder,
 	onShippedOrder,
+	onCancelProcessing,
+	onCancelReady,
+	onCancelOrder,
+	fetchOrders,
 }: OrderDetailsProps) {
 	const API_URL = import.meta.env.VITE_API_URL;
 	const navigate = useNavigate();
+	const addToast = useToastStore((state) => state.addToast);
+	const [showRefundConfirm, setShowRefundConfirm] = useState(false);
 
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 	const [showProcessingConfirm, setShowProcessingConfirm] = useState(false);
 	const [showReadyConfirm, setShowReadyConfirm] = useState(false);
 	const [showShippedConfirm, setShowShippedConfirm] = useState(false);
+
+	const [, setShowRefundButton] = useState(false);
+	const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+
+	const [showCancelProcessing, setShowCancelProcessing] = useState(false);
+	const [showCancelReady, setShowCancelReady] = useState(false);
+
 	const [, setError] = useState("");
 	const [users, setUsers] = useState<UserApiResponse[]>([]);
 	const [loading, setLoading] = useState(false);
+
+	const [canClick, setCanClick] = useState(false);
+	const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+	const handleMouseEnter = () => {
+		timerRef.current = setTimeout(() => {
+			setCanClick(true);
+		}, 5000);
+	};
+
+	const handleMouseLeave = () => {
+		if (timerRef.current) clearTimeout(timerRef.current);
+		setCanClick(false);
+	};
 
 	const fetchUsers = async () => {
 		try {
@@ -52,6 +86,7 @@ export default function OrderDetails({
 	useEffect(() => {
 		fetchUsers();
 	}, []);
+	console.log("order", order);
 
 	const orderUser = users.find((user) => user.user_id === order.user_id);
 
@@ -61,6 +96,7 @@ export default function OrderDetails({
 		ready: "/icons/package-check.svg",
 		shipped: "/icons/delivery.svg",
 		cancelled: "/icons/invoice-cancelled.svg",
+		refund: "/icons/invoice-refund.svg",
 	};
 
 	const statusFr: Record<string, string> = {
@@ -69,6 +105,7 @@ export default function OrderDetails({
 		ready: "Prête",
 		shipped: "Expédiée",
 		cancelled: "Annulée",
+		refund: "Remboursé",
 	};
 
 	const TVA_RATE = 0.2;
@@ -116,6 +153,39 @@ export default function OrderDetails({
 	const handleConfirmShipped = () => {
 		onShippedOrder?.(order.order_id);
 		setShowShippedConfirm(false);
+	};
+
+	const handleConfirmCancelProcessing = () => {
+		onCancelProcessing?.(order.order_id);
+		setShowCancelProcessing(false);
+	};
+
+	const handleConfirmCancelReady = () => {
+		onCancelReady?.(order.order_id);
+		setShowCancelReady(false);
+	};
+
+	const handleCancelOrder = () => {
+		onCancelOrder?.(order.order_id);
+		setShowCancelConfirm(false);
+		setShowRefundButton(true);
+	};
+
+	const handleRefund = async () => {
+		try {
+			await refundOrder(order.order_id);
+			addToast("Commande remboursée avec succès !", "bg-green-500");
+			setShowRefundConfirm(false);
+			fetchOrders?.();
+			onReturn();
+		} catch (err: unknown) {
+			const message =
+				err instanceof Error
+					? err.message
+					: "La commande n'a pas pu être remboursée";
+			addToast(`Erreur : ${message}`, "bg-red-500");
+			setShowRefundConfirm(false);
+		}
 	};
 
 	if (loading) {
@@ -307,13 +377,13 @@ export default function OrderDetails({
 							{/* status payé */}
 							{order.status === "paid" && (
 								<div className="flex justify-around gap-4">
-									<button
+									{/* <button
 										type="button"
 										onClick={() => setShowDeleteConfirm(true)}
 										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2 xl:w-1/4"
 									>
 										ANNULER LA COMMANDE
-									</button>
+									</button> */}
 									<button
 										type="button"
 										onClick={() => setShowProcessingConfirm(true)}
@@ -323,17 +393,23 @@ export default function OrderDetails({
 									</button>
 								</div>
 							)}
-
 							{/* status en préparation */}
 							{order.status === "processing" && (
 								<div className="flex justify-around gap-4">
 									<button
 										type="button"
+										onClick={() => setShowCancelProcessing(true)}
+										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2 xl:w-1/4"
+									>
+										ANNULER LA PREPARATION DE COMMANDE
+									</button>
+									{/* <button
+										type="button"
 										onClick={() => setShowDeleteConfirm(true)}
 										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2 xl:w-1/4"
 									>
 										ANNULER LA COMMANDE
-									</button>
+									</button> */}
 									<button
 										type="button"
 										onClick={() => setShowReadyConfirm(true)}
@@ -343,17 +419,23 @@ export default function OrderDetails({
 									</button>
 								</div>
 							)}
-
 							{/* status en prête */}
 							{order.status === "ready" && (
 								<div className="flex justify-around gap-4">
 									<button
 										type="button"
+										onClick={() => setShowCancelReady(true)}
+										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2 xl:w-1/4"
+									>
+										REVENIR AU A LA PREPRARATION DE LA COMMANDE
+									</button>
+									{/* <button
+										type="button"
 										onClick={() => setShowDeleteConfirm(true)}
 										className="bg-red-500 p-2 rounded-lg font-semibold text-white cursor-pointer text-sm xl:text-md w-1/2 xl:w-1/4"
 									>
 										ANNULER LA COMMANDE
-									</button>
+									</button> */}
 									<button
 										type="button"
 										onClick={() => setShowShippedConfirm(true)}
@@ -371,7 +453,6 @@ export default function OrderDetails({
 									onCancel={() => setShowDeleteConfirm(false)}
 								/>
 							)}
-
 							{/* Modal confirmation de preparation */}
 							{showProcessingConfirm && (
 								<ConfirmModal
@@ -380,7 +461,6 @@ export default function OrderDetails({
 									onCancel={() => setShowProcessingConfirm(false)}
 								/>
 							)}
-
 							{/* Modal confirmation de commande prete */}
 							{showReadyConfirm && (
 								<ConfirmModal
@@ -389,13 +469,29 @@ export default function OrderDetails({
 									onCancel={() => setShowReadyConfirm(false)}
 								/>
 							)}
-
 							{/* Modal confirmation de commande expédiée */}
 							{showShippedConfirm && (
 								<ConfirmModal
 									message="Voulez-vous rendre cette commande expédiée ?"
 									onConfirm={handleConfirmShipped}
 									onCancel={() => setShowShippedConfirm(false)}
+								/>
+							)}
+
+							{/* Modal confirmation de modification de status de "praparation" => "payée" */}
+							{showCancelProcessing && (
+								<ConfirmModal
+									message="Voulez-vous annuler la préparation de cette commande ?"
+									onConfirm={handleConfirmCancelProcessing}
+									onCancel={() => setShowCancelProcessing(false)}
+								/>
+							)}
+							{/* Modal confirmation de modification de status de "prete" => "praparation" */}
+							{showCancelReady && (
+								<ConfirmModal
+									message="Voulez-vous revenir à la préparation de cette commande ?"
+									onConfirm={handleConfirmCancelReady}
+									onCancel={() => setShowCancelReady(false)}
 								/>
 							)}
 						</div>
@@ -437,7 +533,6 @@ export default function OrderDetails({
 											</p>
 										</div>
 									</div>
-
 									<div>
 										<p className="font-medium">Adresse :</p>
 
@@ -466,6 +561,56 @@ export default function OrderDetails({
 										<p className="font-medium">Complément d'information :</p>
 										{orderUser.addresses?.[0].complement ?? "Non renseignée"}
 									</div>
+									<div></div>
+
+									{["paid", "processing", "ready", "shipped"].includes(
+										order.status,
+									) && (
+										<div>
+											<Button
+												type="button"
+												onClick={() => setShowCancelConfirm(true)}
+												buttonText="ANNULER LA COMMANDE"
+												bgColor="bg-red-500"
+											/>
+										</div>
+									)}
+									{order.status === "cancelled" && (
+										<div>
+											<p className="-mb-4 font-semibold text-center">
+												Effectuez un remboursement ?
+											</p>
+											<div>
+												<Button
+													type="button"
+													onClick={() => canClick && setShowRefundConfirm(true)}
+													onMouseEnter={handleMouseEnter}
+													onMouseLeave={handleMouseLeave}
+													buttonText={
+														canClick
+															? "REMBOURSEMENT"
+															: "Survolez 5s pour activer"
+													}
+													bgColor="bg-red-500"
+												/>
+											</div>
+										</div>
+									)}
+									{order.status === "refund" && (
+										<div>
+											<p>Remboursement effectué le : </p>
+											<p>
+												{new Intl.DateTimeFormat("fr-FR", {
+													day: "2-digit",
+													month: "long",
+													year: "numeric",
+												}).format(new Date(order.refunded_at))}
+											</p>
+										</div>
+									)}
+									{/* {order.status === "shipped" && (
+										<div>Remboursement impossible apres expédition</div>
+									)} */}
 								</div>
 
 								{/* Mobile */}
@@ -523,6 +668,36 @@ export default function OrderDetails({
 													</span>
 												</div>
 											</div>
+											{order.status !== "cancelled" && (
+												<div>
+													<Button
+														type="button"
+														onClick={() =>
+															canClick && setShowRefundConfirm(true)
+														}
+														onMouseEnter={handleMouseEnter}
+														onMouseLeave={handleMouseLeave}
+														buttonText={
+															canClick
+																? "REMBOURSEMENT"
+																: "Survolez 5s pour activer"
+														}
+													/>
+												</div>
+											)}
+
+											{order.status === "refund" && (
+												<div>
+													<p>Remboursement effectué le : </p>
+													<p>
+														{new Intl.DateTimeFormat("fr-FR", {
+															day: "2-digit",
+															month: "long",
+															year: "numeric",
+														}).format(new Date(order.refunded_at))}
+													</p>
+												</div>
+											)}
 										</div>
 									</div>
 								</div>
@@ -536,6 +711,21 @@ export default function OrderDetails({
 
 					<div className="h-1 bg-linear-to-r from-indigo-500 via-blue-500 to-purple-500"></div>
 				</div>
+				{showRefundConfirm && (
+					<ConfirmModal
+						message="Voulez-vous vraiment rembourser cette commande ?"
+						onConfirm={handleRefund}
+						onCancel={() => setShowRefundConfirm(false)}
+					/>
+				)}
+
+				{showCancelConfirm && (
+					<ConfirmModal
+						message="Voulez-vous vraiment annuler cette commande ?"
+						onConfirm={handleCancelOrder}
+						onCancel={() => setShowCancelConfirm(false)}
+					/>
+				)}
 			</div>
 		</div>
 	);

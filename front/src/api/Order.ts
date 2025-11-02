@@ -5,7 +5,10 @@ import type { getMyOrdersProps, Order } from "../types/Order";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export async function createOrderAndUpdateStock(cart: CartItem[]) {
+export async function createOrderAndUpdateStock(
+	cart: CartItem[],
+	paymentIntentId: string,
+) {
 	try {
 		const authToken = useAuthStore.getState().token;
 		const userId = useAuthStore.getState().user?.id;
@@ -16,7 +19,7 @@ export async function createOrderAndUpdateStock(cart: CartItem[]) {
 
 		const res = await api.post(
 			`${API_URL}/order/create`,
-			{ cart, userId },
+			{ cart, userId, paymentIntentId },
 			{
 				headers: {
 					"Content-Type": "application/json",
@@ -141,6 +144,35 @@ export async function updateOrderStatus(id: number, status: string) {
 		);
 
 		// On retourne la commande mise à jour
+		return res.data.order;
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error("Erreur mise à jour commande :", error.message);
+		} else {
+			console.error("Erreur inconnue mise à jour commande :", error);
+		}
+		throw error;
+	}
+}
+
+export async function refundOrder(id: number) {
+	const authToken = useAuthStore.getState().token;
+
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
+	if (!id) throw new Error("Commande non identifiée");
+
+	try {
+		const res = await api.post(
+			`${API_URL}/order/refund/${id}`,
+			{},
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
+			},
+		);
 		return res.data.order;
 	} catch (error: unknown) {
 		if (error instanceof Error) {

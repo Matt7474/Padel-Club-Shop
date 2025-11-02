@@ -47,10 +47,50 @@ export function useOrderActions({
 		}
 	};
 
+	const handleCancelProcessing = async (id: number) => {
+		try {
+			await updateOrderStatus(id, "paid");
+			console.log("Status de commande modifié !");
+			addToast("La commande a été modifié", "bg-green-500");
+			setSelectedOrder(null);
+			fetchOrders();
+		} catch (err) {
+			console.error(err, "La commande n'a pas pu être modifié");
+			addToast("La commande n'a pas pu être modifié", "bg-red-500");
+		}
+	};
+	const handleCancelReady = async (id: number) => {
+		try {
+			await updateOrderStatus(id, "processing");
+			console.log("Status de commande modifié !");
+			addToast("La commande a été modifié", "bg-green-500");
+			setSelectedOrder(null);
+			fetchOrders();
+		} catch (err) {
+			console.error(err, "La commande n'a pas pu être modifié");
+			addToast("La commande n'a pas pu être modifié", "bg-red-500");
+		}
+	};
+	const handleCancelOrder = async (id: number) => {
+		try {
+			await updateOrderStatus(id, "cancelled");
+			console.log("Status de commande modifié !");
+			addToast("La commande a été modifié", "bg-green-500");
+			setSelectedOrder(null);
+			fetchOrders();
+		} catch (err) {
+			console.error(err, "La commande n'a pas pu être modifié");
+			addToast("La commande n'a pas pu être modifié", "bg-red-500");
+		}
+	};
+
 	return {
 		handleProcessingOrder,
 		handleReadyOrder,
 		handleShippedOrder,
 		handleDeleteOrder,
+		handleCancelProcessing,
+		handleCancelReady,
+		handleCancelOrder,
 	};
 }

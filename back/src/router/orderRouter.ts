@@ -24,4 +24,10 @@ orderRouter.patch(
 	orderControllers.updateOrderStatus,
 );
 
+orderRouter.post(
+	"/refund/:id",
+	authenticateToken,
+	orderControllers.refundOrder,
+);
+
 export { orderRouter };

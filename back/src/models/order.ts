@@ -7,9 +7,20 @@ export class Order extends Model {
 	public user_id!: number;
 	public vat_rate!: number;
 	public total_amount!: number;
-	public status!: "pending" | "paid" | "cancelled" | "shipped";
-
+	public status!:
+		| "pending"
+		| "paid"
+		| "processing"
+		| "ready"
+		| "shipped"
+		| "cancelled"
+		| "refund";
 	public is_deleted!: boolean;
+
+	public payment_intent_id!: string | null;
+	public refund_id!: string | null;
+	public refunded_at!: Date | null;
+
 	public readonly created_at!: Date;
 	public readonly updated_at!: Date;
 }
@@ -46,11 +57,13 @@ Order.init(
 		},
 		status: {
 			type: DataTypes.ENUM(
+				"pending",
 				"paid",
 				"processing",
 				"ready",
 				"shipped",
 				"cancelled",
+				"refund",
 			),
 			defaultValue: "paid",
 			field: "status",
@@ -60,6 +73,21 @@ Order.init(
 			allowNull: false,
 			defaultValue: false,
 			field: "is_deleted",
+		},
+		payment_intent_id: {
+			type: DataTypes.STRING,
+			allowNull: true,
+			field: "payment_intent_id",
+		},
+		refund_id: {
+			type: DataTypes.STRING,
+			allowNull: true,
+			field: "refund_id",
+		},
+		refunded_at: {
+			type: DataTypes.DATE,
+			allowNull: true,
+			field: "refunded_at",
 		},
 	},
 	{

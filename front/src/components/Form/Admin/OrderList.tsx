@@ -34,15 +34,20 @@ export default function OrderList() {
 
 	useEffect(() => {
 		fetchOrders();
-		const interval = setInterval(fetchOrders, 30000);
-		return () => clearInterval(interval);
+		// // const interval = setInterval(fetchOrders, 300000);
+		// return () => clearInterval(interval);
 	}, []);
+
+	console.log("orders", orders);
 
 	const {
 		handleProcessingOrder,
 		handleReadyOrder,
 		handleShippedOrder,
 		handleDeleteOrder,
+		handleCancelProcessing,
+		handleCancelReady,
+		handleCancelOrder,
 	} = useOrderActions({ fetchOrders, setSelectedOrder });
 
 	const handleNavigate = () => navigate("/");
@@ -53,6 +58,7 @@ export default function OrderList() {
 		ready: "/icons/package-check.svg",
 		shipped: "/icons/delivery.svg",
 		cancelled: "/icons/invoice-cancelled.svg",
+		refund: "/icons/invoice-refund.svg",
 	};
 
 	if (loading) {
@@ -107,6 +113,10 @@ export default function OrderList() {
 				onProcessingOrder={handleProcessingOrder}
 				onReadyOrder={handleReadyOrder}
 				onShippedOrder={handleShippedOrder}
+				onCancelProcessing={handleCancelProcessing}
+				onCancelReady={handleCancelReady}
+				onCancelOrder={handleCancelOrder}
+				fetchOrders={fetchOrders}
 			/>
 		);
 	}
@@ -161,6 +171,15 @@ export default function OrderList() {
 								{order.items.reduce((sum, item) => sum + item.quantity, 0)}
 							</p>
 							<div className="flex justify-center xl:justify-start xl:ml-15  gap-2">
+								{order.status === "refund" && (
+									<div className="hidden xl:block justify-center">
+										<img
+											src={"/icons/invoice-cancelled.svg"}
+											alt={order.status}
+											className="w-7"
+										/>
+									</div>
+								)}
 								{order.status === "processing" && (
 									<div className="hidden xl:block justify-center">
 										<img

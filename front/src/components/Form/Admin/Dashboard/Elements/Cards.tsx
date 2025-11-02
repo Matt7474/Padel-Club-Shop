@@ -6,32 +6,36 @@ export interface OrdersProps {
 }
 
 export default function Cards({ orders }: OrdersProps) {
-	// Calcul du chiffre d'affaire HT
-	const comptableCA = orders.reduce((acc, order) => {
+	// ✅ On filtre les commandes non annulées
+	const validOrders = orders.filter((order) => order.status !== "cancelled");
+
+	// Calcul du chiffre d'affaire HT (hors commandes annulées)
+	const comptableCA = validOrders.reduce((acc, order) => {
 		const totalTTC = parseFloat(order.total_amount ?? "0");
 		const totalHT = totalTTC / 1.2;
 		return acc + totalHT;
 	}, 0);
 
-	// Calcul du chiffre d'affaire HT + Frais de livraison
-	const operationalCA = orders.reduce((acc, order) => {
+	// Calcul du chiffre d'affaire HT + Frais de livraison (hors commandes annulées)
+	const operationalCA = validOrders.reduce((acc, order) => {
 		const totalTTC = parseFloat(order.total_amount ?? "0");
-		// On détermine s'il y a eu des frais de livraison
 		const shippingCost = totalTTC < 69 ? 6.9 : 0;
 		const totalHT = totalTTC / 1.2;
 		return acc + shippingCost + totalHT;
 	}, 0);
 
-	// Calcul du nombre de clients
-	const uniqueClients = new Set(orders.map((order) => order.user_id));
+	// Calcul du nombre de clients uniques (hors commandes annulées)
+	const uniqueClients = new Set(validOrders.map((order) => order.user_id));
 	const totalClients = uniqueClients.size;
+
+	// ✅ Nombre total de commandes valides
+	const totalOrders = validOrders.length;
 
 	const metriques = [
 		{
 			title: "Chiffre d'affaires comptable",
 			subTitle: "(Total HT)",
 			values: `${comptableCA.toFixed(2)} €`,
-			evolution: "+12.5%",
 			icon: DollarSign,
 			color: "bg-green-500",
 		},
@@ -39,23 +43,20 @@ export default function Cards({ orders }: OrdersProps) {
 			title: "Chiffre d'affaires opérationnel",
 			subTitle: "(Total HT + Livraison)",
 			values: `${operationalCA.toFixed(2)} €`,
-			evolution: "+12.5%",
 			icon: Receipt,
 			color: "bg-amber-500",
 		},
 		{
 			title: "Commandes",
-			subTitle: "",
-			values: `${orders.length}`,
-			evolution: "+8.3%",
+			subTitle: "(hors remboursées)",
+			values: `${totalOrders}`,
 			icon: ShoppingCart,
 			color: "bg-blue-500",
 		},
 		{
 			title: "Nombre de clients",
-			subTitle: "",
+			subTitle: "(uniques)",
 			values: totalClients.toString(),
-			evolution: "+15.2%",
 			icon: Users2,
 			color: "bg-purple-500",
 		},
