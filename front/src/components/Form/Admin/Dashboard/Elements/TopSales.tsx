@@ -44,7 +44,7 @@ export default function TopSales({ orders }: OrdersProps) {
 						key={article.name}
 						className="flex items-center justify-between pb-3 border-b last:border-b-0"
 					>
-						<div className="flex items-center gap-4">
+						<div className="flex items-center gap-4 w-4/5">
 							{article.image && (
 								<img
 									src={article.image}
@@ -59,7 +59,7 @@ export default function TopSales({ orders }: OrdersProps) {
 								<p className="text-sm text-gray-600">{article.sales} ventes</p>
 							</div>
 						</div>
-						<p className="font-bold text-green-600">
+						<p className="font-bold text-green-600 w-1/5 text-end">
 							{article.gains.toFixed(2)} €
 						</p>
 					</div>

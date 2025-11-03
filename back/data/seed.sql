@@ -218,7 +218,6 @@ VALUES
 
   (25, '/uploads/25.1-Black-Crown-protection-de-raquette-noir.webp', '2025-09-30');
 
-
 -- ARTICLE RATINGS
 INSERT INTO article_ratings (rating_id, article_id, maneuverability, power, comfort, spin, tolerance, control) VALUES
 (1, 1, 9, 7, 8, 8, 9, 7),
@@ -227,14 +226,13 @@ INSERT INTO article_ratings (rating_id, article_id, maneuverability, power, comf
 (4, 4, 9, 7, 8, 8, 9, 10),
 (5, 5, 9, 8, 7, 9, 8, 9);
 
--- REVIEWS
--- INSERT INTO reviews (review_id, article_id, user_id, comment, rating) VALUES
--- (1, 1, 1, 'Excellent control and precision for advanced players.', 5),
--- (2, 2, 2, 'Good racket for intermediate players.', 4);
-
 -- PROMOTIONS
 INSERT INTO promotions (promo_id, article_id, name, description, discount_type, discount_value, start_date, end_date, status, created_at, updated_at) VALUES
-(1, 2, '🖤 Black November', '🖤 Black November – Un mois entier de bonnes affaires ! Le mois de novembre s’annonce explosif avec des réductions exceptionnelles chaque semaine. Raquettes, vêtements, accessoires… tout y passe à prix mini pour un maximum de plaisir sur le terrain. 🔥 Ce qu’il ne faut pas manquer : - Jusqu’à -50 % sur une sélection d’articles exclusifs. - Offres flash et nouveautés chaque semaine. - Aucune manipulation : les réductions s’appliquent automatiquement au panier. Conditions générales : - Offres valables du 1er au 30 novembre 2025 inclus. - Dans la limite des stocks disponibles. - Non cumulable avec d’autres promotions ou codes de réduction. - Promotion disponible sur la boutique en ligne et en magasin. Préparez vos cadeaux de fin d’année et faites le plein de bonnes affaires avant tout le monde. Le Black November n’attend pas ! 🛍️', '€', 5.00, '2025-11-01', '2025-11-30', 'active', '2025-11-03 20:41:33.39', '2025-11-03 20:41:33.39');
+(1, 2, '🖤 Black November', '🖤 Black November – Un mois entier de bonnes affaires ! Le mois de novembre s’annonce explosif avec des réductions exceptionnelles chaque semaine. Raquettes, vêtements, accessoires… tout y passe à prix mini pour un maximum de plaisir sur le terrain. 🔥 Ce qu’il ne faut pas manquer : - Jusqu’à -50 % sur une sélection d’articles exclusifs. - Offres flash et nouveautés chaque semaine. - Aucune manipulation : les réductions s’appliquent automatiquement au panier. Conditions générales : - Offres valables du 1er au 30 novembre 2025 inclus. - Dans la limite des stocks disponibles. - Non cumulable avec d’autres promotions ou codes de réduction. - Promotion disponible sur la boutique en ligne et en magasin. Préparez vos cadeaux de fin d’année et faites le plein de bonnes affaires avant tout le monde. Le Black November n’attend pas ! 🛍️', '€', 5.00, '2025-11-01', '2025-11-30', 'active', '2025-11-03 20:41:33.39', '2025-11-03 20:41:33.39'),
+(2, 4, '🖤 Black November', '🖤 Black November – Un mois entier de bonnes affaires ! Le mois de novembre s’annonce explosif avec des réductions exceptionnelles chaque semaine. Raquettes, vêtements, accessoires… tout y passe à prix mini pour un maximum de plaisir sur le terrain. 🔥 Ce qu’il ne faut pas manquer : - Jusqu’à -50 % sur une sélection d’articles exclusifs. - Offres flash et nouveautés chaque semaine. - Aucune manipulation : les réductions s’appliquent automatiquement au panier. Conditions générales : - Offres valables du 1er au 30 novembre 2025 inclus. - Dans la limite des stocks disponibles. - Non cumulable avec d’autres promotions ou codes de réduction. - Promotion disponible sur la boutique en ligne et en magasin. Préparez vos cadeaux de fin d’année et faites le plein de bonnes affaires avant tout le monde. Le Black November n’attend pas ! 🛍️', '%', 50.00, '2025-11-01', '2025-11-30', 'active', '2025-11-03 20:41:33.39', '2025-11-03 20:41:33.39'),
+(3, 24, '🖤 Black November', '🖤 Black November – Un mois entier de bonnes affaires ! Le mois de novembre s’annonce explosif avec des réductions exceptionnelles chaque semaine. Raquettes, vêtements, accessoires… tout y passe à prix mini pour un maximum de plaisir sur le terrain. 🔥 Ce qu’il ne faut pas manquer : - Jusqu’à -50 % sur une sélection d’articles exclusifs. - Offres flash et nouveautés chaque semaine. - Aucune manipulation : les réductions s’appliquent automatiquement au panier. Conditions générales : - Offres valables du 1er au 30 novembre 2025 inclus. - Dans la limite des stocks disponibles. - Non cumulable avec d’autres promotions ou codes de réduction. - Promotion disponible sur la boutique en ligne et en magasin. Préparez vos cadeaux de fin d’année et faites le plein de bonnes affaires avant tout le monde. Le Black November n’attend pas ! 🛍️', '%', 18.50, '2025-11-01', '2025-11-30', 'active', '2025-11-03 20:41:33.39', '2025-11-03 20:41:33.39'),
+(4, 14, '🖤 Black November', '🖤 Black November – Un mois entier de bonnes affaires ! Le mois de novembre s’annonce explosif avec des réductions exceptionnelles chaque semaine. Raquettes, vêtements, accessoires… tout y passe à prix mini pour un maximum de plaisir sur le terrain. 🔥 Ce qu’il ne faut pas manquer : - Jusqu’à -50 % sur une sélection d’articles exclusifs. - Offres flash et nouveautés chaque semaine. - Aucune manipulation : les réductions s’appliquent automatiquement au panier. Conditions générales : - Offres valables du 1er au 30 novembre 2025 inclus. - Dans la limite des stocks disponibles. - Non cumulable avec d’autres promotions ou codes de réduction. - Promotion disponible sur la boutique en ligne et en magasin. Préparez vos cadeaux de fin d’année et faites le plein de bonnes affaires avant tout le monde. Le Black November n’attend pas ! 🛍️', '%', 25.00, '2025-11-01', '2025-11-30', 'active', '2025-11-03 20:41:33.39', '2025-11-03 20:41:33.39'),
+(5, 7, '🖤 Black November', '🖤 Black November – Un mois entier de bonnes affaires ! Le mois de novembre s’annonce explosif avec des réductions exceptionnelles chaque semaine. Raquettes, vêtements, accessoires… tout y passe à prix mini pour un maximum de plaisir sur le terrain. 🔥 Ce qu’il ne faut pas manquer : - Jusqu’à -50 % sur une sélection d’articles exclusifs. - Offres flash et nouveautés chaque semaine. - Aucune manipulation : les réductions s’appliquent automatiquement au panier. Conditions générales : - Offres valables du 1er au 30 novembre 2025 inclus. - Dans la limite des stocks disponibles. - Non cumulable avec d’autres promotions ou codes de réduction. - Promotion disponible sur la boutique en ligne et en magasin. Préparez vos cadeaux de fin d’année et faites le plein de bonnes affaires avant tout le monde. Le Black November n’attend pas ! 🛍️', '€', 10.00, '2025-11-01', '2025-11-30', 'active', '2025-11-03 20:41:33.39', '2025-11-03 20:41:33.39');
 
 
 -- PROMOTION
@@ -357,10 +355,57 @@ Restez au chaud et boostez votre équipement pour la saison : les meilleures aff
 -- ORDERS
 -- INSERT INTO orders (order_id, reference, user_id, created_at, vat_rate, status) VALUES
 -- (1, 'CMD-2025-0001', 1, '2025-01-05 10:30:00', 20, 'pending');
+INSERT INTO orders (order_id, reference, user_id, vat_rate, total_amount, status, is_deleted, payment_intent_id, refund_id, refunded_at, created_at, updated_at) VALUES
+(1, 'CMD-20251103-001', 1, 20.00, 174.90, 'paid', false, 'pi_3SPV4k05V6njAEWh0UiAaVpa', NULL, NULL, '2025-11-03 21:14:07.736', '2025-11-03 21:14:07.743'),
+(2, 'CMD-20251103-002', 3, 20.00, 50.85, 'ready', false, 'pi_3SPVLb05V6njAEWh0TnnvrV4', NULL, NULL, '2025-11-03 21:31:32.296', '2025-11-03 21:31:32.299'),
+(3, 'CMD-20251103-003', 4, 20.00, 202.70, 'processing', false, 'pi_3SPVM405V6njAEWh0hNX2tql', NULL, NULL, '2025-11-03 21:32:01.799', '2025-11-03 21:32:01.805'),
+(4, 'CMD-20251103-004', 5, 20.00, 342.89, 'processing', false, 'pi_3SPVMP05V6njAEWh0XXEZ0Lv', NULL, NULL, '2025-11-03 21:32:22.479', '2025-11-03 21:32:22.485'),
+(5, 'CMD-20251103-005', 6, 20.00, 240.70, 'paid', false, 'pi_3SPVMr05V6njAEWh0N3sAk6i', NULL, NULL, '2025-11-03 21:32:50.599', '2025-11-03 21:32:50.606'),
+(6, 'CMD-20251103-006', 2, 20.00, 126.69, 'cancelled', false, 'pi_3SPVx305V6njAEWh0Y8Tppag', NULL, NULL, '2025-11-03 22:10:14.627', '2025-11-03 22:10:14.634'),
+(7, 'CMD-20251103-007', 7, 20.00, 54.85, 'shipped', false, 'pi_3SPVxK05V6njAEWh1jYYlDtE', NULL, NULL, '2025-11-03 22:10:31.632', '2025-11-03 22:10:31.636'),
+(8, 'CMD-20251103-008', 10, 20.00, 336.80, 'paid', false, 'pi_3SPVxX05V6njAEWh0vXKE5mp', NULL, NULL, '2025-11-03 22:10:44.331', '2025-11-03 22:10:44.335'),
+(9, 'CMD-20251103-009', 10, 20.00, 88.84, 'ready', false, 'pi_3SPVxt05V6njAEWh0tgfcJCv', NULL, NULL, '2025-11-03 22:11:06.74', '2025-11-03 22:11:06.746'),
+(10, 'CMD-20251103-010', 8, 20.00, 149.58, 'processing', false, 'pi_3SPW0o05V6njAEWh1u2TzQwU', NULL, NULL, '2025-11-03 22:14:08.211', '2025-11-03 22:14:08.214'),
+(11, 'CMD-20251103-011', 9, 20.00, 276.70, 'paid', false, 'pi_3SPW1A05V6njAEWh1V4Oryc0', NULL, NULL, '2025-11-03 22:14:29.767', '2025-11-03 22:14:29.773'),
+(12, 'CMD-20251103-012', 3, 20.00, 95.40, 'paid', false, 'pi_3SPW1p05V6njAEWh0oMAZCJW', NULL, NULL, '2025-11-03 22:15:10.259', '2025-11-03 22:15:10.263');
+
 
 -- INSERT INTO order_lines (order_line_id, order_id, article_id, quantity) VALUES
 -- (1, 1, 1, 1),
 -- (2, 1, 2, 2);
+INSERT INTO order_lines (order_line_id, order_id, article_id, price, size, quantity, created_at, updated_at) VALUES
+(1, 1, 4, 159.95, NULL, 1, '2025-11-03 21:14:07.741', '2025-11-03 21:14:07.741'),
+(2, 1, 11, 14.95, NULL, 1, '2025-11-03 21:14:07.742', '2025-11-03 21:14:07.742'),
+(3, 2, 17, 35.90, 'L', 1, '2025-11-03 21:31:32.298', '2025-11-03 21:31:32.298'),
+(4, 2, 11, 14.95, NULL, 1, '2025-11-03 21:31:32.299', '2025-11-03 21:31:32.299'),
+(5, 3, 6, 69.90, NULL, 1, '2025-11-03 21:32:01.801', '2025-11-03 21:32:01.801'),
+(6, 3, 23, 89.90, '40', 1, '2025-11-03 21:32:01.803', '2025-11-03 21:32:01.803'),
+(7, 3, 13, 42.90, 'M', 1, '2025-11-03 21:32:01.804', '2025-11-03 21:32:01.804'),
+(8, 4, 9, 5.50, NULL, 2, '2025-11-03 21:32:22.481', '2025-11-03 21:32:22.481'),
+(9, 4, 7, 41.99, NULL, 1, '2025-11-03 21:32:22.483', '2025-11-03 21:32:22.483'),
+(10, 4, 1, 289.90, NULL, 1, '2025-11-03 21:32:22.484', '2025-11-03 21:32:22.484'),
+(11, 5, 12, 69.90, 'L', 1, '2025-11-03 21:32:50.602', '2025-11-03 21:32:50.602'),
+(12, 5, 8, 45.90, NULL, 1, '2025-11-03 21:32:50.605', '2025-11-03 21:32:50.605'),
+(13, 5, 22, 124.90, '42', 1, '2025-11-03 21:32:50.606', '2025-11-03 21:32:50.606'),
+(14, 6, 20, 24.90, 'L', 1, '2025-11-03 22:10:14.629', '2025-11-03 22:10:14.629'),
+(15, 6, 15, 29.90, 'M', 1, '2025-11-03 22:10:14.630', '2025-11-03 22:10:14.630'),
+(16, 6, 7, 41.99, NULL, 1, '2025-11-03 22:10:14.632', '2025-11-03 22:10:14.632'),
+(17, 6, 19, 29.90, 'L', 1, '2025-11-03 22:10:14.633', '2025-11-03 22:10:14.633'),
+(18, 7, 2, 29.95, NULL, 1, '2025-11-03 22:10:31.635', '2025-11-03 22:10:31.635'),
+(19, 7, 20, 24.90, 'M', 1, '2025-11-03 22:10:31.636', '2025-11-03 22:10:31.636'),
+(20, 8, 25, 6.90, NULL, 1, '2025-11-03 22:10:44.333', '2025-11-03 22:10:44.333'),
+(21, 8, 5, 329.90, NULL, 1, '2025-11-03 22:10:44.334', '2025-11-03 22:10:44.334'),
+(22, 9, 6, 69.90, NULL, 1, '2025-11-03 22:11:06.743', '2025-11-03 22:11:06.743'),
+(23, 9, 24, 3.99, NULL, 1, '2025-11-03 22:11:06.744', '2025-11-03 22:11:06.744'),
+(24, 9, 11, 14.95, NULL, 1, '2025-11-03 22:11:06.745', '2025-11-03 22:11:06.745'),
+(25, 10, 14, 24.68, 'S', 1, '2025-11-03 22:14:08.213', '2025-11-03 22:14:08.213'),
+(26, 10, 22, 124.90, '38', 1, '2025-11-03 22:14:08.214', '2025-11-03 22:14:08.214'),
+(27, 11, 3, 239.90, NULL, 1, '2025-11-03 22:14:29.770', '2025-11-03 22:14:29.770'),
+(28, 11, 25, 6.90, NULL, 1, '2025-11-03 22:14:29.772', '2025-11-03 22:14:29.772'),
+(29, 11, 11, 14.95, NULL, 2, '2025-11-03 22:14:29.772', '2025-11-03 22:14:29.772'),
+(30, 12, 9, 5.50, NULL, 1, '2025-11-03 22:15:10.261', '2025-11-03 22:15:10.261'),
+(31, 12, 23, 89.90, '41', 1, '2025-11-03 22:15:10.262', '2025-11-03 22:15:10.262');
+
 
 -- INSERT INTO payments (payment_id, order_id, payment_method, paid_at) VALUES
 -- (1, 1, 'Bank Transfer', '2025-01-05 11:00:00');

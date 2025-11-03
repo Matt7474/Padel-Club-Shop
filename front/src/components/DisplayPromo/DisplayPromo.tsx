@@ -17,15 +17,14 @@ export default function DisplayPromo({ article }: DisplayPromoProps) {
 	if (!isActive) return null;
 
 	return (
-		<div className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 p-5 rounded-xl shadow-lg text-white relative overflow-hidden">
+		<div className="bg-linear-to-r from-emerald-400 via-teal-400 to-cyan-400 p-5 rounded-xl shadow-lg text-white relative overflow-hidden">
 			<div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-2xl"></div>
 			<div className="relative z-10 text-center">
 				<h3 className="text-xl font-extrabold mb-2 drop-shadow-sm">
 					{promo.name}
 				</h3>
 				<p className="text-sm font-medium leading-relaxed">
-					Profitez de réductions exclusives pour faire des économies sur vos
-					achats&nbsp;!
+					{promo.description}
 				</p>
 				<p className="mt-3 text-sm font-bold">
 					🗓️ Du{" "}

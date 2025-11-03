@@ -11,7 +11,7 @@ import SearchBar from "../SearchBar/SearchBar";
 
 export default function Header() {
 	const {
-		lowStockCount,
+		// lowStockCount,
 		orderPaid,
 		messages,
 		unreadMessageCount,
@@ -138,7 +138,7 @@ export default function Header() {
 		unreadMessageCount +
 		unreadPersonalCount +
 		paidOrderCount +
-		lowStockCount +
+		// lowStockCount +
 		unreadFormCount +
 		orderPaid +
 		unreadMessage;

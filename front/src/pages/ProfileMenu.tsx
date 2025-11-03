@@ -95,11 +95,11 @@ export default function ProfileMenu() {
 								!
 							</span>
 						)}
-						{option === "Liste des articles" && lowStockCount === 0 && (
+						{/* {option === "Liste des articles" && lowStockCount === 0 && (
 							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
 								!
 							</span>
-						)}
+						)} */}
 						{option === "Liste des commandes client" && orderPaid > 0 && (
 							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
 								{orderPaid > 99 ? "99+" : orderPaid}
