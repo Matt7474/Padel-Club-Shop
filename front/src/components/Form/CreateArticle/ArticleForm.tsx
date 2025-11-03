@@ -145,7 +145,7 @@ export default function ArticleForm({
 						length={articleDescription.length}
 						value={articleDescription}
 						onChange={setArticleDescription}
-						maxLength={300}
+						maxLength={2000}
 					/>
 				</div>
 				{/* Reference de l'article */}

@@ -119,7 +119,6 @@ export default function Login() {
 							<button
 								type="submit"
 								className="bg-amber-500 text-white font-bold mt-10 p-2 w-full cursor-pointer"
-								onSubmit={loginSubmit}
 							>
 								SE CONNECTER
 							</button>

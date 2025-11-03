@@ -91,7 +91,12 @@ export default function ProfileMenu() {
 
 						{/* Pastille de notification */}
 						{option === "Liste des articles" && lowStockCount > 0 && (
-							<span className="absolute top-2 right-2 bg-yellow-400 text-black text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
+							<span className="absolute top-2 right-2 bg-yellow-500 text-black text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
+								!
+							</span>
+						)}
+						{option === "Liste des articles" && lowStockCount === 0 && (
+							<span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg">
 								!
 							</span>
 						)}
