@@ -13,12 +13,12 @@ interface BreadcrumbProps {
 // 🗝️ Dictionnaire des traductions
 const translations: Record<string, string> = {
 	home: "Accueil",
-	rackets: "Raquettes",
-	bags: "Sacs",
-	balls: "Balles",
-	clothings: "Vêtements",
-	shoess: "Chaussures",
-	accessorys: "Accessoires",
+	racket: "Raquettes",
+	bag: "Sacs",
+	ball: "Balles",
+	clothing: "Vêtements",
+	shoes: "Chaussures",
+	accessory: "Accessoires",
 	brand: "Marque",
 	brands: "Marques",
 	articles: "Articles",

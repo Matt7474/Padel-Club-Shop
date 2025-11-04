@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getAllUsers } from "../../../api/User";
 import type { User, UserApiResponse } from "../../../types/User";
 import Loader from "../Tools/Loader";
+import Pagination from "../Tools/Pagination";
 import { useSortableData } from "../Tools/useSortableData";
 import UserDetails from "./UserDetails";
 
@@ -12,6 +13,14 @@ export default function UsersList() {
 	const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
 	const { items: sortedUsers, requestSort } = useSortableData(users);
+
+	const [currentPage, setCurrentPage] = useState(1);
+	const itemsPerPage = 15;
+
+	const totalPages = Math.ceil(sortedUsers.length / itemsPerPage);
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const endIndex = startIndex + itemsPerPage;
+	const paginatedUsers = sortedUsers.slice(startIndex, endIndex);
 
 	useEffect(() => {
 		const fetchUsers = async () => {
@@ -61,7 +70,6 @@ export default function UsersList() {
 			<h2 className="p-3 bg-gray-500/80 font-semibold text-lg mt-7 xl:mt-0 flex justify-between">
 				Liste des Utilisateurs
 			</h2>
-
 			<div className="grid grid-cols-[3fr_3fr_3fr_5fr] xl:grid-cols-[2fr_3fr_3fr_3fr_2fr] h-10 bg-gray-300 mt-4 mb-2 text-sm ">
 				<button
 					type="button"
@@ -98,8 +106,7 @@ export default function UsersList() {
 					TELEPHONE
 				</button>
 			</div>
-
-			{sortedUsers.map((user) => (
+			{paginatedUsers.map((user) => (
 				<button
 					key={user.userId}
 					type="button"
@@ -135,6 +142,11 @@ export default function UsersList() {
 					</div>
 				</button>
 			))}
+			<Pagination
+				totalPages={totalPages}
+				currentPage={currentPage}
+				setCurrentPage={setCurrentPage}
+			/>
 		</div>
 	);
 }

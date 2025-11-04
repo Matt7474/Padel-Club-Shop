@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getArticles, getArticlesType } from "../api/Article";
 import ArticleCard from "../components/ArticleCard/ArticleCard";
 import Breadcrumb from "../components/Breadcrumb/Breadcrumb";
+import Pagination from "../components/Form/Tools/Pagination";
 import type Article from "../types/Article";
 import type { Promotion } from "../types/Article";
 
@@ -17,6 +18,9 @@ export default function Articles({
 	searchQuery,
 }: ArticlesProps) {
 	const [articles, setArticles] = useState<Article[]>([]);
+	const [currentPage, setCurrentPage] = useState(1);
+	const itemsPerPage = 15;
+
 	const now = new Date();
 
 	useEffect(() => {
@@ -35,6 +39,7 @@ export default function Articles({
 				}
 
 				setArticles(res);
+				setCurrentPage(1);
 			} catch (err) {
 				console.error("Erreur fetching articles:", err);
 			}
@@ -50,7 +55,6 @@ export default function Articles({
 			article.promotions?.some((promo: Promotion) => {
 				if (promo.status !== "active") return false;
 
-				// Vérifier que la promo est valide aujourd'hui
 				const startDate = new Date(promo.start_date);
 				const endDate = new Date(promo.end_date);
 
@@ -68,6 +72,13 @@ export default function Articles({
 				article.description?.toLowerCase().includes(query),
 		);
 	}
+
+	const totalPages = Math.ceil(filteredArticles.length / itemsPerPage);
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const paginatedArticles = filteredArticles.slice(
+		startIndex,
+		startIndex + itemsPerPage,
+	);
 
 	const translations: Record<string, string> = {
 		home: "Accueil",
@@ -135,15 +146,23 @@ export default function Articles({
 					)}
 				</h1>
 
+				{/* --- Articles affichés --- */}
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-					{filteredArticles.length > 0 ? (
-						filteredArticles.map((article) => (
+					{paginatedArticles.length > 0 ? (
+						paginatedArticles.map((article) => (
 							<ArticleCard key={article.article_id} article={article} />
 						))
 					) : (
 						<p className="mt-4">Aucun article trouvé.</p>
 					)}
 				</div>
+
+				{/* --- Pagination --- */}
+				<Pagination
+					totalPages={totalPages}
+					currentPage={currentPage}
+					setCurrentPage={setCurrentPage}
+				/>
 			</div>
 		</>
 	);

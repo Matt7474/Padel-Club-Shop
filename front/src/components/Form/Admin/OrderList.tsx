@@ -6,6 +6,7 @@ import type { Order } from "../../../types/Order";
 import type { User } from "../../../types/User";
 import { useOrderActions } from "../../../utils/useOrderActions";
 import Loader from "../Tools/Loader";
+import Pagination from "../Tools/Pagination";
 import { useSortableData } from "../Tools/useSortableData";
 import OrderDetails from "./OrderDetails";
 import UserDetails from "./UserDetails";
@@ -18,6 +19,14 @@ export default function OrderList() {
 	const [, setError] = useState("");
 	const navigate = useNavigate();
 	const { items: sortedOrders, requestSort } = useSortableData(orders);
+
+	const [currentPage, setCurrentPage] = useState(1);
+	const itemsPerPage = 15;
+
+	const totalPages = Math.ceil(sortedOrders.length / itemsPerPage);
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const endIndex = startIndex + itemsPerPage;
+	const paginatedOrders = sortedOrders.slice(startIndex, endIndex);
 
 	const fetchOrders = async () => {
 		try {
@@ -158,7 +167,7 @@ export default function OrderList() {
 				</button>
 			</div>
 
-			{sortedOrders.map((order) => (
+			{paginatedOrders.map((order) => (
 				<div key={order.order_id} className="relative">
 					<button
 						type="button"
@@ -240,6 +249,11 @@ export default function OrderList() {
 					<div className="absolute bottom-0 left-0 w-full border-b border-gray-200"></div>
 				</div>
 			))}
+			<Pagination
+				totalPages={totalPages}
+				currentPage={currentPage}
+				setCurrentPage={setCurrentPage}
+			/>
 		</div>
 	);
 }

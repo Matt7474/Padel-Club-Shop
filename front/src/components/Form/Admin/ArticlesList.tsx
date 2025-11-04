@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getArticles, getArticlesDeleted } from "../../../api/Article";
 import type Article from "../../../types/Article";
 import Loader from "../Tools/Loader";
+import Pagination from "../Tools/Pagination";
 import { useSortableData } from "../Tools/useSortableData";
 import CreateArticle from "./CreateArticle";
 
@@ -19,6 +20,9 @@ export default function ArticlesList() {
 	const [deletedArticles, setDeletedArticles] = useState<Article[]>([]);
 	const [isChecked, setIsChecked] = useState(false);
 	const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+
+	const [currentPage, setCurrentPage] = useState(1);
+	const itemsPerPage = 15;
 
 	// Articles normaux
 	useEffect(() => {
@@ -123,10 +127,16 @@ export default function ArticlesList() {
 	};
 
 	const getRowBgClass = (quantity: number) => {
+		console.log("quantity", quantity);
 		if (quantity <= 5) return "bg-red-100 hover:bg-red-200";
 		if (quantity <= 15) return "bg-orange-100 hover:bg-orange-200";
 		return "bg-transparent hover:bg-gray-100";
 	};
+
+	const totalPages = Math.ceil(sortedArticles.length / itemsPerPage);
+	const startIndex = (currentPage - 1) * itemsPerPage;
+	const endIndex = startIndex + itemsPerPage;
+	const paginatedArticles = sortedArticles.slice(startIndex, endIndex);
 
 	if (loading) {
 		return <Loader text={"des articles"} />;
@@ -268,7 +278,7 @@ export default function ArticlesList() {
 				</div>
 			</div>
 			{/* Liste d’articles */}
-			{sortedArticles.map((article) => {
+			{paginatedArticles.map((article) => {
 				const quantity =
 					typeof article.stock_quantity === "number"
 						? article.stock_quantity
@@ -364,6 +374,12 @@ export default function ArticlesList() {
 					</div>
 				);
 			})}
+			{/* --- Pagination --- */}
+			<Pagination
+				totalPages={totalPages}
+				currentPage={currentPage}
+				setCurrentPage={setCurrentPage}
+			/>
 		</div>
 	);
 }
