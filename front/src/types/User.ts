@@ -34,6 +34,7 @@ export interface User {
 	email: string;
 	password?: string | undefined;
 	role?: number;
+	roleName?: string;
 	address?: Address[];
 }
 

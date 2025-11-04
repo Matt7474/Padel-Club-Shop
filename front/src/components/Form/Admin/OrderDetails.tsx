@@ -526,12 +526,12 @@ export default function OrderDetails({
 											<p>{orderUser.phone}</p>
 										</div>
 
-										<div className="flex justify-between">
+										{/* <div className="flex justify-between">
 											<p>
 												{orderUser.addresses?.[0].street_number ??
 													"Non renseignée"}
 											</p>
-										</div>
+										</div> */}
 									</div>
 									<div>
 										<p className="font-medium">Adresse :</p>
@@ -544,11 +544,10 @@ export default function OrderDetails({
 										</div>
 
 										<div className="flex justify-between">
-											<p>{orderUser.addresses[0].zip_code}</p>
-										</div>
-
-										<div className="flex justify-between">
-											<p>{orderUser.addresses[0].city}</p>
+											<p>
+												{orderUser.addresses[0].zip_code}{" "}
+												{orderUser.addresses[0].city}
+											</p>
 										</div>
 
 										<div className="flex justify-between">

@@ -36,7 +36,7 @@ export const getUserById = async (req: Request, res: Response) => {
 
 	try {
 		const user = await User.findByPk(id, {
-			attributes: { exclude: ["password"] },
+			// attributes: { exclude: ["password"] },
 			include: [
 				{
 					model: Address,

@@ -4,11 +4,12 @@ BEGIN;
 INSERT INTO roles (role_id, label) VALUES
 (1, 'super admin'),
 (2, 'admin'),
-(3, 'client');
+(3, 'client'),
+(4, 'testeur');
 
 -- USERS
 INSERT INTO users (user_id, last_name, first_name, phone, email, password, role_id) VALUES
-(1, 'DIMIER', 'Matthieu', '06.12.34.56.78', 'dimier.matt.dev@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$pB8YSq9atfPP+MANKgZJMw$NZQpoodO9GpTHZka7rvGkynhpRaMaRK+wZPkdSJjaHU', 1), -- Pa$$w0rd!
+(1, 'DIMIER', 'Matthieu', '06.12.34.56.78', 'dimier.matt.dev@gmail.com', '$argon2id$v=19$m=65536,t=3,p=4$upIrFsmHqAm6ur2Oa/FrUA$+CnVaj4AnRlqbjU0APPBmV/2n7TrjWOLcwxPEAzem3I', 1),
 (2, 'DELAUNAY', 'Amaury', '06.12.34.56.78', 'amaury.delaunay@example.com', '$argon2id$v=19$m=65536,t=3,p=4$gGT/tj4XK/mbVtSL0oroyQ$EB5PNFHRiI/Jz2Zn5OA2Sy54+69zr2Tvvh6Q95+IlHo', 3),
 (3, 'ROUSSELIN','Sébastien', '06.12.34.56.78', 'sebastien.rousselin@example.com', '$argon2id$v=19$m=65536,t=3,p=4$GDMpyYJEMBYBbbNtw0DC7g$YnkaPRtKpCZ3RY6zgMj7qjt4lj3uLBfcp9rgGeHG5Lo', 3),
 (4, 'KESSLER', 'Yannick', '06.12.34.56.78', 'yannick.kessler@example.com', '$argon2id$v=19$m=65536,t=3,p=4$TtPQEo+BVWzFTfFYZgCzdg$ALMAIE45Uu0kRQpYkc4pq52LjBkX3dzloqDkbyhNcp0', 3),
@@ -17,7 +18,7 @@ INSERT INTO users (user_id, last_name, first_name, phone, email, password, role_
 (7, 'GARNIER', 'Mathieu', '06.12.34.56.78', 'mathieu.garnier@example.com', '$argon2id$v=19$m=65536,t=3,p=4$KUgZH9mQVkW+QGenDhAR8g$SZmdZ+Fdgm3EhRKoSLzsuCqjffLgRjizWyyIptAC2FU', 3),
 (8, 'RAVEL', 'Tom', '06.12.34.56.78', 'tom.ravel@example.com', '$argon2id$v=19$m=65536,t=3,p=4$IOS08D3lOf5nNvRQFg9sRg$zWZfAu/QPyMl0M/t65jabc92BsI5VineU2/cOjw1Gdc', 3),
 (9, 'MERVILLE', 'Charly', '06.12.34.56.78', 'charly.merville@example.com', '$argon2id$v=19$m=65536,t=3,p=4$VjtYPwJa1kXzTG7C6tk/Rw$Pt4a4UjUntZA+e2sECP+n7QgHw/VkWjPRVXi7vuIP7w', 3),
-(10, 'STARK', 'Tony', '06.12.34.56.78', 'tony.stark@example.com', '$argon2id$v=19$m=65536,t=3,p=4$885lkUnDGOF0W9SBbgLrkA$DJO7y9/ATU0WXYI94fPUtZUWl2n6qiWAXqP7HP7SqvQ', 2);
+(10, 'STARK', 'Tony', '06.12.34.56.78', 'tony.stark@test.com', '$argon2id$v=19$m=65536,t=3,p=4$885lkUnDGOF0W9SBbgLrkA$DJO7y9/ATU0WXYI94fPUtZUWl2n6qiWAXqP7HP7SqvQ', 4);
 
 -- ADDRESSES
 INSERT INTO addresses (address_id, user_id, type, street_number, street_name, complement, zip_code, city, country, is_default) VALUES

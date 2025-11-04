@@ -13,6 +13,7 @@ import Button from "../Tools/Button";
 import Select from "../Tools/Select";
 import OrderDetails from "./OrderDetails";
 import UsersList from "./UsersList";
+import { FlaskConical, UserCheck, UserStar } from "lucide-react";
 
 interface UserDetailsProps {
 	user: User;
@@ -77,7 +78,9 @@ export default function UserDetails({ user }: UserDetailsProps) {
 			? "Super Admin"
 			: currentUser.role === 2
 				? "Admin"
-				: "Client";
+				: currentUser.role === 4
+					? "Testeur"
+					: "Client";
 
 	// Utilitaires
 	const getRoleAsNumber = (role: string | number | undefined): number => {
@@ -86,12 +89,21 @@ export default function UserDetails({ user }: UserDetailsProps) {
 		const roleLower = role.toLowerCase();
 		if (roleLower === "super admin") return 1;
 		if (roleLower === "admin") return 2;
+		if (roleLower === "testeur") return 4;
 		return 3;
 	};
 
+	// const canModifyRole = (): boolean => {
+	// 	if (!currentLoggedUser) return false;
+	// 	const currentUserRoleId = getRoleAsNumber(currentLoggedUser.role);
+	// 	if (currentLoggedUser.id === user.userId) return false;
+	// 	if (user.role === 1 && currentUserRoleId !== 1) return false;
+	// 	return true;
+	// };
 	const canModifyRole = (): boolean => {
 		if (!currentLoggedUser) return false;
 		const currentUserRoleId = getRoleAsNumber(currentLoggedUser.role);
+		if (currentUserRoleId === 4) return false;
 		if (currentLoggedUser.id === user.userId) return false;
 		if (user.role === 1 && currentUserRoleId !== 1) return false;
 		return true;
@@ -137,6 +149,7 @@ export default function UserDetails({ user }: UserDetailsProps) {
 			"super admin": 1,
 			admin: 2,
 			client: 3,
+			testeur: 4,
 		};
 
 		const roleId = roleMap[roleSelected.toLowerCase()];
@@ -227,31 +240,45 @@ export default function UserDetails({ user }: UserDetailsProps) {
 						<div className="mt-4 pl-1 xl:pl-0 relative ">
 							{userRole === "Super Admin" && (
 								<div className="absolute top-0 right-2">
-									<img
+									<UserStar className="text-yellow-600" />
+									{/* <img
 										src="/icons/superadmin.svg"
 										alt="logo-superAdmin"
 										className="w-7"
-									/>
+									/> */}
 								</div>
 							)}
 							{userRole === "Admin" && (
 								<div className="absolute top-0 right-2">
-									<img
+									<UserStar className="text-slate-500" />
+									{/* <img
 										src="/icons/tie.svg"
 										alt="logo-cravate"
 										className="w-7"
-									/>
+									/> */}
 								</div>
 							)}
 							{userRole === "Client" && (
 								<div className="absolute top-0 right-2">
-									<img
+									<UserCheck className="text-gray-800 ml-1" />
+									{/* <img
 										src="/icons/profile.svg"
 										alt="logo-utilisateur"
 										className="w-7"
-									/>
+									/> */}
 								</div>
 							)}
+							{userRole === "Testeur" && (
+								<div className="absolute top-0 right-2">
+									<FlaskConical className="text-emerald-600" />
+									{/* <img
+										src="/icons/profile.svg"
+										alt="logo-utilisateur"
+										className="w-7"
+									/> */}
+								</div>
+							)}
+
 							<div className="grid grid-cols-[2fr_3fr]">
 								<p className="font-semibold">Rôle :</p>
 								<p className="font-semibold">{userRole}</p>

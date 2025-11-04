@@ -5,6 +5,7 @@ import Loader from "../Tools/Loader";
 import Pagination from "../Tools/Pagination";
 import { useSortableData } from "../Tools/useSortableData";
 import UserDetails from "./UserDetails";
+import { FlaskConical, UserCheck, UserStar } from "lucide-react";
 
 export default function UsersList() {
 	const [users, setUsers] = useState<User[]>([]);
@@ -22,6 +23,13 @@ export default function UsersList() {
 	const endIndex = startIndex + itemsPerPage;
 	const paginatedUsers = sortedUsers.slice(startIndex, endIndex);
 
+	const roleName: Record<number, string> = {
+		1: "Super Admin",
+		2: "Admin",
+		3: "Client",
+		4: "Testeur",
+	};
+
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
@@ -34,6 +42,7 @@ export default function UsersList() {
 					phone: apiUser.phone,
 					email: apiUser.email,
 					role: apiUser.role_id,
+					roleName: roleName[apiUser.role_id] || "Inconnu",
 					address: apiUser.addresses,
 				}));
 
@@ -70,13 +79,20 @@ export default function UsersList() {
 			<h2 className="p-3 bg-gray-500/80 font-semibold text-lg mt-7 xl:mt-0 flex justify-between">
 				Liste des Utilisateurs
 			</h2>
-			<div className="grid grid-cols-[3fr_3fr_3fr_5fr] xl:grid-cols-[2fr_3fr_3fr_3fr_2fr] h-10 bg-gray-300 mt-4 mb-2 text-sm ">
+			<div className="grid grid-cols-[3fr_3fr_3fr_5fr] xl:grid-cols-[2fr_2fr_3fr_3fr_3fr_2fr] h-10 bg-gray-300 mt-4 mb-2 text-sm ">
 				<button
 					type="button"
 					className="border-b pl-1 cursor-pointer"
 					onClick={() => requestSort("role")}
 				>
 					STATUT ↓
+				</button>
+				<button
+					type="button"
+					className="border-b pl-1 cursor-pointer text-start hidden xl:block"
+					onClick={() => requestSort("lastName")}
+				>
+					ROLE ↓
 				</button>
 				<button
 					type="button"
@@ -113,26 +129,14 @@ export default function UsersList() {
 					onClick={() => handleUserClick(user)}
 					className="cursor-pointer w-full text-left hover:bg-gray-300"
 				>
-					<div className="grid grid-cols-[3fr_3fr_3fr_5fr] xl:grid-cols-[2fr_3fr_3fr_3fr_2fr] h-10 items-center border-b">
+					<div className="grid grid-cols-[3fr_3fr_3fr_5fr] xl:grid-cols-[2fr_2fr_3fr_3fr_3fr_2fr] h-10 items-center border-b">
 						<p className="px-1 text-xs flex justify-center">
-							{user.role === 1 && (
-								<img
-									src="/icons/superadmin.svg"
-									alt="Super Admin"
-									className="w-7 h-7"
-								/>
-							)}
-							{user.role === 2 && (
-								<img src="/icons/tie.svg" alt="Admin" className="w-7 h-7" />
-							)}
-							{user.role === 3 && (
-								<img
-									src="/icons/profile.svg"
-									alt="Client"
-									className="w-6 h-6"
-								/>
-							)}
+							{user.role === 1 && <UserStar className="text-yellow-600" />}
+							{user.role === 2 && <UserStar className="text-slate-500" />}
+							{user.role === 3 && <UserCheck className="text-gray-800 ml-1" />}
+							{user.role === 4 && <FlaskConical className="text-emerald-600" />}
 						</p>
+						<p className="px-1 text-xs hidden xl:block">{user.roleName}</p>
 						<p className="px-1 text-xs">{user.lastName}</p>
 						<p className="px-1 text-xs">{user.firstName}</p>
 						<p className="px-1 text-xs truncate">{user.email}</p>

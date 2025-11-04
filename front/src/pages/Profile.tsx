@@ -27,6 +27,7 @@ export default function Profile({ text }: ProfileProps) {
 	const [showNewPassword, setShowNewPassword] = useState(false);
 	const [confirmNewPassword, setConfirmNewPassword] = useState("");
 	const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+	const [userTesteur, setUserTesteur] = useState(false);
 
 	// State utilisateur
 	const [profile, setProfile] = useState({
@@ -133,7 +134,11 @@ export default function Profile({ text }: ProfileProps) {
 	}
 
 	const handleChange = () => {
-		setIsEditing(true);
+		if (user?.role === "testeur") {
+			setUserTesteur(true);
+		} else {
+			setIsEditing(true);
+		}
 	};
 
 	// const handleChangeSubmit = async (e: React.FormEvent) => {
@@ -350,17 +355,24 @@ export default function Profile({ text }: ProfileProps) {
 			<div className="xl:w-2/3 xl:mx-auto xl:bg-white/80 xl:p-5 xl:h-160 xl:overflow-y-auto xl:relative xl:z-10">
 				<h2 className="p-3 bg-gray-500/80 font-semibold text-lg mt-7 xl:mt-0 flex justify-between">
 					Mon profil
-					<button
-						type="button"
-						onClick={handleChange}
-						aria-label="Modifier le profil"
-					>
-						<img
-							src="/icons/pen.svg"
-							alt=""
-							className="w-7 cursor-pointer hover:brightness-80"
-						/>
-					</button>
+					<div className="flex gap-3 items-center">
+						{userTesteur && (
+							<p className="text-sm ">
+								Vous ne pouvez pas modifier les informations du testeur
+							</p>
+						)}
+						<button
+							type="button"
+							onClick={handleChange}
+							aria-label="Modifier le profil"
+						>
+							<img
+								src="/icons/pen.svg"
+								alt=""
+								className="w-7 cursor-pointer hover:brightness-80"
+							/>
+						</button>
+					</div>
 				</h2>
 
 				<form onSubmit={handleChangeSubmit}>
@@ -408,7 +420,7 @@ export default function Profile({ text }: ProfileProps) {
 								/>
 
 								{/* Gestion des mots de passe */}
-								{isEditing && (
+								{isEditing && user?.role !== "testeur" && (
 									<div className="mt-4">
 										<div className="relative">
 											<Input
