@@ -1,4 +1,3 @@
-// src/components/NotificationProvider.tsx
 import { useEffect } from "react";
 import { useNotificationStore } from "../../store/useNotificationStore";
 
@@ -8,10 +7,10 @@ export default function NotificationProvider() {
 	);
 
 	useEffect(() => {
-		fetchNotifications(); // fetch direct au montage
-		const interval = setInterval(fetchNotifications, 10000); // toutes les 10s
+		fetchNotifications();
+		const interval = setInterval(fetchNotifications, 10000);
 		return () => clearInterval(interval);
 	}, [fetchNotifications]);
 
-	return null; // ne render rien
+	return null;
 }

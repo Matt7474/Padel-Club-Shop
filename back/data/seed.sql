@@ -353,8 +353,6 @@ Conditions générales :
 Restez au chaud et boostez votre équipement pour la saison : les meilleures affaires partent vite, soyez au rendez-vous !', '2026-01-08', '2026-02-04', 'active');
 
 -- ORDERS
--- INSERT INTO orders (order_id, reference, user_id, created_at, vat_rate, status) VALUES
--- (1, 'CMD-2025-0001', 1, '2025-01-05 10:30:00', 20, 'pending');
 INSERT INTO orders (order_id, reference, user_id, vat_rate, total_amount, status, is_deleted, payment_intent_id, refund_id, refunded_at, created_at, updated_at) VALUES
 (1, 'CMD-20251103-001', 1, 20.00, 174.90, 'paid', false, 'pi_3SPV4k05V6njAEWh0UiAaVpa', NULL, NULL, '2025-11-03 21:14:07.736', '2025-11-03 21:14:07.743'),
 (2, 'CMD-20251103-002', 3, 20.00, 50.85, 'ready', false, 'pi_3SPVLb05V6njAEWh0TnnvrV4', NULL, NULL, '2025-11-03 21:31:32.296', '2025-11-03 21:31:32.299'),
@@ -370,9 +368,7 @@ INSERT INTO orders (order_id, reference, user_id, vat_rate, total_amount, status
 (12, 'CMD-20251103-012', 3, 20.00, 95.40, 'paid', false, 'pi_3SPW1p05V6njAEWh0oMAZCJW', NULL, NULL, '2025-11-03 22:15:10.259', '2025-11-03 22:15:10.263');
 
 
--- INSERT INTO order_lines (order_line_id, order_id, article_id, quantity) VALUES
--- (1, 1, 1, 1),
--- (2, 1, 2, 2);
+-- ORDERS_LINES
 INSERT INTO order_lines (order_line_id, order_id, article_id, price, size, quantity, created_at, updated_at) VALUES
 (1, 1, 4, 159.95, NULL, 1, '2025-11-03 21:14:07.741', '2025-11-03 21:14:07.741'),
 (2, 1, 11, 14.95, NULL, 1, '2025-11-03 21:14:07.742', '2025-11-03 21:14:07.742'),
@@ -406,28 +402,14 @@ INSERT INTO order_lines (order_line_id, order_id, article_id, price, size, quant
 (30, 12, 9, 5.50, NULL, 1, '2025-11-03 22:15:10.261', '2025-11-03 22:15:10.261'),
 (31, 12, 23, 89.90, '41', 1, '2025-11-03 22:15:10.262', '2025-11-03 22:15:10.262');
 
-
--- INSERT INTO payments (payment_id, order_id, payment_method, paid_at) VALUES
--- (1, 1, 'Bank Transfer', '2025-01-05 11:00:00');
-
--- CARTS
--- INSERT INTO carts (cart_id, user_id) VALUES
--- (1, 2);
-
--- INSERT INTO cart_lines (cart_line_id, cart_id, article_id, quantity) VALUES
--- (1, 1, 1, 3),
--- (2, 1, 2, 1);
-
 COMMIT;
 
--- À exécuter après votre seed pour réinitialiser toutes les séquences
 SELECT setval('roles_role_id_seq', (SELECT MAX(role_id) FROM roles));
 SELECT setval('users_user_id_seq', (SELECT MAX(user_id) FROM users));
 SELECT setval('addresses_address_id_seq', (SELECT MAX(address_id) FROM addresses));
 SELECT setval('brands_brand_id_seq', (SELECT MAX(brand_id) FROM brands));
 SELECT setval('articles_article_id_seq', (SELECT MAX(article_id) FROM articles));
 SELECT setval('article_images_image_id_seq', (SELECT MAX(image_id) FROM article_images));
--- SELECT setval('article_characteristics_characteristic_id_seq', (SELECT MAX(characteristic_id) FROM article_characteristics));
 SELECT setval('article_ratings_rating_id_seq', (SELECT MAX(rating_id) FROM article_ratings));
 SELECT setval('promotions_promo_id_seq', (SELECT MAX(promo_id) FROM promotions));
 SELECT setval('promotion_promo_id_seq', (SELECT MAX(promo_id) FROM promotion));

@@ -138,6 +138,24 @@ export default function ArticlesList() {
 	const endIndex = startIndex + itemsPerPage;
 	const paginatedArticles = sortedArticles.slice(startIndex, endIndex);
 
+	// Calcul des quantité minimal en fonction des tailles d'articles
+	function getArticleQuantity(article: Article): number {
+		if (article.type === "clothing" || article.type === "shoes") {
+			const fitString = article.tech_characteristics?.fit || "";
+			const quantities = fitString
+				.split(",")
+				.map((part) => parseInt(part.split(":")[1] || "0", 10))
+				.filter((q) => q > 0); // on garde uniquement les tailles dispo (>0)
+
+			return quantities.length > 0 ? Math.min(...quantities) : 0; // la plus petite quantité dispo
+		}
+
+		// Pour les articles simples sans tailles
+		return typeof article.stock_quantity === "number"
+			? article.stock_quantity
+			: 0;
+	}
+
 	if (loading) {
 		return <Loader text={"des articles"} />;
 	}
@@ -255,37 +273,36 @@ export default function ArticlesList() {
 			</div>
 
 			{/* Legende couleur */}
-			<div className="flex gap-10 mb-4 justify-around xl:justify-start xl:ml-1">
-				<div className="flex gap-3">
-					<div className="bg-orange-200 w-8 h-2.5 mt-1 " />
-					<p className="text-xs">&lt; 16 restant</p>
+			<div className="flex justify-between">
+				<div className="flex gap-10 mb-4 justify-around xl:justify-start xl:ml-1">
+					<div className="flex gap-3">
+						<div className="bg-orange-200 w-8 h-2.5 mt-1 " />
+						<p className="text-xs">&lt; 16 restant</p>
+					</div>
+					<div className="flex gap-3">
+						<div className="bg-red-200 w-8 h-2.5 mt-1 " />
+						<p className="text-xs">&lt; 6 restant</p>
+					</div>
+					<div className="flex gap-3">
+						<span className="bg-yellow-500 text-black text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center -mt-1">
+							!
+						</span>
+						<p className="text-xs">Quantité faible</p>
+					</div>
+					<div className="flex gap-3">
+						<span className="bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center -mt-1">
+							!
+						</span>
+						<p className="text-xs">Produit épuisé</p>
+					</div>
 				</div>
-				<div className="flex gap-3">
-					<div className="bg-red-200 w-8 h-2.5 mt-1 " />
-					<p className="text-xs">&lt; 6 restant</p>
-				</div>
-				<div className="flex gap-3">
-					<span className="bg-yellow-500 text-black text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center -mt-1">
-						!
-					</span>
-					<p className="text-xs">Quantité faible</p>
-				</div>
-				<div className="flex gap-3">
-					<span className="bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center -mt-1">
-						!
-					</span>
-					<p className="text-xs">Produit épuisé</p>
+				<div>
+					<p className="font-semibold mr-1">{articles.length} articles</p>
 				</div>
 			</div>
 			{/* Liste d’articles */}
 			{paginatedArticles.map((article) => {
-				const quantity =
-					typeof article.stock_quantity === "number"
-						? article.stock_quantity
-						: Object.values(article.stock_quantity || {}).reduce(
-								(acc: number, val) => acc + (val ?? 0),
-								0,
-							);
+				const quantity = getArticleQuantity(article);
 
 				return (
 					<div key={article.article_id}>
