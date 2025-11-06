@@ -47,7 +47,6 @@ export default function UsersList() {
 				}));
 
 				setUsers(mappedUsers);
-				console.log("Users mappés:", mappedUsers);
 			} catch (err) {
 				const error = err as Error;
 				setError(
@@ -90,7 +89,7 @@ export default function UsersList() {
 				<button
 					type="button"
 					className="border-b pl-1 cursor-pointer text-start hidden xl:block"
-					onClick={() => requestSort("lastName")}
+					onClick={() => requestSort("roleName")}
 				>
 					ROLE ↓
 				</button>

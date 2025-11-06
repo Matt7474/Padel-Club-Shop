@@ -6,13 +6,21 @@ import type { Order } from "../types/Order";
 interface UseOrderActionsProps {
 	fetchOrders: () => void;
 	setSelectedOrder: (order: Order | null) => void;
+	reference?: string;
 }
 
 export function useOrderActions({
 	fetchOrders,
 	setSelectedOrder,
+	reference,
 }: UseOrderActionsProps) {
 	const addToast = useToastStore((state) => state.addToast);
+
+	const statusFR: Record<"processing" | "ready" | "shipped", string> = {
+		processing: "en cours de préparation",
+		ready: "prête",
+		shipped: "expédiée",
+	};
 
 	const updateStatus = async (
 		id: number,
@@ -21,12 +29,18 @@ export function useOrderActions({
 		try {
 			const updatedOrder = await updateOrderStatus(id, status);
 			console.log(`Commande mise à jour : ${status}`, updatedOrder);
-			addToast(`La commande est maintenant ${status}`, "bg-green-500");
+			addToast(
+				`La commande ${reference} est maintenant ${statusFR[status]}`,
+				"bg-green-500",
+			);
 			setSelectedOrder(null);
 			fetchOrders();
 		} catch (err) {
-			console.error(err, `La commande n'a pas changé de status`);
-			addToast(`La commande n'a pas changé de status`, "bg-red-500");
+			console.error(err, `La commande ${reference} n'a pas changé de status`);
+			addToast(
+				`La commande ${reference} n'a pas changé de status`,
+				"bg-red-500",
+			);
 		}
 	};
 
@@ -38,49 +52,67 @@ export function useOrderActions({
 		try {
 			await deleteOrder(id);
 			console.log("Commande supprimée !");
-			addToast("La commande a été supprimée", "bg-green-500");
+			addToast(`La commande ${reference} a été supprimée`, "bg-green-500");
 			setSelectedOrder(null);
 			fetchOrders();
 		} catch (err) {
-			console.error(err, "La commande n'a pas pu être supprimée");
-			addToast("La commande n'a pas pu être supprimée", "bg-red-500");
+			console.error(err, `La commande ${reference} n'a pas pu être supprimée`);
+			addToast(
+				`La commande ${reference} n'a pas pu être supprimée`,
+				"bg-red-500",
+			);
 		}
 	};
 
 	const handleCancelProcessing = async (id: number) => {
 		try {
 			await updateOrderStatus(id, "paid");
-			console.log("Status de commande modifié !");
-			addToast("La commande a été modifié", "bg-green-500");
+			console.log("Status de commande annulée !");
+			addToast(
+				`La commande ${reference} est revenue au status "payé`,
+				"bg-green-500",
+			);
 			setSelectedOrder(null);
 			fetchOrders();
 		} catch (err) {
-			console.error(err, "La commande n'a pas pu être modifié");
-			addToast("La commande n'a pas pu être modifié", "bg-red-500");
+			console.error(err, `La commande ${reference} n'a pas pu être modifiée`);
+			addToast(
+				`La commande ${reference} n'a pas pu être modifiée`,
+				"bg-red-500",
+			);
 		}
 	};
 	const handleCancelReady = async (id: number) => {
 		try {
 			await updateOrderStatus(id, "processing");
 			console.log("Status de commande modifié !");
-			addToast("La commande a été modifié", "bg-green-500");
+			addToast(
+				`La commande ${reference} est revenue au status "en cours de préparation"`,
+				"bg-green-500",
+			);
 			setSelectedOrder(null);
 			fetchOrders();
 		} catch (err) {
-			console.error(err, "La commande n'a pas pu être modifié");
-			addToast("La commande n'a pas pu être modifié", "bg-red-500");
+			console.error(err, `La commande ${reference} n'a pas pu être modifié`);
+			addToast(
+				`La commande ${reference} n'a pas pu être modifié`,
+				"bg-red-500",
+			);
 		}
 	};
 	const handleCancelOrder = async (id: number) => {
 		try {
 			await updateOrderStatus(id, "cancelled");
 			console.log("Status de commande modifié !");
-			addToast("La commande a été modifié", "bg-green-500");
+			addToast(`La commande ${reference} a été annulée`, "bg-green-500");
 			setSelectedOrder(null);
 			fetchOrders();
 		} catch (err) {
-			console.error(err, "La commande n'a pas pu être modifié");
-			addToast("La commande n'a pas pu être modifié", "bg-red-500");
+			console.error(err, `La commande ${reference} n'a pas pu être annulée`);
+			addToast(
+				`La commande ${reference} n'a pas pu être annulée`,
+				"bg-red-500",
+			);
 		}
 	};
 

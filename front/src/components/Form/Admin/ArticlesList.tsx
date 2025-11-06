@@ -289,12 +289,12 @@ export default function ArticlesList() {
 						</span>
 						<p className="text-xs">Quantité faible</p>
 					</div>
-					<div className="flex gap-3">
+					{/* <div className="flex gap-3">
 						<span className="bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center -mt-1">
 							!
 						</span>
 						<p className="text-xs">Produit épuisé</p>
-					</div>
+					</div> */}
 				</div>
 				<div>
 					<p className="font-semibold mr-1">{articles.length} articles</p>

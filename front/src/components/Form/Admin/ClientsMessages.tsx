@@ -286,7 +286,7 @@ export default function ClientsMessages({
 						{/* Liste scrollable */}
 						<div className="flex-1 overflow-y-auto px-6 py-4">
 							{users
-								.filter((u) => u.role !== 1 && u.role !== 2)
+								.filter((u) => u.role !== 1 && u.role !== 2 && u.role !== 4)
 								.map((u) => {
 									const unreadCount = unreadByUser.get(u.id) || 0;
 

@@ -1,8 +1,10 @@
 import axios from "axios";
 import api from "../api/api";
+import { useAuthStore } from "../store/useAuthStore";
 import type { Promo } from "../types/Promotions";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const authToken = useAuthStore.getState().token;
 
 export async function getPromotion(): Promise<Promo[]> {
 	try {
@@ -25,8 +27,15 @@ export async function createPromo(promo: {
 	start_date: string;
 	end_date: string;
 }): Promise<Promo> {
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
-		const res = await api.post(`${API_URL}/promotions/promotion`, promo);
+		const res = await api.post(`${API_URL}/promotions/promotion`, promo, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
@@ -47,12 +56,18 @@ export async function updatePromo(
 		end_date: string;
 	},
 ): Promise<Promo> {
-	console.log(promoId);
-
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
 		const res = await api.patch(
 			`${API_URL}/promotions/promotion/${promoId}`,
 			promo,
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
+			},
 		);
 		return res.data;
 	} catch (err: unknown) {
@@ -66,8 +81,15 @@ export async function updatePromo(
 }
 
 export async function deletePromoById(id: number) {
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
-		const res = await api.delete(`${API_URL}/promotions/promotion/${id}`);
+		const res = await api.delete(`${API_URL}/promotions/promotion/${id}`, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {

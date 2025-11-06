@@ -2,6 +2,9 @@ import axios from "axios";
 import api from "../api/api";
 import { useAuthStore } from "../store/useAuthStore";
 
+const authToken = useAuthStore.getState().token;
+const API_URL = import.meta.env.VITE_API_URL;
+
 interface ContactFormData {
 	user_id?: number | null;
 	firstName: string;
@@ -12,8 +15,6 @@ interface ContactFormData {
 	message: string;
 	orderNumber: string;
 }
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 export async function sendContactForm(data: ContactFormData) {
 	try {
@@ -49,18 +50,15 @@ export async function sendContactForm(data: ContactFormData) {
 }
 
 export async function getMessagesForm() {
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
-		const authToken = useAuthStore.getState().token;
-		const response = await api.get(
-			`${API_URL}/contact/messages`,
-
-			{
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${authToken}`,
-				},
+		const response = await api.get(`${API_URL}/contact/messages`, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authToken}`,
 			},
-		);
+		});
 		return response.data;
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error)) {
@@ -73,12 +71,9 @@ export async function getMessagesForm() {
 }
 
 export async function markMessageAsRead(id: number) {
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
-		const authToken = useAuthStore.getState().token;
-
-		if (!authToken)
-			throw new Error("Token manquant pour récupérer l'utilisateur");
-
 		const res = await api.patch(
 			`${API_URL}/contact/messages/markMessageAsRead/${id}`,
 			{},
@@ -108,12 +103,9 @@ export async function markMessageAsRead(id: number) {
 }
 
 export async function responseMessage(id: number, response: string) {
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
-		const authToken = useAuthStore.getState().token;
-
-		if (!authToken)
-			throw new Error("Token manquant pour récupérer l'utilisateur");
-
 		const res = await api.patch(
 			`${API_URL}/contact/messages/response/${id}`,
 			{ response },
@@ -142,34 +134,10 @@ export async function responseMessage(id: number, response: string) {
 	}
 }
 
-// export async function getMyMessages(email: string) {
-// 	try {
-// 		const authToken = useAuthStore.getState().token;
-// 		const response = await api.get(
-// 			`${API_URL}/contact/messages/${encodeURIComponent(email)}`,
-
-// 			{
-// 				headers: {
-// 					"Content-Type": "application/json",
-// 					Authorization: `Bearer ${authToken}`,
-// 				},
-// 			},
-// 		);
-// 		return response.data;
-// 	} catch (error: unknown) {
-// 		if (axios.isAxiosError(error)) {
-// 			throw new Error(
-// 				error.response?.data?.message ||
-// 					"Erreur lors de la récupération des messages",
-// 			);
-// 		}
-// 		throw new Error("Erreur inconnue");
-// 	}
-// }
-
 export async function deleteMessage(id: number) {
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
-		const authToken = useAuthStore.getState().token;
 		const response = await api.patch(
 			`${API_URL}/contact/delete/${id}`,
 			{},
@@ -193,8 +161,9 @@ export async function deleteMessage(id: number) {
 }
 
 export async function restoreMessage(id: number) {
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
-		const authToken = useAuthStore.getState().token;
 		const response = await api.patch(
 			`${API_URL}/contact/restore/${id}`,
 			{},
@@ -216,31 +185,3 @@ export async function restoreMessage(id: number) {
 		throw new Error("Erreur inconnue");
 	}
 }
-
-// export async function sendMessage(formData: {
-// 	user_id: number;
-// 	message: string;
-// 	is_admin?: boolean;
-// }) {
-// 	try {
-// 		const authToken = useAuthStore.getState().token;
-
-// 		if (!authToken) throw new Error("Token manquant pour envoyer un message");
-
-// 		const res = await api.post(`${API_URL}/contact/messages`, formData, {
-// 			headers: {
-// 				"Content-Type": "application/json",
-// 				Authorization: `Bearer ${authToken}`,
-// 			},
-// 		});
-
-// 		return res.data;
-// 	} catch (error: unknown) {
-// 		if (error instanceof Error) {
-// 			console.error("Erreur lors de l'envoi du message :", error.message);
-// 		} else {
-// 			console.error("Erreur inconnue lors de l'envoi du message :", error);
-// 		}
-// 		throw error;
-// 	}
-// }

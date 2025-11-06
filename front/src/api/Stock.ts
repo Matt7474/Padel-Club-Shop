@@ -3,15 +3,12 @@ import { useAuthStore } from "../store/useAuthStore";
 import type { CartItem } from "../types/Cart";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const authToken = useAuthStore.getState().token;
 
 export async function verifyStockBeforePayment(cart: CartItem[]) {
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
-		const authToken = useAuthStore.getState().token;
-
-		if (!authToken) {
-			throw new Error("Token manquant pour récupérer l'utilisateur");
-		}
-
 		const res = await api.post(
 			`${API_URL}/stock/check-before-payment`,
 			{ cart },
@@ -38,13 +35,9 @@ export async function verifyStockBeforePayment(cart: CartItem[]) {
 }
 
 export async function updateStockAfterPayment(cart: CartItem[]) {
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
-		const authToken = useAuthStore.getState().token;
-
-		if (!authToken) {
-			throw new Error("Token manquant pour récupérer l'utilisateur");
-		}
-
 		const res = await api.post(
 			`${API_URL}/stock/update-after-payment`,
 			{ cart },

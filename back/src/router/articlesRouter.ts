@@ -10,22 +10,8 @@ articlesRouter.post(
 	upload.array("images"),
 	articlesControllers.addImagesArticle,
 );
-articlesRouter.post(
-	"/:id/ratings",
-	(req, res, next) => {
-		console.log("🎯 Route ratings atteinte !", req.params, req.body);
-		next();
-	},
-	articlesControllers.createTechRatings,
-);
-articlesRouter.patch(
-	"/:id/ratings",
-	(req, res, next) => {
-		console.log("🎯 Route ratings atteinte !", req.params, req.body);
-		next();
-	},
-	articlesControllers.updateTechRatings,
-);
+articlesRouter.post("/:id/ratings", articlesControllers.createTechRatings);
+articlesRouter.patch("/:id/ratings", articlesControllers.updateTechRatings);
 
 articlesRouter.get("/", articlesControllers.getAllArticles);
 articlesRouter.get("/id/:id", articlesControllers.getOneArticle);

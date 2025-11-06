@@ -39,19 +39,16 @@ export default function OrderDetails({
 	const API_URL = import.meta.env.VITE_API_URL;
 	const navigate = useNavigate();
 	const addToast = useToastStore((state) => state.addToast);
-	const [showRefundConfirm, setShowRefundConfirm] = useState(false);
 
+	const [showRefundConfirm, setShowRefundConfirm] = useState(false);
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 	const [showProcessingConfirm, setShowProcessingConfirm] = useState(false);
 	const [showReadyConfirm, setShowReadyConfirm] = useState(false);
 	const [showShippedConfirm, setShowShippedConfirm] = useState(false);
-
 	const [, setShowRefundButton] = useState(false);
 	const [showCancelConfirm, setShowCancelConfirm] = useState(false);
-
 	const [showCancelProcessing, setShowCancelProcessing] = useState(false);
 	const [showCancelReady, setShowCancelReady] = useState(false);
-
 	const [, setError] = useState("");
 	const [users, setUsers] = useState<UserApiResponse[]>([]);
 	const [loading, setLoading] = useState(false);
@@ -86,7 +83,6 @@ export default function OrderDetails({
 	useEffect(() => {
 		fetchUsers();
 	}, []);
-	console.log("order", order);
 
 	const orderUser = users.find((user) => user.user_id === order.user_id);
 
@@ -116,10 +112,6 @@ export default function OrderDetails({
 	const totalQty = order.items.reduce((sum, item) => sum + item.quantity, 0);
 
 	// Total TTC des articles
-	// const totalTTC = order.items.reduce((sum, item) => {
-	// 	if (!item.article) return sum;
-	// 	return sum + item.article.price_ttc * item.quantity;
-	// }, 0);
 	const totalTTC = order.items.reduce(
 		(sum, item) => sum + item.price * item.quantity,
 		0,

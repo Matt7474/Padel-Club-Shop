@@ -69,8 +69,6 @@ export default function UserDetails({ user }: UserDetailsProps) {
 		handleDeleteOrder,
 	} = useOrderActions({ fetchOrders: fetchUserOrders, setSelectedOrder });
 
-	console.log("userOrders", userOrders);
-
 	// Variables dérivées
 	const hasOrders = userOrders.length > 0;
 	const userRole =

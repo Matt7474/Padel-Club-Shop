@@ -81,9 +81,27 @@ export default function Articles({
 		);
 	}
 
+	console.log(articles);
+
 	// --- Application des filtres ---
 	filteredArticles = filteredArticles.filter((article) => {
-		const price = Number(article.price_ttc);
+		// --- Détermination du prix effectif ---
+		let price = Number(article.price_ttc);
+
+		// Vérifie s’il y a une promo active
+		const activePromo = article.promotions?.find((promo: Promotion) => {
+			if (promo.status !== "active") return false;
+			const startDate = new Date(promo.start_date);
+			const endDate = new Date(promo.end_date);
+			return now >= startDate && now <= endDate;
+		});
+
+		// Si promo active → remplace par le prix réduit
+		if (activePromo?.discount_value) {
+			price = Number(activePromo.discount_value);
+		}
+
+		// --- Filtres existants ---
 		const matchBrand = filters.brand
 			? article.brand?.name === filters.brand
 			: true;
@@ -225,7 +243,7 @@ export default function Articles({
 					>
 						<option value="">Tous genres</option>
 						<option value="men">Homme</option>
-						<option value="women">Femme</option>
+						<option value="woman">Femme</option>
 						<option value="unisex">Unisexe</option>
 					</select>
 

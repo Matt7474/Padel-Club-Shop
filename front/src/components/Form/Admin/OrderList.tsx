@@ -43,11 +43,7 @@ export default function OrderList() {
 
 	useEffect(() => {
 		fetchOrders();
-		// // const interval = setInterval(fetchOrders, 300000);
-		// return () => clearInterval(interval);
 	}, []);
-
-	console.log("orders", orders);
 
 	const {
 		handleProcessingOrder,
@@ -57,9 +53,25 @@ export default function OrderList() {
 		handleCancelProcessing,
 		handleCancelReady,
 		handleCancelOrder,
-	} = useOrderActions({ fetchOrders, setSelectedOrder });
+	} = useOrderActions({
+		fetchOrders,
+		setSelectedOrder,
+		reference: selectedOrder?.reference,
+	});
 
 	const handleNavigate = () => navigate("/");
+
+	const statusFr: Record<
+		"paid" | "processing" | "ready" | "shipped" | "cancelled" | "refund",
+		string
+	> = {
+		paid: "Payé",
+		processing: "En cours de préparation",
+		ready: "Prête",
+		shipped: "Expédiée",
+		cancelled: "Annulée",
+		refund: "Remboursée",
+	};
 
 	const statusImages: Record<string, string> = {
 		paid: "/icons/invoice-check.svg",
@@ -136,7 +148,7 @@ export default function OrderList() {
 				Liste des Commandes
 			</h2>
 
-			<div className="grid grid-cols-[3fr_2fr_2fr_2fr] bg-gray-300 mt-4 mb-2 text-sm">
+			<div className="grid grid-cols-[3fr_2fr_2fr_2fr]  bg-gray-300 mt-4 mb-2 text-sm">
 				<button
 					type="button"
 					onClick={() => requestSort("reference")}
@@ -158,6 +170,13 @@ export default function OrderList() {
 				>
 					STATUT ↓
 				</button>
+				{/* <button
+					type="button"
+					onClick={() => requestSort("status")}
+					className="cursor-pointer hidden xl:block"
+				>
+					STATUT ↓
+				</button> */}
 				<button
 					type="button"
 					onClick={() => requestSort("created_at")}
@@ -167,6 +186,19 @@ export default function OrderList() {
 				</button>
 			</div>
 
+			{/* Legende couleur */}
+			<div className="flex justify-between">
+				<div className="flex gap-10 mb-4 justify-around xl:justify-start xl:ml-1">
+					<div className="gap-3 hidden xl:flex">
+						<span className="bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center -mt-1">
+							X
+						</span>
+						<p className="text-xs">
+							Nbr de ommandes non traités (status "payé")
+						</p>
+					</div>
+				</div>
+			</div>
 			{paginatedOrders.map((order) => (
 				<div key={order.order_id} className="relative">
 					<button
@@ -179,67 +211,77 @@ export default function OrderList() {
 							<p className="pl-1 text-xs text-center">
 								{order.items.reduce((sum, item) => sum + item.quantity, 0)}
 							</p>
-							<div className="flex justify-center xl:justify-start xl:ml-15  gap-2">
-								{order.status === "refund" && (
-									<div className="hidden xl:block justify-center">
-										<img
-											src={"/icons/invoice-cancelled.svg"}
-											alt={order.status}
-											className="w-7"
-										/>
-									</div>
-								)}
-								{order.status === "processing" && (
-									<div className="hidden xl:block justify-center">
-										<img
-											src={"/icons/invoice-check.svg"}
-											alt={order.status}
-											className="w-7"
-										/>
-									</div>
-								)}
-								{order.status === "ready" && (
-									<div className="hidden xl:flex justify-center gap-2">
-										<img
-											src={"/icons/invoice-check.svg"}
-											alt={order.status}
-											className="w-7"
-										/>
-										<img
-											src={"/icons/package.svg"}
-											alt={order.status}
-											className="w-7"
-										/>
-									</div>
-								)}
-								{order.status === "shipped" && (
-									<div className="hidden xl:flex justify-center gap-2">
-										<img
-											src={"/icons/invoice-check.svg"}
-											alt={order.status}
-											className="w-7"
-										/>
-										<img
-											src={"/icons/package.svg"}
-											alt={order.status}
-											className="w-7"
-										/>
-										<img
-											src={"/icons/package-check.svg"}
-											alt={order.status}
-											className="w-7"
-										/>
-									</div>
-								)}
-								<img
-									src={
-										statusImages[order.status as keyof typeof statusImages] ||
-										"/icons/default.svg"
-									}
-									alt={order.status}
-									className="w-7"
-								/>
+							{/* <div className="flex justify-center xl:justify-around xl:ml-15  gap-2">
+								<div className="flex justify-start"></div> */}
+							<div className="flex items-center gap-3 justify-center xl:justify-start xl:ml-6 xl:min-w-[150px]">
+								{/* Icônes de statut */}
+								<div className="flex items-center gap-2 xl:w-[150px]">
+									{order.status === "refund" && (
+										<div className="hidden xl:block justify-center">
+											<img
+												src={"/icons/invoice-cancelled.svg"}
+												alt={order.status}
+												className="w-7"
+											/>
+										</div>
+									)}
+									{order.status === "processing" && (
+										<div className="hidden xl:block justify-center">
+											<img
+												src={"/icons/invoice-check.svg"}
+												alt={order.status}
+												className="w-7"
+											/>
+										</div>
+									)}
+									{order.status === "ready" && (
+										<div className="hidden xl:flex justify-center gap-2">
+											<img
+												src={"/icons/invoice-check.svg"}
+												alt={order.status}
+												className="w-7"
+											/>
+											<img
+												src={"/icons/package.svg"}
+												alt={order.status}
+												className="w-7"
+											/>
+										</div>
+									)}
+									{order.status === "shipped" && (
+										<div className="hidden xl:flex justify-center gap-2">
+											<img
+												src={"/icons/invoice-check.svg"}
+												alt={order.status}
+												className="w-7"
+											/>
+											<img
+												src={"/icons/package.svg"}
+												alt={order.status}
+												className="w-7"
+											/>
+											<img
+												src={"/icons/package-check.svg"}
+												alt={order.status}
+												className="w-7"
+											/>
+										</div>
+									)}
+									<img
+										src={
+											statusImages[order.status as keyof typeof statusImages] ||
+											"/icons/default.svg"
+										}
+										alt={order.status}
+										className="w-7"
+									/>
+								</div>
+								<div className="text-xs hidden xl:block">
+									{statusFr[order.status as keyof typeof statusFr] ||
+										order.status}
+								</div>
 							</div>
+
 							<p className="pl-1 text-xs text-center">
 								{new Date(order.created_at).toLocaleDateString()}
 							</p>

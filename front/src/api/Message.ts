@@ -3,14 +3,13 @@ import { useAuthStore } from "../store/useAuthStore";
 import type { Message } from "../types/Messages";
 
 const API_URL = import.meta.env.VITE_API_URL;
-
+const authToken = useAuthStore.getState().token;
 const api = axios.create({
 	withCredentials: true,
 });
 
 // ---------------- Messages des utilisateurs ----------------
 export async function getAllUserMessages(): Promise<Message[]> {
-	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 
@@ -35,7 +34,6 @@ export async function getAllUserMessages(): Promise<Message[]> {
 
 // ---------------- Passage de "is_read" a true ----------------
 export const markMessagesAsRead = async (userId: number) => {
-	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour marquer les messages comme lus");
 
@@ -64,7 +62,6 @@ export const markMessagesAsRead = async (userId: number) => {
 
 // ---------------- Passage de "is_read" receiver a true ----------------
 export const markMessagesReceiverAsRead = async (userId: number) => {
-	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour marquer les messages comme lus");
 
@@ -93,7 +90,6 @@ export const markMessagesReceiverAsRead = async (userId: number) => {
 
 // ---------------- Messages d'un utilisateur ----------------
 export async function getUserMessages(userId: number): Promise<Message[]> {
-	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 
@@ -121,9 +117,8 @@ export async function sendUserMessage(payload: {
 	sender_id: number;
 	content: string;
 }): Promise<Message[]> {
-	const authToken = useAuthStore.getState().token;
-	if (!authToken) throw new Error("Token manquant pour envoyer le message");
-
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
 		const response = await api.post(`${API_URL}/message/user`, payload, {
 			headers: {
@@ -148,9 +143,8 @@ export async function sendAdminMessage(payload: {
 	user_id: number;
 	content: string;
 }): Promise<Message> {
-	const authToken = useAuthStore.getState().token;
-	if (!authToken) throw new Error("Token manquant pour envoyer le message");
-
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
 		const response = await api.post(`${API_URL}/message/admin`, payload, {
 			headers: {

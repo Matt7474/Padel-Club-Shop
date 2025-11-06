@@ -33,7 +33,7 @@ export default function Header() {
 	const unreadPersonalCount = personalMessages.filter((m) => !m.is_read).length;
 
 	const cart = useCartStore((state) => state.cart);
-	// Somme des quantités dans le panier
+
 	useEffect(() => {
 		const totalQuantity = cart.reduce<number>(
 			(acc, item) => acc + item.quantity,
@@ -42,108 +42,13 @@ export default function Header() {
 		setIsQuantity(totalQuantity);
 	}, [cart]);
 
-	// useEffect(() => {
-	// 	if (!isAuthenticated) {
-	// 		navigate("/");
-	// 	} else {
-	// 		const fetchLowStockArticles = async () => {
-	// 			try {
-	// 				const articles = await getArticles();
-	// 				let lowStock = 0;
-
-	// 				for (const article of articles) {
-	// 					let totalStock = 0;
-
-	// 					if (typeof article.stock_quantity === "number") {
-	// 						totalStock = article.stock_quantity;
-	// 					} else if (typeof article.stock_quantity === "object") {
-	// 						totalStock = Object.values(article.stock_quantity || {}).reduce(
-	// 							(acc: number, val) => acc + (val ?? 0),
-	// 							0,
-	// 						);
-	// 					}
-
-	// 					if (totalStock < 5) lowStock++;
-	// 				}
-
-	// 				setLowStockCount(lowStock);
-	// 			} catch (error) {
-	// 				console.error("Erreur lors de la récupération des stocks :", error);
-	// 			}
-	// 		};
-
-	// 		const fetchOrderPaid = async () => {
-	// 			try {
-	// 				const orders = await getOrders();
-	// 				const ordersPaid = orders.filter(
-	// 					(order: Order) => order.status === "paid",
-	// 				);
-	// 				setOrderPaid(ordersPaid.length);
-	// 			} catch (error) {
-	// 				console.error(
-	// 					"Erreur lors de la récupération des commandes :",
-	// 					error,
-	// 				);
-	// 			}
-	// 		};
-
-	// 		const fetchAllUnreadMessages = async () => {
-	// 			try {
-	// 				const messagesFromApi = await getAllUserMessages();
-
-	// 				const messagesParsed: Message[] = messagesFromApi.map((m) => ({
-	// 					...m,
-	// 					created_at: new Date(m.created_at),
-	// 					updated_at: new Date(m.updated_at),
-	// 				}));
-
-	// 				const unreadCount = messagesParsed.filter((m) => !m.is_read).length;
-
-	// 				setMessages(messagesParsed);
-	// 				setUnreadMessageCount(unreadCount);
-	// 			} catch (error) {
-	// 				console.error("Erreur lors de la récupération des messages :", error);
-	// 			}
-	// 		};
-	// 		const fetchUnreadFormMessages = async () => {
-	// 			try {
-	// 				const response = await getMessagesForm();
-	// 				const unread = response.data.filter(
-	// 					(message: IClientMessageForm) => message.is_read === false,
-	// 				).length;
-	// 				setUnreadFormCount(unread);
-	// 			} catch (error) {
-	// 				console.error("Erreur lors de la récupération des messages :", error);
-	// 			}
-	// 		};
-
-	// 		const fetchAll = async () => {
-	// 			await Promise.all([
-	// 				fetchAllUnreadMessages(),
-	// 				fetchUnreadFormMessages(),
-	// 				fetchOrderPaid(),
-	// 				fetchLowStockArticles(),
-	// 				fetchOrderPaid(),
-	// 				// fetchUnReadPersonalMessages(),
-	// 			]);
-	// 		};
-
-	// 		fetchAll();
-	// 		const interval = setInterval(fetchAll, 10000);
-	// 		return () => clearInterval(interval);
-	// 	}
-	// }, [isAuthenticated, navigate]);
-
 	const totalAlertCount =
 		unreadMessageCount +
 		unreadPersonalCount +
 		paidOrderCount +
-		// lowStockCount +
 		unreadFormCount +
 		orderPaid +
 		unreadMessage;
-
-	console.log("unreadPersonalCount", unreadPersonalCount);
 
 	const toggleMenu = () => {
 		setIsMenuOpen((prev) => !prev);
@@ -298,7 +203,7 @@ export default function Header() {
 								/>
 								{unreadPersonalCount > 0 && (
 									<div className="w-5 h-5 flex justify-center items-center rounded-full bg-red-500 text-white absolute text-[10px] font-semibold -top-2 -right-2 xl:-right-1">
-										{unreadPersonalCount > 99 ? "99+" : unreadPersonalCount}
+										{totalAlertCount > 99 ? "99+" : totalAlertCount}
 									</div>
 								)}
 							</div>

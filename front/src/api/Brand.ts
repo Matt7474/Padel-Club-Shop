@@ -1,21 +1,31 @@
 import axios from "axios";
 import api from "../api/api";
+import { useAuthStore } from "../store/useAuthStore";
 import type { Brand } from "../types/Article";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const authToken = useAuthStore.getState().token;
 
 export const createBrand = async (
 	data: FormData | { brandName: string; image_url: string },
 ) => {
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
+
 	try {
 		if (data instanceof FormData) {
-			const response = await api.post(`${API_URL}/brands`, data, {
-				headers: { "Content-Type": "multipart/form-data" },
+			const response = await axios.post(`${API_URL}/brands`, data, {
+				headers: {
+					Authorization: `Bearer ${authToken}`,
+				},
 			});
 			return response.data;
 		} else {
-			const response = await api.post(`${API_URL}/brands`, data, {
-				headers: { "Content-Type": "application/json" },
+			const response = await axios.post(`${API_URL}/brands`, data, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
 			});
 			return response.data;
 		}
@@ -42,7 +52,12 @@ export async function getBrands(): Promise<Brand[]> {
 
 export async function updateBrand(id: number, brand: Partial<Brand>) {
 	try {
-		const res = await api.patch(`${API_URL}/brands/${id}`, brand);
+		const res = await api.patch(`${API_URL}/brands/${id}`, brand, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
@@ -56,7 +71,12 @@ export async function updateBrand(id: number, brand: Partial<Brand>) {
 
 export async function deleteBrands(brandId: number): Promise<void> {
 	try {
-		await api.delete(`${API_URL}/brands/${brandId}`);
+		await api.delete(`${API_URL}/brands/${brandId}`, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authToken}`,
+			},
+		});
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
 			throw new Error(

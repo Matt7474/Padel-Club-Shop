@@ -12,8 +12,6 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export async function addArticle(article: NewArticle): Promise<Article> {
 	try {
-		console.log("🚀 Body envoyé au serveur :", article);
-
 		const res = await api.post(`${API_URL}/articles`, article, {
 			headers: { "Content-Type": "application/json" },
 		});
@@ -32,9 +30,7 @@ export async function addArticle(article: NewArticle): Promise<Article> {
 export async function getArticles(): Promise<Article[]> {
 	const API_URL = import.meta.env.VITE_API_URL;
 	try {
-		// const token = getAuthToken();
 		const res = await api.get(`${API_URL}/articles/`);
-
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
@@ -49,8 +45,6 @@ export async function getArticles(): Promise<Article[]> {
 export async function getArticleById(id: number): Promise<Article> {
 	try {
 		const res = await api.get(`${API_URL}/articles/id/${id}`);
-		console.log("id", id);
-
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
@@ -94,10 +88,7 @@ export async function getArticlesType(type?: string): Promise<Article[]> {
 
 export async function deleteArticleById(id: number): Promise<Article> {
 	try {
-		console.log("deleteArticleById", id);
-
 		const res = await api.patch(`${API_URL}/articles/archive/${id}`);
-
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
@@ -146,7 +137,6 @@ export async function updateArticle(
 	updatedData: Partial<NewArticle>,
 ) {
 	try {
-		console.log("📤 Données envoyées :", updatedData);
 		const response = await api.patch(`${API_URL}/articles/${id}`, updatedData, {
 			headers: {
 				"Content-Type": "application/json",

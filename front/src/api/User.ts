@@ -5,6 +5,13 @@ import type { AuthResponse } from "../types/AuthResponse";
 import type { CreateUser, User, UserApiResponse } from "../types/User";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const authToken = useAuthStore.getState().token;
+
+interface requestPasswordProps {
+	email: string;
+	password: string;
+	token: string;
+}
 
 // registerUser
 export async function createUser(newUser: CreateUser): Promise<User> {
@@ -85,11 +92,6 @@ export async function requestResetPassword(payload: { email: string }) {
 	}
 }
 // 2. Requete pour le changement de mot de passe
-interface requestPasswordProps {
-	email: string;
-	password: string;
-	token: string;
-}
 export async function requestPassword({
 	email,
 	password,
@@ -126,8 +128,6 @@ export async function getUserById(
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 
-	console.log("getUserById", id);
-
 	try {
 		const res = await api.get<UserApiResponse>(`${API_URL}/user/${id}`, {
 			headers: {
@@ -155,13 +155,13 @@ export async function getUserById(
 
 // getAllUsers
 export async function getAllUsers(): Promise<UserApiResponse[]> {
-	const token = useAuthStore.getState().token;
-
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
 		const res = await api.get<UserApiResponse[]>(`${API_URL}/user/`, {
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${authToken}`,
 			},
 		});
 
@@ -187,13 +187,13 @@ export async function updateUser(
 	id: number,
 	updatedData: Partial<User>,
 ): Promise<User> {
-	const token = useAuthStore.getState().token;
-
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
 		const res = await api.patch<User>(`${API_URL}/user/${id}`, updatedData, {
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${authToken}`,
 			},
 		});
 		return res.data;
@@ -209,7 +209,8 @@ export async function updateUser(
 
 // updateUserRole
 export async function updateUserRole(userId: number, roleId: number) {
-	const token = useAuthStore.getState().token;
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
 		const res = await api.patch(
 			`${API_URL}/user/role/${userId}`,
@@ -217,7 +218,7 @@ export async function updateUserRole(userId: number, roleId: number) {
 			{
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
+					Authorization: `Bearer ${authToken}`,
 				},
 			},
 		);
@@ -234,12 +235,12 @@ export async function updateUserRole(userId: number, roleId: number) {
 
 // deleteUser
 export async function deleteUser(id: number): Promise<void> {
-	const token = useAuthStore.getState().token;
-
+	if (!authToken)
+		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
 		await api.delete(`${API_URL}/user/${id}`, {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${authToken}`,
 			},
 		});
 	} catch (err: unknown) {
