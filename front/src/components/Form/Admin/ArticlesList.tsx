@@ -127,7 +127,6 @@ export default function ArticlesList() {
 	};
 
 	const getRowBgClass = (quantity: number) => {
-		console.log("quantity", quantity);
 		if (quantity <= 5) return "bg-red-100 hover:bg-red-200";
 		if (quantity <= 15) return "bg-orange-100 hover:bg-orange-200";
 		return "bg-transparent hover:bg-gray-100";
@@ -283,7 +282,7 @@ export default function ArticlesList() {
 						<div className="bg-red-200 w-8 h-2.5 mt-1 " />
 						<p className="text-xs">&lt; 6 restant</p>
 					</div>
-					<div className="flex gap-3">
+					<div className="gap-3 hidden xl:flex">
 						<span className="bg-yellow-500 text-black text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center -mt-1">
 							!
 						</span>
@@ -297,7 +296,9 @@ export default function ArticlesList() {
 					</div> */}
 				</div>
 				<div>
-					<p className="font-semibold mr-1">{articles.length} articles</p>
+					<p className="text-sm xl:font-semibold mr-1">
+						{articles.length} articles
+					</p>
 				</div>
 			</div>
 			{/* Liste d’articles */}

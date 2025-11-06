@@ -1,5 +1,6 @@
 import axios from "axios";
 import api from "../api/api";
+import { useAuthStore } from "../store/useAuthStore";
 import type Article from "../types/Article";
 import type {
 	NewArticle,
@@ -9,11 +10,15 @@ import type {
 } from "../types/Article";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const authToken = useAuthStore.getState().token;
 
 export async function addArticle(article: NewArticle): Promise<Article> {
 	try {
 		const res = await api.post(`${API_URL}/articles`, article, {
-			headers: { "Content-Type": "application/json" },
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${authToken}`,
+			},
 		});
 
 		return res.data;
@@ -87,8 +92,19 @@ export async function getArticlesType(type?: string): Promise<Article[]> {
 }
 
 export async function deleteArticleById(id: number): Promise<Article> {
+	console.log("authToken", authToken);
+
 	try {
-		const res = await api.patch(`${API_URL}/articles/archive/${id}`);
+		const res = await api.patch(
+			`${API_URL}/articles/archive/${id}`,
+			{},
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
+			},
+		);
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
@@ -102,8 +118,16 @@ export async function deleteArticleById(id: number): Promise<Article> {
 
 export async function restoreArticleById(id: number): Promise<Article> {
 	try {
-		const res = await api.patch(`${API_URL}/articles/restore/${id}`);
-
+		const res = await api.patch(
+			`${API_URL}/articles/restore/${id}`,
+			{},
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
+			},
+		);
 		return res.data;
 	} catch (err: unknown) {
 		if (axios.isAxiosError(err)) {
@@ -140,6 +164,7 @@ export async function updateArticle(
 		const response = await api.patch(`${API_URL}/articles/${id}`, updatedData, {
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${authToken}`,
 			},
 		});
 
@@ -172,7 +197,10 @@ export async function uploadArticleImages(
 			`${API_URL}/articles/${articleId}/images`,
 			formData,
 			{
-				headers: { "Content-Type": "multipart/form-data" },
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: `Bearer ${authToken}`,
+				},
 			},
 		);
 
@@ -197,7 +225,10 @@ export async function addTechRatings(articleId: number, ratings: TechRatings) {
 			`${API_URL}/articles/${articleId}/ratings`,
 			ratings,
 			{
-				headers: { "Content-Type": "application/json" },
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
 			},
 		);
 		console.log("🔢 Notes ajoutés :", res.data);
@@ -224,7 +255,10 @@ export async function updateTechRatings(
 			`${API_URL}/articles/${articleId}/ratings`,
 			ratings,
 			{
-				headers: { "Content-Type": "application/json" },
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${authToken}`,
+				},
 			},
 		);
 		console.log("🔢 Notes modifiés :", res.data);
