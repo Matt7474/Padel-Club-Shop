@@ -26,6 +26,14 @@ export const useNotificationStore = create<NotificationState>((set) => ({
 
 	fetchNotifications: async () => {
 		try {
+			// Vérifier si le token existe avant d'appeler les APIs
+			const token = localStorage.getItem("token"); // Ou votre méthode de récupération du token
+
+			if (!token) {
+				console.warn("Token manquant, skip fetch notifications");
+				return;
+			}
+
 			const [articles, orders, messagesFromApi, formMessagesRes] =
 				await Promise.all([
 					getArticles(),

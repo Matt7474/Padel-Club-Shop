@@ -148,7 +148,7 @@ export default function Header() {
 									className={`w-7 h-7 transition-transform duration-200 text-yellow-600`}
 								/>
 								{totalAlertCount > 0 && (
-									<div className="w-5 h-5 flex justify-center items-center rounded-full bg-red-500 text-white absolute text-[10px] font-semibold -top-2 -right-2 xl:-right-1">
+									<div className="w-5 h-5 hidden xl:flex justify-center items-center rounded-full bg-red-500 text-white absolute text-[10px] font-semibold -top-2 -right-2 xl:-right-1">
 										{totalAlertCount > 99 ? "99+" : totalAlertCount}
 									</div>
 								)}
@@ -166,7 +166,7 @@ export default function Header() {
 									className={`w-7 h-7 transition-transform duration-200 text-gray-800`}
 								/>
 								{totalAlertCount > 0 && (
-									<div className="w-5 h-5 flex justify-center items-center rounded-full bg-red-500 text-white absolute text-[10px] font-semibold -top-2 -right-2 xl:-right-1">
+									<div className="w-5 h-5 hidden xl:flex justify-center items-center rounded-full bg-red-500 text-white absolute text-[10px] font-semibold -top-2 -right-2 xl:-right-1">
 										{totalAlertCount > 99 ? "99+" : totalAlertCount}
 									</div>
 								)}
@@ -184,7 +184,7 @@ export default function Header() {
 									className={`w-7 h-7 transition-transform duration-200 text-gray-800`}
 								/>
 								{unreadPersonalCount > 0 && (
-									<div className="w-5 h-5 flex justify-center items-center rounded-full bg-red-500 text-white absolute text-[10px] font-semibold -top-2 -right-2 xl:-right-1">
+									<div className="w-5 h-5 hidden xl:flex justify-center items-center rounded-full bg-red-500 text-white absolute text-[10px] font-semibold -top-2 -right-2 xl:-right-1">
 										{unreadPersonalCount > 99 ? "99+" : unreadPersonalCount}
 									</div>
 								)}
@@ -202,7 +202,7 @@ export default function Header() {
 									className={`w-7 h-7 transition-transform duration-200 text-gray-800`}
 								/>
 								{totalAlertCount > 0 && (
-									<div className="w-5 h-5 flex justify-center items-center rounded-full bg-red-500 text-white absolute text-[10px] font-semibold -top-2 -right-2 xl:-right-1">
+									<div className="w-5 h-5 hidden xl:flex justify-center items-center rounded-full bg-red-500 text-white absolute text-[10px] font-semibold -top-2 -right-2 xl:-right-1">
 										{totalAlertCount > 99 ? "99+" : totalAlertCount}
 									</div>
 								)}
