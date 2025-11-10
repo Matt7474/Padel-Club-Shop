@@ -1,0 +1,65 @@
+name: Deploy Front and Back
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy-front:
+    name: Déploiement Front sur o2switch
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout du dépôt
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 📥 Installer PNPM
+        run: npm install -g pnpm
+
+      - name: 📁 Installer les dépendances front
+        working-directory: ./front
+        run: pnpm install
+
+      - name: 🛠️ Build du front
+        working-directory: ./front
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+        run: pnpm run build
+
+      - name: 📤 Déployer vers o2switch via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./front/dist/
+          server-dir: public_html/pince/
+
+  deploy-back:
+    name: Déploiement Back sur Ionos
+    runs-on: ubuntu-latest
+    needs: deploy-front
+    
+
+    steps:
+      - name: 📦 Checkout du dépôt
+        uses: actions/checkout@v4
+
+      - name: 🔐 Préparer la connexion SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 217.154.15.118 >> ~/.ssh/known_hosts
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: 🚀 Lancer le script deploy.sh localement
+        run: ./deploy.sh

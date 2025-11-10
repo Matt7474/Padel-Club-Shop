@@ -46,7 +46,7 @@ export default function ProgressBar({ progress }: ProgressBarProps) {
 						progress >= max ? "text-green-600" : "text-gray-800"
 					}`}
 				>
-					{progress >= max ? "OFFERTE" : "6,90 €"}
+					{progress === 0 ? "-" : progress >= max ? "OFFERTE" : "6,90 €"}
 				</p>
 			</div>
 		</div>

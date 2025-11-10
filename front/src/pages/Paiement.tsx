@@ -459,12 +459,16 @@ export default function Paiement() {
 									</p>
 									<p
 										className={`font-semibold text-gray-700 ${
-											shippingCost === 0 ? "text-green-600" : ""
+											shippingCost === 0 && cart.length > 0
+												? "text-green-600"
+												: ""
 										}`}
 									>
-										{shippingCost === 0
-											? "OFFERTE"
-											: `${shippingCost.toFixed(2)} €`}
+										{cart.length === 0
+											? "-" // ou ""
+											: shippingCost === 0
+												? "OFFERTE"
+												: `${shippingCost.toFixed(2)} €`}
 									</p>
 								</div>
 

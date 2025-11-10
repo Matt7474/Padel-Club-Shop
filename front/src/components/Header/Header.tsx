@@ -198,10 +198,10 @@ export default function Header() {
 							className="w-6 hover:cursor-pointer xl:mt-2 2xl:w-8 2xl:mr-4"
 						>
 							<div className="relative">
-								<User
+								<UserStar
 									className={`w-7 h-7 transition-transform duration-200 text-gray-800`}
 								/>
-								{unreadPersonalCount > 0 && (
+								{totalAlertCount > 0 && (
 									<div className="w-5 h-5 flex justify-center items-center rounded-full bg-red-500 text-white absolute text-[10px] font-semibold -top-2 -right-2 xl:-right-1">
 										{totalAlertCount > 99 ? "99+" : totalAlertCount}
 									</div>

@@ -86,9 +86,9 @@ INSERT INTO articles (article_id, type, name, description, reference, brand_id, 
 
 (17, 'clothing', 'Adidas Club Tee Climacool', 'Le t-shirt « Adidas Club Tee Climacool » est conçu pour les joueuses de padel recherchant confort et performance. Fabriqué en tissu léger et respirant, il intègre la technologie AEROREADY qui évacue efficacement la transpiration pour rester au sec tout au long du match. Sa coupe féminine légèrement cintrée assure une grande liberté de mouvement, tandis que ses empiècements en mesh sous les bras favorisent une meilleure ventilation. Idéal pour les entraînements comme pour la compétition, ce modèle allie style et technicité avec son coloris rose dynamique et ses finitions sportives typiques d’Adidas.', 'REF-809006', 1, 35.90, 1, 'available', 4.99, '{"fit":"XS:37,S:44,M:39,L:28,XL:21,2XL:3,3XL:0,4XL:0","type":"t-shirt","color":"Rose","gender":"woman","material":"Polyester 100% recyclé"}', '2025-10-30'),
 
-(18, 'clothing', 'Adidas Club Tee', 'Le t-shirt « Adidas Club Tee » allie confort, respirabilité et style pour les joueuses de padel. Conçu avec la technologie AEROREADY, il évacue efficacement la transpiration pour rester au sec pendant les entraînements et les matchs. Sa coupe féminine et légèrement cintrée assure une liberté de mouvement optimale, tandis que les empiècements en mesh sur les côtés et au dos améliorent la ventilation. Polyvalent et élégant, il se porte facilement avec d’autres vêtements Adidas pour un look sportif complet.', 'REF-241658', 1, 44.50, 1, 'available', 4.99, '{"fit":"XS:48,S:73,M:45,L:35,XL:22,2XL:12,3XL:3,4XL:0","type":"t-shirt","color":"Blanc","gender":"woman","material":"Polyester 100% recyclé"}', '2025-10-30'),
+(18, 'clothing', 'Adidas Club Tee', 'Le t-shirt « Adidas Club Tee » allie confort, respirabilité et style pour les joueuses de padel. Conçu avec la technologie AEROREADY, il évacue efficacement la transpiration pour rester au sec pendant les entraînements et les matchs. Sa coupe féminine et légèrement cintrée assure une liberté de mouvement optimale, tandis que les empiècements en mesh sur les côtés et au dos améliorent la ventilation. Polyvalent et élégant, il se porte facilement avec d’autres vêtements Adidas pour un look sportif complet.', 'REF-241658', 1, 44.50, 1, 'available', 4.99, '{"fit":"XS:48,S:73,M:45,L:35,XL:22,2XL:12,3XL:3,4XL:0","type":"t-shirt","color":"Blanc","gender":"woman","material":"Polyester 100% recyclé avec technologie AEROREADY et inserts en mesh respirant"}', '2025-10-30'),
 
-(19, 'clothing', 'Tecnifibre Team Tech Tee', 'Le t-shirt « Tecnifibre Team Tech Tee » est conçu pour les joueurs exigeants qui recherchent performance et confort sur le court. Fabriqué en polyester léger et respirant avec zones de ventilation stratégiques, il évacue efficacement la transpiration et assure une grande liberté de mouvement grâce à sa coupe ergonomique. Idéal pour l’entraînement quotidien et les matchs intenses, ce tee-shirt offre un style sobre et professionnel, parfaitement adapté aux couleurs de l’équipe.', 'REF-307480', 12, 29.90, 1, 'available', 4.99, '{"fit":"XS:5,S:32,M:56,L:54,XL:38,2XL:39,3XL:12,4XL:12","type":"t-shirt","color":"Bleu marine","gender":"men","material":"Polyester 100%"}', '2025-10-30'),
+(19, 'clothing', 'Tecnifibre Team Tech Tee', 'Le t-shirt « Tecnifibre Team Tech Tee » est conçu pour les joueurs exigeants qui recherchent performance et confort sur le court. Fabriqué en polyester léger et respirant avec zones de ventilation stratégiques, il évacue efficacement la transpiration et assure une grande liberté de mouvement grâce à sa coupe ergonomique. Idéal pour l’entraînement quotidien et les matchs intenses, ce tee-shirt offre un style sobre et professionnel, parfaitement adapté aux couleurs de l’équipe.', 'REF-307480', 12, 29.90, 1, 'available', 4.99, '{"fit":"XS:5,S:32,M:56,L:54,XL:38,2XL:39,3XL:12,4XL:12","type":"t-shirt","color":"Bleu marine","gender":"men","material":"Polyester 100% respirant"}', '2025-10-30'),
 
 (20, 'clothing', 'Tecnifibre Training Tee', 'Le t-shirt « Tecnifibre Training Tee » est parfait pour l’entraînement intensif. Conçu avec un tissu doux et léger en polyester, il assure un confort optimal tout en évacuant l’humidité pour rester sec même pendant les sessions les plus longues. Sa coupe classique et son design épuré blanc permettent une grande liberté de mouvement et une parfaite combinaison avec tous les shorts et pantalons Tecnifibre.', 'REF-123045', 12, 24.90, 1, 'available', 4.99, '{"fit":"XS:12,S:27,M:55,L:45,XL:56,2XL:42,3XL:9,4XL:0","type":"t-shirt","color":"Blanc","gender":"men","material":"Polyester 100% léger et respirant avec finition anti-transpiration"}', '2025-10-30'),
 
@@ -272,7 +272,7 @@ Conditions générales :
 
 (3, '🎄 Noël', '🎄 Noël 2025 – Des Offres Magiques pour des Fêtes Sportives !  
 Célébrez la magie de Noël avec Padel Club Shop et découvrez des promotions féériques sur nos produits stars. 🎁  
-Du 1er au 31 décembre, profitez de remises exclusives pour préparer vos cadeaux ou vous offrir ce dont vous rêviez toute l’année.  
+Du 3 au 26 décembre, profitez de remises exclusives pour préparer vos cadeaux ou vous offrir ce dont vous rêviez toute l’année.  
 
 ✨ Au programme :  
 - Jusqu’à -50 % sur une sélection spéciale “Noël”.  
@@ -280,12 +280,12 @@ Du 1er au 31 décembre, profitez de remises exclusives pour préparer vos cadeau
 - Offres automatiques, sans code promo à entrer.  
 
 Conditions générales :  
-- Offres valables du 1er au 31 décembre 2025 inclus.  
+- Offres valables du 3 au 26 décembre 2025 inclus.  
 - Dans la limite des stocks disponibles.  
 - Non cumulable avec d’autres promotions ou codes de réduction.  
 - Valable en ligne et en magasin.  
 
-Offrez (ou offrez-vous) le plaisir du jeu, et faites de ce Noël un moment inoubliable sur le court ! 🌟', '2025-12-01', '2025-12-31', 'active'),
+Offrez (ou offrez-vous) le plaisir du jeu, et faites de ce Noël un moment inoubliable sur le court ! 🌟', '2025-12-03', '2025-12-26', 'active'),
 
 (4, '🖤 Black November', '🖤 Black November – Un mois entier de bonnes affaires !  
 Le mois de novembre s’annonce explosif avec des réductions exceptionnelles chaque semaine.  

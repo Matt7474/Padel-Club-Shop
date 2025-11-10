@@ -19,11 +19,11 @@ export default function CartModal({ closeCart }: { closeCart: () => void }) {
 	);
 
 	const total =
-		totalWithoutShipping > 69
-			? totalWithoutShipping
-			: totalWithoutShipping + 6.9;
-
-	console.log("🧺 Cart content:", cart);
+		cart.length === 0
+			? 0
+			: totalWithoutShipping > 69
+				? totalWithoutShipping
+				: totalWithoutShipping + 6.9;
 
 	const showConfirm = () => {
 		if (cart.length > 0) {
@@ -82,7 +82,9 @@ export default function CartModal({ closeCart }: { closeCart: () => void }) {
 				<ProgressBar progress={totalWithoutShipping} />
 				<div className="flex justify-between my-2">
 					<p className="font-semibold text-2xl">TOTAL</p>
-					<p className="font-semibold text-2xl">{total.toFixed(2)} €</p>
+					<p className="font-semibold text-2xl">
+						{total.toFixed(2)} €{cart.length === 0 && ""}
+					</p>
 				</div>
 				<button
 					type="button"

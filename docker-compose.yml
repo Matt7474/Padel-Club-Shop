@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  api:
+    build: ./back
+    container_name: pcs_api
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./back/.env.production
+    depends_on:
+      - pg16
+    volumes:
+      - ./uploads:/app/uploads
+    networks:
+      - pcs_net
+
+  pg16:
+    image: postgres:16
+    container_name: pcs_pg16
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+      - ./back/data/create.sql:/docker-entrypoint-initdb.d/create.sql:ro
+      - ./back/data/seed.sql:/docker-entrypoint-initdb.d/seed.sql:ro
+    ports:
+      - "5436:5432"
+    networks:
+      - pcs_net
+
+networks:
+  pcs_net:
+    driver: bridge

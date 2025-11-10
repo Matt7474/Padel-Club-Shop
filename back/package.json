@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"main": "index.js",
 	"scripts": {
+		"clean": "rm -rf dist",
+		"build": "npm run clean && tsc",
+		"copy-swagger": "mkdir -p dist/src && cp -r src/swagger dist/src/swagger",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "cross-env NODE_ENV=dev pnpm nodemon --exec ts-node index.ts",
 		"start": "node dist/index.js",
