@@ -3,10 +3,12 @@ import { useAuthStore } from "../store/useAuthStore";
 import type { CartItem } from "../types/Cart";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const authToken = useAuthStore.getState().token;
 
 // Crée la session de paiement Stripe
 export const createPaymentIntent = async (cartItems: CartItem[]) => {
+	const authToken = useAuthStore.getState().token;
+	console.log("authToken", authToken);
+
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {

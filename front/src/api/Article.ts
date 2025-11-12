@@ -10,9 +10,9 @@ import type {
 } from "../types/Article";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const authToken = useAuthStore.getState().token;
 
 export async function addArticle(article: NewArticle): Promise<Article> {
+	const authToken = useAuthStore.getState().token;
 	try {
 		const res = await api.post(`${API_URL}/articles`, article, {
 			headers: {
@@ -92,6 +92,7 @@ export async function getArticlesType(type?: string): Promise<Article[]> {
 }
 
 export async function deleteArticleById(id: number): Promise<Article> {
+	const authToken = useAuthStore.getState().token;
 	console.log("authToken", authToken);
 
 	try {
@@ -117,6 +118,7 @@ export async function deleteArticleById(id: number): Promise<Article> {
 }
 
 export async function restoreArticleById(id: number): Promise<Article> {
+	const authToken = useAuthStore.getState().token;
 	try {
 		const res = await api.patch(
 			`${API_URL}/articles/restore/${id}`,
@@ -160,6 +162,7 @@ export async function updateArticle(
 	id: number,
 	updatedData: Partial<NewArticle>,
 ) {
+	const authToken = useAuthStore.getState().token;
 	try {
 		const response = await api.patch(`${API_URL}/articles/${id}`, updatedData, {
 			headers: {
@@ -187,6 +190,7 @@ export async function uploadArticleImages(
 	articleId: number,
 	images: { file: File }[],
 ): Promise<void> {
+	const authToken = useAuthStore.getState().token;
 	try {
 		const formData = new FormData();
 		images.forEach((img) => {
@@ -220,6 +224,7 @@ export async function uploadArticleImages(
 
 // Créer les notes pour une raquette
 export async function addTechRatings(articleId: number, ratings: TechRatings) {
+	const authToken = useAuthStore.getState().token;
 	try {
 		const res = await api.post(
 			`${API_URL}/articles/${articleId}/ratings`,
@@ -250,6 +255,7 @@ export async function updateTechRatings(
 	articleId: number,
 	ratings: TechRatings,
 ) {
+	const authToken = useAuthStore.getState().token;
 	try {
 		const res = await api.patch(
 			`${API_URL}/articles/${articleId}/ratings`,

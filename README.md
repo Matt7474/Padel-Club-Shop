@@ -6,7 +6,7 @@
 
 ## 🌐 Stack Technique
 
-- **Frontend** : React + Vite + TailwindCSS  
+- **Frontend** : React + TypeScript + TailwindCSS  
 - **Backend** : Node.js + Express + TypeScript  
 - **Base de données** : PostgreSQL  
 - **ORM** : Sequelize  
@@ -14,7 +14,7 @@
 - **Déploiement** :
   - Frontend : o2switch  
   - Backend + Base de données : IONOS  
-- **Architecture** : Monorepo (frontend + backend dans le même dépôt)
+- **Architecture** : Monorepo
 
 ---
 
@@ -39,6 +39,7 @@
 
 ### Espace utilisateur
 - Profil complet  
+- Messagerie instantanée vers un admin
 - Historique des commandes et factures  
 - Gestion des adresses de livraison et facturation  
 
@@ -96,4 +97,4 @@ PCS (Monorepo)
 ### 📝 Notes sur le mode démo
 
 Permet de tester l’application sans impacter les données réelles   
-Réinitialise automatiquement les données de test.
+Réinitialise quotidiennement les données de test apres une sauvegarde.

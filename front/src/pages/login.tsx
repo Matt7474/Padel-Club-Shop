@@ -56,7 +56,7 @@ export default function Login() {
 			login(transformedUser, token);
 
 			addToast(`Bienvenue ${fullUser.first_name}`, "bg-green-500");
-			navigate("/");
+			window.location.href = "/";
 		} catch (error: unknown) {
 			if (error instanceof Error) {
 				console.error("❌ Erreur front :", error.message);

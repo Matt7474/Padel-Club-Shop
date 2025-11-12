@@ -4,11 +4,11 @@ import { useAuthStore } from "../store/useAuthStore";
 import type { Brand } from "../types/Article";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const authToken = useAuthStore.getState().token;
 
 export const createBrand = async (
 	data: FormData | { brandName: string; image_url: string },
 ) => {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 
@@ -51,6 +51,7 @@ export async function getBrands(): Promise<Brand[]> {
 }
 
 export async function updateBrand(id: number, brand: Partial<Brand>) {
+	const authToken = useAuthStore.getState().token;
 	try {
 		const res = await api.patch(`${API_URL}/brands/${id}`, brand, {
 			headers: {
@@ -70,6 +71,7 @@ export async function updateBrand(id: number, brand: Partial<Brand>) {
 }
 
 export async function deleteBrands(brandId: number): Promise<void> {
+	const authToken = useAuthStore.getState().token;
 	try {
 		await api.delete(`${API_URL}/brands/${brandId}`, {
 			headers: {

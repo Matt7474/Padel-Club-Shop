@@ -4,13 +4,13 @@ import type { CartItem } from "../types/Cart";
 import type { getMyOrdersProps, Order } from "../types/Order";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const authToken = useAuthStore.getState().token;
 const userId = useAuthStore.getState().user?.id;
 
 export async function createOrderAndUpdateStock(
 	cart: CartItem[],
 	paymentIntentId: string,
 ) {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
@@ -45,6 +45,7 @@ export async function createOrderAndUpdateStock(
 }
 
 export async function getOrders(): Promise<Order[]> {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer les commandes");
 	try {
@@ -67,6 +68,7 @@ export async function getOrders(): Promise<Order[]> {
 }
 
 export async function getMyOrders(): Promise<getMyOrdersProps[]> {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
@@ -92,6 +94,7 @@ export async function getMyOrders(): Promise<getMyOrdersProps[]> {
 }
 
 export async function deleteOrder(id: number) {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
@@ -116,6 +119,7 @@ export async function deleteOrder(id: number) {
 }
 
 export async function updateOrderStatus(id: number, status: string) {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	if (!id) throw new Error("Commande non identifiée");
@@ -145,6 +149,7 @@ export async function updateOrderStatus(id: number, status: string) {
 }
 
 export async function refundOrder(id: number) {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	if (!id) throw new Error("Commande non identifiée");

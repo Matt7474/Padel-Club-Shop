@@ -122,31 +122,39 @@ export const stripeWebhook = [
 export const stripeWebhookProd = [
 	bodyParser.raw({ type: "application/json" }),
 	(req: Request, res: Response) => {
-		const sig = req.headers["stripe-signature"] as string;
-		const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+		const sig = req.headers["stripe-signature"] as string | undefined;
+		const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 		let event: Stripe.Event;
 
-		try {
-			event = stripe.webhooks.constructEvent(
-				req.body as Buffer,
-				sig,
-				webhookSecret,
-			);
-		} catch (err: any) {
-			console.error("❌ Webhook signature failed:", err.message);
-			return res.status(400).send(`Webhook Error: ${err.message}`);
+		if (!sig) {
+			console.warn("⚠️ Stripe signature manquante dans l'en-tête");
+			return res.status(400).send("Stripe signature missing");
 		}
 
+		try {
+			if (webhookSecret) {
+				event = stripe.webhooks.constructEvent(
+					req.body as Buffer,
+					sig,
+					webhookSecret,
+				);
+			} else {
+				console.warn(
+					"⚠️ STRIPE_WEBHOOK_SECRET non défini, signature non vérifiée",
+				);
+				event = req.body as Stripe.Event;
+			}
+		} catch (error: unknown) {
+			console.error("❌ Webhook signature failed:", error);
+			return res.status(400).send(`Webhook Error: ${error}`);
+		}
+
+		// Gestion des événements Stripe
 		switch (event.type) {
 			case "payment_intent.succeeded":
 				console.log("✅ Payment succeeded:", event.data.object.id);
-				// TODO: Traiter la commande
 				break;
 			case "payment_intent.payment_failed":
-				console.log(
-					"❌ Payment failed:",
-					event.data.object.last_payment_error?.message,
-				);
 				break;
 			default:
 				console.log(`ℹ️ Unhandled event type ${event.type}`);

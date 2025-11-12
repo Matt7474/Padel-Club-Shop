@@ -4,7 +4,6 @@ import { useAuthStore } from "../store/useAuthStore";
 import type { Promo } from "../types/Promotions";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const authToken = useAuthStore.getState().token;
 
 export async function getPromotion(): Promise<Promo[]> {
 	try {
@@ -27,6 +26,7 @@ export async function createPromo(promo: {
 	start_date: string;
 	end_date: string;
 }): Promise<Promo> {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
@@ -56,6 +56,7 @@ export async function updatePromo(
 		end_date: string;
 	},
 ): Promise<Promo> {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
@@ -81,6 +82,7 @@ export async function updatePromo(
 }
 
 export async function deletePromoById(id: number) {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {

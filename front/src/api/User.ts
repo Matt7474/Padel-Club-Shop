@@ -5,7 +5,6 @@ import type { AuthResponse } from "../types/AuthResponse";
 import type { CreateUser, User, UserApiResponse } from "../types/User";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const authToken = useAuthStore.getState().token;
 
 interface requestPasswordProps {
 	email: string;
@@ -155,6 +154,7 @@ export async function getUserById(
 
 // getAllUsers
 export async function getAllUsers(): Promise<UserApiResponse[]> {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
@@ -187,6 +187,7 @@ export async function updateUser(
 	id: number,
 	updatedData: Partial<User>,
 ): Promise<User> {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
@@ -209,6 +210,7 @@ export async function updateUser(
 
 // updateUserRole
 export async function updateUserRole(userId: number, roleId: number) {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
@@ -235,6 +237,7 @@ export async function updateUserRole(userId: number, roleId: number) {
 
 // deleteUser
 export async function deleteUser(id: number): Promise<void> {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {

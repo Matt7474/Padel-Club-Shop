@@ -2,7 +2,6 @@ import axios from "axios";
 import api from "../api/api";
 import { useAuthStore } from "../store/useAuthStore";
 
-const authToken = useAuthStore.getState().token;
 const API_URL = import.meta.env.VITE_API_URL;
 
 interface ContactFormData {
@@ -50,6 +49,7 @@ export async function sendContactForm(data: ContactFormData) {
 }
 
 export async function getMessagesForm() {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
@@ -71,6 +71,7 @@ export async function getMessagesForm() {
 }
 
 export async function markMessageAsRead(id: number) {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
@@ -103,6 +104,7 @@ export async function markMessageAsRead(id: number) {
 }
 
 export async function responseMessage(id: number, response: string) {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
@@ -135,6 +137,7 @@ export async function responseMessage(id: number, response: string) {
 }
 
 export async function deleteMessage(id: number) {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
@@ -161,6 +164,7 @@ export async function deleteMessage(id: number) {
 }
 
 export async function restoreMessage(id: number) {
+	const authToken = useAuthStore.getState().token;
 	if (!authToken)
 		throw new Error("Token manquant pour récupérer l'utilisateur");
 	try {
