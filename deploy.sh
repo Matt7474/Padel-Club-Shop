@@ -1,35 +1,27 @@
 #!/bin/bash
-set -e  # Stop en cas d'erreur
 
 ARCHIVE_NAME="pcs-stack.tar.gz"
 REMOTE_USER="root"
 REMOTE_HOST="217.154.15.118"
-REMOTE_DIR="/root/pcs-stack"
-SSH_KEY_PATH="$HOME/.ssh/id_rsa"
+REMOTE_DIR="/srv/pcs"   # <- changer ici
 
 echo "🚀 Déploiement de $ARCHIVE_NAME vers $REMOTE_HOST..."
 
-# Envoi de l’archive
-scp -i $SSH_KEY_PATH -o StrictHostKeyChecking=no $ARCHIVE_NAME $REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR/
+# créer le dossier distant si nécessaire
+ssh -i ~/.ssh/id_rsa $REMOTE_USER@$REMOTE_HOST "mkdir -p $REMOTE_DIR"
 
-# Connexion SSH + déploiement
-ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << EOF
-  set -e
+# upload
+scp -i ~/.ssh/id_rsa $ARCHIVE_NAME $REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR/
+
+# déployer
+ssh -i ~/.ssh/id_rsa $REMOTE_USER@$REMOTE_HOST << EOF
   cd $REMOTE_DIR
-
-  echo "📦 Extraction du code..."
   tar xzf $ARCHIVE_NAME
-
-  echo "🧹 Nettoyage des anciens conteneurs..."
-  docker-compose down --volumes || true
-
-  echo "🧱 Reconstruction complète..."
+  docker system prune -a --volumes -f
+  docker-compose down --volumes
   docker-compose build --no-cache
-
-  echo "🟢 Lancement du stack..."
+  rm -rf ./database/data/*
   docker-compose up -d
-
-  echo "✅ Déploiement terminé."
 EOF
 
 
