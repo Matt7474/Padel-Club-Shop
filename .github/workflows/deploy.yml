@@ -3,7 +3,7 @@ name: Deploy Front and Back
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 jobs:
