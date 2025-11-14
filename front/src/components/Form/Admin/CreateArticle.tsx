@@ -291,7 +291,6 @@ export default function CreateArticle({
 	useEffect(() => {
 		getBrands()
 			.then((data) => {
-				console.log("brands API:", data);
 				setBrands(data);
 			})
 			.catch((err) => console.error(err));
@@ -300,7 +299,6 @@ export default function CreateArticle({
 	useEffect(() => {
 		if (mode === "edit" && article) {
 			const tech = article.tech_characteristics ?? {};
-			console.log("✅ Données tech_characteristics reçues :", tech);
 
 			// --- Chaussures ---
 			if (articleType === "shoes") {
@@ -488,8 +486,6 @@ export default function CreateArticle({
 							]
 						: undefined,
 			};
-
-			console.log("articlePromo", articlePromo);
 
 			// Si aucune image sélectionnée en création
 			if (mode === "create" && images.length === 0) {

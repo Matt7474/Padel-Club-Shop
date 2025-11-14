@@ -319,14 +319,12 @@ export default function MyOrders() {
 
 											<div className="space-y-3">
 												{order.items?.map((item: OrderItem) => {
-													console.log("item on map", item);
-
 													const mainImage =
 														item.article?.images?.find((img) => img.is_main) ??
 														item.article?.images?.[0];
 
 													return (
-														<div key={item.article_id}>
+														<div key={item.article?.article_id}>
 															<div className="items-center bg-gray-50 px-4 py-2 rounded-lg border border-gray-200">
 																<div className="grid grid-cols-[4fr_2fr] xl:flex xl:justify-between items-center xl:gap-4 ">
 																	<div className="flex">

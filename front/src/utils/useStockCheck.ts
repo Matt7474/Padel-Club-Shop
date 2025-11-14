@@ -23,11 +23,6 @@ export function useStockCheck() {
 	}: StockCheckParams): Promise<boolean> => {
 		try {
 			const article = (await getArticleById(articleId)) as Article;
-			console.log(
-				"article.stock_quantity",
-				article.stock_quantity,
-				typeof article.stock_quantity,
-			);
 
 			// --- 1️⃣ Cas : article AVEC tailles ---
 			if (article.tech_characteristics?.fit && selectedSize) {

@@ -117,8 +117,6 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 		createdAt !== null &&
 		(now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24) < 30;
 
-	console.log("articles", article);
-
 	return (
 		<>
 			<Link

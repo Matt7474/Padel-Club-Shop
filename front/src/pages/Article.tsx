@@ -48,8 +48,6 @@ export default function Article() {
 		{ label: article.name, href: `/articles/${name}` },
 	];
 
-	console.log(article);
-
 	let selectedQty: number | undefined;
 	if (selectedSize && article.tech_characteristics?.fit) {
 		const sizeObj = article.tech_characteristics.fit
@@ -62,14 +60,6 @@ export default function Article() {
 
 		if (sizeObj) selectedQty = sizeObj.qty;
 	}
-	console.log("selectedSize:", selectedSize);
-	console.log("selectedQty:", selectedQty);
-	console.log(
-		"stockMessage:",
-		selectedQty && selectedQty < 5
-			? `Il ne reste que ${selectedQty}...`
-			: undefined,
-	);
 
 	return (
 		<>

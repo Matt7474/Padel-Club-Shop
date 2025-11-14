@@ -20,20 +20,30 @@ export function useWebSocket(userId: number) {
 	const [messages, setMessages] = useState<WSMessage[]>([]);
 
 	useEffect(() => {
-		ws.current = new WebSocket(`ws://localhost:3000`); // adapte l'URL selon ton serveur
+		const WS_URL =
+			import.meta.env.MODE === "development"
+				? "ws://localhost:3000"
+				: "wss://pcs-api.matt-dev.fr";
+
+		// ouverture
+		ws.current = new WebSocket(WS_URL);
 
 		ws.current.onopen = () => {
 			console.log("WebSocket connecté");
 
-			// envoyer l'identifiant utilisateur pour s'enregistrer côté serveur
-			ws.current?.send(JSON.stringify({ type: "connect", userId }));
+			ws.current?.send(
+				JSON.stringify({
+					type: "connect",
+					userId,
+				}),
+			);
 		};
 
+		// message entrant
 		ws.current.onmessage = (event) => {
 			const message: WSMessage = JSON.parse(event.data);
 
 			setMessages((prev) => {
-				// ❌ ignore si déjà présent
 				if (
 					message.data?.conversationId &&
 					prev.some(
@@ -45,14 +55,22 @@ export function useWebSocket(userId: number) {
 				) {
 					return prev;
 				}
+
 				return [...prev, message];
 			});
 		};
 
-		ws.current.onclose = () => console.log("WebSocket déconnecté");
-		ws.current.onerror = (err) => console.error("WebSocket erreur", err);
+		ws.current.onclose = () => {
+			console.log("WebSocket déconnecté");
+		};
 
-		return () => ws.current?.close();
+		ws.current.onerror = (err) => {
+			console.error("WebSocket erreur", err);
+		};
+
+		return () => {
+			ws.current?.close();
+		};
 	}, [userId]);
 
 	const sendMessage = (conversationId: number, content: string) => {

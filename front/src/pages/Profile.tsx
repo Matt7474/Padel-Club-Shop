@@ -75,7 +75,6 @@ export default function Profile({ text }: ProfileProps) {
 				setLoading(true);
 
 				const response: UserApiResponse = await getUserById(user.id);
-				console.log("Utilisateur récupéré :", response);
 
 				// Infos de base
 				setProfile({

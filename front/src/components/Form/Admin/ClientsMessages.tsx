@@ -67,33 +67,32 @@ export default function ClientsMessages({
 		ws.current.onmessage = (event) => {
 			try {
 				const message = JSON.parse(event.data);
-				console.log("📥 [ADMIN] Message reçu via WebSocket:", message);
 
 				// ✅ Vérifie le type
 				if (message.type !== "message") return;
 
 				const msg = message.data;
 				if (!msg) {
-					console.warn("⚠️ Message vide ou mal formé:", message);
+					// console.warn("⚠️ Message vide ou mal formé:", message);
 					return;
 				}
 				setMessages((prevMessages) => {
 					if (prevMessages.some((m) => m.id === msg.id)) {
-						console.log("⚠️ Message déjà présent, ignoré:", msg.id);
+						// console.log("⚠️ Message déjà présent, ignoré:", msg.id);
 						return prevMessages;
 					}
-					console.log("💬 Nouveau message ajouté:", msg);
+					// console.log("💬 Nouveau message ajouté:", msg);
 					return [...prevMessages, msg];
 				});
 
 				const currentSelectedUser = selectedUserRef.current;
 
-				console.log("📨 Message détaillé reçu:", {
-					sender_id: msg.sender_id,
-					receiver_id: msg.receiver_id,
-					current_user_id: user.id,
-					selected_user_id: currentSelectedUser?.id,
-				});
+				// console.log("📨 Message détaillé reçu:", {
+				// 	sender_id: msg.sender_id,
+				// 	receiver_id: msg.receiver_id,
+				// 	current_user_id: user.id,
+				// 	selected_user_id: currentSelectedUser?.id,
+				// });
 
 				// ✅ Vérifie si le message concerne la conversation actuellement ouverte
 				const isForCurrentConversation =
@@ -106,17 +105,17 @@ export default function ClientsMessages({
 							msg.receiver_id === currentSelectedUser.id));
 
 				if (!isForCurrentConversation) {
-					console.log("📭 Message non lié à la conversation en cours, ignoré.");
+					// console.log("📭 Message non lié à la conversation en cours, ignoré.");
 					return;
 				}
 
 				// ✅ Évite les doublons (basé sur id)
 				setMessages((prevMessages) => {
 					if (prevMessages.some((m) => m.id === msg.id)) {
-						console.log("⚠️ Message déjà présent, ignoré:", msg.id);
+						// console.log("⚠️ Message déjà présent, ignoré:", msg.id);
 						return prevMessages;
 					}
-					console.log("💬 Nouveau message ajouté:", msg);
+					// console.log("💬 Nouveau message ajouté:", msg);
 					return [...prevMessages, msg];
 				});
 			} catch (err) {
@@ -133,7 +132,7 @@ export default function ClientsMessages({
 		};
 
 		ws.current.onclose = () => {
-			console.log("❎ Admin WebSocket closed");
+			// console.log("❎ Admin WebSocket closed");
 		};
 
 		return () => {

@@ -81,8 +81,6 @@ export default function Articles({
 		);
 	}
 
-	console.log(articles);
-
 	// --- Application des filtres ---
 	filteredArticles = filteredArticles.filter((article) => {
 		// --- Détermination du prix effectif ---

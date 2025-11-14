@@ -98,7 +98,7 @@ export default function Login() {
 							conserver un environnement de démonstration propre. Tout compte
 							créé sera donc supprimé lors de cette réinitialisation.
 						</li>
-						<p className="mt-3">
+						<div className="mt-3">
 							Vous pouvez créer votre propre compte "client" temporaire ou
 							utiliser un compte d'essai "admin" :<br />
 							<p className="mt-3">
@@ -106,7 +106,7 @@ export default function Login() {
 								<br />
 								<strong>Mot de passe :</strong> Password1
 							</p>
-						</p>
+						</div>
 					</ul>
 				</div>
 				{/* Partie login */}

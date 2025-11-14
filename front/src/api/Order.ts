@@ -81,7 +81,6 @@ export async function getMyOrders(): Promise<getMyOrdersProps[]> {
 			},
 			params: { userId },
 		});
-		console.log("COMMANDES RECUES :", res.data.orders);
 		return res.data.orders;
 	} catch (error: unknown) {
 		if (error instanceof Error) {

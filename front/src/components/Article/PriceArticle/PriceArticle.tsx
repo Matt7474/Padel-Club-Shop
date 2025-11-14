@@ -16,13 +16,7 @@ export default function PriceArticle({
 	article,
 	selectedSize,
 	qty,
-	isSelected,
-	stockMessage,
 }: PriceArticleProps) {
-	console.log("PriceArticle - stockMessage:", stockMessage);
-	console.log("PriceArticle - qty:", qty);
-	console.log("PriceArticle - isSelected:", isSelected);
-	console.log("PriceArticle - isSelected:", article);
 	const addToast = useToastStore((state) => state.addToast);
 	const addToCart = useCartStore((state) => state.addToCart);
 	const [quantity, setQuantity] = useState(1);
@@ -101,8 +95,6 @@ export default function PriceArticle({
 			quantity: quantityInCart + quantity,
 			selectedSize: selectedSize ?? undefined,
 		});
-
-		console.log(" addToCart", article.shipping_cost);
 
 		if (!isInStock) return;
 		addToCart({
