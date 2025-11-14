@@ -21,7 +21,7 @@ export function useWebSocket(userId: number) {
 
 	useEffect(() => {
 		const WS_URL =
-			import.meta.env.MODE === "development"
+			window.location.hostname === "localhost"
 				? "ws://localhost:3000"
 				: "wss://pcs-api.matt-dev.fr";
 
