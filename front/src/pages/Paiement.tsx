@@ -7,7 +7,7 @@ import {
 	useStripe,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { createOrderAndUpdateStock } from "../api/Order";
 import { createPaymentIntent } from "../api/payment";
@@ -29,7 +29,8 @@ const ELEMENT_OPTIONS = {
 			fontSize: "16px",
 			color: "#424770",
 			letterSpacing: "0.025em",
-			fontFamily: "system-ui, sans-serif",
+			fontFamily:
+				"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
 			"::placeholder": {
 				color: "#aab7c4",
 			},
@@ -38,6 +39,7 @@ const ELEMENT_OPTIONS = {
 			color: "#9e2146",
 		},
 	},
+	hidePostalCode: true,
 };
 
 // ---- Sous composant pour le paiement ----
@@ -55,6 +57,22 @@ function CheckoutForm({
 	const addToast = useToastStore((state) => state.addToast);
 	const { updateQuantity } = useCartStore();
 	const [reference, setReference] = useState("");
+	const [stripeReady, setStripeReady] = useState(false);
+
+	interface StockUpdate {
+		id: number;
+		name: string;
+		newQuantity: number;
+		size: string;
+	}
+
+	// ✅ Vérifier que Stripe et les éléments sont prêts
+	useEffect(() => {
+		if (stripe && elements) {
+			setStripeReady(true);
+			console.log("✅ Stripe et Elements sont prêts");
+		}
+	}, [stripe, elements]);
 
 	interface StockUpdate {
 		id: number;
@@ -154,6 +172,13 @@ function CheckoutForm({
 	return (
 		<form onSubmit={handleSubmit} className="max-w-2xl  xl:mx-0">
 			<div className="bg-white rounded-lg ">
+				{!stripeReady && (
+					<div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+						<p className="text-yellow-800">
+							⏳ Chargement du formulaire de paiement...
+						</p>
+					</div>
+				)}
 				<h3 className="text-lg font-semibold mb-6">Informations de paiement</h3>
 				<div className="xl:mt-14">
 					<div className="flex items-center -mt-4 mb-3 gap-3 ">
