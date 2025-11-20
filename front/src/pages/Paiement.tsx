@@ -59,13 +59,6 @@ function CheckoutForm({
 	const [reference, setReference] = useState("");
 	const [stripeReady, setStripeReady] = useState(false);
 
-	interface StockUpdate {
-		id: number;
-		name: string;
-		newQuantity: number;
-		size: string;
-	}
-
 	// ✅ Vérifier que Stripe et les éléments sont prêts
 	useEffect(() => {
 		if (stripe && elements) {
